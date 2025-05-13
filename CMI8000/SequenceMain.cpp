@@ -7187,9 +7187,10 @@ BOOL CSequenceMain::SortPicker1_Run()
 		}
 		break;
 	case 16:	// Position Check
-		if (g_objCommon.Get_SortPicker1Up(0) && g_objCommon.Get_InfoSortPicker1Close() && g_objCommon.Get_InfoSortPicker1Check()) {
+		if (g_objCommon.Get_SortPicker1Up(0) && g_objCommon.Get_InfoSortPicker1Close() 
+			&& g_objCommon.Get_InfoSortPicker1Check() && g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) 
+		{
 			
-
 			if (Check_NgTrayFull()) {
 				if (m_nNgTrayCase == 10) m_nNgTrayCase = 11;
 			}
@@ -7398,7 +7399,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 		}
 		return TRUE;
 
-	case 22:	// Move to NG Unload Position
+	case 22:	// Move to Good Position
 		if ((gData.nPNoSortPick[0] != gData.nPNoGoodTray) && (gData.nPNoSortPick[0] != 0)) {
 			if (gData.nPNoGoodTray != 0) return TRUE;
 		}
@@ -8360,9 +8361,9 @@ BOOL CSequenceMain::SortPicker2_Run()
 		}
 		break;
 	case 16:	// Position Check
-		if (g_objCommon.Get_SortPicker2Up(0) && g_objCommon.Get_InfoSortPicker2Close() && g_objCommon.Get_InfoSortPicker2Check()) {
+		if (g_objCommon.Get_SortPicker2Up(0) && g_objCommon.Get_InfoSortPicker2Close() 
+			&& g_objCommon.Get_InfoSortPicker2Check() && g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) {
 			
-
 			if (Check_NgTrayFull()) {
 				if (m_nNgTrayCase == 10) m_nNgTrayCase = 11;
 			}
