@@ -492,12 +492,12 @@ void CInspector::Get_ScanComplete(int nInspector, CString sGbn, CString sLotId, 
 		g_objSequenceMain.Set_MainRunCase(AUTO_VISION_BTM1, 35);
 
 	} else if (sGbn == "B13D"){
-		int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_BTM1);
+		/*int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_BTM1);
 		m_nB1_3DScanCnt++;
 		if (m_nB1_3DScanCnt < m_nB1_3DScanReq) return;
 		if (nCase != 42 && nCase != 45) { Exception_Log("Scan Complete", sGbn, nCase); return; }
 		gData.bScanDone[6] = TRUE;
-		g_objSequenceMain.Set_MainRunCase(AUTO_VISION_BTM1, 47);
+		g_objSequenceMain.Set_MainRunCase(AUTO_VISION_BTM1, 47);*/
 
 	} else if (sGbn == "T1") {
 		int nCase = 0;
