@@ -395,7 +395,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 				if (!g_objSequenceMain.Is_MainThreadRun()) {
 					g_objLogFile.Save_HandlerLog("[Work Mode] Auto STOP");
 					pMainDlg->Set_CurrentState(STATE_STOP);
-					g_objMES.Set_Status(2);
+					g_objMES.Set_Status(3);
 
 					g_objCommon.Btm1BlowSunctionOnOff(FALSE);
 					g_objCommon.TopBlowSunctionOnOff(FALSE);

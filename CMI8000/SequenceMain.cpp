@@ -1143,13 +1143,10 @@ BOOL CSequenceMain::Select_SortPickNgPos(int nNo, int &nPos, int &nCnt, BOOL bBu
 	} else {
 		int *pInfo = gData.InfoSortPick[nNo-1];
 
-		for (int i = 0; i < 5; i++) { if (pInfo[i] == 2 || pInfo[i] == 4 || pInfo[i] == 6 || pInfo[i] == 7) { nPos = i; break; } }	// Tray1,3
+		for (int i = 0; i < 5; i++) { if (pInfo[i] == 2 || pInfo[i] == 4 || pInfo[i] == 6 || pInfo[i] == 7 || pInfo[i] == 5) { nPos = i; break; } }	// Tray1,3
 
 		if (nPos == -1) {
-			for (int i = 0; i < 5; i++) { if (pInfo[i] == 5) { nPos = i; break; } }	// Tray4
-			if (nPos == -1) {
-				for (int i = 0; i < 5; i++) { if (pInfo[i] == 8) { nPos = i; break; } }	// Tray2
-			}
+			for (int i = 0; i < 5; i++) { if (pInfo[i] == 8) { nPos = i; break; } }	// Tray2, 4			
 		}
 		if (nPos == -1) return FALSE;
 
@@ -1218,23 +1215,17 @@ BOOL CSequenceMain::Select_NgTrayPos(int nPickNo, int &nTrayNo, int &nTrayPosX, 
 	int nTray1 = -1, nTray2 = -1, nInfo = 0;	// Default
 
 	for (int i = 0; i < 5; i++) { 
-		if (pInfo[i] == 2 || pInfo[i] == 4 || pInfo[i] == 6 || pInfo[i] == 7) { nInfo = pInfo[i]; break; }	// Tray1,3
+		if (pInfo[i] == 2 || pInfo[i] == 4 || pInfo[i] == 6 || pInfo[i] == 7 || pInfo[i] == 5) { nInfo = pInfo[i]; break; }	// Tray1,3
 	}
 	if (nInfo == 0) {
 		for (int i = 0; i < 5; i++) {
-			if (pInfo[i] == 5) { nInfo = pInfo[i]; break; }	// Tray4
-		}
-		if (nInfo == 0) {
-			for (int i = 0; i < 5; i++) {
-				if (pInfo[i] == 8) { nInfo = pInfo[i]; break; }	// Tray2
-			}
-		}
+			if (pInfo[i] == 8) { nInfo = pInfo[i]; break; }	// Tray 2,4
+		}		
 	}
 	if (nInfo == 0) return FALSE;
 
-	if (nInfo == 2 || nInfo == 4 || nInfo == 6 || nInfo == 7) { nTray1 = 0; nTray2 = 2; }	// N,N1,N3,B
-	if (nInfo == 5) nTray1 = 3;		// N2
-	if (nInfo == 8) nTray1 = 1;		// N4
+	if (nInfo == 2 || nInfo == 4 || nInfo == 6 || nInfo == 7 || nInfo == 5) { nTray1 = 0; nTray2 = 2; }	// N,N1,N2,N3,B
+	if (nInfo == 8) { nTray1 = 1; nTray2 = 3 ;}		// N4
 
 	for (int t = 3; t >= 0; t--) {
 		if (t != nTray1 && t != nTray2) continue;
