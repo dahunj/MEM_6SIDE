@@ -403,7 +403,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			}
 		}
 
-	} else if (m_rdoWorkStop.GetCheck()) // First AutoStop
+	} else if (m_rdoWorkStop.GetCheck()) // executed once when you pushed stop // First AutoStop
 	{
 		if (m_bAutoRunning) 
 		{	
@@ -433,7 +433,9 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			g_objCommon.Btm1BlowSunctionOnOff(FALSE);
 			g_objCommon.TopBlowSunctionOnOff(FALSE);
 
-		} else {				// Stop
+			g_objMES.Set_Status(3);
+
+		} else {				// Stop keep execute when status is stop 
 			int nState = theApp.Get_MainState();
 			if (nState != STATE_ERROR) g_objCommon.Check_MainEmgAir();
 		}
@@ -1612,7 +1614,8 @@ void CWorkDlg::OnBnClickedBtnIdleReport()
 void CWorkDlg::OnBnClickedButton1()
 {
 	DX_DATA_14 *pDX14 = g_objAJinAXL.Get_pDX14(); DY_DATA_14 *pDY14 = g_objAJinAXL.Get_pDY14();
-	pDX14->iLoad1Sw = TRUE;
+	//pDX14->iLoad1Sw = TRUE;
+	pDX14->iStartSw = TRUE;
 	
 	//PostMessage(UM_UPDATE_BARCODE, NULL, NULL);
 	//BOOL ret = g_objLogFile.Check_BarcodeLog("CPP00034A/560/DVRI1144N014");
@@ -1623,7 +1626,7 @@ void CWorkDlg::OnBnClickedButton1()
 void CWorkDlg::OnBnClickedButton2()
 {
 	DX_DATA_14 *pDX14 = g_objAJinAXL.Get_pDX14();
-	pDX14->iLoad2Sw = TRUE;
+	pDX14->iStopSw = TRUE;
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
@@ -1647,13 +1650,13 @@ void CWorkDlg::OnBnClickedButton4()
 
 void CWorkDlg::OnBnClickedButton5()
 {
-	//gData.bNGTrayWait = FALSE;
-	//gData.bGoodTrayWait = FALSE;
-	ULONGLONG size = 0;
+	gData.bNGTrayWait = FALSE;
+	gData.bGoodTrayWait = FALSE;
+	/*ULONGLONG size = 0;
 	CString strRAM;
 
 	g_objCommon.Get_HardInfo(strRAM);
-	AfxMessageBox(strRAM);
+	AfxMessageBox(strRAM);*/
 	
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
