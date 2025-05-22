@@ -692,5 +692,5 @@ BOOL CSetupMotionTabDlg::Check_Interlock(int nAxis)
 		}
 	}
 
-
+	return TRUE;
 }

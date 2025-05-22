@@ -19,7 +19,7 @@ public:
 	CGroupCS	m_Group[8];
 	CLabelCS	m_Label[39];
 	CStaticCS	m_stcEquipName;
-	CRadioCS	m_rdoModel[2];	// 0:R43B, 1:R44B
+	CRadioCS	m_rdoModel[2];	// 0:R53B, 1:R54B
 	CComboCS	m_cboLotBarcodePort;
 	CStaticCS	m_stcScreenOff;
 	CStaticCS	m_stcNoWorkTime;
