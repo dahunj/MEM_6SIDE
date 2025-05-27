@@ -1,6 +1,7 @@
 #pragma once
 
 
+
 // CManualRepeatRunDlg 대화 상자입니다.
 
 class CManualRepeatRunDlg : public CDialogEx
@@ -31,6 +32,11 @@ private:
 	void Initial_Controls();
 
 protected:
+	int m_nRepeatCase;
+
+	int m_nPickerSelected;
+	int m_nPickerNumSelected;
+
 	int	 m_nPickerSelect;
 	int	 m_nPickerNum;
 	int	 m_nActionDelay;
@@ -47,4 +53,5 @@ public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnBnClickedChkRepeatRun();
 	afx_msg void OnCbnSelchangeCboPicker();
+	afx_msg void OnCbnSelchangeCboPickNum();
 };

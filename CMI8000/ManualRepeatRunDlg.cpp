@@ -6,6 +6,10 @@
 #include "ManualRepeatRunDlg.h"
 #include "afxdialogex.h"
 
+#include "Common.h"
+#include "AJinDefine.h"
+#include "AJinAXL.h"
+#include "LogFile.h"
 
 // CManualRepeatRunDlg 대화 상자입니다.
 
@@ -38,6 +42,7 @@ BEGIN_MESSAGE_MAP(CManualRepeatRunDlg, CDialogEx)
 	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_CHK_REPEAT_RUN, &CManualRepeatRunDlg::OnBnClickedChkRepeatRun)
 	ON_CBN_SELCHANGE(IDC_CBO_PICKER, &CManualRepeatRunDlg::OnCbnSelchangeCboPicker)
+	ON_CBN_SELCHANGE(IDC_CBO_PICK_NUM, &CManualRepeatRunDlg::OnCbnSelchangeCboPickNum)
 END_MESSAGE_MAP()
 
 
@@ -59,11 +64,11 @@ BOOL CManualRepeatRunDlg::OnInitDialog()
 	m_cboPicker.AddString("Sort 2 Picker");
 
 	m_cboPicker.SetCurSel(0);
-		
+	m_cboPickNum.SetCurSel(0);
+
+	m_nPickerSelected = 0;
+	m_nPickerNumSelected = 0;
 	
-
-
-
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
@@ -109,8 +114,20 @@ void CManualRepeatRunDlg::OnBnClickedChkRepeatRun()
 	m_cboPickNum.EnableWindow(!m_chkRepeatRun.GetCheck());
 	m_edtDelay.EnableWindow(!m_chkRepeatRun.GetCheck());
 
-	CString strText;
+	CString strText, strTemp;
 	if (m_chkRepeatRun.GetCheck()) {
+
+		int nMotionNo = g_objCommon.Check_MotionPos();
+		if (nMotionNo < 99) {
+			double dCurrentPos = g_objAJinAXL.Get_Position(nMotionNo);
+			CString strName = g_objAJinAXL.Get_AxisName(nMotionNo);
+			strTemp.Format("Motion(%s) 위치를 Check 하세요.\n이전위치(%0.3lf) != 현재위치(%0.3lf)", strName, gAlm.dMotionPos[nMotionNo], dCurrentPos);
+			g_objLogFile.Save_HandlerLog(strTemp);
+
+			g_objCommon.Show_MsgBox(1, strTemp);			
+			return;
+		}
+
 		m_nPickerSelect = m_cboPicker.GetCurSel();
 		m_nPickerNum = m_cboPickNum.GetCurSel();
 		m_edtDelay.GetWindowText(strText);
@@ -142,6 +159,30 @@ UINT CManualRepeatRunDlg::Thread_ActionRun(LPVOID lpVoid)
 
 void CManualRepeatRunDlg::Repeat_Action()
 {
+
+	switch(m_nRepeatCase)
+	{
+	case 0:
+		{
+			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 1);
+			m_nRepeatCase = 100;
+		}
+		break;
+	//
+	case 100:
+		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 1))
+		{
+			theApp.uSleep(300);
+			g_objCommon.Set_Btm1PickerOpen(m_nPickerNumSelected);
+			m_nRepeatCase = 110;
+		}
+		break;
+	case 110:
+		break;
+
+
+
+	}
 	/*DY_DATA_00 *pDY00 = g_objAJinAXL.Get_pDY00();
 
 	if (m_nActionItem == 0) { pDY00->oCleanUnitIn = TRUE; pDY00->oCleanUnitOut = FALSE; g_objAJinAXL.Write_Output(0); }
@@ -157,18 +198,18 @@ void CManualRepeatRunDlg::Repeat_Action()
 
 void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 {
-	m_cboPickNum.Clear();
+	m_cboPickNum.ResetContent();
 
 	if(m_cboPicker.GetCurSel() == 0)
 	{
 		for(int i = 1; i < gData.nBtmPickQt+1 ; i++)
 		{	
-			m_strLog.Format("Btm1 %d", i);
+			m_strLog.Format("Btm1 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
 		}
 		for(int i = gData.nBtmPickQt+1; i < gData.nBtmPickQt*2+1 ; i++)
 		{	
-			m_strLog.Format("Btm1 %d", i);
+			m_strLog.Format("Btm1 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
 		}
 	}
@@ -176,12 +217,12 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 	{
 		for(int i = 1; i < gData.nBtmPickQt+1 ; i++)
 		{	
-			m_strLog.Format("Btm2 %d", i);
+			m_strLog.Format("Btm2 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
 		}
 		for(int i = gData.nBtmPickQt+1; i < gData.nBtmPickQt*2+1 ; i++)
 		{	
-			m_strLog.Format("Btm2 %d", i);
+			m_strLog.Format("Btm2 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
 		}
 	}
@@ -189,7 +230,7 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 	{
 		for(int i = 1; i < gData.nSortPickQt+1 ; i++)
 		{	
-			m_strLog.Format("Btm2 %d", i);
+			m_strLog.Format("Sort 1 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
 		}
 		
@@ -198,13 +239,15 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 	{
 		for(int i = 1; i < gData.nSortPickQt+1 ; i++)
 		{	
-			m_strLog.Format("Btm2 %d", i);
+			m_strLog.Format("Sort 2 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
 		}
 		
 	}
-	
+}
 
-	
 
+void CManualRepeatRunDlg::OnCbnSelchangeCboPickNum()
+{
+	m_nPickerNumSelected = m_cboPickNum.GetCurSel();
 }
