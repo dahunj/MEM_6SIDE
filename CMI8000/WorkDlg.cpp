@@ -432,6 +432,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 
 			g_objCommon.Btm1BlowSunctionOnOff(FALSE);
 			g_objCommon.TopBlowSunctionOnOff(FALSE);
+			g_objMES.Set_Status(3);
 
 		} else {				// Stop
 			int nState = theApp.Get_MainState();

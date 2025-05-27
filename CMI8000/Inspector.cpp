@@ -173,8 +173,8 @@ LRESULT CInspector::OnUdpReceive(WPARAM wLocalPort, LPARAM lParam)
 		/////////////////////////////////////////////////////////
 
 		EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-		if (nInspector == INSPECTOR_PC1 && !pEquipData->bUseVisionAlign && !pEquipData->bUseInspectAngle && !pEquipData->bUseInspectBtm1Specular && !pEquipData->bUseInspectBtm1Angle && !pEquipData->bUseInspectBtm13D) return 0;
-		if (nInspector == INSPECTOR_PC2 && !pEquipData->bUseInspectTop1) return 0;
+		if (nInspector == INSPECTOR_PC1 && !pEquipData->bUseInspectBtm1Specular && !pEquipData->bUseInspectBtm1Angle && !pEquipData->bUseInspectBtm13D) return 0;
+		if (nInspector == INSPECTOR_PC2 && !pEquipData->bUseInspectTop1 && !pEquipData->bUseVisionAlign && !pEquipData->bUseInspectAngle) return 0;
 		if (nInspector == INSPECTOR_PC3 && !pEquipData->bUseInspectTop2) return 0;
 		if (nInspector == INSPECTOR_PC4 && !pEquipData->bUseInspectBtm2) return 0;
 
@@ -1402,8 +1402,8 @@ BOOL CInspector::Check_LotReady()
 	m_bLotReady3 = TRUE;
 	m_bLotReady4 = TRUE;
 #else
-	if (!pEquipData->bUseInspectBtm1Specular && !pEquipData->bUseInspectBtm1Angle && !pEquipData->bUseInspectBtm13D && !pEquipData->bUseVisionAlign) m_bLotReady1 = TRUE;
-	if (!pEquipData->bUseInspectTop1  && !pEquipData->bUseInspectAngle) m_bLotReady2 = TRUE;
+	if (!pEquipData->bUseInspectBtm1Specular && !pEquipData->bUseInspectBtm1Angle && !pEquipData->bUseInspectBtm13D ) m_bLotReady1 = TRUE;
+	if (!pEquipData->bUseInspectTop1  && !pEquipData->bUseInspectAngle && !pEquipData->bUseVisionAlign) m_bLotReady2 = TRUE;
 	if (!pEquipData->bUseInspectTop2) m_bLotReady3 = TRUE;
 	if (!pEquipData->bUseInspectBtm2) m_bLotReady4 = TRUE;
 #endif
