@@ -1402,8 +1402,8 @@ BOOL CInspector::Check_LotReady()
 	m_bLotReady3 = TRUE;
 	m_bLotReady4 = TRUE;
 #else
-	if (!pEquipData->bUseInspectBtm1Specular && !pEquipData->bUseInspectBtm1Angle && !pEquipData->bUseInspectBtm13D && !pEquipData->bUseVisionAlign) m_bLotReady1 = TRUE;
-	if (!pEquipData->bUseInspectTop1  && !pEquipData->bUseInspectAngle) m_bLotReady2 = TRUE;
+	if (!pEquipData->bUseInspectBtm1Specular && !pEquipData->bUseInspectBtm1Angle && !pEquipData->bUseInspectBtm13D ) m_bLotReady1 = TRUE;
+	if (!pEquipData->bUseInspectTop1  && !pEquipData->bUseInspectAngle && !pEquipData->bUseVisionAlign) m_bLotReady2 = TRUE;
 	if (!pEquipData->bUseInspectTop2) m_bLotReady3 = TRUE;
 	if (!pEquipData->bUseInspectBtm2) m_bLotReady4 = TRUE;
 #endif
