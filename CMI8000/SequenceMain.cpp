@@ -10164,7 +10164,8 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 		break;
 	case 3:		// Buffer Z Up Stop
 #ifdef EDITION_2ND
-		if (m_pDX01->iEmptyPortTopCheck || g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0)) {
+		if (m_pDX01->iEmptyPortTopCheck || g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0)) //limit up pos
+		{
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		} else if (!m_pDX01->iEmptyPortTopCheck && g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && !g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0)) {

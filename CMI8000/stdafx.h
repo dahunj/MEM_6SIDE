@@ -73,7 +73,7 @@
 	#pragma comment(lib, "CSUdpClientR.lib")
 #endif
 
-#define MAIN_VERSION	_T("V 3.5.0.6 MEM")
+#define MAIN_VERSION	_T("V 3.5.0.7 MEM")
 
 //주석처리하면 SIMULATION 
 //#define AJIN_BOARD_USE 
@@ -90,9 +90,6 @@
 
 #define SIM_WAITTIMES	 1		//
 #define SIM_WAITTIMEM	 1		//
-
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 

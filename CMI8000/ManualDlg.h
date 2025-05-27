@@ -6,6 +6,7 @@
 #include "ManualBtm1Dlg.h"
 #include "ManualBtm2Dlg.h"
 #include "ManualUnloadDlg.h"
+#include "ManualRepeatActionDlg.h"
 
 #include <atltime.h>
 // CManualDlg 대화 상자입니다.
@@ -25,6 +26,7 @@ public:
 	CRadioCS	m_rdoManualBtm1;
 	CRadioCS	m_rdoManualBtm2;
 	CRadioCS	m_rdoManualUnload;
+	CRadioCS	m_rdoManualRepeat;
 	CRadioCS	m_rdoManualDoorLock;
 	CRadioCS	m_rdoManualDoorUnlock;
 
@@ -49,6 +51,8 @@ public:
 	CManualBtm1Dlg		*m_pManualBtm1Dlg;
 	CManualBtm2Dlg		*m_pManualBtm2Dlg;
 	CManualUnloadDlg	*m_pManualUnloadDlg;
+	CManualRepeatActionDlg *m_pManualRepeatDlg;
+
 
 private:
 	void Initial_Controls();
@@ -57,6 +61,7 @@ private:
 public:
 	void Set_ManualPos(int nPos);
 	void SaveLog_DoorInterlock(CString resultCode);
+	afx_msg void OnBnClickedRdoManualRepeat();
 };
 
 extern CManualDlg g_dlgManual;
