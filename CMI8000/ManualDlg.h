@@ -6,7 +6,7 @@
 #include "ManualBtm1Dlg.h"
 #include "ManualBtm2Dlg.h"
 #include "ManualUnloadDlg.h"
-#include "ManualRepeatActionDlg.h"
+#include "ManualRepeatRunDlg.h"
 
 #include <atltime.h>
 // CManualDlg 대화 상자입니다.
@@ -51,7 +51,7 @@ public:
 	CManualBtm1Dlg		*m_pManualBtm1Dlg;
 	CManualBtm2Dlg		*m_pManualBtm2Dlg;
 	CManualUnloadDlg	*m_pManualUnloadDlg;
-	CManualRepeatActionDlg *m_pManualRepeatDlg;
+	CManualRepeatRunDlg *m_pManualRepeatRunDlg;
 
 
 private:
