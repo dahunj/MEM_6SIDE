@@ -11,6 +11,10 @@
 #include "AJinAXL.h"
 #include "LogFile.h"
 
+#include "CMI8000Dlg.h"
+#include "ManualDlg.h"
+
+
 // CManualRepeatRunDlg 대화 상자입니다.
 
 IMPLEMENT_DYNAMIC(CManualRepeatRunDlg, CDialogEx)
@@ -34,12 +38,14 @@ void CManualRepeatRunDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CBO_PICK_NUM, m_cboPickNum);
 	DDX_Control(pDX, IDC_EDT_DELAY, m_edtDelay);
 	DDX_Control(pDX, IDC_CHK_REPEAT_RUN, m_chkRepeatRun);
+	DDX_Control(pDX, IDC_EDT_MSG, m_edtMsg);
 }
 
 
 BEGIN_MESSAGE_MAP(CManualRepeatRunDlg, CDialogEx)
 	ON_WM_DESTROY()
 	ON_WM_TIMER()
+	ON_WM_SHOWWINDOW()
 	ON_BN_CLICKED(IDC_CHK_REPEAT_RUN, &CManualRepeatRunDlg::OnBnClickedChkRepeatRun)
 	ON_CBN_SELCHANGE(IDC_CBO_PICKER, &CManualRepeatRunDlg::OnCbnSelchangeCboPicker)
 	ON_CBN_SELCHANGE(IDC_CBO_PICK_NUM, &CManualRepeatRunDlg::OnCbnSelchangeCboPickNum)
@@ -58,13 +64,13 @@ BOOL CManualRepeatRunDlg::OnInitDialog()
 
 	Initial_Controls();
 
-	m_cboPicker.AddString("Btm 1 Picker");
-	m_cboPicker.AddString("Btm 2 Picker");
-	m_cboPicker.AddString("Sort 1 Picker");
-	m_cboPicker.AddString("Sort 2 Picker");
-
-	m_cboPicker.SetCurSel(0);
-	m_cboPickNum.SetCurSel(0);
+	m_cboPicker.AddString("Btm 1 Picker (Angle Tray)");
+	m_cboPicker.AddString("Btm 2 Picker (Buffer)");
+	m_cboPicker.AddString("Sort 1 Picker (Buffer)");
+	m_cboPicker.AddString("Sort 2 Picker (Buffer)");
+		
+	//m_cboPicker.SetCurSel(0);
+	//m_cboPickNum.SetCurSel(0);
 
 	m_nPickerSelected = 0;
 	m_nPickerNumSelected = 0;
@@ -76,9 +82,27 @@ BOOL CManualRepeatRunDlg::OnInitDialog()
 
 BOOL CManualRepeatRunDlg::PreTranslateMessage(MSG* pMsg)
 {
-	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	if (pMsg->message == WM_KEYDOWN && (pMsg->wParam == VK_RETURN || pMsg->wParam == VK_ESCAPE))
+		return TRUE;
 
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+void CManualRepeatRunDlg::OnShowWindow(BOOL bShow, UINT nStatus) 
+{
+	CDialogEx::OnShowWindow(bShow, nStatus);
+
+	if (!bShow) return;
+
+	CString strMsg;
+	strMsg = "1. 각 Picker Z Ready Up 시작할것 (아닐시 정지)\r\n";
+	strMsg += "2. 정지시 (Repeat Stop) 후 해당 부분 센서 점검필요 \r\n";
+	m_edtMsg.SetWindowText(strMsg);
+
+	//Display_Status();
+
+	m_strLog.Format("[Manual Repeat] Show Window");
+	g_objLogFile.Save_HandlerLog(m_strLog);
 }
 
 
@@ -105,28 +129,43 @@ void CManualRepeatRunDlg::Initial_Controls()
 	m_cboPicker.Init_Ctrl("Arial", 10, FALSE, COLOR_DEFAULT, COLOR_DEFAULT);
 	m_cboPickNum.Init_Ctrl("Arial", 10, FALSE, COLOR_DEFAULT, COLOR_DEFAULT);
 	m_edtDelay.Init_Ctrl("Arial", 10, FALSE, COLOR_DEFAULT, COLOR_DEFAULT);
+	m_edtMsg.Init_Ctrl("Arial", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT);
 	m_chkRepeatRun.Init_Ctrl("Arial", 10, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 }
 
 void CManualRepeatRunDlg::OnBnClickedChkRepeatRun()
 {
+	CString strText, strTemp;
+
+	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
+
 	m_cboPicker.EnableWindow(!m_chkRepeatRun.GetCheck());
 	m_cboPickNum.EnableWindow(!m_chkRepeatRun.GetCheck());
 	m_edtDelay.EnableWindow(!m_chkRepeatRun.GetCheck());
 
-	CString strText, strTemp;
+	pMainDlg->Enable_ModeButton(!m_chkRepeatRun.GetCheck());
+	pMainDlg->m_btnMainOperator.EnableWindow(!m_chkRepeatRun.GetCheck());
+
+	g_dlgManual.m_rdoManualBtm1.EnableWindow(!m_chkRepeatRun.GetCheck());
+	g_dlgManual.m_rdoManualBtm2.EnableWindow(!m_chkRepeatRun.GetCheck());
+	g_dlgManual.m_rdoManualLoad.EnableWindow(!m_chkRepeatRun.GetCheck());
+	g_dlgManual.m_rdoManualUnload.EnableWindow(!m_chkRepeatRun.GetCheck());
+
+
+	int nMotionNo = g_objCommon.Check_MotionPos();
+	if (nMotionNo < 99) {
+		double dCurrentPos = g_objAJinAXL.Get_Position(nMotionNo);
+		CString strName = g_objAJinAXL.Get_AxisName(nMotionNo);
+		strTemp.Format("Motion(%s) 위치를 Check 하세요.\n이전위치(%0.3lf) != 현재위치(%0.3lf)", strName, gAlm.dMotionPos[nMotionNo], dCurrentPos);
+		g_objLogFile.Save_HandlerLog(strTemp);
+
+		g_objCommon.Show_MsgBox(1, strTemp);			
+		return;
+	}
+		
 	if (m_chkRepeatRun.GetCheck()) {
+		
 
-		int nMotionNo = g_objCommon.Check_MotionPos();
-		if (nMotionNo < 99) {
-			double dCurrentPos = g_objAJinAXL.Get_Position(nMotionNo);
-			CString strName = g_objAJinAXL.Get_AxisName(nMotionNo);
-			strTemp.Format("Motion(%s) 위치를 Check 하세요.\n이전위치(%0.3lf) != 현재위치(%0.3lf)", strName, gAlm.dMotionPos[nMotionNo], dCurrentPos);
-			g_objLogFile.Save_HandlerLog(strTemp);
-
-			g_objCommon.Show_MsgBox(1, strTemp);			
-			return;
-		}
 
 		m_nPickerSelect = m_cboPicker.GetCurSel();
 		m_nPickerNum = m_cboPickNum.GetCurSel();
@@ -163,37 +202,205 @@ void CManualRepeatRunDlg::Repeat_Action()
 	switch(m_nRepeatCase)
 	{
 	case 0:
-		{
-			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 1);
-			m_nRepeatCase = 100;
-		}
 		break;
-	//
+	
+	
 	case 100:
-		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 1))
+		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0))
 		{
-			theApp.uSleep(300);
-			g_objCommon.Set_Btm1PickerOpen(m_nPickerNumSelected);
+			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 1); // z down
 			m_nRepeatCase = 110;
 		}
 		break;
 	case 110:
+		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 1))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_Btm1PickerClose(m_nPickerNumSelected); // close
+			m_nRepeatCase = 120;
+		}
+		break;
+	case 120:
+		if(g_objCommon.Get_Btm1PickerClose(m_nPickerNumSelected))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 0); // z up 
+			m_nRepeatCase = 130;
+		}
+		break;
+	case 130:
+		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 1); // z down
+			m_nRepeatCase = 140;
+		}
+		break;
+	case 140:
+		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 1))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_Btm1PickerOpen(m_nPickerNumSelected); //open
+			m_nRepeatCase = 150;
+		}
+		break;
+	case 150:
+		if(g_objCommon.Get_Btm1PickerOpen(m_nPickerNumSelected))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 0);// Z up 
+			m_nRepeatCase = 100;
+		}
+		break;
+//////////
+	case 200:
+		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0))
+		{
+			g_objCommon.Move_Position(AX_BTM2_PICKER_Z, 1); //z down 
+			m_nRepeatCase = 210;
+		}
+		break;
+	case 210:
+		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 1))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_Btm2PickerClose(m_nPickerNumSelected);
+			m_nRepeatCase = 220;
+		}
+		break;
+	case 220:
+		if(g_objCommon.Get_Btm2PickerClose(m_nPickerNumSelected))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_BTM2_PICKER_Z, 0);
+			m_nRepeatCase = 230;
+		}
+		break;
+	case 230:
+		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_BTM2_PICKER_Z, 1); // z down
+			m_nRepeatCase = 240;
+		}
+		break;
+	case 240:
+		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 1))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_Btm2PickerOpen(m_nPickerNumSelected); //open
+			m_nRepeatCase = 250;
+		}
+		break;
+	case 250:
+		if(g_objCommon.Get_Btm2PickerOpen(m_nPickerNumSelected))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_BTM2_PICKER_Z, 0);// Z up 
+			m_nRepeatCase = 200;
+		}
+		break;
+	// Sort 1
+	case 300:
+		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
+		{
+			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 1);
+			m_nRepeatCase = 310;
+		}
+		break;
+	case 310:
+		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 1))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_SortPicker1Close(m_nPickerNumSelected);
+			m_nRepeatCase = 320;
+		}
+		break;
+	case 320:
+		if(g_objCommon.Get_SortPicker1Close(m_nPickerNumSelected))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);
+			m_nRepeatCase = 330;
+		}
+		break;
+	case 330:
+		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 1); // z down
+			m_nRepeatCase = 340;
+		}
+		break;
+	case 340:
+		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 1))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_SortPicker1Open(m_nPickerNumSelected); //open
+			m_nRepeatCase = 350;
+		}
+		break;
+	case 350:
+		if(g_objCommon.Get_SortPicker1Open(m_nPickerNumSelected))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);// Z up 
+			m_nRepeatCase = 300;
+		}
+		break;
+	// Sort 2
+	case 400:
+		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
+		{
+			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 1);
+			m_nRepeatCase = 410;
+		}
+		break;
+	case 410:
+		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 1))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_SortPicker2Close(m_nPickerNumSelected);
+			m_nRepeatCase = 420;
+		}
+		break;
+	case 420:
+		if(g_objCommon.Get_SortPicker2Close(m_nPickerNumSelected))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 0);
+			m_nRepeatCase = 430;
+		}
+		break;
+	case 430:
+		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 1); // z down
+			m_nRepeatCase = 440;
+		}
+		break;
+	case 440:
+		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 1))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_SortPicker2Open(m_nPickerNumSelected); //open
+			m_nRepeatCase = 450;
+		}
+		break;
+	case 450:
+		if(g_objCommon.Get_SortPicker2Open(m_nPickerNumSelected))
+		{
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 0);// Z up 
+			m_nRepeatCase = 400;
+		}
 		break;
 
 
 
 	}
-	/*DY_DATA_00 *pDY00 = g_objAJinAXL.Get_pDY00();
-
-	if (m_nActionItem == 0) { pDY00->oCleanUnitIn = TRUE; pDY00->oCleanUnitOut = FALSE; g_objAJinAXL.Write_Output(0); }
-	if (m_nActionItem == 1) { pDY00->oCleanUnitUp = FALSE; pDY00->oCleanUnitDown = TRUE; g_objAJinAXL.Write_Output(0); }
-	if (m_nActionItem == 2) g_objCommon.Set_BtmFlipperClose(0);
-	Sleep(m_nActionDelay);
-
-	if (m_nActionItem == 0) { pDY00->oCleanUnitIn = FALSE; pDY00->oCleanUnitOut = TRUE; g_objAJinAXL.Write_Output(0); }
-	if (m_nActionItem == 1) { pDY00->oCleanUnitUp = TRUE; pDY00->oCleanUnitDown = FALSE; g_objAJinAXL.Write_Output(0); }
-	if (m_nActionItem == 2) g_objCommon.Set_BtmFlipperOpen(0);
-	Sleep(m_nActionDelay);*/
+	
 }
 
 void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
@@ -202,6 +409,7 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 
 	if(m_cboPicker.GetCurSel() == 0)
 	{
+		m_nRepeatCase = 100;
 		for(int i = 1; i < gData.nBtmPickQt+1 ; i++)
 		{	
 			m_strLog.Format("Btm1 CM No.: %d", i);
@@ -249,5 +457,5 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 
 void CManualRepeatRunDlg::OnCbnSelchangeCboPickNum()
 {
-	m_nPickerNumSelected = m_cboPickNum.GetCurSel();
+	m_nPickerNumSelected = m_cboPickNum.GetCurSel() + 1;
 }

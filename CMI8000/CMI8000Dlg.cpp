@@ -873,7 +873,7 @@ void CCMI8000Dlg::Set_LampFlicker_Empty(BOOL bEnable)
 }
 
 void CCMI8000Dlg::Enable_ModeButton(BOOL bEnable)
-{
+{	
 	m_rdoMainWork.EnableWindow(bEnable);
 	m_rdoMainManual.EnableWindow(bEnable);
 	m_rdoMainSetup.EnableWindow(bEnable);

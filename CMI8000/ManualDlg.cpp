@@ -45,9 +45,10 @@ BEGIN_MESSAGE_MAP(CManualDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RDO_MANUAL_BTM1, &CManualDlg::OnBnClickedRdoManualBtm1)
 	ON_BN_CLICKED(IDC_RDO_MANUAL_BTM2, &CManualDlg::OnBnClickedRdoManualBtm2)
 	ON_BN_CLICKED(IDC_RDO_MANUAL_UNLOAD, &CManualDlg::OnBnClickedRdoManualUnload)
+	ON_BN_CLICKED(IDC_RDO_MANUAL_REPEAT, &CManualDlg::OnBnClickedRdoManualRepeat)
 	ON_BN_CLICKED(IDC_RDO_MANUAL_DOOR_LOCK, &CManualDlg::OnBnClickedRdoManualDoorLock)
 	ON_BN_CLICKED(IDC_RDO_MANUAL_DOOR_UNLOCK, &CManualDlg::OnBnClickedRdoManualDoorUnlock)
-	ON_BN_CLICKED(IDC_RDO_MANUAL_REPEAT, &CManualDlg::OnBnClickedRdoManualRepeat)
+	
 END_MESSAGE_MAP()
 
 // CManualDlg 메시지 처리기입니다.
@@ -165,7 +166,7 @@ void CManualDlg::OnTimer(UINT_PTR nIDEvent)
 	else if (m_pManualBtm1Dlg->IsWindowVisible()) m_pManualBtm1Dlg->Display_Status();
 	else if (m_pManualBtm2Dlg->IsWindowVisible()) m_pManualBtm2Dlg->Display_Status();
 	else if (m_pManualUnloadDlg->IsWindowVisible()) m_pManualUnloadDlg->Display_Status();
-	//else if (m_pManualUnloadDlg->IsWindowVisible()) m_pManualUnloadDlg->Display_Status();
+	//else if (m_pManualRepeatRunDlg->IsWindowVisible()) m_pManualRepeatRunDlg->Display_Status();
 
 	SetTimer(0, 100, NULL);
 	CDialogEx::OnTimer(nIDEvent);
@@ -178,24 +179,27 @@ void CManualDlg::OnBnClickedRdoManualLoad()
 	g_objLogFile.Save_HandlerLog("[Manual - Load] Start");
 	m_rdoManualLoad.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
 	m_pManualLoadDlg->ShowWindow(SW_SHOW);
+	m_rdoManualLoad.SetCheck(TRUE);
 }
 
 void CManualDlg::OnBnClickedRdoManualBtm1()
 {
 	if (m_pManualBtm1Dlg->IsWindowVisible()) return;
 	Hide_Windows();
-	g_objLogFile.Save_HandlerLog("[Manual - Index] Start");
+	g_objLogFile.Save_HandlerLog("[Manual - Btm1] Start");
 	m_rdoManualBtm1.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
 	m_pManualBtm1Dlg->ShowWindow(SW_SHOW);
+	m_rdoManualBtm1.SetCheck(TRUE);
 }
 
 void CManualDlg::OnBnClickedRdoManualBtm2()
 {
 	if (m_pManualBtm2Dlg->IsWindowVisible()) return;
 	Hide_Windows();
-	g_objLogFile.Save_HandlerLog("[Manual - Trans] Start");
+	g_objLogFile.Save_HandlerLog("[Manual - Btm2] Start");
 	m_rdoManualBtm2.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
 	m_pManualBtm2Dlg->ShowWindow(SW_SHOW);
+	m_rdoManualBtm2.SetCheck(TRUE);
 }
 
 void CManualDlg::OnBnClickedRdoManualUnload()
@@ -205,7 +209,20 @@ void CManualDlg::OnBnClickedRdoManualUnload()
 	g_objLogFile.Save_HandlerLog("[Manual - Unload] Start");
 	m_rdoManualUnload.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
 	m_pManualUnloadDlg->ShowWindow(SW_SHOW);
+	m_rdoManualUnload.SetCheck(TRUE);
 }
+
+
+void CManualDlg::OnBnClickedRdoManualRepeat()
+{
+	if (m_pManualRepeatRunDlg->IsWindowVisible()) return;
+	Hide_Windows();
+	g_objLogFile.Save_HandlerLog("[Manual - Repeat] Start");
+	m_rdoManualRepeat.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
+	m_pManualRepeatRunDlg->ShowWindow(SW_SHOW);
+	m_rdoManualRepeat.SetCheck(TRUE);
+}
+
 
 void CManualDlg::OnBnClickedRdoManualDoorLock()
 {
@@ -271,6 +288,12 @@ void CManualDlg::Hide_Windows()
 	m_rdoManualBtm2.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
 	m_rdoManualUnload.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
 	m_rdoManualRepeat.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
+
+	m_rdoManualLoad.SetCheck(FALSE);
+	m_rdoManualBtm1.SetCheck(FALSE);
+	m_rdoManualBtm2.SetCheck(FALSE);
+	m_rdoManualUnload.SetCheck(FALSE);
+	m_rdoManualRepeat.SetCheck(FALSE);
 }
 
 void CManualDlg::Set_ManualPos(int nPos)
@@ -322,13 +345,4 @@ void CManualDlg::SaveLog_DoorInterlock(CString resultCode)
 
 	g_objLogFile.Save_DoorInterlock(nLotNo, strInterlockLog, FALSE);
 
-}
-
-void CManualDlg::OnBnClickedRdoManualRepeat()
-{
-	if (m_pManualRepeatRunDlg->IsWindowVisible()) return;
-	Hide_Windows();
-	g_objLogFile.Save_HandlerLog("[Manual - Unload] Start");
-	m_rdoManualUnload.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
-	m_pManualRepeatRunDlg->ShowWindow(SW_SHOW);
 }

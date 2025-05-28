@@ -1,7 +1,6 @@
 #pragma once
 
 
-
 // CManualRepeatRunDlg 대화 상자입니다.
 
 class CManualRepeatRunDlg : public CDialogEx
@@ -19,6 +18,7 @@ public:
 	CEditCS		m_edtDelay;
 	CCheckCS	m_chkRepeatRun;
 
+	CEditCS		m_edtMsg;
 // 대화 상자 데이터입니다.
 	enum { IDD = IDD_MANUAL_REPEAT_RUN_DLG };
 
@@ -49,6 +49,7 @@ protected:
 public:
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	afx_msg void OnDestroy();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnBnClickedChkRepeatRun();

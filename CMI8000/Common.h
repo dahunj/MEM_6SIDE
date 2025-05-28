@@ -143,6 +143,8 @@ public:
 	void Set_Btm1PickerAirOff(int nSub);
 	void Set_Btm1PickerOpen(int nSub);
 	BOOL Get_Btm1PickerOpen(int nSub);
+	void Set_Btm1PickerClose(int nSub);
+	BOOL Get_Btm1PickerClose(int nSub);
 	BOOL Get_Btm1PickerAllNotChk();	
 
 	// 5. Inspection I/O ÇÔ¼ö
@@ -166,8 +168,12 @@ public:
 	void Set_Btm2PickerVacOff(int nSub);
 	BOOL Get_Btm2PickerVacOff(int nSub);
 	void Set_Btm2PickerAirOff(int nSub);
-	void Set_Btm2PickerOpen(int nSub, int nRow=0);
-	BOOL Get_Btm2PickerOpen(int nSub, int nRow=0);
+	void Set_Btm2PickerOpen(int nSub, int nRow);
+	BOOL Get_Btm2PickerOpen(int nSub, int nRow);
+	void Set_Btm2PickerOpen(int nSub);
+	BOOL Get_Btm2PickerOpen(int nSub);
+	void Set_Btm2PickerClose(int nSub);
+	BOOL Get_Btm2PickerClose(int nSub);
 	BOOL Get_Btm2PickerAllNotChk();
 
 	void Set_Btm2PickerVacOffMulti(int nSub, int nCnt, int nRow=0);
@@ -181,6 +187,8 @@ public:
 	BOOL Get_SortPicker1Down(int nSub);
 	void Set_SortPicker1Open(int nSub);
 	BOOL Get_SortPicker1Open(int nSub);
+	void Set_SortPicker1Close(int nSub);
+	BOOL Get_SortPicker1Close(int nSub);
 	BOOL Get_SortPicker1AllNotChk();
 
 	void Set_SortPicker1DownMulti(int nSub, int nCnt);
@@ -197,6 +205,8 @@ public:
 	BOOL Get_SortPicker2Down(int nSub);
 	void Set_SortPicker2Open(int nSub);
 	BOOL Get_SortPicker2Open(int nSub);
+	void Set_SortPicker2Close(int nSub);
+	BOOL Get_SortPicker2Close(int nSub);
 	BOOL Get_SortPicker2AllNotChk();
 
 	void Set_SortPicker2DownMulti(int nSub, int nCnt);
