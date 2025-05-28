@@ -152,12 +152,25 @@ void CSequenceInit::Reset_InitialCase()
 	m_niEmpTrans2Case	= 0;	// 13. (Error : 2300)
 }
 
+
+BOOL CSequenceInit::Check_Mode()
+{
+	if(theApp.Get_MainMode() == MODE_MANUAL
+		|| theApp.Get_MainMode() == MODE_SETUP
+		|| theApp.Get_MainMode() == MODE_PARAM
+		|| theApp.Get_MainMode() == MODE_PROHIBIT
+		) return FALSE;
+
+	return TRUE;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // Initial Thread Function 
 
 UINT CSequenceInit::Thread_Initial(LPVOID lpVoid)
 {
 	while (g_objSequenceInit.m_bThreadInitial) {
+		if (!g_objSequenceInit.Check_Mode()) break;
 		if (!g_objCommon.Check_MainEmgAir()) break;
 		if (!g_objCommon.Check_MainDoor()) break;
 		if (!g_objCommon.Check_TrayFull()) break;

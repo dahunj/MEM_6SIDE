@@ -122,6 +122,7 @@ public:
 	void Reset_InitialCase();
 
 	BOOL Is_InitThreadRun() { return m_bThreadInitial; }
+	BOOL Check_Mode();
 };
 
 extern CSequenceInit g_objSequenceInit;
