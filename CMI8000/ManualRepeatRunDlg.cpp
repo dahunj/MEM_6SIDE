@@ -152,21 +152,20 @@ void CManualRepeatRunDlg::OnBnClickedChkRepeatRun()
 	g_dlgManual.m_rdoManualUnload.EnableWindow(!m_chkRepeatRun.GetCheck());
 
 
-	int nMotionNo = g_objCommon.Check_MotionPos();
-	if (nMotionNo < 99) {
-		double dCurrentPos = g_objAJinAXL.Get_Position(nMotionNo);
-		CString strName = g_objAJinAXL.Get_AxisName(nMotionNo);
-		strTemp.Format("Motion(%s) 위치를 Check 하세요.\n이전위치(%0.3lf) != 현재위치(%0.3lf)", strName, gAlm.dMotionPos[nMotionNo], dCurrentPos);
-		g_objLogFile.Save_HandlerLog(strTemp);
 
-		g_objCommon.Show_MsgBox(1, strTemp);			
-		return;
-	}
 		
-	if (m_chkRepeatRun.GetCheck()) {
-		
+	if (m_chkRepeatRun.GetCheck())
+	{
+		int nMotionNo = g_objCommon.Check_MotionPos();
+		if (nMotionNo < 99) {
+			double dCurrentPos = g_objAJinAXL.Get_Position(nMotionNo);
+			CString strName = g_objAJinAXL.Get_AxisName(nMotionNo);
+			strTemp.Format("Motion(%s) 위치를 Check 하세요.\n이전위치(%0.3lf) != 현재위치(%0.3lf)", strName, gAlm.dMotionPos[nMotionNo], dCurrentPos);
+			g_objLogFile.Save_HandlerLog(strTemp);
 
-
+			g_objCommon.Show_MsgBox(1, strTemp);			
+			return;
+		}
 		m_nPickerSelect = m_cboPicker.GetCurSel();
 		m_nPickerNum = m_cboPickNum.GetCurSel();
 		m_edtDelay.GetWindowText(strText);
@@ -204,7 +203,7 @@ void CManualRepeatRunDlg::Repeat_Action()
 	case 0:
 		break;
 	
-	
+	//Btm1 Picker :100
 	case 100:
 		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0))
 		{
@@ -229,7 +228,7 @@ void CManualRepeatRunDlg::Repeat_Action()
 		}
 		break;
 	case 130:
-		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0))
+		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0) && g_objCommon.Get_Btm1PickerClose(m_nPickerNumSelected))
 		{
 			theApp.uSleep(m_nActionDelay);
 			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 1); // z down
@@ -277,7 +276,7 @@ void CManualRepeatRunDlg::Repeat_Action()
 		}
 		break;
 	case 230:
-		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0))
+		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0) && g_objCommon.Get_Btm2PickerClose(m_nPickerNumSelected))
 		{
 			theApp.uSleep(m_nActionDelay);
 			g_objCommon.Move_Position(AX_BTM2_PICKER_Z, 1); // z down
@@ -325,7 +324,7 @@ void CManualRepeatRunDlg::Repeat_Action()
 		}
 		break;
 	case 330:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
+		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0) && g_objCommon.Get_SortPicker1Close(m_nPickerNumSelected))
 		{
 			theApp.uSleep(m_nActionDelay);
 			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 1); // z down
@@ -373,7 +372,7 @@ void CManualRepeatRunDlg::Repeat_Action()
 		}
 		break;
 	case 430:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
+		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0) && g_objCommon.Get_SortPicker2Close(m_nPickerNumSelected))
 		{
 			theApp.uSleep(m_nActionDelay);
 			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 1); // z down
@@ -407,7 +406,7 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 {
 	m_cboPickNum.ResetContent();
 
-	if(m_cboPicker.GetCurSel() == 0)
+	if(m_cboPicker.GetCurSel() == 0) // btm1 picker 
 	{
 		m_nRepeatCase = 100;
 		for(int i = 1; i < gData.nBtmPickQt+1 ; i++)
@@ -421,8 +420,9 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 			m_cboPickNum.AddString(m_strLog);
 		}
 	}
-	else if(m_cboPicker.GetCurSel() == 1)
+	else if(m_cboPicker.GetCurSel() == 1) // Btm2 picker
 	{
+		m_nRepeatCase = 200;
 		for(int i = 1; i < gData.nBtmPickQt+1 ; i++)
 		{	
 			m_strLog.Format("Btm2 CM No.: %d", i);
@@ -434,8 +434,9 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 			m_cboPickNum.AddString(m_strLog);
 		}
 	}
-	else if(m_cboPicker.GetCurSel() == 2)
+	else if(m_cboPicker.GetCurSel() == 2) //sort 1 picker
 	{
+		m_nRepeatCase = 300;
 		for(int i = 1; i < gData.nSortPickQt+1 ; i++)
 		{	
 			m_strLog.Format("Sort 1 CM No.: %d", i);
@@ -443,8 +444,9 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 		}
 		
 	}
-	else if(m_cboPicker.GetCurSel() == 3)
+	else if(m_cboPicker.GetCurSel() == 3) //sort 2 picker 
 	{
+		m_nRepeatCase = 400;
 		for(int i = 1; i < gData.nSortPickQt+1 ; i++)
 		{	
 			m_strLog.Format("Sort 2 CM No.: %d", i);
