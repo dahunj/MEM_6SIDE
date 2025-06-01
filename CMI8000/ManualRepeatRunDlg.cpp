@@ -39,6 +39,7 @@ void CManualRepeatRunDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDT_DELAY, m_edtDelay);
 	DDX_Control(pDX, IDC_CHK_REPEAT_RUN, m_chkRepeatRun);
 	DDX_Control(pDX, IDC_EDT_MSG, m_edtMsg);
+	DDX_Control(pDX, IDC_LBL_CASE, m_lblCase);
 }
 
 
@@ -49,6 +50,7 @@ BEGIN_MESSAGE_MAP(CManualRepeatRunDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHK_REPEAT_RUN, &CManualRepeatRunDlg::OnBnClickedChkRepeatRun)
 	ON_CBN_SELCHANGE(IDC_CBO_PICKER, &CManualRepeatRunDlg::OnCbnSelchangeCboPicker)
 	ON_CBN_SELCHANGE(IDC_CBO_PICK_NUM, &CManualRepeatRunDlg::OnCbnSelchangeCboPickNum)
+	ON_BN_CLICKED(IDC_BTN_RESETCASE, &CManualRepeatRunDlg::OnBnClickedBtnResetcase)
 END_MESSAGE_MAP()
 
 
@@ -197,6 +199,9 @@ UINT CManualRepeatRunDlg::Thread_ActionRun(LPVOID lpVoid)
 
 void CManualRepeatRunDlg::Repeat_Action()
 {
+
+	m_strTemp.Format("%d", m_nRepeatCase);
+	m_lblCase.SetWindowText(m_strTemp);
 
 	switch(m_nRepeatCase)
 	{
@@ -460,4 +465,12 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 void CManualRepeatRunDlg::OnCbnSelchangeCboPickNum()
 {
 	m_nPickerNumSelected = m_cboPickNum.GetCurSel() + 1;
+}
+
+
+void CManualRepeatRunDlg::OnBnClickedBtnResetcase()
+{
+	m_nRepeatCase = 0;
+	m_strTemp.Format("%d", m_nRepeatCase);
+	m_lblCase.SetWindowText(m_strTemp);
 }

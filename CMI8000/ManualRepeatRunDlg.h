@@ -17,6 +17,7 @@ public:
 	CComboCS	m_cboPickNum;
 	CEditCS		m_edtDelay;
 	CCheckCS	m_chkRepeatRun;
+	CLabelCS	m_lblCase;
 
 	CEditCS		m_edtMsg;
 // 대화 상자 데이터입니다.
@@ -32,6 +33,8 @@ private:
 	void Initial_Controls();
 
 protected:
+	CString m_strTemp;
+
 	int m_nRepeatCase;
 
 	int m_nPickerSelected;
@@ -55,4 +58,5 @@ public:
 	afx_msg void OnBnClickedChkRepeatRun();
 	afx_msg void OnCbnSelchangeCboPicker();
 	afx_msg void OnCbnSelchangeCboPickNum();
+	afx_msg void OnBnClickedBtnResetcase();
 };
