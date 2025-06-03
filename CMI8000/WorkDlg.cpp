@@ -371,9 +371,10 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 				}
 				pMainDlg->Set_EquipRunStart();
 				MachineStopLog("RUN_START");
-
+				
 				g_objCommon.Btm1BlowSunctionOnOff(TRUE);
 				g_objCommon.TopBlowSunctionOnOff(TRUE);
+				
 
 			} else {
 				g_objCommon.Show_Error(40);		// 초기화 완료 에러
@@ -395,7 +396,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 				if (!g_objSequenceMain.Is_MainThreadRun()) {
 					g_objLogFile.Save_HandlerLog("[Work Mode] Auto STOP");
 					pMainDlg->Set_CurrentState(STATE_STOP);
-					g_objMES.Set_Status(2);
+					g_objMES.Set_Status(3);
 
 					g_objCommon.Btm1BlowSunctionOnOff(FALSE);
 					g_objCommon.TopBlowSunctionOnOff(FALSE);
@@ -538,7 +539,6 @@ void CWorkDlg::OnBnClickedBtnMesAbort()
 
 	g_objMES.Set_LotCancel(gData.sLotID[m_nPortIdx], gData.nCmUseCount[m_nPortIdx], gData.sOperID);
 // 	gData.bMesRegistered[m_nPortIdx] = FALSE;
-	g_objMES.Set_Status(3);	// Idle
 
 	CString strLog;
 	strLog.Format("Lot Cancel OK...  => Lot[%s] 취소를 MES에 전송하였습니다.", gData.sLotID[m_nPortIdx]);
