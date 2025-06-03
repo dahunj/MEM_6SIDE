@@ -199,6 +199,7 @@ BOOL CManualRepeatRunDlg::CheckMotionPos()
 		g_objCommon.Show_MsgBox(1, strTemp);		
 		return FALSE;
 	}
+	return TRUE;
 }
 
 
