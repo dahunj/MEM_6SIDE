@@ -50,7 +50,7 @@ BEGIN_MESSAGE_MAP(CManualRepeatRunDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHK_REPEAT_RUN, &CManualRepeatRunDlg::OnBnClickedChkRepeatRun)
 	ON_CBN_SELCHANGE(IDC_CBO_PICKER, &CManualRepeatRunDlg::OnCbnSelchangeCboPicker)
 	ON_CBN_SELCHANGE(IDC_CBO_PICK_NUM, &CManualRepeatRunDlg::OnCbnSelchangeCboPickNum)
-	ON_BN_CLICKED(IDC_BTN_RESETCASE, &CManualRepeatRunDlg::OnBnClickedBtnResetcase)
+	
 END_MESSAGE_MAP()
 
 
@@ -65,17 +65,14 @@ BOOL CManualRepeatRunDlg::OnInitDialog()
 	SetWindowPos(this, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
 	Initial_Controls();
-
-	m_cboPicker.AddString("Btm 1 Picker (Angle Tray)");
-	m_cboPicker.AddString("Btm 2 Picker (Buffer)");
-	m_cboPicker.AddString("Sort 1 Picker (Buffer)");
-	m_cboPicker.AddString("Sort 2 Picker (Buffer)");
-		
-	//m_cboPicker.SetCurSel(0);
-	//m_cboPickNum.SetCurSel(0);
-
+	
+	AddComboListPicker();
+	
 	m_nPickerSelected = 0;
 	m_nPickerNumSelected = 0;
+
+	m_edtDelay.SetWindowText("1000");
+
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
@@ -152,22 +149,11 @@ void CManualRepeatRunDlg::OnBnClickedChkRepeatRun()
 	g_dlgManual.m_rdoManualBtm2.EnableWindow(!m_chkRepeatRun.GetCheck());
 	g_dlgManual.m_rdoManualLoad.EnableWindow(!m_chkRepeatRun.GetCheck());
 	g_dlgManual.m_rdoManualUnload.EnableWindow(!m_chkRepeatRun.GetCheck());
-
-
-
-		
+			
 	if (m_chkRepeatRun.GetCheck())
-	{
-		int nMotionNo = g_objCommon.Check_MotionPos();
-		if (nMotionNo < 99) {
-			double dCurrentPos = g_objAJinAXL.Get_Position(nMotionNo);
-			CString strName = g_objAJinAXL.Get_AxisName(nMotionNo);
-			strTemp.Format("Motion(%s) 위치를 Check 하세요.\n이전위치(%0.3lf) != 현재위치(%0.3lf)", strName, gAlm.dMotionPos[nMotionNo], dCurrentPos);
-			g_objLogFile.Save_HandlerLog(strTemp);
+	{		
+		if(!CheckMotionPos()) return;
 
-			g_objCommon.Show_MsgBox(1, strTemp);			
-			return;
-		}
 		m_nPickerSelect = m_cboPicker.GetCurSel();
 		m_nPickerNum = m_cboPickNum.GetCurSel();
 		m_edtDelay.GetWindowText(strText);
@@ -175,12 +161,46 @@ void CManualRepeatRunDlg::OnBnClickedChkRepeatRun()
 
 		m_bThreadAction = TRUE;
 		m_pThreadAction = AfxBeginThread(Thread_ActionRun, this);
-	} else {
+	} 
+	else
+	{
+		m_cboPicker.ResetContent();
+		AddComboListPicker();
+
+		m_nRepeatCase = 0;
+		m_strTemp.Format("%d", m_nRepeatCase);
+		m_lblCase.SetWindowText(m_strTemp);
+
 		if (!m_pThreadAction) return;
 		m_bThreadAction = FALSE;
 		WaitForSingleObject(m_pThreadAction->m_hThread, INFINITE);
 	}
 }
+
+void CManualRepeatRunDlg::AddComboListPicker()
+{
+	m_cboPicker.AddString("Btm 1 Picker (Angle Tray)");
+	m_cboPicker.AddString("Btm 2 Picker (Buffer)");
+	m_cboPicker.AddString("Sort 1 Picker (Buffer)");
+	m_cboPicker.AddString("Sort 2 Picker (Buffer)");
+}
+
+BOOL CManualRepeatRunDlg::CheckMotionPos()
+{
+	CString strTemp;
+
+	int nMotionNo = g_objCommon.Check_MotionPos();
+	if (nMotionNo < 99) {
+		double dCurrentPos = g_objAJinAXL.Get_Position(nMotionNo);
+		CString strName = g_objAJinAXL.Get_AxisName(nMotionNo);
+		strTemp.Format("Motion(%s) 위치를 Check 하세요.\n이전위치(%0.3lf) != 현재위치(%0.3lf)", strName, gAlm.dMotionPos[nMotionNo], dCurrentPos);
+		g_objLogFile.Save_HandlerLog(strTemp);
+
+		g_objCommon.Show_MsgBox(1, strTemp);		
+		return FALSE;
+	}
+}
+
 
 
 UINT CManualRepeatRunDlg::Thread_ActionRun(LPVOID lpVoid)
@@ -203,6 +223,36 @@ void CManualRepeatRunDlg::Repeat_Action()
 	m_strTemp.Format("%d", m_nRepeatCase);
 	m_lblCase.SetWindowText(m_strTemp);
 
+	if(m_nRepeatCase == 100 && !g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0))
+	{
+		m_bThreadAction = FALSE;
+		m_pThreadAction = NULL;
+		AfxMessageBox("Btm1 Picker Z Ready Up 아닙니다.");
+		return;
+	}
+	if(m_nRepeatCase == 200 && !g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0))
+	{
+		m_bThreadAction = FALSE;
+		m_pThreadAction = NULL;
+		AfxMessageBox("Btm2 Picker Z Ready Up 아닙니다.");
+		return;
+	}
+	if(m_nRepeatCase == 300 && !g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
+	{
+		m_bThreadAction = FALSE;
+		m_pThreadAction = NULL;
+		AfxMessageBox("Sort 1 Picker Z Ready Up 아닙니다.");
+		return;
+	}
+	if(m_nRepeatCase == 400 && !g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
+	{
+		m_bThreadAction = FALSE;
+		m_pThreadAction = NULL;
+		AfxMessageBox("Sort 2 Picker Z Ready Up 아닙니다.");
+		return;
+	}
+
+
 	switch(m_nRepeatCase)
 	{
 	case 0:
@@ -210,11 +260,21 @@ void CManualRepeatRunDlg::Repeat_Action()
 	
 	//Btm1 Picker :100
 	case 100:
+		//Btm1 X Tray position 아니면 Stop 
+		if(!g_objCommon.Check_Position(AX_BTM1_PICKER_X, 0) && !g_objCommon.Check_Position(AX_BTM1_PICKER_X, 1)
+			&& !g_objCommon.Check_Position(AX_BTM1_PICKER_X, 2) && !g_objCommon.Check_Position(AX_BTM1_PICKER_X, 3))
+		{
+			m_bThreadAction = FALSE;
+			m_pThreadAction = NULL;
+			AfxMessageBox("Btm1 Picker (Tray) Position 아닙니다.");
+			return;
+		}
+
 		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0))
 		{
 			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 1); // z down
 			m_nRepeatCase = 110;
-		}
+		}		
 		break;
 	case 110:
 		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 1))
@@ -258,6 +318,16 @@ void CManualRepeatRunDlg::Repeat_Action()
 		break;
 //////////
 	case 200:
+
+		//Btm2 X Buffer position 아니면 Stop 
+		if(!g_objCommon.Check_Position(AX_BTM2_PICKER_X, 2) && !g_objCommon.Check_Position(AX_BTM2_PICKER_X, 3)
+			&& !g_objCommon.Check_Position(AX_BTM2_PICKER_X, 4) && !g_objCommon.Check_Position(AX_BTM2_PICKER_X, 5))
+		{
+			m_bThreadAction = FALSE;
+			m_pThreadAction = NULL;
+			AfxMessageBox("Btm2 Picker (Buffer) Position 아닙니다.");
+			return;
+		}
 		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0))
 		{
 			g_objCommon.Move_Position(AX_BTM2_PICKER_Z, 1); //z down 
@@ -306,6 +376,13 @@ void CManualRepeatRunDlg::Repeat_Action()
 		break;
 	// Sort 1
 	case 300:
+		if(!g_objCommon.Check_Position(AX_SORT_PICKER1_X, 0) && !g_objCommon.Check_Position(AX_SORT_PICKER1_X, 1))
+		{
+			m_bThreadAction = FALSE;
+			m_pThreadAction = NULL;
+			AfxMessageBox("Sort 1 Picker (Buffer) Position 아닙니다.");
+			return;
+		}
 		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
 		{
 			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 1);
@@ -354,6 +431,13 @@ void CManualRepeatRunDlg::Repeat_Action()
 		break;
 	// Sort 2
 	case 400:
+		if(!g_objCommon.Check_Position(AX_SORT_PICKER2_X, 0) && !g_objCommon.Check_Position(AX_SORT_PICKER2_X, 1))
+		{
+			m_bThreadAction = FALSE;
+			m_pThreadAction = NULL;
+			AfxMessageBox("Sort 2 Picker (Buffer) Position 아닙니다.");
+			return;
+		}
 		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
 		{
 			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 1);
@@ -468,9 +552,3 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPickNum()
 }
 
 
-void CManualRepeatRunDlg::OnBnClickedBtnResetcase()
-{
-	m_nRepeatCase = 0;
-	m_strTemp.Format("%d", m_nRepeatCase);
-	m_lblCase.SetWindowText(m_strTemp);
-}
