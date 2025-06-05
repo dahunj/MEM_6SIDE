@@ -495,8 +495,6 @@ void CMESInterface::Set_JobReady(CString sLotID, int nCount, CString sOperID, in
 	m_sOperID = sOperID;
 	gData.nMesPortNo = nPortNo;
 
-// 	Set_Status(1);	// Run Set
-// 
 	if (!m_pThreadMES) {
 		m_bThreadMES = TRUE;
 		m_pThreadMES = AfxBeginThread(Thread_MES, NULL);
@@ -703,8 +701,6 @@ void CMESInterface::Set_LotEnd(CString sLotID, int nCount, CString sOperID, int 
 	g_csMesLog.Unlock();
 
 	Clear_Result();	//수신 Folder All File 삭제
-
-	Set_Status(3);	// Idle Set
 }
 
 void CMESInterface::Set_TackTime(double dTack, CString sLotID, int nCount, CString sStartTime, CString sEndTime)	//sStartTime="2017/12/04 14:00:10:
