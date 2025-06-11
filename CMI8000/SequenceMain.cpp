@@ -10111,6 +10111,8 @@ BOOL CSequenceMain::EmptyTrayX_Run()
 BOOL CSequenceMain::EmptyTrayElevator_Run()
 {
 	int nTaktZone = 19;		// Takt_Start, Takt_End
+	static double dEmpty_Z;
+	static double dEmpty_Z_Limit;
 
 	// Top check Sensor 켜져있으면 준비 완료.
 	switch (m_nEmptyTrayElCase) {
@@ -10154,8 +10156,8 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 		break;
 	case 3:		// Buffer Z Up Stop
 #ifdef EDITION_2ND
-		double dEmpty_Z = g_objAJinAXL.Get_Position(AX_EMPTY_PORT_Z);
-		double dEmpty_Z_Limit = m_pMoveData->dEmptyPortZ[2];
+		dEmpty_Z = g_objAJinAXL.Get_Position(AX_EMPTY_PORT_Z);
+		dEmpty_Z_Limit = m_pMoveData->dEmptyPortZ[2];
 		if (m_pDX01->iEmptyPortTopCheck || g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.5)) {
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(5000);
