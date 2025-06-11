@@ -306,6 +306,8 @@ typedef struct {
 	int		nDoorLockTime;		//Min
 	DWORD	dwDoorStartTime;
 
+	double	dEmptyPort_Z_Limit;
+
 } GLOVAL_DATA;
 
 typedef struct {

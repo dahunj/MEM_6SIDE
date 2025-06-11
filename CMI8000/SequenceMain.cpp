@@ -72,6 +72,8 @@ CSequenceMain::CSequenceMain()
 
 	iGoodTrayBufferCount = 0;
 	Reset_MainRunCase();
+
+	gData.dEmptyPort_Z_Limit = m_pMoveData->dEmptyPortZ[2];
 }
 
 CSequenceMain::~CSequenceMain()
@@ -10112,7 +10114,7 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 {
 	int nTaktZone = 19;		// Takt_Start, Takt_End
 	static double dEmpty_Z;
-	static double dEmpty_Z_Limit;
+	
 
 	// Top check Sensor 켜져있으면 준비 완료.
 	switch (m_nEmptyTrayElCase) {
@@ -10121,33 +10123,25 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 
 	case 1:		// Tray 확인.
 		if (m_bUnloadLotEnd) m_nEmptyTrayElCase = 0;
+		
+		else if (m_pDX01->iEmptyPortSlideClose)
+		{
 
-#ifdef EDITION_2ND
-		else if (m_pDX01->iEmptyPortSlideClose) {
-#else
-		else if (m_pDX07->iEmptyPortSlideClose) {
-#endif
 			gData.bEmptyZTopCheckRepeat = FALSE;
 			gData.bEmptyFull = FALSE;
 			if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 0)) m_nEmptyTrayElCase = 20;
 			else if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 1)) m_nEmptyTrayElCase = 21;
-
-#ifdef EDITION_2ND
 			else if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0) && !m_pDX01->iEmptyPortTopCheck && !m_pDX01->iEmptyPortExist) m_nEmptyTrayElCase++;
-#else
-			else if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0) && !m_pDX07->iEmptyPortTopCheck && !m_pDX07->iEmptyPortExist) m_nEmptyTrayElCase++;
-#endif
+
 			m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		break;
 
 	// 1. Slow Up
 	case 2:		// Elevator Z Slow Up
-#ifdef EDITION_2ND
-		if (!m_pDX01->iEmptyPortTopCheck) {
-#else
-		if (!m_pDX07->iEmptyPortTopCheck) {
-#endif
+
+		if (!m_pDX01->iEmptyPortTopCheck)
+		{
 			if (m_dwEmptyTrayEl == 0) m_dwEmptyTrayEl = GetTickCount();
 			m_tEmptyTrayElLoop.Takt_Start(nTaktZone, 1, TRUE);
 			g_objAJinAXL.Move_Relative(AX_EMPTY_PORT_Z, 2.0, 0.25);	// 2mm씩 올려준다.
@@ -10156,13 +10150,12 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 		break;
 	case 3:		// Buffer Z Up Stop
 #ifdef EDITION_2ND
-		dEmpty_Z = g_objAJinAXL.Get_Position(AX_EMPTY_PORT_Z);
-		dEmpty_Z_Limit = m_pMoveData->dEmptyPortZ[2];
+		dEmpty_Z = g_objAJinAXL.Get_Position(AX_EMPTY_PORT_Z);		
 		if (m_pDX01->iEmptyPortTopCheck || g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.5)) {
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
-		else if(dEmpty_Z > dEmpty_Z_Limit) // if over limit ---> ready down 
+		else if(dEmpty_Z > gData.dEmptyPort_Z_Limit) // if over limit ---> ready down 
 		{
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			m_nEmptyTrayElCase = 5; m_tEmptyTrayElLoop.Set_LoopTime(5000);
@@ -10180,11 +10173,10 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 #endif
 		break;
 	case 4:	
-#ifdef EDITION_2ND
-		if ((g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && m_pDX01->iEmptyPortTopCheck) || (!m_pDX01->iEmptyPortTopCheck && g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0))) {
-#else
-		if ((g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && m_pDX07->iEmptyPortTopCheck) || (!m_pDX07->iEmptyPortTopCheck && g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0))) {
-#endif
+
+		if ((g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && m_pDX01->iEmptyPortTopCheck) || (!m_pDX01->iEmptyPortTopCheck && g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0))) 
+		{
+			gData.dEmptyPort_Z_Limit = g_objAJinAXL.Get_Position(AX_EMPTY_PORT_Z) + (2.5 * m_pMoveData->dEmptyTrans1X[2]);
 			m_tEmptyTrayElLoop.Takt_End(nTaktZone, 1,0);
 
 			gData.bEmptyZTopCheckRepeat = FALSE;
