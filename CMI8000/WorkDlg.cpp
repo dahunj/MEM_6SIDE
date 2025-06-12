@@ -456,14 +456,15 @@ void CWorkDlg::OnBnClickedNgClear(UINT nID)
 	int nIndex = nID - IDC_BTN_NG_CLEAR_0;
 	CString strMsg;
 
-	if (nIndex == 0) strMsg.Format("N1 && N3 Tray Clear 하시겠습니까?");
+	if (nIndex == 0) strMsg.Format("N1&&N2&&N3 Tray Clear 하시겠습니까?");
 	if (nIndex == 1) strMsg.Format("N4 Tray Clear 하시겠습니까?");
-	if (nIndex == 2) strMsg.Format("N1 && N3 Tray Clear 하시겠습니까?");
-	if (nIndex == 3) strMsg.Format("N2 Tray Clear 하시겠습니까?");
+	//if (nIndex == 2) strMsg.Format("N1 && N3 Tray Clear 하시겠습니까?");
+	//if (nIndex == 3) strMsg.Format("N2 Tray Clear 하시겠습니까?");
 
 	if (g_objCommon.Show_MsgBox(2, strMsg) == IDOK) {
 		g_objSequenceMain.Init_NgTray(nIndex);
 		if (nIndex == 0) g_objSequenceMain.Init_NgTray(2);	// NG 1 Clear 할 때 NG3도 Clear 한다.
+		if (nIndex == 1) g_objSequenceMain.Init_NgTray(3);	// NG 1 Clear 할 때 NG3도 Clear 한다.
 	}	
 }
 
