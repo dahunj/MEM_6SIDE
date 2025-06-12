@@ -219,6 +219,8 @@ void CSetupMotionTabDlg::OnBtnHomeClick(UINT nID)
 	int ID = nID - IDC_BTN_HOME_0;
 	int nStartAx = m_nMotionTab * 8;
 
+	if (Check_Interlock(nStartAx + ID) == FALSE) return;
+
 	g_objAJinAXL.Home_Search(nStartAx + ID);
 
 	m_strLog.Format("[Setup Motion] Homing - %s", g_objAJinAXL.Get_AxisName(nStartAx + ID));
