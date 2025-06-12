@@ -1612,9 +1612,7 @@ void CWorkDlg::OnBnClickedBtnIdleReport()
 
 void CWorkDlg::OnBnClickedButton1()
 {
-	DX_DATA_14 *pDX14 = g_objAJinAXL.Get_pDX14(); DY_DATA_14 *pDY14 = g_objAJinAXL.Get_pDY14();
-	pDX14->iLoad1Sw = TRUE;
-	
+	gData.dEmptyPort_Z_Limit = g_objDataManager.Get_pMoveData()->dEmptyPortZ[2];
 	//PostMessage(UM_UPDATE_BARCODE, NULL, NULL);
 	//BOOL ret = g_objLogFile.Check_BarcodeLog("CPP00034A/560/DVRI1144N014");
 	//BOOL ret = g_objMES.Read_APDResult("APDTEST7");

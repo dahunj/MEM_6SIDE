@@ -590,8 +590,9 @@ void CManualUnloadDlg::OnBtnEmptyPortZClick(UINT nID)
 	if (nIndex == 0 || nIndex == 1 || nIndex == 2) {	// Base Down, Ready Down, Limit Up
 		g_objCommon.Move_Position(AX_EMPTY_PORT_Z, nIndex);
 	}
-	else if (nIndex == 3) {		// Slow Up
-#ifdef EDITION_2ND
+	else if (nIndex == 3) 
+	{		// Slow Up
+
 		if (pDX01->iEmptyPortTopCheck) { AfxMessageBox("이미 Top Check 센서를 감지하고 있습니다."); return; }
 
 		CWaitCursor wait;
@@ -605,22 +606,9 @@ void CManualUnloadDlg::OnBtnEmptyPortZClick(UINT nID)
 		}
 
 		wait.Restore();
-#else
-		if (pDX07->iEmptyPortTopCheck) { AfxMessageBox("이미 Top Check 센서를 감지하고 있습니다."); return; }
 
-		CWaitCursor wait;
-
-		g_objAJinAXL.Move_AbsSlow(AX_EMPTY_PORT_Z, pMoveData->dEmptyPortZ[2]);
-
-		DWORD dwStart = GetTickCount();
-		while (!pDX07->iEmptyPortTopCheck) {
-			if (GetTickCount() - dwStart > 10000) { g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z); AfxMessageBox("Time Over."); wait.Restore(); return; }
-			theApp.DoEvents();
-		}
-
-		wait.Restore();
-#endif
 		g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
+		gData.dEmptyPort_Z_Limit = g_objAJinAXL.Get_Position(AX_EMPTY_PORT_Z) + (pMoveData->dEmptyTrans1X[2] * 2.5);
 	}
 	else if (nIndex == 4) {		// Slow Down
 #ifdef EDITION_2ND
