@@ -10132,6 +10132,11 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 			if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 0)) m_nEmptyTrayElCase = 20;
 			else if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 1)) m_nEmptyTrayElCase = 21;
 			else if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.5) && !m_pDX01->iEmptyPortTopCheck && !m_pDX01->iEmptyPortExist) m_nEmptyTrayElCase++;
+			else if (m_pDX01->iEmptyPortTopCheck)
+			{ 
+				g_objCommon.Move_Position(AX_EMPTY_PORT_Z, 0);
+				m_nEmptyTrayElCase = 20;
+			}
 
 			m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
