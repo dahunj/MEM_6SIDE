@@ -73,7 +73,7 @@ CSequenceMain::CSequenceMain()
 	iGoodTrayBufferCount = 0;
 	Reset_MainRunCase();
 
-	gData.dEmptyPort_Z_Limit = m_pMoveData->dEmptyPortZ[2];
+	gData.dEmptyPort_Z_Limit = 300;
 }
 
 CSequenceMain::~CSequenceMain()
@@ -9992,14 +9992,12 @@ BOOL CSequenceMain::EmptyTrayX_Run()
 	case 10:	// Wait
 		if (m_nEmptyTrayYCase == 0 || m_nEmptyTrayYCase == 2 || m_nEmptyTrayYCase >= 20) {
 			// EmptyPort에 Tray가 있고 Good Stage에 Tray가 없으면 먼저 작업할수있게 기다려 준다.
-#ifdef EDITION_2ND
 			if (m_pDX01->iEmptyPortExist && m_pDX01->iEmptyPortTopCheck && (!m_pDX12->iGoodTrayBufferBottom || !m_pDX12->iGoodStage1Exist || !m_pDX12->iGoodStage2Exist))
-#else
-			if (m_pDX07->iEmptyPortExist && m_pDX07->iEmptyPortTopCheck && (!m_pDX12->iGoodTrayBufferBottom || !m_pDX12->iGoodStage1Exist || !m_pDX12->iGoodStage2Exist))
-#endif
 			{
 				return TRUE;
-			} else {
+			} 
+			else 
+			{
 				m_nEmptyTrayXCase++; m_tEmptyTrayXLoop.Set_LoopTime(5000);
 			}
 		}
@@ -10026,7 +10024,9 @@ BOOL CSequenceMain::EmptyTrayX_Run()
 			if (dReadyPos < dCurPos) {
 				g_objAJinAXL.Move_Absolute(AX_EMPTY_PORT_Z, gData.dEmptyPortZDownOffset, 0.5);	// Down Offset Move
 				m_nEmptyTrayXCase++; m_tEmptyTrayXLoop.Set_LoopTime(10000);
-			} else {
+			} 
+			else 
+			{
 				m_nEmptyTrayElCase = 30;	// Full Alarm 처리
 				m_tEmptyTrayXLoop.Set_LoopTime(10000);
 			}
@@ -10154,28 +10154,20 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 		} 
 		break;
 	case 3:		// Buffer Z Up Stop
-#ifdef EDITION_2ND
 		dEmpty_Z = g_objAJinAXL.Get_Position(AX_EMPTY_PORT_Z);		
 		if (m_pDX01->iEmptyPortTopCheck || g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.5)) {
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
-		else if(dEmpty_Z > gData.dEmptyPort_Z_Limit) // if over limit ---> ready down 
+		else if(dEmpty_Z > gData.dEmptyPort_Z_Limit && g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z)) // if over limit ---> ready down 
 		{
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
-			m_nEmptyTrayElCase = 5; m_tEmptyTrayElLoop.Set_LoopTime(5000);
+			g_objCommon.Move_Position(AX_EMPTY_PORT_Z, 0);
+			m_nEmptyTrayElCase = 20; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		else if (!m_pDX01->iEmptyPortTopCheck && g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && !g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0)) {
 			m_nEmptyTrayElCase = 2; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
-#else
-		if (m_pDX07->iEmptyPortTopCheck || g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0)) {
-			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
-			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(5000);
-		} else if (!m_pDX07->iEmptyPortTopCheck && g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && !g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0)) {
-			m_nEmptyTrayElCase = 2; m_tEmptyTrayElLoop.Set_LoopTime(5000);
-		}
-#endif
 		break;
 	case 4:	
 
@@ -10254,21 +10246,12 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 		}
 		break;
 	case 22:	// 트레이가 있어야하고 탑체크 감지 안되어 있어야한다.
-#ifdef EDITION_2ND
 		if (!m_pDX01->iEmptyPortTopCheck && m_pDX01->iEmptyPortSlideClose) {
 			m_nEmptyTrayElCase = 2; m_tEmptyTrayElLoop.Set_LoopTime(20000);	// 20초
 		} else if (m_pDX01->iEmptyPortTopCheck) {
 			m_nEmptyTrayElCase = 25; m_tEmptyTrayElLoop.Set_LoopTime(10000);
 		}
-#else
-		if (!m_pDX07->iEmptyPortTopCheck && m_pDX07->iEmptyPortSlideClose) {
-			m_nEmptyTrayElCase = 2; m_tEmptyTrayElLoop.Set_LoopTime(20000);	// 20초
-		} else if (m_pDX07->iEmptyPortTopCheck) {
-			m_nEmptyTrayElCase = 25; m_tEmptyTrayElLoop.Set_LoopTime(10000);
-		}
-#endif
 		break;
-
 	case 25:	// Move to Base Position
 		if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 1)) {
 			m_tEmptyTrayElLoop.Takt_Start(nTaktZone, 3);
