@@ -788,7 +788,7 @@ void CSequenceMain::Init_AnglePortTray(int nPNo)
 
 		if(nTrayY == fullLine_YCnt)
 		{
-			nTrayX = (i % 4) +(gData.nTrayX-remainder_X); //마지막 라인 잔량은 오른쪽으로 붙이기
+			nTrayX = (i % 4) + (gData.nTrayX-remainder_X); //마지막 라인 잔량은 오른쪽으로 붙이기
 		}
 		else{
 			nTrayX = i % gData.nTrayX;
@@ -3617,10 +3617,9 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			}
 		}
 		break;
-	case 5:		// Btm1 Picker Up & Info Exchange
-		
-		if (1) {
-				// Btm1 Delay
+	case 5:		
+		if (1)
+		{	
 			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 0);	// Ready up
 												
 			if (Check_AngleTrayEmpty(nB1pWorkTray)) {	// 트레이가 다 비었을때 초기화 해준다.
