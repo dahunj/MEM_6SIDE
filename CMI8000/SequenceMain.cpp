@@ -10137,7 +10137,6 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 				g_objCommon.Move_Position(AX_EMPTY_PORT_Z, 0);
 				m_nEmptyTrayElCase = 20;
 			}
-
 			m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		break;
@@ -10158,7 +10157,8 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 			g_objCommon.Move_Position(AX_EMPTY_PORT_Z, 0);
 			m_nEmptyTrayElCase = 20; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
-		else if (m_pDX01->iEmptyPortTopCheck || g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.5)) {
+		else if (m_pDX01->iEmptyPortTopCheck || g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.5)) 
+		{
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
