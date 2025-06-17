@@ -10179,8 +10179,7 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 			m_nEmptyTrayElCase = 2; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		break;
-	case 4:	
-
+	case 4:
 		if ((g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && m_pDX01->iEmptyPortTopCheck) || (!m_pDX01->iEmptyPortTopCheck && g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0))) 
 		{
 			gData.dEmptyPort_Z_Limit = g_objAJinAXL.Get_Position(AX_EMPTY_PORT_Z) + (2.5 * m_pMoveData->dEmptyTrans1X[2]);
@@ -10196,46 +10195,38 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 
 	// 2. Slow Down
 	case 5:		// Buffer Z Slow Down
-#ifdef EDITION_2ND
-		if (m_pDX01->iEmptyPortTopCheck) {
-#else
-		if (m_pDX07->iEmptyPortTopCheck) {
-#endif
+		if (m_pDX01->iEmptyPortTopCheck)
+		{
 			if (m_dwEmptyTrayEl == 0) m_dwEmptyTrayEl = GetTickCount();
 			m_tEmptyTrayElLoop.Takt_Start(nTaktZone, 2);
 			g_objAJinAXL.Move_Absolute(AX_EMPTY_PORT_Z, m_pMoveData->dEmptyPortZ[1], 0.25);	//Ready Position
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(10000);	// 10초
-		} else {
+		} 
+		else
+		{
 			gData.bEmptyZTopCheckRepeat = FALSE;
 			m_nEmptyTrayElCase = 10; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		break;
 	case 6:		// Buffer Z Down Stop
-#ifdef EDITION_2ND
-		if (!m_pDX01->iEmptyPortTopCheck) {
-#else
-		if (!m_pDX07->iEmptyPortTopCheck) {
-#endif
+
+		if (!m_pDX01->iEmptyPortTopCheck) 
+		{
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		break;
 	case 7:		// Check Buffer Z Done
-#ifdef EDITION_2ND
-		if (g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && !m_pDX01->iEmptyPortTopCheck) {
-#else
-		if (g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && !m_pDX07->iEmptyPortTopCheck) {
-#endif
+		if (g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && !m_pDX01->iEmptyPortTopCheck) 
+		{
 			if (!m_tEmptyTrayElLoop.Waiting_Time(300)) break;	// 센서가 정말로 꺼졌나 확인하는 시간.
 
 			m_tEmptyTrayElLoop.Takt_End(nTaktZone, 2,0);
 			m_nEmptyTrayElCase = 2; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		} 
-#ifdef EDITION_2ND
-		else if (g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && m_pDX01->iEmptyPortTopCheck) {
-#else
-		else if (g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && m_pDX07->iEmptyPortTopCheck) {
-#endif
+
+		else if (g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && m_pDX01->iEmptyPortTopCheck) 
+		{
 			m_nEmptyTrayElCase = 5; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		break;
