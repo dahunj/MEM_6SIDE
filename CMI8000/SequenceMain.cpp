@@ -10314,6 +10314,7 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 			m_tEmptyTrayElLoop.Takt_End(nTaktZone, 3, TRUE);
 			m_nEmptyTrayElCase = 0;
 			gData.bEmptyFull = TRUE;
+			gData.dEmptyPort_Z_Limit = m_pMoveData->dEmptyPortZ[2];
 			g_objCommon.Show_Error(4926);	// Empty Tray Full Alarm
 			return FALSE;
 		}
