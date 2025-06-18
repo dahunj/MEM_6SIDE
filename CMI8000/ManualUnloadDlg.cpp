@@ -310,12 +310,12 @@ void CManualUnloadDlg::OnBtnGoodStage1YClick(UINT nID)
 			AfxMessageBox("Empty Trans2 Up 상태 확인 후 진행하세요."); return;
 		}
 
-		if (!g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0) && g_objCommon.Check_Position(AX_SORT_PICKER1_X, 1)) {
-			AfxMessageBox("Sort Picker1 Z Up 위치 확인 후 진행하세요."); return;
+		if (!g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) {
+			AfxMessageBox("Sort Picker1 Z Ready Up 위치 확인 후 진행하세요."); return;
 		}
 
-		if (!g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0) && g_objCommon.Check_Position(AX_SORT_PICKER2_X, 1)) {
-			AfxMessageBox("Sort Picker2 Z Up 위치 확인 후 진행하세요."); return;
+		if (!g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) {
+			AfxMessageBox("Sort Picker2 Z Ready Up 위치 확인 후 진행하세요."); return;
 		}
 
 		if (nIndex == 4 || nIndex == 5) {	// Pitch Move

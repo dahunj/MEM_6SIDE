@@ -554,13 +554,24 @@ BOOL CSetupMotionTabDlg::Check_Interlock(int nAxis)
 			||(!pDX09->iBufferStage1Down && !pDX09->iBufferStage2Down)
 			||(!pDX09->iBufferStage1Up && !pDX09->iBufferStage2Up))
 		{
-			AfxMessageBox(_T("Buffer Stage 충돌 위험 있습니다."));
+			AfxMessageBox(_T("Buffer Stage 단차 확인 바랍니다."));
 			return FALSE;
 		}
 		
 		if(!g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0))
 		{
 			AfxMessageBox(_T("Btm2 Picker Z Ready Up 후에 진행하세요."));
+			return FALSE;
+		}
+		if(!g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
+		{
+			AfxMessageBox(_T("Sort Picker Z Ready Up 후에 진행하세요."));
+			return FALSE;
+		}
+
+		if(!g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
+		{
+			AfxMessageBox(_T("Sort Picker Z Ready Up 후에 진행하세요."));
 			return FALSE;
 		}
 	}
@@ -572,13 +583,25 @@ BOOL CSetupMotionTabDlg::Check_Interlock(int nAxis)
 			||(!pDX09->iBufferStage1Down && !pDX09->iBufferStage2Down)
 			||(!pDX09->iBufferStage1Up && !pDX09->iBufferStage2Up))
 		{
-			AfxMessageBox(_T("Buffer Stage 충돌 위험 있습니다."));
+			AfxMessageBox(_T("Buffer Stage 단차 확인 바랍니다."));
 			return FALSE;
 		}
 
 		if(!g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0))
 		{
 			AfxMessageBox(_T("Btm2 Picker Z Ready Up 후에 진행하세요."));
+			return FALSE;
+		}
+
+		if(!g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
+		{
+			AfxMessageBox(_T("Sort Picker Z Ready Up 후에 진행하세요."));
+			return FALSE;
+		}
+
+		if(!g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
+		{
+			AfxMessageBox(_T("Sort Picker Z Ready Up 후에 진행하세요."));
 			return FALSE;
 		}
 	}
