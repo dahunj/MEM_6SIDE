@@ -326,7 +326,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 
 
 		if (!m_bAutoRunning) {		// First AutoRun
-			if (!Work_Start()) { SetTimer(0, 100, NULL); m_rdoWorkStop.SetCheck(TRUE); return; }
+			if (!Work_Start()) { SetTimer(0, 100, NULL); m_rdoWorkStop.SetCheck(TRUE); m_rdoWorkStart.SetCheck(FALSE); return; }
 
 			if (g_objSequenceInit.Get_InitComplete()) {
 
@@ -344,7 +344,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 					else			 g_objCommon.Locking_PortSlide(TRUE, 3);
 				}
 					
-				g_objCommon.Locking_MainDoor(TRUE, TRUE);
+				if(pEquipData->bUseDoorLock) g_objCommon.Locking_MainDoor(TRUE, TRUE);
 				pMainDlg->Enable_ModeButton(FALSE);
 				if (gAlm.bBegin) Reset_AlarmLog();
 				pMainDlg->Set_CurrentState(STATE_RUN);
@@ -404,7 +404,8 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			}
 		}
 
-	} else if (m_rdoWorkStop.GetCheck()) // First AutoStop
+	} 
+	else if (m_rdoWorkStop.GetCheck()) // First AutoStop
 	{
 		if (m_bAutoRunning) 
 		{	
