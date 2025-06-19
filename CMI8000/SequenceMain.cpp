@@ -2595,7 +2595,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 	case 2:		// Slave In & Align Z Move to Down Position 
 		if (!m_pDX02->iAnglePortMasterIn && m_pDX02->iAnglePortMasterOut) 
 		{
-			//g_objCommon.Move_Position(AX_VISION_ALIGN_Z, 1);	// Align Grab Pos
+			g_objCommon.Move_Position(AX_VISION_ALIGN_Z, 1);	// Align Grab Pos
 			m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(5000);
 			m_tVisAngleLoop.Takt_End(nTaktZone, 1);
 			m_tVisAngleLoop.Takt_Start(nTaktZone, 2);
