@@ -44,10 +44,15 @@ protected:
 	int	 m_nPickerNum;
 	int	 m_nActionDelay;
 	void Repeat_Action();
+	void Repeat_Stop();
 
 	BOOL		m_bThreadAction;
 	CWinThread* m_pThreadAction;
 	static UINT	Thread_ActionRun(LPVOID lpVoid);
+
+	BOOL		m_bThreadStop;
+	CWinThread* m_pThreadStop;
+	static UINT	Thread_ActionStop(LPVOID lpVoid);
 
 public:
 	void AddComboListPicker();

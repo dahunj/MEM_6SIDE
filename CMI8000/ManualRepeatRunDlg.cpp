@@ -137,18 +137,6 @@ void CManualRepeatRunDlg::OnBnClickedChkRepeatRun()
 	CString strText, strTemp;
 
 	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
-
-	m_cboPicker.EnableWindow(!m_chkRepeatRun.GetCheck());
-	m_cboPickNum.EnableWindow(!m_chkRepeatRun.GetCheck());
-	m_edtDelay.EnableWindow(!m_chkRepeatRun.GetCheck());
-
-	pMainDlg->Enable_ModeButton(!m_chkRepeatRun.GetCheck());
-	pMainDlg->m_btnMainOperator.EnableWindow(!m_chkRepeatRun.GetCheck());
-
-	g_dlgManual.m_rdoManualBtm1.EnableWindow(!m_chkRepeatRun.GetCheck());
-	g_dlgManual.m_rdoManualBtm2.EnableWindow(!m_chkRepeatRun.GetCheck());
-	g_dlgManual.m_rdoManualLoad.EnableWindow(!m_chkRepeatRun.GetCheck());
-	g_dlgManual.m_rdoManualUnload.EnableWindow(!m_chkRepeatRun.GetCheck());
 			
 	if (m_chkRepeatRun.GetCheck())
 	{		
@@ -164,19 +152,38 @@ void CManualRepeatRunDlg::OnBnClickedChkRepeatRun()
 	} 
 	else
 	{
+		m_bThreadStop = TRUE;
+		m_pThreadStop = AfxBeginThread(Thread_ActionStop, this);
+
+		while(m_bThreadStop) 
+		{	
+			g_objCommon.DoEvents();
+			if(!m_bThreadStop) break;
+		}
+
 		m_cboPicker.ResetContent();
 		AddComboListPicker();
 
 		m_nRepeatCase = 0;
 		m_strTemp.Format("%d", m_nRepeatCase);
-		m_lblCase.SetWindowText(m_strTemp);
+		m_lblCase.SetWindowText(m_strTemp);		
 		
-		m_bThreadAction = FALSE;
-		m_pThreadAction = NULL;
 	/*	if (!m_pThreadAction) return;
 		m_bThreadAction = FALSE;
 		WaitForSingleObject(m_pThreadAction->m_hThread, INFINITE);*/
 	}
+
+	m_cboPicker.EnableWindow(!m_chkRepeatRun.GetCheck());
+	m_cboPickNum.EnableWindow(!m_chkRepeatRun.GetCheck());
+	m_edtDelay.EnableWindow(!m_chkRepeatRun.GetCheck());
+
+	pMainDlg->Enable_ModeButton(!m_chkRepeatRun.GetCheck());
+	pMainDlg->m_btnMainOperator.EnableWindow(!m_chkRepeatRun.GetCheck());
+
+	g_dlgManual.m_rdoManualBtm1.EnableWindow(!m_chkRepeatRun.GetCheck());
+	g_dlgManual.m_rdoManualBtm2.EnableWindow(!m_chkRepeatRun.GetCheck());
+	g_dlgManual.m_rdoManualLoad.EnableWindow(!m_chkRepeatRun.GetCheck());
+	g_dlgManual.m_rdoManualUnload.EnableWindow(!m_chkRepeatRun.GetCheck());
 }
 
 void CManualRepeatRunDlg::AddComboListPicker()
@@ -206,8 +213,6 @@ BOOL CManualRepeatRunDlg::CheckMotionPos()
 	return TRUE;
 }
 
-
-
 UINT CManualRepeatRunDlg::Thread_ActionRun(LPVOID lpVoid)
 {
 	CManualRepeatRunDlg* pOwner = (CManualRepeatRunDlg*)lpVoid;
@@ -219,6 +224,37 @@ UINT CManualRepeatRunDlg::Thread_ActionRun(LPVOID lpVoid)
 	pOwner->m_pThreadAction = NULL;
 
 	return 0;
+}
+
+
+
+
+UINT CManualRepeatRunDlg::Thread_ActionStop(LPVOID lpVoid)
+{
+	CManualRepeatRunDlg* pOwner = (CManualRepeatRunDlg*)lpVoid;
+
+	while (pOwner->m_bThreadStop) {
+		pOwner->Repeat_Stop();
+	} 
+	pOwner->m_bThreadStop = FALSE;
+	pOwner->m_pThreadStop = NULL;
+
+	return 0;
+}
+
+void CManualRepeatRunDlg::Repeat_Stop()
+{
+	if(m_nRepeatCase == 100 || m_nRepeatCase == 200 || m_nRepeatCase == 300 || m_nRepeatCase == 400 || m_nRepeatCase == 500 || m_nRepeatCase == 600)
+	{
+		m_nRepeatCase = 0;
+		m_bThreadAction = FALSE;
+		m_pThreadAction = NULL;
+
+		m_bThreadStop = FALSE;
+		m_pThreadStop = NULL;	
+
+		
+	}		
 }
 
 
