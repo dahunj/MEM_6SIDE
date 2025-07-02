@@ -744,14 +744,14 @@ BOOL CWorkDlg::Work_Start()
 #endif
 
 #ifndef AJIN_BOARD_USE
-		//m_stcCmCount[0].GetWindowText(strTemp);	// CM 수량
-		//int nTemp = atoi(strTemp);
-		//if (nTemp > 1 || nTemp < 2400) pDX00->iLoadPort1Bottom = TRUE;
+		m_stcCmCount[0].GetWindowText(strTemp);	// CM 수량
+		int nTemp = atoi(strTemp);
+		if (nTemp > 1 || nTemp < 2400) pDX00->iLoadPort1Bottom = TRUE;
 
-		//m_stcCmCount[1].GetWindowText(strTemp2);	// CM 수량
-		//int nTemp2 = atoi(strTemp2);
-		//gData.nCmUseCount[1] = nTemp2;
-		//if (nTemp2 > 1 || nTemp2 < 2400) pDX00->iLoadPort2Bottom = TRUE;
+		m_stcCmCount[1].GetWindowText(strTemp2);	// CM 수량
+		int nTemp2 = atoi(strTemp2);
+		gData.nCmUseCount[1] = nTemp2;
+		if (nTemp2 > 1 || nTemp2 < 2400) pDX00->iLoadPort2Bottom = TRUE;
 #endif 
 
 	if (g_objSequenceMain.Get_IsAutoRun()) return TRUE;	// Auto Run이면 스킵
