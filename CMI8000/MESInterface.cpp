@@ -119,17 +119,23 @@ UINT CMESInterface::Thread_MES(LPVOID lpVoid)
 	}
 
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-	if (g_objMES.m_nMESCount != g_objMES.m_nOperCount && !pEquipData->bUse2ndAVI) {	// Lot Count 불일치
-		g_dlgWork.Enable_UserInput(gData.nMesPortNo, TRUE);
-		g_objMES.m_nMESSequence = 4;
-		g_objMES.m_bThreadMES = FALSE; g_objMES.m_pThreadMES = NULL;
-// 		g_objMES.m_bMesErr = TRUE;
-		if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
-		strLog.Format("[MESInterface] Thread_MES. CmCount Fail. ErrNo:994, OperLotId(%s), OperCmCnt(%d)", g_objMES.m_sOperLotID, g_objMES.m_nOperCount);
-		g_objLogFile.Save_MesAgentLog(strLog);
-		g_objCommon.Show_Error(994);
-		return 0;
-	}
+	g_objMES.m_nOperCount = g_objMES.m_nMESCount;
+	gData.nCmUseCount[gData.nMesPortNo] = g_objMES.m_nMESCount;
+	g_dlgWork.WriteCMCount(gData.nMesPortNo);
+
+
+//	if (g_objMES.m_nMESCount != g_objMES.m_nOperCount && !pEquipData->bUse2ndAVI) {	// Lot Count 불일치
+//		g_objMES.m_nOperCount = g_objMES.m_nMESCount;
+//		g_dlgWork.Enable_UserInput(gData.nMesPortNo, TRUE);
+//		g_objMES.m_nMESSequence = 4;
+//		g_objMES.m_bThreadMES = FALSE; g_objMES.m_pThreadMES = NULL;
+//// 		g_objMES.m_bMesErr = TRUE;
+//		if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
+//		strLog.Format("[MESInterface] Thread_MES. CmCount Fail. ErrNo:994, OperLotId(%s), OperCmCnt(%d)", g_objMES.m_sOperLotID, g_objMES.m_nOperCount);
+//		g_objLogFile.Save_MesAgentLog(strLog);
+//		g_objCommon.Show_Error(994);
+//		return 0;
+//	}
 
 	strLog.Format("[MESInterface] Thread_MES. OK.");
 	g_objLogFile.Save_MesAgentLog(strLog);

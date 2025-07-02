@@ -135,6 +135,9 @@ public:
 	void Enable_UserInput(int nNo, BOOL bEnable);
 	void Get_LotInfo(int nNo);
 	void MachineStopLog(CString sType);
+
+	void WriteCMCount(int nPortNo);
+
 	afx_msg void OnBnClickedBtnIdleReport();
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton2();

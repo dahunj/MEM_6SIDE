@@ -485,29 +485,32 @@ void CWorkDlg::OnStcLotIdClick(UINT nID)
 
 void CWorkDlg::OnStcCmCountClick(UINT nID)
 {
-	int ID = nID - IDC_STC_CM_COUNT_0;
+	if(!m_chkMesUse.GetCheck())
+	{
+		int ID = nID - IDC_STC_CM_COUNT_0;
 
-	CString strOld, strNew, strValue;
+		CString strOld, strNew, strValue;
 
-	m_stcCmCount[ID].GetWindowText(strOld);
-	if (g_objCommon.Show_NumPad(strOld, strNew) != IDOK) return;
+		m_stcCmCount[ID].GetWindowText(strOld);
+		if (g_objCommon.Show_NumPad(strOld, strNew) != IDOK) return;
 
-	int nCmCnt = atoi(strNew);
+		int nCmCnt = atoi(strNew);
 
-	int nTrayUseCount = nCmCnt / gData.nCmMaxCount;
-	if (nCmCnt % gData.nCmMaxCount) nTrayUseCount++;
+		int nTrayUseCount = nCmCnt / gData.nCmMaxCount;
+		if (nCmCnt % gData.nCmMaxCount) nTrayUseCount++;
 
-	strValue.Format("%d", nTrayUseCount);
-	m_stcTrayCount[ID].SetWindowText(strValue);
-	if (ID == 1) g_dlgOperator.m_stcOperTrayCount.SetWindowText(strValue);
+		strValue.Format("%d", nTrayUseCount);
+		m_stcTrayCount[ID].SetWindowText(strValue);
+		if (ID == 1) g_dlgOperator.m_stcOperTrayCount.SetWindowText(strValue);
 
-	strValue.Format("%d", nCmCnt);
-	m_stcCmCount[ID].SetWindowText(strValue);
-	if (ID == 1) g_dlgOperator.m_stcOperCmCount.SetWindowText(strValue);
+		strValue.Format("%d", nCmCnt);
+		m_stcCmCount[ID].SetWindowText(strValue);
+		if (ID == 1) g_dlgOperator.m_stcOperCmCount.SetWindowText(strValue);
 
-	CString strLog;
-	strLog.Format("[Work Dialog] CM Count (%d) Click. (CmCount:%d)", ID, nCmCnt);
-	g_objLogFile.Save_MesAgentLog(strLog);
+		CString strLog;
+		strLog.Format("[Work Dialog] CM Count (%d) Click. (CmCount:%d)", ID, nCmCnt);
+		g_objLogFile.Save_MesAgentLog(strLog);
+	}	
 }
 
 void CWorkDlg::OnBnClickedChkMesUse()
@@ -741,14 +744,14 @@ BOOL CWorkDlg::Work_Start()
 #endif
 
 #ifndef AJIN_BOARD_USE
-		m_stcCmCount[0].GetWindowText(strTemp);	// CM 수량
-		int nTemp = atoi(strTemp);
-		if (nTemp > 1 || nTemp < 2400) pDX00->iLoadPort1Bottom = TRUE;
+		//m_stcCmCount[0].GetWindowText(strTemp);	// CM 수량
+		//int nTemp = atoi(strTemp);
+		//if (nTemp > 1 || nTemp < 2400) pDX00->iLoadPort1Bottom = TRUE;
 
-		m_stcCmCount[1].GetWindowText(strTemp2);	// CM 수량
-		int nTemp2 = atoi(strTemp2);
-		gData.nCmUseCount[1] = nTemp2;
-		if (nTemp2 > 1 || nTemp2 < 2400) pDX00->iLoadPort2Bottom = TRUE;
+		//m_stcCmCount[1].GetWindowText(strTemp2);	// CM 수량
+		//int nTemp2 = atoi(strTemp2);
+		//gData.nCmUseCount[1] = nTemp2;
+		//if (nTemp2 > 1 || nTemp2 < 2400) pDX00->iLoadPort2Bottom = TRUE;
 #endif 
 
 	if (g_objSequenceMain.Get_IsAutoRun()) return TRUE;	// Auto Run이면 스킵
@@ -770,13 +773,16 @@ BOOL CWorkDlg::Work_Start()
 	if (strTemp.GetLength() < 2) { g_objCommon.Show_MsgBox(1, "Port1번에 LOT ID를 입력하여 주십시오."); return FALSE; }
 	gData.sLotID[0] = strTemp;
 
-	m_stcCmCount[0].GetWindowText(strTemp);	// CM 수량
-	int nTempCnt = atoi(strTemp);
-	if (nTempCnt < 1 || nTempCnt > 2400) {	g_objCommon.Show_MsgBox(1, "Port1번의 CM 수량을 확인하여 주십시오. (1 ~ 2400)"); return FALSE; }
-	gData.nCmUseCount[0] = nTempCnt;
+	if(!m_chkMesUse.GetCheck())
+	{
+		m_stcCmCount[0].GetWindowText(strTemp);	// CM 수량
+		int nTempCnt = atoi(strTemp);
+		if (nTempCnt < 1 || nTempCnt > 2400) {	g_objCommon.Show_MsgBox(1, "Port1번의 CM 수량을 확인하여 주십시오. (1 ~ 2400)"); return FALSE; }
+		gData.nCmUseCount[0] = nTempCnt;
 
-	m_stcTrayCount[0].GetWindowText(strTemp);	// Tray Count
-	gData.nTrayUseCount[0] = atoi(strTemp);
+		m_stcTrayCount[0].GetWindowText(strTemp);	// Tray Count
+		gData.nTrayUseCount[0] = atoi(strTemp);
+	}
 
 	m_stcLotId[1].GetWindowText(strTemp2);		// Lot ID
 	gData.sLotID[1] = strTemp2;
@@ -1668,6 +1674,24 @@ void CWorkDlg::OnBnClickedButton6()
 
 void CWorkDlg::OnBnClickedButton7()
 {
-	g_objLaserComm.Set_M0();// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	
+	g_objLaserComm.Set_M0();// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.	
+}
+
+void CWorkDlg::WriteCMCount(int nPortNo)
+{
+	CString strNew, strValue;
+
+	int nCmCnt = gData.nCmUseCount[nPortNo];
+
+	int nTrayUseCount = nCmCnt / gData.nCmMaxCount;
+	if (nCmCnt % gData.nCmMaxCount) nTrayUseCount++;
+
+	strValue.Format("%d", nTrayUseCount);
+	m_stcTrayCount[nPortNo].SetWindowText(strValue);
+	if (nPortNo == 1) g_dlgOperator.m_stcOperTrayCount.SetWindowText(strValue);
+
+	strValue.Format("%d", nCmCnt);
+	m_stcCmCount[nPortNo].SetWindowText(strValue);
+	if (nPortNo == 1) g_dlgOperator.m_stcOperCmCount.SetWindowText(strValue);
+
 }

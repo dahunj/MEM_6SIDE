@@ -416,18 +416,10 @@ void CErrorDlg::OnBnClickedBtnErrToManual()
 		CString strLotId, strTrayCnt, strCmCnt;
 
 		g_dlgWork.m_stcLotId[0].GetWindowText(strLotId);
-// 		g_dlgWork.m_stcLotId[1].SetWindowText(strLotId);
-// 		g_dlgWork.m_stcLotId[0].SetWindowText("LOT_ID");
 // 
 		g_dlgWork.m_stcTrayCount[0].GetWindowText(strTrayCnt);
-// 		g_dlgWork.m_stcTrayCount[1].SetWindowText(strTrayCnt);
-// 		g_dlgWork.m_stcTrayCount[0].SetWindowText("0");
 // 
 		g_dlgWork.m_stcCmCount[0].GetWindowText(strCmCnt);
-// 		g_dlgWork.m_stcCmCount[1].SetWindowText(strCmCnt);
-// 		g_dlgWork.m_stcCmCount[0].SetWindowText("0");
-
-// 		g_dlgWork.m_rdoWorkStart.SetCheck(TRUE);
 
 		strLog.Format("[Error Mode] Manual button push - LotID[%s], TrayCnt[%s], CmCnt[%s]", strLotId, strTrayCnt, strCmCnt);
 		g_objLogFile.Save_MesAgentLog(strLog);

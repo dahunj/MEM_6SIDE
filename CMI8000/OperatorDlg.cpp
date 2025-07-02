@@ -189,28 +189,7 @@ void COperatorDlg::OnStnClickedStcOperOperId()
 
 void COperatorDlg::OnStnClickedStcOperCmCount()
 {
-	CString strOld, strNew, strValue;
-
-	g_dlgWork.m_stcCmCount[1].GetWindowText(strOld);
-	if (g_objCommon.Show_NumPad(strOld, strNew) != IDOK) return;
-
-	int nCmCnt = atoi(strNew);
-
-	int nTrayUseCount = nCmCnt / gData.nCmMaxCount;
-	if (nCmCnt % gData.nCmMaxCount) nTrayUseCount++;
-	strValue.Format("%d", nTrayUseCount);
-	m_stcOperTrayCount.SetWindowText(strValue);
-	g_dlgWork.m_stcTrayCount[1].SetWindowText(strValue);
-
-	strValue.Format("%d", nCmCnt);
-	m_stcOperCmCount.SetWindowText(strValue);
-	g_dlgWork.m_stcCmCount[1].SetWindowText(strValue);
-
-	CString sLog;
-	int nNo = gData.nLPNo-1;
-	if (nNo < 0) nNo = 0;
-	sLog.Format("[Operator] CM Count Input....  LotID[%s] OperID[%s]", gData.sLotID[nNo], gData.sOperID);
-	g_objLogFile.Save_HandlerLog(sLog);
+	
 }
 
 void COperatorDlg::OnBnClickedBtnOperStart()
