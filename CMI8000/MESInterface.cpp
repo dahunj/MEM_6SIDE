@@ -80,44 +80,44 @@ UINT CMESInterface::Thread_MES(LPVOID lpVoid)
 		if (!g_objMES.m_bMesStart) break;
 	}
 
-	if (!g_objMES.m_bMesStart) {
-		g_objMES.m_bThreadMES = FALSE; g_objMES.m_pThreadMES = NULL;
-		strLog.Format("[MESInterface] Thread_MES. bMesStart = FALSE.");
-		g_objLogFile.Save_MesAgentLog(strLog);
-		return 0;
-	}
-
-	if (g_objMES.m_nReadCnt > TIME_OUT) {	//TimeOver
-		g_objMES.m_nMESSequence = 0;
-		g_objMES.m_bThreadMES = FALSE; g_objMES.m_pThreadMES = NULL;
-		if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
-		strLog.Format("[MESInterface] Thread_MES. Timeout. ErrNo:991, OperLotId(%s), OperCmCnt(%d)", g_objMES.m_sOperLotID, g_objMES.m_nOperCount);
-		g_objLogFile.Save_MesAgentLog(strLog);
-		g_objCommon.Show_Error(991);
-		return 0;
-	}
-
-	if (g_objMES.m_sMESResult == "1") {		//Lot취소
-		g_objMES.m_nMESSequence = 0;
-		g_objMES.m_bThreadMES = FALSE; g_objMES.m_pThreadMES = NULL;
-		strLog.Format("[MESInterface] Thread_MES. Cancel. ErrNo:992, OperLotId(%s), OperCmCnt(%d)", g_objMES.m_sOperLotID, g_objMES.m_nOperCount);
-		g_objLogFile.Save_MesAgentLog(strLog);
-		g_objCommon.Show_Error(992);
-		return 0;
-	}
-
-	if (g_objMES.m_sMESLotID != g_objMES.m_sOperLotID) {	// Lot ID 불일치
-		g_dlgWork.Enable_UserInput(gData.nMesPortNo, TRUE);
-		g_objMES.m_nMESSequence = 4;
-		g_objMES.m_bThreadMES = FALSE; g_objMES.m_pThreadMES = NULL;
-// 		g_objMES.m_bMesErr = TRUE;
-		if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
-		strLog.Format("[MESInterface] Thread_MES. LotID Fail. ErrNo:993, OperLotId(%s), OperCmCnt(%d)", g_objMES.m_sOperLotID, g_objMES.m_nOperCount);
-		g_objLogFile.Save_MesAgentLog(strLog);
-		g_objCommon.Show_Error(993);
-		return 0;
-	}
-
+//	if (!g_objMES.m_bMesStart) {
+//		g_objMES.m_bThreadMES = FALSE; g_objMES.m_pThreadMES = NULL;
+//		strLog.Format("[MESInterface] Thread_MES. bMesStart = FALSE.");
+//		g_objLogFile.Save_MesAgentLog(strLog);
+//		return 0;
+//	}
+//
+//	if (g_objMES.m_nReadCnt > TIME_OUT) {	//TimeOver
+//		g_objMES.m_nMESSequence = 0;
+//		g_objMES.m_bThreadMES = FALSE; g_objMES.m_pThreadMES = NULL;
+//		if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
+//		strLog.Format("[MESInterface] Thread_MES. Timeout. ErrNo:991, OperLotId(%s), OperCmCnt(%d)", g_objMES.m_sOperLotID, g_objMES.m_nOperCount);
+//		g_objLogFile.Save_MesAgentLog(strLog);
+//		g_objCommon.Show_Error(991);
+//		return 0;
+//	}
+//
+//	if (g_objMES.m_sMESResult == "1") {		//Lot취소
+//		g_objMES.m_nMESSequence = 0;
+//		g_objMES.m_bThreadMES = FALSE; g_objMES.m_pThreadMES = NULL;
+//		strLog.Format("[MESInterface] Thread_MES. Cancel. ErrNo:992, OperLotId(%s), OperCmCnt(%d)", g_objMES.m_sOperLotID, g_objMES.m_nOperCount);
+//		g_objLogFile.Save_MesAgentLog(strLog);
+//		g_objCommon.Show_Error(992);
+//		return 0;
+//	}
+//
+//	if (g_objMES.m_sMESLotID != g_objMES.m_sOperLotID) {	// Lot ID 불일치
+//		g_dlgWork.Enable_UserInput(gData.nMesPortNo, TRUE);
+//		g_objMES.m_nMESSequence = 4;
+//		g_objMES.m_bThreadMES = FALSE; g_objMES.m_pThreadMES = NULL;
+//// 		g_objMES.m_bMesErr = TRUE;
+//		if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
+//		strLog.Format("[MESInterface] Thread_MES. LotID Fail. ErrNo:993, OperLotId(%s), OperCmCnt(%d)", g_objMES.m_sOperLotID, g_objMES.m_nOperCount);
+//		g_objLogFile.Save_MesAgentLog(strLog);
+//		g_objCommon.Show_Error(993);
+//		return 0;
+//	}
+	g_objMES.m_nMESCount = 55;//Test
 	g_objMES.m_nOperCount = g_objMES.m_nMESCount;
 	gData.nCmUseCount[gData.nMesPortNo] = g_objMES.m_nMESCount;
 	g_dlgWork.WriteCMCount(gData.nMesPortNo);
@@ -486,7 +486,7 @@ void CMESInterface::Set_JobReady(CString sLotID, int nCount, CString sOperID, in
 	m_sOperLotID = sLotID;
 	m_nOperCount = nCount;
 	m_sOperID = sOperID;
-	gData.nMesPortNo = nPortNo;
+	gData.nMesPortNo = nPortNo-1;
 
 	if (!m_pThreadMES) {
 		m_bThreadMES = TRUE;

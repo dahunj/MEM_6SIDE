@@ -137,6 +137,7 @@ public:
 	void MachineStopLog(CString sType);
 
 	void WriteCMCount(int nPortNo);
+	void FakeLoadPortSensor();
 
 	afx_msg void OnBnClickedBtnIdleReport();
 	afx_msg void OnBnClickedButton1();

@@ -364,7 +364,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 					gData.bMesFirstLot = TRUE;
 					g_objMES.Clear_APDResultVar();	// 모듈 결과 APD 관련 변수 초기화.
 					g_objMES.m_bMesStart = TRUE;
-					g_objMES.Set_JobReady(gData.sLotID[0], gData.nCmUseCount[0], gData.sOperID, 1);
+					g_objMES.Set_JobReady(gData.sLotID[0], gData.nCmUseCount[0], gData.sOperID, 1); //무조건 1번 포트 먼저 
 					CString strLog;
 					strLog.Format("[Work Timer] Set_JobReady. (LotID:%s, CmCnt:%d, Port:0)", gData.sLotID[0], gData.nCmUseCount[0]);
 					g_objLogFile.Save_MesAgentLog(strLog);
@@ -938,15 +938,17 @@ void CWorkDlg::Check_Lamp()
 		if (pDX14->iLoad2Sw && bLoad2) {
 			if (pDX00->iLoadPort2SlideClose && (!pEquipData->bUseDoorLock || !pDX15->iDoor03Unlock)) {	// 안전 확인.
 				CString sTemp;
-				m_stcCmCount[1].GetWindowText(sTemp);	// CM 수량
-				int nCnt = atoi(sTemp);
+				//m_stcCmCount[1].GetWindowText(sTemp);	// CM 수량
+				//int nCnt = atoi(sTemp);
 				m_stcLotId[1].GetWindowText(sTemp);		// Lot ID
+				
 				// Port1 CM 수량 확인 및 LotID 확인
-				if (nCnt > 0 && gLot.sLotID[0] != sTemp && gLot.sLotID[1] != sTemp) {
-					gData.nCmUseCount[1] = nCnt;					
-					gData.sLotID[1] = sTemp;					
-					m_stcTrayCount[1].GetWindowText(sTemp);	// Tray Count
-					gData.nTrayUseCount[1] = atoi(sTemp);
+				if ( gLot.sLotID[0] != sTemp && gLot.sLotID[1] != sTemp) //if (nCnt > 0 && gLot.sLotID[0] != sTemp && gLot.sLotID[1] != sTemp)				
+				{
+					//gData.nCmUseCount[1] = nCnt;					
+					//gData.sLotID[1] = sTemp;					
+					//m_stcTrayCount[1].GetWindowText(sTemp);	// Tray Count
+					//gData.nTrayUseCount[1] = atoi(sTemp);
 					
 					gData.bLoadLampOn[1] = FALSE;
 					pMainDlg->Set_LampFlicker_Load2(FALSE);
@@ -1629,16 +1631,28 @@ void CWorkDlg::OnBnClickedButton1()
 
 void CWorkDlg::OnBnClickedButton2()
 {
+	DX_DATA_00 *pDX00 = g_objAJinAXL.Get_pDX00();
 	DX_DATA_14 *pDX14 = g_objAJinAXL.Get_pDX14();
+	DX_DATA_15 *pDX15 = g_objAJinAXL.Get_pDX15();
 	pDX14->iLoad2Sw = TRUE;
+	pDX00->iLoadPort2Bottom = TRUE; // 2번 포트에 트레이 넣는다고 가정(2포트 시뮬레이션 위해)
+	pDX15->iDoor03Unlock = FALSE; //문이 락 걸려 있다고 가정 
+	
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
 
 void CWorkDlg::OnBnClickedButton3()
 {
+	//연속랏 시뮬레이션 할 경우 
+
+	DX_DATA_00 *pDX00 = g_objAJinAXL.Get_pDX00();
 	DX_DATA_14 *pDX14 = g_objAJinAXL.Get_pDX14();
-	pDX14->iLoad1Sw = FALSE;
+	DX_DATA_15 *pDX15 = g_objAJinAXL.Get_pDX15();
+	pDX14->iLoad1Sw = TRUE;
+	pDX00->iLoadPort1Bottom = TRUE; // 1번 포트에 트레이 넣는다고 가정(1포트 시뮬레이션 위해)
+	pDX15->iDoor02Unlock = FALSE; //문이 락 걸려 있다고 가정 
+		
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
@@ -1654,13 +1668,13 @@ void CWorkDlg::OnBnClickedButton4()
 
 void CWorkDlg::OnBnClickedButton5()
 {
-	//gData.bNGTrayWait = FALSE;
-	//gData.bGoodTrayWait = FALSE;
-	ULONGLONG size = 0;
+	gData.bNGTrayWait = FALSE;
+	gData.bGoodTrayWait = FALSE;
+	/*ULONGLONG size = 0;
 	CString strRAM;
 
 	g_objCommon.Get_HardInfo(strRAM);
-	AfxMessageBox(strRAM);
+	AfxMessageBox(strRAM);*/
 	
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
@@ -1686,6 +1700,8 @@ void CWorkDlg::WriteCMCount(int nPortNo)
 	int nTrayUseCount = nCmCnt / gData.nCmMaxCount;
 	if (nCmCnt % gData.nCmMaxCount) nTrayUseCount++;
 
+	gData.nTrayUseCount[nPortNo] = nTrayUseCount;
+
 	strValue.Format("%d", nTrayUseCount);
 	m_stcTrayCount[nPortNo].SetWindowText(strValue);
 	if (nPortNo == 1) g_dlgOperator.m_stcOperTrayCount.SetWindowText(strValue);
@@ -1693,5 +1709,26 @@ void CWorkDlg::WriteCMCount(int nPortNo)
 	strValue.Format("%d", nCmCnt);
 	m_stcCmCount[nPortNo].SetWindowText(strValue);
 	if (nPortNo == 1) g_dlgOperator.m_stcOperCmCount.SetWindowText(strValue);
+
+	
+
+}
+
+
+void CWorkDlg::FakeLoadPortSensor()
+{
+	CString strTemp, strTemp2;
+
+	DX_DATA_00 *pDX00 = g_objAJinAXL.Get_pDX00();
+
+
+	m_stcCmCount[0].GetWindowText(strTemp);	// CM 수량
+	int nTemp = atoi(strTemp);
+	if (nTemp > 1 || nTemp < 2400) pDX00->iLoadPort1Bottom = TRUE;
+
+	m_stcCmCount[1].GetWindowText(strTemp2);	// CM 수량
+	int nTemp2 = atoi(strTemp2);
+	gData.nCmUseCount[1] = nTemp2;
+	if (nTemp2 > 1 || nTemp2 < 2400) pDX00->iLoadPort2Bottom = TRUE;
 
 }

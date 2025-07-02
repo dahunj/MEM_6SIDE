@@ -2010,10 +2010,11 @@ BOOL CSequenceMain::LoadTray_Run()
 		} else if ((m_pDX00->iLoadPort1Bottom || m_pDX00->iLoadPort2Bottom) && !gData.bCycleStop) {
 			// 맨처음 시작할때 2개 모두 적재 되어있으면 1번부터 가져간다.
 			// 작업할 포트에 트레이 유무와 입력수량확인.
-			if ((nLtWorkPort == 0 || nLtWorkPort == 2) && m_pDX00->iLoadPort1Bottom && (gData.nCmUseCount[0] > 0)) nLtWorkPort = 1;
-			else if ((nLtWorkPort == 0 || nLtWorkPort == 1) && m_pDX00->iLoadPort2Bottom && (gData.nCmUseCount[1] > 0)) nLtWorkPort = 2;
+			if ((nLtWorkPort == 0 || nLtWorkPort == 2) && m_pDX00->iLoadPort1Bottom && (gData.sLotID[0] != "")) nLtWorkPort = 1;
+			else if ((nLtWorkPort == 0 || nLtWorkPort == 1) && m_pDX00->iLoadPort2Bottom && (gData.sLotID[1] != "")) nLtWorkPort = 2;
 
 			if (!Check_LoadTrayLoading(nLtWorkPort)) return TRUE;	// 같은 Port Lot을 동시에 검사하지 않는다.
+
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
 			m_tLoadTrayLoop.Takt_Start(nTaktZone, 1, TRUE);						
 		}
@@ -2022,34 +2023,43 @@ BOOL CSequenceMain::LoadTray_Run()
 		if (gData.bCycleStop) {
 			nLtWorkPort = 0;
 			m_nLoadTrayCase = 0;	// 사이클스탑이면 투입된 모듈 트레이까지만 작업 후 종료.
-		}
-		if (gData.nLoadTrayCount[nLtWorkPort-1] < gData.nTrayUseCount[nLtWorkPort-1] && !gData.bCycleStop) {
-		
-			if ((nLtWorkPort == 1 && !m_pDX00->iLoadPort1Bottom) || (nLtWorkPort == 2 && !m_pDX00->iLoadPort2Bottom)) break;
+		}		
+			
+		if ((nLtWorkPort == 1 && !m_pDX00->iLoadPort1Bottom) || (nLtWorkPort == 2 && !m_pDX00->iLoadPort2Bottom)) break;
 
-			if (nLtWorkPort == 1 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 0)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 0);	// Port1
-			if (nLtWorkPort == 2 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 1);	// Port2
-			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
-		} 
+		if (nLtWorkPort == 1 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 0)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 0);	// Port1
+		if (nLtWorkPort == 2 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 1);	// Port2
+
+		if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) {
+			if (g_objMES.m_bMESUse) {
+				if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
+				else
+				{	
+					// 연속 랏 관련하여 MES Lot Start 부분 수정.
+					g_objMES.m_bMesStart = TRUE;
+					g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
+					g_objMES.Set_JobReady(gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], gData.sOperID, nLtWorkPort);	//2020.9.16+
+					m_strLog.Format("[Sequence] Set_JobReady. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
+					g_objLogFile.Save_MesAgentLog(m_strLog);					
+				}
+			}
+		}	
+		m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
+		m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
+		m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
 		break;
 	case 3:		// Check Position, Lot Start
 		if ((nLtWorkPort == 1 && g_objCommon.Check_Position(AX_LOAD_STAGE_X, 0)) || 
-			(nLtWorkPort == 2 && g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1))) {
-			
-			if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) {
-				if (g_objMES.m_bMESUse) {
-					if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
-					else {	// 연속 랏 관련하여 MES Lot Start 부분 수정.
-						g_objMES.m_bMesStart = TRUE;
-						g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
-						g_objMES.Set_JobReady(gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], gData.sOperID, nLtWorkPort);	//2020.9.16+
-						m_strLog.Format("[Sequence] Set_JobReady. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
-						g_objLogFile.Save_MesAgentLog(m_strLog);
-					}
-				}
+			(nLtWorkPort == 2 && g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1))) 
+		{
+			if (gData.nLoadTrayCount[nLtWorkPort-1] < gData.nTrayUseCount[nLtWorkPort-1] && !gData.bCycleStop) 
+			{ 
+				//pass
 			}
+			else
+			{
+				break;
+			}			
 			m_dwLoadTray = GetTickCount();
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);	// 30000
 			m_tLoadTrayLoop.Takt_End(nTaktZone, 2);
@@ -10711,10 +10721,7 @@ BOOL CSequenceMain::EmptyTrayY_Run()
 ///////////////////////////////////////////////////////////////////////////////
 
 
-void CSequenceMain::Test_CSKIM()
-{
-	m_pThreadNgFullBeep = AfxBeginThread(Thread_NgFullBeep, (LPVOID)(2000));
-}
+
 
 
 BOOL CSequenceMain::Run_Simulation()
@@ -10733,8 +10740,9 @@ BOOL CSequenceMain::Run_Simulation()
 	if (m_nLoadTrayCase == 10) { // 로드트레이가 포트에서 get
 		Sleep(SIM_WAITTIMES); m_pDX01->iLoadStageExist = TRUE; 
 	}
-	else if(m_nLoadTrayCase == 21){ 
-		
+	else if(m_nLoadTrayCase == 2){ 
+
+		g_dlgWork.FakeLoadPortSensor();
 	}
 		
 	if (m_nLoadPickCase == 7) { //로드 피커가 로드트레이에서 get
