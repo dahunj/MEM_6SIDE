@@ -911,17 +911,12 @@ void CWorkDlg::Check_Lamp()
 		if (pDX14->iLoad1Sw && bLoad1) {
 			if (pDX00->iLoadPort1SlideClose && (!pEquipData->bUseDoorLock || !pDX15->iDoor02Unlock)) {	// 안전 확인.
 				
-				CString sTemp;
-				m_stcCmCount[0].GetWindowText(sTemp);	// CM 수량
-				int nCnt = atoi(sTemp);
+				CString sTemp;				
 				m_stcLotId[0].GetWindowText(sTemp);		// Lot ID				
 				// Port1 CM 수량 확인 및 LotID 확인
-				if (nCnt > 0 && gLot.sLotID[0] != sTemp && gLot.sLotID[1] != sTemp) {
-					gData.nCmUseCount[0] = nCnt;
-					gData.sLotID[0] = sTemp;
-					m_stcTrayCount[0].GetWindowText(sTemp);	// Tray Count
-					gData.nTrayUseCount[0] = atoi(sTemp);
-
+				if (gLot.sLotID[0] != sTemp && gLot.sLotID[1] != sTemp) 
+				{
+					
 					gData.bLoadLampOn[0] = FALSE;
 					pMainDlg->Set_LampFlicker_Load1(FALSE);
 					g_objSequenceMain.Set_LotLoadEnable(FALSE, 0);
@@ -929,7 +924,9 @@ void CWorkDlg::Check_Lamp()
 					g_objAJinAXL.Write_Output(0);
 					if (pEquipData->bUseDoorLock) pDY15->oDoor02Unlock = FALSE; 
 					g_objAJinAXL.Write_Output(15);
-				} else {
+				} 
+				else 
+				{
 					g_objCommon.Show_MsgBox(1, "Port1 Lot 정보를 확인해 주십시오.");
 				}
 			}
@@ -938,18 +935,12 @@ void CWorkDlg::Check_Lamp()
 		if (pDX14->iLoad2Sw && bLoad2) {
 			if (pDX00->iLoadPort2SlideClose && (!pEquipData->bUseDoorLock || !pDX15->iDoor03Unlock)) {	// 안전 확인.
 				CString sTemp;
-				//m_stcCmCount[1].GetWindowText(sTemp);	// CM 수량
-				//int nCnt = atoi(sTemp);
+				
 				m_stcLotId[1].GetWindowText(sTemp);		// Lot ID
 				
 				// Port1 CM 수량 확인 및 LotID 확인
-				if ( gLot.sLotID[0] != sTemp && gLot.sLotID[1] != sTemp) //if (nCnt > 0 && gLot.sLotID[0] != sTemp && gLot.sLotID[1] != sTemp)				
-				{
-					//gData.nCmUseCount[1] = nCnt;					
-					//gData.sLotID[1] = sTemp;					
-					//m_stcTrayCount[1].GetWindowText(sTemp);	// Tray Count
-					//gData.nTrayUseCount[1] = atoi(sTemp);
-					
+				if ( gLot.sLotID[0] != sTemp && gLot.sLotID[1] != sTemp) 				
+				{										
 					gData.bLoadLampOn[1] = FALSE;
 					pMainDlg->Set_LampFlicker_Load2(FALSE);
 					g_objSequenceMain.Set_LotLoadEnable(FALSE, 1);
@@ -957,7 +948,9 @@ void CWorkDlg::Check_Lamp()
 					g_objAJinAXL.Write_Output(0);
 					if (pEquipData->bUseDoorLock) pDY15->oDoor03Unlock = FALSE; 
 					g_objAJinAXL.Write_Output(15);
-				} else {
+				} 
+				else 
+				{
 					g_objCommon.Show_MsgBox(1, "Port2 Lot 정보를 확인해 주십시오.");
 				}
 			}

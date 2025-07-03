@@ -1938,7 +1938,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	for (int i = 0; i < 6; i++) gLot.nSNgCount[nPx][i] = 0; 
 	gLot.nRosRequest[nPx] = gLot.nRosGood[nPx] = gLot.nRosNg[nPx] = gLot.nRosRepair[nPx] = gLot.nRosTimeOut[nPx] = 0;
 
-	gData.sLotID[nPx] = "";
+	gData.sLotID[nPx] = "LOT_ID";
 	gData.nCmUseCount[nPx] = 0;
 	gData.nTrayUseCount[nPx] = 0;	
 
@@ -2010,8 +2010,8 @@ BOOL CSequenceMain::LoadTray_Run()
 		} else if ((m_pDX00->iLoadPort1Bottom || m_pDX00->iLoadPort2Bottom) && !gData.bCycleStop) {
 			// 맨처음 시작할때 2개 모두 적재 되어있으면 1번부터 가져간다.
 			// 작업할 포트에 트레이 유무와 입력수량확인.
-			if ((nLtWorkPort == 0 || nLtWorkPort == 2) && m_pDX00->iLoadPort1Bottom && (gData.sLotID[0] != "")) nLtWorkPort = 1;
-			else if ((nLtWorkPort == 0 || nLtWorkPort == 1) && m_pDX00->iLoadPort2Bottom && (gData.sLotID[1] != "")) nLtWorkPort = 2;
+			if ((nLtWorkPort == 0 || nLtWorkPort == 2) && m_pDX00->iLoadPort1Bottom && (gData.sLotID[0] != "LOT_ID")) nLtWorkPort = 1;
+			else if ((nLtWorkPort == 0 || nLtWorkPort == 1) && m_pDX00->iLoadPort2Bottom && (gData.sLotID[1] != "LOT_ID")) nLtWorkPort = 2;
 
 			if (!Check_LoadTrayLoading(nLtWorkPort)) return TRUE;	// 같은 Port Lot을 동시에 검사하지 않는다.
 
