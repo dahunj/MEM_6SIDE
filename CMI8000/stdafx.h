@@ -308,6 +308,11 @@ typedef struct {
 
 	double	dEmptyPort_Z_Limit;
 
+	int		nPNoMESNG[24]; //MES와 실물 수량 불일치 갯수 최대 24개 가정 
+	int		nTNoMESNG[24];
+	int		nCmNoMESNG[24];
+
+
 } GLOVAL_DATA;
 
 typedef struct {

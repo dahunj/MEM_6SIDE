@@ -1363,7 +1363,8 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		gData.bRosDone[nPx][nTx][nCx] = TRUE;
 	}
 
-	if (m_pEquipData->bResultTestUse) {
+	if (m_pEquipData->bResultTestUse)
+	{
 		int nRand = g_objCommon.Get_Random(0, 99);
 		int nNg1 = m_pEquipData->nResultTestN1;
 		int nNg2 = m_pEquipData->nResultTestN2 + nNg1;
@@ -1376,12 +1377,27 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		strLog.Format("ResultTest_Use : %d,%d,%d",nInfo, nTx+1, nCx+1);
 		g_objLogFile.Save_TestLog(strLog);
 
-	} else {
+	} 
+	else 
+	{
 		if (gData.bCycleStop && !Get_VisionInspectUse()) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	//Good
 		else if (Get_VisionInspectUse())  nInfo = gData.nInspectInfo[nPx][nTx][nCx];
 
 		if (nInfo == 9) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;
 	}
+
+	for(int i = 0; i < gLot.nSNgCount[nPx][0]; i++ )
+	{
+		if(gData.nPNoMESNG[i] != nPortNo) break;
+		if(gData.nTNoMESNG[i] != nTrayNo) break;
+		if(gData.nCmNoMESNG[i] != nCmNo) break;
+		gData.nInspectInfo[nPx][nTx][nCx] = 4;
+		gMes.sJudge[nPx][nTx][nCx] = "N1";
+		strLog.Format("MES NG, CM less than MES Count Info, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
+		g_objLogFile.Save_HandlerLog(strLog);
+
+	}
+
 #endif
 
 #ifdef VISION_REPEAT
@@ -1790,9 +1806,8 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	if (gLot.nCmCount[nPx] < 1) return;	// Error
 	if (gLot.bLotEndComplete[nPx] == TRUE) return;
 
-	//2주내 바코드 중복 체크 위한 저장 
-	//g_objLogFile.Save_BarcodeChkLog(gData.sLotID[nPx]);
-
+	if(gLot.nSNgCount[nPx][0] > 0) g_dlgWork.PostMessage(UM_SHOW_MSG, 4, NULL); 
+	
 	gLot.bLotEndComplete[nPx] = TRUE;
 
 	SYSTEMTIME time;
@@ -9885,12 +9900,17 @@ BOOL CSequenceMain::NgTray_Run()
 				g_dlgWork.PostMessage(UM_SHOW_MSG, 1, NULL);
 				if (m_pThreadNgFullBeep == NULL) m_pThreadNgFullBeep = AfxBeginThread(Thread_NgFullBeep, (LPVOID)(2000));
 				//g_objCommon.Show_Error(4720);	// NG Full Alarm
-			} else if (!m_bUnloadLotEnd) {
+			} 
+			else if (!m_bUnloadLotEnd)
+			{
 				// 장비 종료만 아니면 대기상태로 만들어 준다.
 				gData.bNGTrayWait = TRUE;
 				gData.bContinueLotEnd = TRUE;
-				g_dlgWork.PostMessage(UM_SHOW_MSG, 2, NULL);		// 2020.09.14 khs
-			} else if (m_bUnloadLotEnd) {
+				g_dlgWork.PostMessage(UM_SHOW_MSG, 2, NULL);
+				
+			} 
+			else if (m_bUnloadLotEnd) 
+			{
 				gData.bNgTrayEnd = TRUE;
 			}
 			m_nNgTrayCase = 0; m_tNgTrayLoop.Set_LoopTime(5000);

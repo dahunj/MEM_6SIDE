@@ -86,6 +86,7 @@ protected:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnStcLotIdClick(UINT nID);
 	afx_msg void OnStcCmCountClick(UINT nID);
+	afx_msg void OnStcBtm1InfoClick(UINT nID);
 	afx_msg void OnBnClickedRdoWorkStart();
 	afx_msg void OnBnClickedRdoWorkStop();
 	afx_msg void OnBnClickedChkCycleStop();
@@ -147,6 +148,7 @@ public:
 	afx_msg void OnBnClickedButton5();
 	afx_msg void OnBnClickedButton6();
 	afx_msg void OnBnClickedButton7();
+	
 };
 
 extern CWorkDlg g_dlgWork;

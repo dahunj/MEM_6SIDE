@@ -100,6 +100,8 @@ BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
 	ON_WM_TIMER()
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_LOT_ID_0, IDC_STC_LOT_ID_1, OnStcLotIdClick)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_CM_COUNT_0, IDC_STC_CM_COUNT_1, OnStcCmCountClick)
+	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_B1_NO_0,IDC_STC_B1_NO_9, OnStcBtm1InfoClick)
+
 	ON_BN_CLICKED(IDC_BTN_MES_ABORT, &CWorkDlg::OnBnClickedBtnMesAbort)
 	ON_BN_CLICKED(IDC_BTN_MES_MANUAL, &CWorkDlg::OnBnClickedBtnMesManual)
 	ON_BN_CLICKED(IDC_RDO_WORK_START, &CWorkDlg::OnBnClickedRdoWorkStart)
@@ -129,6 +131,7 @@ BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON5, &CWorkDlg::OnBnClickedButton5)
 	ON_BN_CLICKED(IDC_BUTTON6, &CWorkDlg::OnBnClickedButton6)
 	ON_BN_CLICKED(IDC_BUTTON7, &CWorkDlg::OnBnClickedButton7)
+	
 END_MESSAGE_MAP()
 
 // CWorkDlg 메시지 처리기입니다.
@@ -511,6 +514,27 @@ void CWorkDlg::OnStcCmCountClick(UINT nID)
 		strLog.Format("[Work Dialog] CM Count (%d) Click. (CmCount:%d)", ID, nCmCnt);
 		g_objLogFile.Save_MesAgentLog(strLog);
 	}	
+}
+
+void CWorkDlg::OnStcBtm1InfoClick(UINT nID)
+{
+	int ID = nID - IDC_STC_B1_NO_0;
+
+	if(g_objCommon.Show_MsgBox(2, "해당 모듈 Dummy 입니까?") != IDOK) return;
+	
+	//나중에 NG로 빠지게 하면 될듯 지금 그렇게 해줄 이유가 없음 
+	//gData.nCNoBtm1Pick[ID] = 0; //gData.nTNoBtm1Pick[ID] = 0;
+	//gData.InfoBtm1Pick[ID] = gData.nCNoBtm1Pick[ID];
+
+	gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]++;
+	gData.nPNoMESNG[gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nPNoBtm1Pick;
+	gData.nTNoMESNG[gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nTNoBtm1Pick[ID];
+	gData.nCmNoMESNG[gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nCNoBtm1Pick[ID];
+	
+
+	//CString strText;
+	//strText.Format("%d-%d", gData.nTNoBtm1Pick[ID], gData.nCNoBtm1Pick[ID]); m_stcB1No[ID].Set_Text(strText);
+
 }
 
 void CWorkDlg::OnBnClickedChkMesUse()
@@ -964,10 +988,13 @@ void CWorkDlg::Check_Lamp()
 				if (pEquipData->bUseDoorLock) pDY15->oDoor04Unlock = FALSE; 
 				g_objAJinAXL.Write_Output(15);
 
-				if (gData.bContinueLotEnd) {
+				if (gData.bContinueLotEnd) 
+				{
 					gData.bContinueLotEnd = FALSE;
 					for (int i = 0; i < 4; i++) g_objSequenceMain.Init_NgTray(i);
-				} else {
+				} 
+				else 
+				{
 					if (gData.InfoNgTray[0][gData.nTrayY-1][gData.nTrayX-1] > 0) { g_objSequenceMain.Init_NgTray(0); g_objSequenceMain.Init_NgTray(2); }	// N1,N3
 					if (gData.InfoNgTray[1][gData.nTrayY-1][gData.nTrayX-1] > 0) g_objSequenceMain.Init_NgTray(1);	// N4
 					if (gData.InfoNgTray[3][gData.nTrayY-1][gData.nTrayX-1] > 0) g_objSequenceMain.Init_NgTray(3);	// N2
@@ -1596,6 +1623,7 @@ LRESULT CWorkDlg::OnShowMsg(WPARAM wParam, LPARAM lParam)
 	if		(wParam == 1) g_objCommon.Show_MsgBox(1, "NG Tray Full 상태입니다.\nNG Tray 교체 해주십시오.");
 	else if	(wParam == 2) g_objCommon.Show_MsgBox(1, "현재 Lot이 종료 되었습니다. NG Tray 교체 해주십시오.");
 	else if	(wParam == 3) g_objCommon.Show_MsgBox(1, "Cap Attach 설비가 정지하였습니다.");
+	else if	(wParam == 4) g_objCommon.Show_MsgBox(1, "MES 수량 대비 실물 수량 부족. 확인바랍니다.");
 	else 				  g_objCommon.Show_MsgBox(1, "Lot의 마지막 트레이 작업 중입니다.\n배출 준비 해주십시오.");
 
 	return 0;
@@ -1713,8 +1741,7 @@ void CWorkDlg::FakeLoadPortSensor()
 	CString strTemp, strTemp2;
 
 	DX_DATA_00 *pDX00 = g_objAJinAXL.Get_pDX00();
-
-
+	
 	m_stcCmCount[0].GetWindowText(strTemp);	// CM 수량
 	int nTemp = atoi(strTemp);
 	if (nTemp > 1 || nTemp < 2400) pDX00->iLoadPort1Bottom = TRUE;
@@ -1725,3 +1752,5 @@ void CWorkDlg::FakeLoadPortSensor()
 	if (nTemp2 > 1 || nTemp2 < 2400) pDX00->iLoadPort2Bottom = TRUE;
 
 }
+
+
