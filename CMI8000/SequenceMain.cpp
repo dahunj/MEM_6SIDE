@@ -615,8 +615,11 @@ BOOL CSequenceMain::LotEnd_Run()
 	strMsg.Format("Lot End ==> ID(%s), Total(%d), Good(%d), NG(%d), Rate(%0.1lf)", gLot.sLotID[nPx], nSum, gLot.nGoodCount[nPx], gLot.nNgCount[nPx], dRate);
 	g_objLogFile.Save_HandlerLog(strMsg);
 
-	strMsg.Format("Lot End.\n\nSpecial NG Count\n(N1:%d, N2:%d, N3:%d, N4:%d, ROS:%d)",
-		gLot.nSNgCount[nPx][1], gLot.nSNgCount[nPx][2], gLot.nSNgCount[nPx][3], gLot.nSNgCount[nPx][5], gLot.nRosNg[nPx]);
+	strMsg.Format("Lot End.");
+	g_objCommon.Show_Alarm(strMsg);
+
+	strMsg.Format("Lot End.\n\nSpecial NG Count\n(N1:%d, N2:%d, N3:%d, N4:%d, MES:%d)",
+		gLot.nSNgCount[nPx][1], gLot.nSNgCount[nPx][2], gLot.nSNgCount[nPx][3], gLot.nSNgCount[nPx][5], gLot.nSNgCount[nPx][0]);
 	g_objCommon.Show_Alarm(strMsg);
 
 	m_pEquipData->bResultTestUse = FALSE;	// LOT ³¡³ª¸é Reset
