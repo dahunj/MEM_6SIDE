@@ -128,6 +128,7 @@ private:
 	void Check_Lamp();
 	void Display_Status();
 	void Reset_AlarmLog();
+	
 
 public:
 	void Set_AutoRun(BOOL bAutoRun);
@@ -139,6 +140,8 @@ public:
 
 	void WriteCMCount(int nPortNo);
 	void FakeLoadPortSensor();
+
+	void ResetInfoDisplay();
 
 	afx_msg void OnBnClickedBtnIdleReport();
 	afx_msg void OnBnClickedButton1();

@@ -1388,14 +1388,16 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 
 	for(int i = 0; i < gLot.nSNgCount[nPx][0]; i++ )
 	{
-		if(gData.nPNoMESNG[i] != nPortNo) break;
-		if(gData.nTNoMESNG[i] != nTrayNo) break;
-		if(gData.nCmNoMESNG[i] != nCmNo) break;
-		gData.nInspectInfo[nPx][nTx][nCx] = 4;
-		gMes.sJudge[nPx][nTx][nCx] = "N1";
-		strLog.Format("MES NG, CM less than MES Count Info, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
-		g_objLogFile.Save_HandlerLog(strLog);
+		if(gData.nPNoMESNG[i] == nPortNo && gData.nTNoMESNG[i] == nTrayNo && gData.nCmNoMESNG[i] == nCmNo)
+		{
+			gData.nInspectInfo[nPx][nTx][nCx] = 4;
+			gMes.sJudge[nPx][nTx][nCx] = "N1";
 
+			nInfo = gData.nInspectInfo[nPx][nTx][nCx];		
+
+			strLog.Format("MES NG, CM less than MES Count Info, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
+			g_objLogFile.Save_HandlerLog(strLog);
+		}
 	}
 
 #endif
@@ -1497,6 +1499,20 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 		if (nInfo == 9) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;
 	}
 #endif
+
+	for(int i = 0; i < gLot.nSNgCount[nPx][0]; i++ )
+	{
+		if(gData.nPNoMESNG[i] == nPortNo && gData.nTNoMESNG[i] == nTrayNo && gData.nCmNoMESNG[i] == nCmNo)
+		{
+			gData.nInspectInfo[nPx][nTx][nCx] = 4;
+			gMes.sJudge[nPx][nTx][nCx] = "N1";
+
+			nInfo = gData.nInspectInfo[nPx][nTx][nCx];		
+
+			strLog.Format("MES NG, CM less than MES Count Info, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
+			g_objLogFile.Save_HandlerLog(strLog);
+		}
+	}
 
 #ifdef VISION_REPEAT
 	nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	// 반복성 검증일때 모두 양품
@@ -4059,7 +4075,9 @@ BOOL CSequenceMain::Btm1Picker_Run()
 		}
 		break;
 	case 24:	// Picker Up
-		if (!m_pThreadVacuumB1p && g_objCommon.Get_Btm1PickerOpen(0)) {
+		if (!m_pThreadVacuumB1p && g_objCommon.Get_Btm1PickerOpen(0)) 
+		{
+			g_dlgWork.ResetInfoDisplay();
 			if (!m_tBtm1PickLoop.Waiting_Time(m_pEquipData->nDelayAdd[0])) break;	// Btm1 Delay
 			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 0);	// Ready Up	
 

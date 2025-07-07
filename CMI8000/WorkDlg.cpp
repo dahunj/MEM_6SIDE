@@ -490,7 +490,7 @@ void CWorkDlg::OnStcCmCountClick(UINT nID)
 {
 	if(!m_chkMesUse.GetCheck())
 	{
-		int ID = nID - IDC_STC_CM_COUNT_0;
+		int ID = nID  - IDC_STC_CM_COUNT_0;
 
 		CString strOld, strNew, strValue;
 
@@ -526,11 +526,20 @@ void CWorkDlg::OnStcBtm1InfoClick(UINT nID)
 	//gData.nCNoBtm1Pick[ID] = 0; //gData.nTNoBtm1Pick[ID] = 0;
 	//gData.InfoBtm1Pick[ID] = gData.nCNoBtm1Pick[ID];
 
-	gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]++;
+	
 	gData.nPNoMESNG[gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nPNoBtm1Pick;
 	gData.nTNoMESNG[gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nTNoBtm1Pick[ID];
 	gData.nCmNoMESNG[gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nCNoBtm1Pick[ID];
-	
+	gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]++;
+
+	//m_stcB1No[ID].Init_Ctrl("πŸ≈¡", 12, TRUE, RGB(0xFF, 0x00, 0x00), RGB(0x0F, 0x0F, 0x0F));
+	m_stcB1No[ID].Set_Color(RGB(0xFF, 0x00, 0x00), RGB(0x0F, 0x0F, 0x0F));
+	//m_stcB1No[ID].Set_Color(RGB(0x00, 0xFF, 0x00), RGB(0x00, 0x00, 0x00));
+
+	CString strLog;
+
+	strLog.Format("MES NG, Clicked, PortNo(%d), TrayNo(%d), CmNo(%d)", gData.nPNoBtm1Pick, gData.nTNoBtm1Pick[ID], gData.nCNoBtm1Pick[ID]);
+	g_objLogFile.Save_HandlerLog(strLog);
 
 	//CString strText;
 	//strText.Format("%d-%d", gData.nTNoBtm1Pick[ID], gData.nCNoBtm1Pick[ID]); m_stcB1No[ID].Set_Text(strText);
@@ -1077,6 +1086,12 @@ void CWorkDlg::Display_Status()
 	int *pCase = g_objSequenceMain.Get_pMainRunCase();
 	for (int i = 0; i < AUTO_COUNT; i++) { strText.Format("%02d", *(pCase + i)); m_stcWorkCase[i].Set_Text(strText); }
 }
+
+void CWorkDlg::ResetInfoDisplay()
+{
+	for (int i = 0; i < 10; i++) m_stcB1No[i].Set_Color(RGB(0x00, 0xFF, 0x00), RGB(0x00, 0x00, 0x00));
+}
+
 
 void CWorkDlg::Reset_AlarmLog()
 {
