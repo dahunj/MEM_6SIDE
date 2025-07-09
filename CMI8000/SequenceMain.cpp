@@ -711,8 +711,7 @@ void CSequenceMain::Set_ClearRunData(int nType)
 // 	gData.nNNgTrayCount = 0;
 // 	gData.nSNgTrayCount = 0;
 
-	gData.nTrayUseCount[0] = gData.nTrayUseCount[1] = 0;
-	gData.nCmUseCount[0] = gData.nCmUseCount[1] = 0;
+
 
 	gData.bNGTrayWait = FALSE;
 	gData.bContinueLotEnd = FALSE;
@@ -1828,6 +1827,9 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	if(gLot.nSNgCount[nPx][0] > 0) g_dlgWork.PostMessage(UM_SHOW_MSG, 4, NULL); 
 	
 	gLot.bLotEndComplete[nPx] = TRUE;
+
+	gData.nTrayUseCount[0] = gData.nTrayUseCount[1] = 0;
+	gData.nCmUseCount[0] = gData.nCmUseCount[1] = 0;
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
