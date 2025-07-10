@@ -708,10 +708,6 @@ void CSequenceMain::Set_ClearRunData(int nType)
 	gData.nLoadTrayCount[0] = 0; gData.nLoadTrayCount[1] = 0;
 	gData.nEmptyTrayCount = (m_nEmptyTrayElCase == 20 ? 1 : 0);
 	gData.nGoodTrayCount = 0;
-// 	gData.nNNgTrayCount = 0;
-// 	gData.nSNgTrayCount = 0;
-
-
 
 	gData.bNGTrayWait = FALSE;
 	gData.bContinueLotEnd = FALSE;
@@ -1828,8 +1824,8 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	
 	gLot.bLotEndComplete[nPx] = TRUE;
 
-	gData.nTrayUseCount[0] = gData.nTrayUseCount[1] = 0;
-	gData.nCmUseCount[0] = gData.nCmUseCount[1] = 0;
+	gData.nTrayUseCount[nPx] = 0;
+	gData.nCmUseCount[nPx] = 0;
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
