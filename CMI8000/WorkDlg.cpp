@@ -399,7 +399,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 				if (!g_objSequenceMain.Is_MainThreadRun()) {
 					g_objLogFile.Save_HandlerLog("[Work Mode] Auto STOP");
 					pMainDlg->Set_CurrentState(STATE_STOP);
-					g_objMES.Set_Status(3);
+					g_objMES.Set_Status(2);
 
 					g_objCommon.Btm1BlowSunctionOnOff(FALSE);
 					g_objCommon.TopBlowSunctionOnOff(FALSE);
@@ -437,7 +437,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 
 			g_objCommon.Btm1BlowSunctionOnOff(FALSE);
 			g_objCommon.TopBlowSunctionOnOff(FALSE);
-			g_objMES.Set_Status(3);
+			
 
 		} else {				// Stop
 			int nState = theApp.Get_MainState();
@@ -639,6 +639,7 @@ void CWorkDlg::OnBnClickedRdoWorkStart()
 
 void CWorkDlg::OnBnClickedRdoWorkStop()
 {
+	g_objMES.Set_Status(2);
 	g_objLogFile.Save_HandlerLog("[Work Mode] STOP button push");
 	MachineStopLog("STOP_BUTTON_PUSH");
 	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
@@ -1602,7 +1603,10 @@ LRESULT CWorkDlg::OnLotStartEnd(WPARAM wParam, LPARAM lParam)
 	if (wParam == 1) {
 		pMainDlg->Set_LotErrorLog("LOT START", 901, "Lot Start", nNo);
 		g_objLogFile.Save_EfficiencyLog(1, "Start", 901, "Lot Start");	// Lot Start
-	} else if (wParam == 2) {
+	} 
+	else if (wParam == 2) 
+	{
+		g_objMES.Set_Status(3);
 		pMainDlg->Set_LotErrorLog("LOT END", 902, "Lot End", nNo);
 		g_objLogFile.Save_EfficiencyLog(1, "End", 902, "Lot End");
 	}

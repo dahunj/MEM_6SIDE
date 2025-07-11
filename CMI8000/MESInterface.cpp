@@ -19,6 +19,7 @@
 #define MES_FOLDER_APD	"D:\\MES\\APD\\"
 #define MES_FOLDER_RMS	"D:\\MES\\Recipe\\"
 #define MES_FOLDER_APD_RESULT "D:\\EVMS\\TP\\MES\\VALIDATION\\"
+#define BACKUP_FOLDER	"D:\\DUMP\\"
 
 #define EQUIP_TYPE		"S"	//Single:S, Dual:D"
 #define APD_COUNT		100	//전송Max수량
@@ -442,6 +443,27 @@ void CMESInterface::Set_Status(int nState)	//1:Run, 2:Stop, 3:Idle
 		}
 	}
 
+
+	CString strPath2, strFile2, strSave2, strLog2;
+	strPath2.Format("%s%04d%02d%02d", BACKUP_FOLDER, time.wYear, time.wMonth, time.wDay);
+	strFile2.Format("%s\\%04d%02d%02d.txt", strPath2, time.wYear, time.wMonth, time.wDay);
+	Create_Folder(strPath2);
+
+	CString strState2 = (nState == 1 ? "RUN" : (nState == 2 ? "STOP" : "IDLE"));
+	CFile file2;
+	if (file2.Open(strFile2, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
+		try {
+			file2.SeekToEnd();
+			strSave2.Format("[%04d/%02d/%02d %02d:%02d:%02d],StateChange,UNITID=1000,WorkMode=%s\r\n",
+				time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, strState2);
+			file2.Write(strSave2, strSave2.GetLength());
+			file2.Close();
+
+		} catch (CFileException *pEx) {
+			pEx->Delete();
+		}
+	}
+
 	strLog.Format("[MESInterface] Set_Status. (Status:%d)", nState);
 	g_objLogFile.Save_MesAgentLog(strLog);
 	g_csMesLog.Unlock();
@@ -474,10 +496,37 @@ void CMESInterface::Set_Alarm(int nType, int nAlarmID, CString sText )	//1:발생,
 			file.Write(strSave, strSave.GetLength());
 			file.Close();
 
-		} catch (CFileException *pEx) {
+		} 
+		catch (CFileException *pEx)
+		{
 			pEx->Delete();
 		}
 	}
+
+	CString strPath2, strFile2;
+	strPath2.Format("%s%04d%02d%02d", BACKUP_FOLDER, time.wYear, time.wMonth, time.wDay);
+	strFile2.Format("%s\\%04d%02d%02d.txt", strPath2, time.wYear, time.wMonth, time.wDay);
+	Create_Folder(strPath2);
+	
+	strState2 = (nType == 1 ? "STOP" : "IDLE");
+	CFile file2;
+	if (file2.Open(strFile2, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
+		try {
+			file2.SeekToEnd();
+			
+			strSave.Format("%s[%04d/%02d/%02d %02d:%02d:%02d],StateChange,UNITID=1000,WorkMode=%s\r\n",
+				strSave2, time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, strState2);
+			file2.Write(strSave, strSave.GetLength());
+			file2.Close();
+
+		} 
+		catch (CFileException *pEx)
+		{
+			pEx->Delete();
+		}
+	}
+
+
 
 	strLog.Format("[MESInterface] Set_Alarm. (Type:%d, AlarmID:%d, Text:%s)", nType, nAlarmID, sText);
 	g_objLogFile.Save_MesAgentLog(strLog);
