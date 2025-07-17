@@ -615,6 +615,8 @@ BOOL CSequenceMain::LotEnd_Run()
 	strMsg.Format("Lot End ==> ID(%s), Total(%d), Good(%d), NG(%d), Rate(%0.1lf)", gLot.sLotID[nPx], nSum, gLot.nGoodCount[nPx], gLot.nNgCount[nPx], dRate);
 	g_objLogFile.Save_HandlerLog(strMsg);
 
+
+	g_objMES.Set_Status(3);
 	strMsg.Format("Lot End.");
 	g_objCommon.Show_Alarm(strMsg);
 

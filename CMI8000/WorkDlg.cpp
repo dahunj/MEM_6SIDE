@@ -1606,7 +1606,7 @@ LRESULT CWorkDlg::OnLotStartEnd(WPARAM wParam, LPARAM lParam)
 	} 
 	else if (wParam == 2) 
 	{
-		g_objMES.Set_Status(3);
+		
 		pMainDlg->Set_LotErrorLog("LOT END", 902, "Lot End", nNo);
 		g_objLogFile.Save_EfficiencyLog(1, "End", 902, "Lot End");
 	}
