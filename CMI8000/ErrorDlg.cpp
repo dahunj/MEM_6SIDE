@@ -304,7 +304,7 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		pMainDlg->Set_BuzzerFlicker(FALSE);
 		if (g_objSequenceInit.Get_InitComplete()) pMainDlg->Set_CurrentState(STATE_STOP);
 		else pMainDlg->Set_CurrentState(STATE_NONE);
-		g_objMES.Set_Alarm(2, m_nErrNo, m_strErrMsg);
+		//g_objMES.Set_Alarm(2, m_nErrNo, m_strErrMsg);
 
 		g_objLogFile.Save_HandlerLog("[Error Mode] Close Error");
 
