@@ -62,6 +62,9 @@ public:
 	void Set_IDLEReasonReport(CString eventTime, CString sOperID, CString sStartTime, CString sEndTime, CString ReasonCode);
 
 	void Set_Result(CString sLotID, CString sBarID, CString sJudge, CString sNGCode, CString NGText, int nLTray, int nLPno, int nUTray, int nUPno,int nNGTray, int nNGPno);
+
+	void Save_ProcessedData(CString sLotID, CString sBarID, CString sJudge, CString sNGCode, CString NGText, int nLTray, int nLPno, int nUTray, int nUPno,int nNGTray, int nNGPno);
+
 	void LotEnd_WriteAPD();
 	void Clear_APDResultVar() { m_nTCount = m_nSNo = 0; }
 
