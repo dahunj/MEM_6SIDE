@@ -377,6 +377,8 @@ typedef struct {
 
 	double  dMotionChkPos;
 	double  dMotionPos[46];
+
+	BOOL	bBufferUpDownStatus[2];
 } GLOVAL_ALM;
 
 typedef struct {

@@ -143,7 +143,8 @@ LRESULT CInspector::OnUdpReceive(WPARAM wLocalPort, LPARAM lParam)
 	strRecvSocket.Format("%s", byRecv);
 	m_strRecvCmd += strRecvSocket;
 
-	while (!m_strRecvCmd.IsEmpty()) {
+	while (!m_strRecvCmd.IsEmpty()) 
+	{
 		int nStart = m_strRecvCmd.Find("@");
 		int nEnd = m_strRecvCmd.Find("\n");
 
