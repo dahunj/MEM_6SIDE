@@ -729,6 +729,18 @@ BOOL CWorkDlg::Work_Start()
 		return FALSE;
 	}
 
+	//buffer stage 이전 상태 기억 및 체크 
+	if((gAlm.bBufferUpStatus[0] != pDX09->iBufferStage1Up) || (gAlm.bBufferUpStatus[1] != pDX09->iBufferStage2Up)
+		|| (gAlm.bBufferDownStatus[0] != pDX09->iBufferStage1Down) || (gAlm.bBufferDownStatus[1] = pDX09->iBufferStage2Down))
+	{
+		strTemp.Format("Buffer Stage 상태 체크 하세요 1Up :%d, 1Down:%d, 2Up:%d, 2Down:%d", gAlm.bBufferUpStatus[0],gAlm.bBufferDownStatus[0],gAlm.bBufferUpStatus[1],gAlm.bBufferDownStatus[1] );
+		g_objLogFile.Save_HandlerLog(strTemp);
+
+		g_objCommon.Show_MsgBox(1, strTemp);
+	}
+
+
+
 	g_objInspector.Set_FOBRequest(INSPECTOR_ALL);	// 시작전 FOB 모드 확인
 
 #ifndef DRY_RUN_TEST
