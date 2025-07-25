@@ -82,6 +82,19 @@ END_MESSAGE_MAP()
 
 void CInspector::Initialize()
 {
+
+#ifndef AJIN_BOARD_USE
+	BOOL bOpenedPC1 = m_UdpVisionPC1.Open_Socket(10000, 10001, "127.0.0.1", this);
+	BOOL bOpenedPC2 = m_UdpVisionPC2.Open_Socket(11000, 11001, "127.0.0.1", this);
+	BOOL bOpenedPC3 = m_UdpVisionPC3.Open_Socket(12000, 12001, "127.0.0.1", this);
+	BOOL bOpenedPC4 = m_UdpVisionPC4.Open_Socket(13000, 13001, "127.0.0.1", this);
+
+	if (bOpenedPC1) Set_ConnectRequest(INSPECTOR_PC1);
+	if (bOpenedPC2) Set_ConnectRequest(INSPECTOR_PC2);
+	if (bOpenedPC3) Set_ConnectRequest(INSPECTOR_PC3);
+	if (bOpenedPC4) Set_ConnectRequest(INSPECTOR_PC4);
+
+#else
 	BOOL bOpenedPC1 = m_UdpVisionPC1.Open_Socket(UDP_PC1_LPORT, UDP_PC1_HPORT, UDP_PC1_HOST_IP, this);
 	BOOL bOpenedPC2 = m_UdpVisionPC2.Open_Socket(UDP_PC2_LPORT, UDP_PC2_HPORT, UDP_PC2_HOST_IP, this);
 	BOOL bOpenedPC3 = m_UdpVisionPC3.Open_Socket(UDP_PC3_LPORT, UDP_PC3_HPORT, UDP_PC3_HOST_IP, this);
@@ -91,6 +104,10 @@ void CInspector::Initialize()
 	if (bOpenedPC2) Set_ConnectRequest(INSPECTOR_PC2);
 	if (bOpenedPC3) Set_ConnectRequest(INSPECTOR_PC3);
 	if (bOpenedPC4) Set_ConnectRequest(INSPECTOR_PC4);
+
+#endif
+
+
 }
 
 void CInspector::Terminate()
@@ -128,10 +145,19 @@ LRESULT CInspector::OnUdpReceive(WPARAM wLocalPort, LPARAM lParam)
 	BYTE byRecv[1024] = { 0 };
 	CString strLog;
 
+#ifdef AJIN_BOARD_USE
 	if (nPort == UDP_PC1_HPORT) { nInspector = INSPECTOR_PC1; nLen = m_UdpVisionPC1.Read_Socket(byRecv); }
 	if (nPort == UDP_PC2_HPORT) { nInspector = INSPECTOR_PC2; nLen = m_UdpVisionPC2.Read_Socket(byRecv); }
 	if (nPort == UDP_PC3_HPORT) { nInspector = INSPECTOR_PC3; nLen = m_UdpVisionPC3.Read_Socket(byRecv); }
 	if (nPort == UDP_PC4_HPORT) { nInspector = INSPECTOR_PC4; nLen = m_UdpVisionPC4.Read_Socket(byRecv); }
+#else
+	if (nPort == 10001) { nInspector = INSPECTOR_PC1; nLen = m_UdpVisionPC1.Read_Socket(byRecv); }
+	if (nPort == 11001) { nInspector = INSPECTOR_PC2; nLen = m_UdpVisionPC2.Read_Socket(byRecv); }
+	if (nPort == 12001) { nInspector = INSPECTOR_PC3; nLen = m_UdpVisionPC3.Read_Socket(byRecv); }
+	if (nPort == 13001) { nInspector = INSPECTOR_PC4; nLen = m_UdpVisionPC4.Read_Socket(byRecv); }
+#endif
+
+
 
 	if (nInspector == 0 || nLen < 1) {
 		strLog.Format("[H<-V%d] : Local Port (%d) Mismatch or Receive Data Zero (%d)", nInspector, nPort, nLen);
