@@ -75,8 +75,15 @@ BOOL CMainDlg::OnInitDialog()
 		step = 100;
 		break;
 	case 100:
+		g_objVIsionManager.Set_StatusUpdate(INSPECTOR_PC3, 0);
+		Sleep(10);
+		g_objVIsionManager.Set_ConnectEnd(INSPECTOR_PC3);
+		Sleep(10);
+		g_objVIsionManager.Set_ConnectRequest(INSPECTOR_PC3);
+		Sleep(10);
 		step = 200;
 		break;
+	
 
 	}
 
