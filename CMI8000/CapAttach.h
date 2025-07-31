@@ -33,6 +33,7 @@ private:
 	void Get_StatusUpdate(CString sStatus);
 	void Get_TrayUnload();
 	void Get_ApdReply(CString sCapForceAvg);
+	void Get_NotifyCmAlignAlarm();
 
 	void Send_Command(CString strSend);
 

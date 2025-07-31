@@ -334,11 +334,27 @@ UINT CSequenceMain::Thread_MainRun(LPVOID lpVoid)
 		if (!g_objCommon.Check_DirveAlarm()) break;
 		if (!g_objCommon.Check_EndLimit()) break;
 		if (!g_objCommon.Check_HomeDone()) break;
+
+		
 		// Cap Attach가 정지하면 AVI도 정지해준다.
 		if (g_objSequenceMain.m_pEquipData->bUseInlineMode && g_objCapAttach.Is_StatusCapAttach() == 0) {
 			g_dlgWork.MachineStopLog("CAP_ATTACH_STOP");	// Cap Attach 알람 또는 정지에 의한 설비 멈춤.
-			g_dlgWork.PostMessage(UM_SHOW_MSG, 3, NULL);
+			
+			if(gData.bCapVisionAlarm)
+			{
+				gData.bCapVisionAlarm = FALSE;
+				g_dlgWork.PostMessage(UM_SHOW_MSG, 5, NULL);
+			}
+			else{
+				g_dlgWork.PostMessage(UM_SHOW_MSG, 3, NULL);
+			}
+			
 			break;
+		}
+		if(gData.bCapVisionAlarm) //경고 메시지 안떳을때 다시 처리 
+		{
+			gData.bCapVisionAlarm = FALSE;
+			g_dlgWork.PostMessage(UM_SHOW_MSG, 5, NULL);
 		}
 
 		//Vision PC HDD 용량 확인시 핸들러에서 알람 
@@ -347,7 +363,6 @@ UINT CSequenceMain::Thread_MainRun(LPVOID lpVoid)
 		//if (gData.b3DGrabFailErr) { gData.b3DGrabFailErr = FALSE; g_objCommon.Show_Error(6200);
 		//	break;
 		//}
-
 
 		if (!g_objSequenceMain.LoadTray_Run()) break;			//  1. (Error : 3100)
 		
