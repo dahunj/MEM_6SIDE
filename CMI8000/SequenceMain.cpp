@@ -7265,7 +7265,11 @@ BOOL CSequenceMain::SortPicker1_Run()
 				}
 			} else {
 				if (Check_InspectLotEnd(gData.nPNoNgTray, 1)) {
-					if (Check_NgBufferLotEnd(gData.nPNoNgTray)) {	// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
+					if (Check_NgBufferLotEnd(gData.nPNoNgTray) ) 
+					{	
+						if(gData.nPNoSortPick[1] == gData.nPNoNgTray) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
+						
+						// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
 						if (m_pEquipData->bUseApdAlarm) {	// 2023.05.11+
 							m_nSortPick1Case = 60; m_tSortPick1Loop.Set_LoopTime(10000); break;	// LotEnd Case
 						}
@@ -7312,7 +7316,9 @@ BOOL CSequenceMain::SortPicker1_Run()
 						if (!gData.bGoodTrayLotEnd[0] && m_nGoodTray1Case > 20 && m_nGoodTray1Case < 30) { gData.bGoodTrayLotEnd[0] = TRUE; }
 						if (!gData.bGoodTrayLotEnd[1] && m_nGoodTray2Case > 20 && m_nGoodTray2Case < 30) { gData.bGoodTrayLotEnd[1] = TRUE; }
 
-					} else {
+					} 
+					else 
+					{
 						if (!Check_NgBufferEmpty(1) && Check_SortPickerEmpty(1)) {
 							bLastNgBuffPick1 = TRUE;
 							m_nSortPick1Case = 50; m_tSortPick1Loop.Set_LoopTime(10000);
@@ -7591,6 +7597,9 @@ BOOL CSequenceMain::SortPicker1_Run()
 		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) {
 			if (Check_InspectLotEnd(gData.nULPNo, 1)) {
 				if (Check_NgBufferLotEnd(gData.nULPNo)) {	// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
+
+					if(gData.nPNoSortPick[1] == gData.nPNoNgTray) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
+
 					if (m_pEquipData->bUseApdAlarm) {	// 2023.05.11+
 						m_nSortPick1Case = 60; m_tSortPick1Loop.Set_LoopTime(10000); break;	// LotEnd Case
 						m_tSortPick1Loop.Takt_Start(nTaktZone, 28);
@@ -8440,8 +8449,13 @@ BOOL CSequenceMain::SortPicker2_Run()
 					m_tSortPick2Loop.Takt_End(nTaktZone,17);
 				}
 			} else {
-				if (Check_InspectLotEnd(gData.nPNoNgTray, 2)) {
-					if (Check_NgBufferLotEnd(gData.nPNoNgTray)) {	// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
+				if (Check_InspectLotEnd(gData.nPNoNgTray, 2))
+				{
+					if (Check_NgBufferLotEnd(gData.nPNoNgTray)) 
+					{	// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
+
+						if(gData.nPNoSortPick[0] == gData.nPNoNgTray) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
+
 						if (m_pEquipData->bUseApdAlarm) {	// 2023.05.11+
 							m_nSortPick2Case = 60; m_tSortPick2Loop.Set_LoopTime(10000); break;	// LotEnd Case
 						}
@@ -8488,8 +8502,11 @@ BOOL CSequenceMain::SortPicker2_Run()
 						if (!gData.bGoodTrayLotEnd[0] && m_nGoodTray1Case > 20 && m_nGoodTray1Case < 30) { gData.bGoodTrayLotEnd[0] = TRUE; }
 						if (!gData.bGoodTrayLotEnd[1] && m_nGoodTray2Case > 20 && m_nGoodTray2Case < 30) { gData.bGoodTrayLotEnd[1] = TRUE; }
 
-					} else {
-						if (!Check_NgBufferEmpty(2) && Check_SortPickerEmpty(2)) {
+					} 
+					else
+					{
+						if (!Check_NgBufferEmpty(2) && Check_SortPickerEmpty(2)) 
+						{
 							bLastNgBuffPick2 = TRUE;
 							m_nSortPick2Case = 50; m_tSortPick2Loop.Set_LoopTime(10000);
 
@@ -8781,8 +8798,13 @@ BOOL CSequenceMain::SortPicker2_Run()
 		break;
 	case 28:	// Buffer 복귀
 		if (g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) {
-			if (Check_InspectLotEnd(gData.nULPNo, 2)) {
-				if (Check_NgBufferLotEnd(gData.nULPNo)) {	// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
+			if (Check_InspectLotEnd(gData.nULPNo, 2)) 
+			{
+				if (Check_NgBufferLotEnd(gData.nULPNo)) 
+				{	// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
+
+					if(gData.nPNoSortPick[0] == gData.nPNoNgTray) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
+
 					if (m_pEquipData->bUseApdAlarm) {	// 2023.05.11+
 						m_nSortPick2Case = 60; m_tSortPick2Loop.Set_LoopTime(10000); break;	// LotEnd Case
 
