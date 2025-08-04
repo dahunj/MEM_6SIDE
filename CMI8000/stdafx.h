@@ -74,7 +74,7 @@
 #endif
 
 
-#define MAIN_VERSION	_T("V 3.5.0.21 MEM")
+#define MAIN_VERSION	_T("V 3.5.0.24 MEM")
 
 
 //주석처리하면 SIMULATION 
@@ -311,6 +311,8 @@ typedef struct {
 	int		nPNoMESNG[24]; //MES와 실물 수량 불일치 갯수 최대 24개 가정 
 	int		nTNoMESNG[24];
 	int		nCmNoMESNG[24];
+
+	BOOL	bCapVisionAlarm;
 
 
 } GLOVAL_DATA;

@@ -1643,6 +1643,7 @@ LRESULT CWorkDlg::OnShowMsg(WPARAM wParam, LPARAM lParam)
 	else if	(wParam == 2) g_objCommon.Show_MsgBox(1, "현재 Lot이 종료 되었습니다. NG Tray 교체 해주십시오.");
 	else if	(wParam == 3) g_objCommon.Show_MsgBox(1, "Cap Attach 설비가 정지하였습니다.");
 	else if	(wParam == 4) g_objCommon.Show_MsgBox(1, "MES 수량 대비 실물 수량 부족. 확인바랍니다.");
+	else if	(wParam == 5) g_objCommon.Show_MsgBox(1, "CAP Vision Alarm 입니다. 참고 바랍니다.");
 	else 				  g_objCommon.Show_MsgBox(1, "Lot의 마지막 트레이 작업 중입니다.\n배출 준비 해주십시오.");
 
 	return 0;

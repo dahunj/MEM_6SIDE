@@ -140,6 +140,9 @@ LRESULT CCapAttach::OnUdpReceive(WPARAM wLocalPort, LPARAM lParam)
 		} else if (strCmd == "APD") {
 			if (strOp == "REPLY") Get_ApdReply(strArg[0]);
 		}
+		else if (strCmd == "NOTIFY") {
+			if (strOp == "ALARM") Get_NotifyCmAlignAlarm();
+		}
 	}
 
 	return 1;
@@ -189,6 +192,11 @@ void CCapAttach::Get_TrayUnload()
 void CCapAttach::Get_ApdReply(CString sCapForceAvg)
 {
 	gData.dAssyLoadCellAvg = atof(sCapForceAvg);
+}
+
+void CCapAttach::Get_NotifyCmAlignAlarm()
+{
+	gData.bCapVisionAlarm = TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
