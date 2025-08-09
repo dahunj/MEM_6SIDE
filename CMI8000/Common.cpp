@@ -95,6 +95,13 @@ void CCommon::Save_MotionPos()
 		if(g_objAJinAXL.Is_Done(i)) { gAlm.dMotionPos[i] = g_objAJinAXL.Get_Position(i); }
 		else						{ gAlm.dMotionPos[i] = -100.0; nCount++; }
 	}
+
+	DX_DATA_09 *pDX09 = g_objAJinAXL.Get_pDX09();
+	gAlm.bBufferUpStatus[0] = pDX09->iBufferStage1Up;
+	gAlm.bBufferUpStatus[1] = pDX09->iBufferStage2Up;
+	gAlm.bBufferDownStatus[0] = pDX09->iBufferStage1Down;
+	gAlm.bBufferDownStatus[1] = pDX09->iBufferStage2Down;
+	
 	if (nCount == 0) return;
 
 	uSleep(1000);
@@ -121,6 +128,8 @@ int CCommon::Check_MotionPos()
 	double	dCurrentPos, dCheckPos;
 	double	dRange = gAlm.dMotionChkPos;
 	if (dRange < 0.05) return nMotionNo;
+
+	
 
 	for(int i=0; i<AXIS_COUNT; i++) {
 		if (i == 44) continue;	// Empty Port Z Axis
