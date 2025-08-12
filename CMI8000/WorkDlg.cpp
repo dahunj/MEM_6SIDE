@@ -527,10 +527,10 @@ void CWorkDlg::OnStcBtm1InfoClick(UINT nID)
 	//gData.InfoBtm1Pick[ID] = gData.nCNoBtm1Pick[ID];
 
 	
-	gData.nPNoMESNG[gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nPNoBtm1Pick;
-	gData.nTNoMESNG[gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nTNoBtm1Pick[ID];
-	gData.nCmNoMESNG[gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nCNoBtm1Pick[ID];
-	gLot.nSNgCount[gData.nPNoBtm1Pick-1][0]++;
+	gData.nPNoMESNG[gLot.nMatchingNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nPNoBtm1Pick;
+	gData.nTNoMESNG[gLot.nMatchingNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nTNoBtm1Pick[ID];
+	gData.nCmNoMESNG[gLot.nMatchingNgCount[gData.nPNoBtm1Pick-1][0]] = gData.nCNoBtm1Pick[ID];
+	gLot.nMatchingNgCount[gData.nPNoBtm1Pick-1][0]++;
 
 	//m_stcB1No[ID].Init_Ctrl("πŸ≈¡", 12, TRUE, RGB(0xFF, 0x00, 0x00), RGB(0x0F, 0x0F, 0x0F));
 	m_stcB1No[ID].Set_Color(RGB(0xFF, 0x00, 0x00), RGB(0x0F, 0x0F, 0x0F));
