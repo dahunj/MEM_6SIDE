@@ -330,6 +330,9 @@ typedef struct {
 	int		nGoodCount[2];
 	int		nNgCount[2];
 	int		nSNgCount[2][6];			// Special NG (MES, N1, N2)
+
+	int		nMatchingNgCount[2][6];		//MES보다 실물 수량 적은 만큼 갯수 증가 
+	
 	int		nBsNgCount[2];				// Barcode Shift
 	int		nRosRequest[2];
 	int		nRosGood[2];

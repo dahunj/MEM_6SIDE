@@ -746,7 +746,11 @@ void CSequenceMain::Set_ClearRunData(int nType)
 	gData.bTop1MirrorErr[2] = FALSE;
 	gData.b3DGrabFailErr = FALSE;
 
+	for (int p = 0; p < 2; p++) for (int i = 0; i < 6; i++) gLot.nMatchingNgCount[p][i] = 0;	// Special NG
+	
 	for (int p = 0; p < 2; p++) for (int i = 0; i < 6; i++) gLot.nSNgCount[p][i] = 0;	// Special NG
+
+
 	gLot.nGoodCount[0] = gLot.nGoodCount[1] = gLot.nNgCount[0] = gLot.nNgCount[1] = 0;
 	for (int p = 0; p < 2; p++) { gLot.nRosRequest[p] = gLot.nRosGood[p] = gLot.nRosNg[p] = gLot.nRosRepair[p] = gLot.nRosTimeOut[p] = 0; }
 	g_dlgWork.PostMessage(UM_VISION_RESULT, NULL, NULL);
@@ -1350,12 +1354,15 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		bDone = FALSE;	// return FALSE;	// Btm1_3D
 	
 	if (!bDone) {
-		if (m_pEquipData->bUseInspectSkip || (GetTickCount() - gData.dwSkipTime_Sort1 > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
+		if (m_pEquipData->bUseInspectSkip || (GetTickCount() - gData.dwSkipTime_Sort1 > m_pEquipData->nDelayAdd[4]) ) 
+		{	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 			gData.nInspectInfo[nPx][nTx][nCx] = 4;
 			gMes.sJudge[nPx][nTx][nCx] = "N1";
 			strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
 			g_objLogFile.Save_HandlerLog(strLog);
-		} else {
+		} 
+		else
+		{
 			return FALSE;
 		}
 	}
@@ -1515,7 +1522,7 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 	}
 #endif
 
-	for(int i = 0; i < gLot.nSNgCount[nPx][0]; i++ )
+	for(int i = 0; i < gLot.nMatchingNgCount[nPx][0]; i++ )
 	{
 		if(gData.nPNoMESNG[i] == nPortNo && gData.nTNoMESNG[i] == nTrayNo && gData.nCmNoMESNG[i] == nCmNo)
 		{
@@ -1985,6 +1992,9 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	gLot.nGoodCount[nPx] = gLot.nNgCount[nPx] = 0;
 	for (int i = 0; i < 6; i++) gLot.nSNgCount[nPx][i] = 0; 
+
+	for (int i = 0; i < 6; i++) gLot.nMatchingNgCount[nPx][i] = 0;
+
 	gLot.nRosRequest[nPx] = gLot.nRosGood[nPx] = gLot.nRosNg[nPx] = gLot.nRosRepair[nPx] = gLot.nRosTimeOut[nPx] = 0;
 
 	gData.sLotID[nPx] = "LOT_ID";
@@ -7024,6 +7034,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 		for (int i = 0; i < 5; i++) {
 			if (gData.InfoSortPick[0][i] == 1 || gData.InfoSortPick[0][i] == 9) gLot.nGoodCount[nSp1PNo-1]++;
 			else if (gData.InfoSortPick[0][i] != 0 ) gLot.nNgCount[nSp1PNo-1]++;
+			
 			for (int j = 0; j < 6; j++) {
 				if (gData.InfoSortPick[0][i] == j + 3)	gLot.nSNgCount[nSp1PNo-1][j]++;	// S-NG (3,4,5,6,7,8)
 			}
