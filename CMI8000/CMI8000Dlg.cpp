@@ -292,6 +292,12 @@ void CCMI8000Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	Set_LotErrorLog("PROGRAM BEGIN", 900, "Program Begin");
 	g_dlgWork.MachineStopLog("PROGRAM_BEGIN");
 
+	DX_DATA_09 *pDX09 = g_objAJinAXL.Get_pDX09();
+	gAlm.bBufferUpStatus[0] = pDX09->iBufferStage1Up;
+	gAlm.bBufferUpStatus[1] = pDX09->iBufferStage2Up;
+	gAlm.bBufferDownStatus[0] = pDX09->iBufferStage1Down;
+	gAlm.bBufferDownStatus[1] = pDX09->iBufferStage2Down;
+
 	
 }
 
