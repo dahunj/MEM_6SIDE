@@ -747,6 +747,36 @@ void CMESInterface::Set_LotEnd(CString sLotID, int nCount, CString sOperID, int 
 		g_objLogFile.Save_MesAgentLog(strLog);
 	}
 
+	CString strPathBack, strFileBack, strSaveBack;
+	strPath.Format("%s%04d%02d%02d", BACKUP_FOLDER, time.wYear, time.wMonth, time.wDay);
+	strFile.Format("%s\\%04d%02d%02d.txt", strPath, time.wYear, time.wMonth, time.wDay);
+	Create_Folder(strPathBack);
+
+	CFile BackData;
+	if (BackData.Open(strFileBack, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite))
+	{
+		CString strState = "LotEnd";
+		CFile file;
+		if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) 
+		{
+			try 
+			{
+				file.SeekToEnd();
+				strSave.Format("[%04d/%02d/%02d %02d:%02d:%02d],%s,UNITID=1000,TYPE=%s,LOTID=%s,GoodCount=%d,NGCount=%d,USERID=%s\r\n",
+					time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, strState, EQUIP_TYPE, sLotID, nOKCount, nNGCount, sOperID);
+				file.Write(strSave, strSave.GetLength());
+				file.Close();
+
+			} 
+			catch (CFileException *pEx)
+			{
+				pEx->Delete();
+			}
+		}
+	}
+
+
+	
 	strLog.Format("[MESInterface] Set_LotEnd. (LotID:%s, CmCnt:%d)", sLotID, nCount);
 	g_objLogFile.Save_MesAgentLog(strLog);
 	g_csMesLog.Unlock();
