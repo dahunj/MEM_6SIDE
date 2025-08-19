@@ -90,8 +90,8 @@
 // EVMS 사용 옵션 (2024.01.26)
 // #define USE_AVI_EVMS		// EVMS 폴더 사용
 
-#define SIM_WAITTIMES	 1		//
-#define SIM_WAITTIMEM	 1		//
+#define SIM_WAITTIMES	 10		//
+#define SIM_WAITTIMEM	 10		//
 
 
 
