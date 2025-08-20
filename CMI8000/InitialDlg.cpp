@@ -139,6 +139,7 @@ void CInitialDlg::OnTimer(UINT_PTR nIDEvent)
 				g_objCommon.Locking_MainDoor(TRUE);
 				pMainDlg->Set_CurrentState(STATE_INIT);
 				pMainDlg->Enable_ModeButton(FALSE);
+				pMainDlg->m_btnMainOperator.EnableWindow(FALSE);
 
 				g_objInspector.Set_InitialRequest(INSPECTOR_ALL);
 
@@ -178,6 +179,7 @@ void CInitialDlg::OnTimer(UINT_PTR nIDEvent)
 
 				pMainDlg->Set_CurrentState(STATE_STOP);
 				pMainDlg->Enable_ModeButton(TRUE);
+				pMainDlg->m_btnMainOperator.EnableWindow(TRUE);
 				pMainDlg->Set_CurrentMode(MODE_OPERATOR);
 
 				g_dlgOperator.ShowWindow(SW_SHOW);
@@ -200,6 +202,7 @@ void CInitialDlg::OnTimer(UINT_PTR nIDEvent)
 			int nState = theApp.Get_MainState();
 			if (nState != STATE_ALARM && nState != STATE_ERROR) pMainDlg->Set_CurrentState(STATE_NONE);
 			pMainDlg->Enable_ModeButton(TRUE);
+			pMainDlg->m_btnMainOperator.EnableWindow(TRUE);
 			g_objCommon.Locking_MainDoor(FALSE);
 
 		} else {

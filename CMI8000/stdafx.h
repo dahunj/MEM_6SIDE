@@ -93,9 +93,6 @@
 #define SIM_WAITTIMES	 10		//
 #define SIM_WAITTIMEM	 10		//
 
-
-
-
 ///////////////////////////////////////////////////////////////////////////////
 
 extern CString gsCurrentDir;	// 현재 프로젝트 폴더

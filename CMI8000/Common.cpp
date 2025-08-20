@@ -1068,6 +1068,45 @@ BOOL CCommon::Get_Btm1PickerOpen(int nSub)
 	return FALSE;
 }
 
+
+void CCommon::Set_Btm1PickerClose(int nSub)
+{
+	DY_DATA_03 *pDY03 = g_objAJinAXL.Get_pDY03();
+	if (nSub == 0 || nSub ==  1) { pDY03->oBtm1PickerOpen01 = FALSE; pDY03->oBtm1PickerClose01 = TRUE; }
+	if (nSub == 0 || nSub ==  2) { pDY03->oBtm1PickerOpen02 = FALSE; pDY03->oBtm1PickerClose02 = TRUE; }
+	if (nSub == 0 || nSub ==  3) { pDY03->oBtm1PickerOpen03 = FALSE; pDY03->oBtm1PickerClose03 = TRUE; }
+	if (nSub == 0 || nSub ==  4) { pDY03->oBtm1PickerOpen04 = FALSE; pDY03->oBtm1PickerClose04 = TRUE; }
+	if (nSub == 0 || nSub ==  5) { pDY03->oBtm1PickerOpen05 = FALSE; pDY03->oBtm1PickerClose05 = TRUE; }
+	if (nSub == 0 || nSub ==  6) { pDY03->oBtm1PickerOpen06 = FALSE; pDY03->oBtm1PickerClose06 = TRUE; }
+	if (nSub == 0 || nSub ==  7) { pDY03->oBtm1PickerOpen07 = FALSE; pDY03->oBtm1PickerClose07 = TRUE; }
+	if (nSub == 0 || nSub ==  8) { pDY03->oBtm1PickerOpen08 = FALSE; pDY03->oBtm1PickerClose08 = TRUE; }
+	g_objAJinAXL.Write_Output(3);
+}
+
+
+BOOL CCommon::Get_Btm1PickerClose(int nSub)
+{
+	DX_DATA_03 *pDX03 = g_objAJinAXL.Get_pDX03();
+	if (nSub == 0) {
+		if (pDX03->iBtm1PickerExist01 && pDX03->iBtm1PickerExist02 &&
+			pDX03->iBtm1PickerExist03 && pDX03->iBtm1PickerExist04 &&
+			pDX03->iBtm1PickerExist05 && pDX03->iBtm1PickerExist06 &&
+			pDX03->iBtm1PickerExist07 && pDX03->iBtm1PickerExist08) return TRUE;
+	}
+	else if (nSub ==  1 && pDX03->iBtm1PickerExist01) return TRUE;
+	else if (nSub ==  2 && pDX03->iBtm1PickerExist02) return TRUE;
+	else if (nSub ==  3 && pDX03->iBtm1PickerExist03) return TRUE;
+	else if (nSub ==  4 && pDX03->iBtm1PickerExist04) return TRUE;
+	else if (nSub ==  5 && pDX03->iBtm1PickerExist05) return TRUE;
+	else if (nSub ==  6 && pDX03->iBtm1PickerExist06) return TRUE;
+	else if (nSub ==  7 && pDX03->iBtm1PickerExist07) return TRUE;
+	else if (nSub ==  8 && pDX03->iBtm1PickerExist08) return TRUE;
+	return FALSE;
+}
+
+
+
+
 BOOL CCommon::Get_Btm1PickerAllNotChk()
 {
 	DX_DATA_03 *pDX03 = g_objAJinAXL.Get_pDX03();
@@ -1530,6 +1569,20 @@ void CCommon::Set_Btm2PickerOpen(int nSub, int nRow)
 	g_objAJinAXL.Write_Output(7);
 }
 
+void CCommon::Set_Btm2PickerOpen(int nSub)
+{
+	DY_DATA_07 *pDY07 = g_objAJinAXL.Get_pDY07();
+	if (nSub == 0 || nSub ==  1 ) { pDY07->oBtm2PickerOpen01 = TRUE; pDY07->oBtm2PickerClose01 = FALSE; }
+	if (nSub == 0 || nSub ==  2 ) { pDY07->oBtm2PickerOpen02 = TRUE; pDY07->oBtm2PickerClose02 = FALSE; }
+	if (nSub == 0 || nSub ==  3 ) { pDY07->oBtm2PickerOpen03 = TRUE; pDY07->oBtm2PickerClose03 = FALSE; }
+	if (nSub == 0 || nSub ==  4 ) { pDY07->oBtm2PickerOpen04 = TRUE; pDY07->oBtm2PickerClose04 = FALSE; }
+	if (nSub == 0 || nSub ==  5 ) { pDY07->oBtm2PickerOpen05 = TRUE; pDY07->oBtm2PickerClose05 = FALSE; }
+	if (nSub == 0 || nSub ==  6 ) { pDY07->oBtm2PickerOpen06 = TRUE; pDY07->oBtm2PickerClose06 = FALSE; }
+	if (nSub == 0 || nSub ==  7 ) { pDY07->oBtm2PickerOpen07 = TRUE; pDY07->oBtm2PickerClose07 = FALSE; }
+	if (nSub == 0 || nSub ==  8 ) { pDY07->oBtm2PickerOpen08 = TRUE; pDY07->oBtm2PickerClose08 = FALSE; }
+	g_objAJinAXL.Write_Output(7);
+}
+
 BOOL CCommon::Get_Btm2PickerOpen(int nSub, int nRow)
 {
 	DX_DATA_07 *pDX07 = g_objAJinAXL.Get_pDX07();
@@ -1551,6 +1604,68 @@ BOOL CCommon::Get_Btm2PickerOpen(int nSub, int nRow)
 
 	return bRet;
 }
+
+BOOL CCommon::Get_Btm2PickerOpen(int nSub)
+{
+	DX_DATA_07 *pDX07 = g_objAJinAXL.Get_pDX07();
+	if (nSub == 0) {
+		if (pDX07->iBtm2PickerOpen01 && pDX07->iBtm2PickerOpen02 &&
+			pDX07->iBtm2PickerOpen03 && pDX07->iBtm2PickerOpen04 &&
+			pDX07->iBtm2PickerOpen05 && pDX07->iBtm2PickerOpen06 &&
+			pDX07->iBtm2PickerOpen07 && pDX07->iBtm2PickerOpen08) return TRUE;
+	}
+	BOOL bRet = TRUE;
+	if ((nSub ==  1 ) && !pDX07->iBtm2PickerOpen01) bRet = FALSE;
+	if ((nSub ==  2 ) && !pDX07->iBtm2PickerOpen02) bRet = FALSE;
+	if ((nSub ==  3 ) && !pDX07->iBtm2PickerOpen03) bRet = FALSE;
+	if ((nSub ==  4 ) && !pDX07->iBtm2PickerOpen04) bRet = FALSE;
+	if ((nSub ==  5 ) && !pDX07->iBtm2PickerOpen05) bRet = FALSE;
+	if ((nSub ==  6 ) && !pDX07->iBtm2PickerOpen06) bRet = FALSE;
+	if ((nSub ==  7 ) && !pDX07->iBtm2PickerOpen07) bRet = FALSE;
+	if ((nSub ==  8 ) && !pDX07->iBtm2PickerOpen08) bRet = FALSE;
+
+	return bRet;
+}
+
+
+
+void CCommon::Set_Btm2PickerClose(int nSub)
+{
+	DY_DATA_07 *pDY07 = g_objAJinAXL.Get_pDY07();
+	if (nSub == 0 || nSub ==  1 ) { pDY07->oBtm2PickerOpen01 = FALSE; pDY07->oBtm2PickerClose01 = TRUE; }
+	if (nSub == 0 || nSub ==  2 ) { pDY07->oBtm2PickerOpen02 = FALSE; pDY07->oBtm2PickerClose02 = TRUE; }
+	if (nSub == 0 || nSub ==  3 ) { pDY07->oBtm2PickerOpen03 = FALSE; pDY07->oBtm2PickerClose03 = TRUE; }
+	if (nSub == 0 || nSub ==  4 ) { pDY07->oBtm2PickerOpen04 = FALSE; pDY07->oBtm2PickerClose04 = TRUE; }
+	if (nSub == 0 || nSub ==  5 ) { pDY07->oBtm2PickerOpen05 = FALSE; pDY07->oBtm2PickerClose05 = TRUE; }
+	if (nSub == 0 || nSub ==  6 ) { pDY07->oBtm2PickerOpen06 = FALSE; pDY07->oBtm2PickerClose06 = TRUE; }
+	if (nSub == 0 || nSub ==  7 ) { pDY07->oBtm2PickerOpen07 = FALSE; pDY07->oBtm2PickerClose07 = TRUE; }
+	if (nSub == 0 || nSub ==  8 ) { pDY07->oBtm2PickerOpen08 = FALSE; pDY07->oBtm2PickerClose08 = TRUE; }
+	g_objAJinAXL.Write_Output(7);
+}
+
+BOOL CCommon::Get_Btm2PickerClose(int nSub)
+{
+	DX_DATA_07 *pDX07 = g_objAJinAXL.Get_pDX07();
+	if (nSub == 0) {
+		if (pDX07->iBtm2PickerExist01 && pDX07->iBtm2PickerExist02 &&
+			pDX07->iBtm2PickerExist03 && pDX07->iBtm2PickerExist04 &&
+			pDX07->iBtm2PickerExist05 && pDX07->iBtm2PickerExist06 &&
+			pDX07->iBtm2PickerExist07 && pDX07->iBtm2PickerExist08) return TRUE;
+	}
+	BOOL bRet = TRUE;
+	if ((nSub ==  1 ) && !pDX07->iBtm2PickerExist01) bRet = FALSE;
+	if ((nSub ==  2 ) && !pDX07->iBtm2PickerExist02) bRet = FALSE;
+	if ((nSub ==  3 ) && !pDX07->iBtm2PickerExist03) bRet = FALSE;
+	if ((nSub ==  4 ) && !pDX07->iBtm2PickerExist04) bRet = FALSE;
+	if ((nSub ==  5 ) && !pDX07->iBtm2PickerExist05) bRet = FALSE;
+	if ((nSub ==  6 ) && !pDX07->iBtm2PickerExist06) bRet = FALSE;
+	if ((nSub ==  7 ) && !pDX07->iBtm2PickerExist07) bRet = FALSE;
+	if ((nSub ==  8 ) && !pDX07->iBtm2PickerExist08) bRet = FALSE;
+
+	return bRet;
+}
+
+
 
 BOOL CCommon::Get_Btm2PickerAllNotChk()
 {
@@ -1778,6 +1893,31 @@ BOOL CCommon::Get_SortPicker1Open(int nSub)
 	else if (nSub ==  2 && pDX10->iSortPicker1Open2) return TRUE;
 	else if (nSub ==  3 && pDX10->iSortPicker1Open3) return TRUE;
 	else if (nSub ==  4 && pDX10->iSortPicker1Open4) return TRUE;
+	return FALSE;
+}
+
+
+void CCommon::Set_SortPicker1Close(int nSub)
+{
+	DY_DATA_10 *pDY10 = g_objAJinAXL.Get_pDY10();
+	if (nSub == 0 || nSub ==  1) { pDY10->oSortPicker1Open1 = FALSE; pDY10->oSortPicker1Close1 = TRUE; }
+	if (nSub == 0 || nSub ==  2) { pDY10->oSortPicker1Open2 = FALSE; pDY10->oSortPicker1Close2 = TRUE; }
+	if (nSub == 0 || nSub ==  3) { pDY10->oSortPicker1Open3 = FALSE; pDY10->oSortPicker1Close3 = TRUE; }
+	if (nSub == 0 || nSub ==  4) { pDY10->oSortPicker1Open4 = FALSE; pDY10->oSortPicker1Close4 = TRUE; }
+	g_objAJinAXL.Write_Output(10);
+}
+
+BOOL CCommon::Get_SortPicker1Close(int nSub)
+{
+	DX_DATA_10 *pDX10 = g_objAJinAXL.Get_pDX10();
+	if (nSub == 0) {
+		if (pDX10->iSortPicker1Exist1 && pDX10->iSortPicker1Exist2 &&
+			pDX10->iSortPicker1Exist3 && pDX10->iSortPicker1Exist4) return TRUE;
+	}
+	else if (nSub ==  1 && pDX10->iSortPicker1Exist1) return TRUE;
+	else if (nSub ==  2 && pDX10->iSortPicker1Exist2) return TRUE;
+	else if (nSub ==  3 && pDX10->iSortPicker1Exist3) return TRUE;
+	else if (nSub ==  4 && pDX10->iSortPicker1Exist4) return TRUE;
 	return FALSE;
 }
 
@@ -2024,6 +2164,32 @@ BOOL CCommon::Get_SortPicker2Open(int nSub)
 	else if (nSub ==  4 && pDX11->iSortPicker2Open4) return TRUE;
 	return FALSE;
 }
+
+void CCommon::Set_SortPicker2Close(int nSub)
+{
+	DY_DATA_11 *pDY11 = g_objAJinAXL.Get_pDY11();
+	if (nSub == 0 || nSub ==  1) { pDY11->oSortPicker2Open1 = FALSE; pDY11->oSortPicker2Close1 = TRUE; }
+	if (nSub == 0 || nSub ==  2) { pDY11->oSortPicker2Open2 = FALSE; pDY11->oSortPicker2Close2 = TRUE; }
+	if (nSub == 0 || nSub ==  3) { pDY11->oSortPicker2Open3 = FALSE; pDY11->oSortPicker2Close3 = TRUE; }
+	if (nSub == 0 || nSub ==  4) { pDY11->oSortPicker2Open4 = FALSE; pDY11->oSortPicker2Close4 = TRUE; }
+	g_objAJinAXL.Write_Output(11);
+}
+
+BOOL CCommon::Get_SortPicker2Close(int nSub)
+{
+	DX_DATA_11 *pDX11 = g_objAJinAXL.Get_pDX11();
+	if (nSub == 0) {
+		if (pDX11->iSortPicker2Exist1 && pDX11->iSortPicker2Exist2 &&
+			pDX11->iSortPicker2Exist3 && pDX11->iSortPicker2Exist4) return TRUE;
+	}
+	else if (nSub ==  1 && pDX11->iSortPicker2Exist1) return TRUE;
+	else if (nSub ==  2 && pDX11->iSortPicker2Exist2) return TRUE;
+	else if (nSub ==  3 && pDX11->iSortPicker2Exist3) return TRUE;
+	else if (nSub ==  4 && pDX11->iSortPicker2Exist4) return TRUE;
+	return FALSE;
+}
+
+
 
 BOOL CCommon::Get_SortPicker2AllNotChk()
 {

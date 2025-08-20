@@ -31,7 +31,8 @@ void CManualDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_RDO_MANUAL_LOAD, m_rdoManualLoad);
 	DDX_Control(pDX, IDC_RDO_MANUAL_BTM1, m_rdoManualBtm1);
 	DDX_Control(pDX, IDC_RDO_MANUAL_BTM2, m_rdoManualBtm2);
-	DDX_Control(pDX, IDC_RDO_MANUAL_UNLOAD, m_rdoManualUnload);
+	DDX_Control(pDX, IDC_RDO_MANUAL_UNLOAD, m_rdoManualUnload); 
+	DDX_Control(pDX, IDC_RDO_MANUAL_REPEAT, m_rdoManualRepeat);
 	DDX_Control(pDX, IDC_RDO_MANUAL_DOOR_LOCK, m_rdoManualDoorLock);
 	DDX_Control(pDX, IDC_RDO_MANUAL_DOOR_UNLOCK, m_rdoManualDoorUnlock);
 }
@@ -44,8 +45,10 @@ BEGIN_MESSAGE_MAP(CManualDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RDO_MANUAL_BTM1, &CManualDlg::OnBnClickedRdoManualBtm1)
 	ON_BN_CLICKED(IDC_RDO_MANUAL_BTM2, &CManualDlg::OnBnClickedRdoManualBtm2)
 	ON_BN_CLICKED(IDC_RDO_MANUAL_UNLOAD, &CManualDlg::OnBnClickedRdoManualUnload)
+	ON_BN_CLICKED(IDC_RDO_MANUAL_REPEAT, &CManualDlg::OnBnClickedRdoManualRepeat)
 	ON_BN_CLICKED(IDC_RDO_MANUAL_DOOR_LOCK, &CManualDlg::OnBnClickedRdoManualDoorLock)
 	ON_BN_CLICKED(IDC_RDO_MANUAL_DOOR_UNLOCK, &CManualDlg::OnBnClickedRdoManualDoorUnlock)
+	
 END_MESSAGE_MAP()
 
 // CManualDlg ¸Þ½ÃÁö Ã³¸®±âÀÔ´Ï´Ù.
@@ -71,6 +74,9 @@ BOOL CManualDlg::OnInitDialog()
 	m_pManualUnloadDlg = new CManualUnloadDlg(this);
 	m_pManualUnloadDlg->Create(IDD_MANUAL_UNLOAD_DLG, this);
 
+	m_pManualRepeatRunDlg = new CManualRepeatRunDlg(this);
+	m_pManualRepeatRunDlg->Create(IDD_MANUAL_REPEAT_RUN_DLG, this);
+
 	// Load Dlg Visible
 	m_rdoManualLoad.SetCheck(TRUE);
 	m_rdoManualLoad.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
@@ -91,16 +97,19 @@ void CManualDlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
+	m_pManualRepeatRunDlg->DestroyWindow();
 	m_pManualUnloadDlg->DestroyWindow();
 	m_pManualBtm2Dlg->DestroyWindow();
 	m_pManualBtm1Dlg->DestroyWindow();
 	m_pManualLoadDlg->DestroyWindow();
 
+	if (m_pManualRepeatRunDlg) delete m_pManualRepeatRunDlg;
 	if (m_pManualUnloadDlg) delete m_pManualUnloadDlg;
 	if (m_pManualBtm2Dlg) delete m_pManualBtm2Dlg;
 	if (m_pManualBtm1Dlg) delete m_pManualBtm1Dlg;
 	if (m_pManualLoadDlg) delete m_pManualLoadDlg;
-	
+
+	m_pManualRepeatRunDlg = NULL;
 	m_pManualUnloadDlg = NULL;
 	m_pManualBtm2Dlg = NULL;
 	m_pManualBtm1Dlg = NULL;
@@ -116,6 +125,7 @@ void CManualDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		if (m_rdoManualBtm1.GetCheck()) m_pManualBtm1Dlg->ShowWindow(SW_SHOW);
 		if (m_rdoManualBtm2.GetCheck()) m_pManualBtm2Dlg->ShowWindow(SW_SHOW);
 		if (m_rdoManualUnload.GetCheck()) m_pManualUnloadDlg->ShowWindow(SW_SHOW);
+		if (m_rdoManualRepeat.GetCheck()) m_pManualRepeatRunDlg->ShowWindow(SW_SHOW);
 
 		EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 		if (pEquipData->bUseDoorLock) {
@@ -141,6 +151,7 @@ void CManualDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		if (m_rdoManualBtm1.GetCheck()) m_pManualBtm1Dlg->ShowWindow(SW_HIDE);
 		if (m_rdoManualBtm2.GetCheck()) m_pManualBtm2Dlg->ShowWindow(SW_HIDE);
 		if (m_rdoManualUnload.GetCheck()) m_pManualUnloadDlg->ShowWindow(SW_HIDE);
+		if (m_rdoManualRepeat.GetCheck()) m_pManualRepeatRunDlg->ShowWindow(SW_HIDE);
 	}
 }
 
@@ -155,6 +166,7 @@ void CManualDlg::OnTimer(UINT_PTR nIDEvent)
 	else if (m_pManualBtm1Dlg->IsWindowVisible()) m_pManualBtm1Dlg->Display_Status();
 	else if (m_pManualBtm2Dlg->IsWindowVisible()) m_pManualBtm2Dlg->Display_Status();
 	else if (m_pManualUnloadDlg->IsWindowVisible()) m_pManualUnloadDlg->Display_Status();
+	//else if (m_pManualRepeatRunDlg->IsWindowVisible()) m_pManualRepeatRunDlg->Display_Status();
 
 	SetTimer(0, 100, NULL);
 	CDialogEx::OnTimer(nIDEvent);
@@ -167,24 +179,27 @@ void CManualDlg::OnBnClickedRdoManualLoad()
 	g_objLogFile.Save_HandlerLog("[Manual - Load] Start");
 	m_rdoManualLoad.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
 	m_pManualLoadDlg->ShowWindow(SW_SHOW);
+	m_rdoManualLoad.SetCheck(TRUE);
 }
 
 void CManualDlg::OnBnClickedRdoManualBtm1()
 {
 	if (m_pManualBtm1Dlg->IsWindowVisible()) return;
 	Hide_Windows();
-	g_objLogFile.Save_HandlerLog("[Manual - Index] Start");
+	g_objLogFile.Save_HandlerLog("[Manual - Btm1] Start");
 	m_rdoManualBtm1.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
 	m_pManualBtm1Dlg->ShowWindow(SW_SHOW);
+	m_rdoManualBtm1.SetCheck(TRUE);
 }
 
 void CManualDlg::OnBnClickedRdoManualBtm2()
 {
 	if (m_pManualBtm2Dlg->IsWindowVisible()) return;
 	Hide_Windows();
-	g_objLogFile.Save_HandlerLog("[Manual - Trans] Start");
+	g_objLogFile.Save_HandlerLog("[Manual - Btm2] Start");
 	m_rdoManualBtm2.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
 	m_pManualBtm2Dlg->ShowWindow(SW_SHOW);
+	m_rdoManualBtm2.SetCheck(TRUE);
 }
 
 void CManualDlg::OnBnClickedRdoManualUnload()
@@ -194,7 +209,20 @@ void CManualDlg::OnBnClickedRdoManualUnload()
 	g_objLogFile.Save_HandlerLog("[Manual - Unload] Start");
 	m_rdoManualUnload.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
 	m_pManualUnloadDlg->ShowWindow(SW_SHOW);
+	m_rdoManualUnload.SetCheck(TRUE);
 }
+
+
+void CManualDlg::OnBnClickedRdoManualRepeat()
+{
+	if (m_pManualRepeatRunDlg->IsWindowVisible()) return;
+	Hide_Windows();
+	g_objLogFile.Save_HandlerLog("[Manual - Repeat] Start");
+	m_rdoManualRepeat.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
+	m_pManualRepeatRunDlg->ShowWindow(SW_SHOW);
+	m_rdoManualRepeat.SetCheck(TRUE);
+}
+
 
 void CManualDlg::OnBnClickedRdoManualDoorLock()
 {
@@ -242,6 +270,7 @@ void CManualDlg::Initial_Controls()
 	m_rdoManualBtm1.Init_Ctrl("¹ÙÅÁ", 12, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 	m_rdoManualBtm2.Init_Ctrl("¹ÙÅÁ", 12, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 	m_rdoManualUnload.Init_Ctrl("¹ÙÅÁ", 12, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
+	m_rdoManualRepeat.Init_Ctrl("¹ÙÅÁ", 12, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 	m_rdoManualDoorLock.Init_Ctrl("¹ÙÅÁ", 12, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 	m_rdoManualDoorUnlock.Init_Ctrl("¹ÙÅÁ", 12, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 }
@@ -252,11 +281,19 @@ void CManualDlg::Hide_Windows()
 	m_pManualBtm1Dlg->ShowWindow(SW_HIDE);
 	m_pManualBtm2Dlg->ShowWindow(SW_HIDE);
 	m_pManualUnloadDlg->ShowWindow(SW_HIDE);
+	m_pManualRepeatRunDlg->ShowWindow(SW_HIDE);
 
 	m_rdoManualLoad.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
 	m_rdoManualBtm1.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
 	m_rdoManualBtm2.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
 	m_rdoManualUnload.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
+	m_rdoManualRepeat.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
+
+	m_rdoManualLoad.SetCheck(FALSE);
+	m_rdoManualBtm1.SetCheck(FALSE);
+	m_rdoManualBtm2.SetCheck(FALSE);
+	m_rdoManualUnload.SetCheck(FALSE);
+	m_rdoManualRepeat.SetCheck(FALSE);
 }
 
 void CManualDlg::Set_ManualPos(int nPos)
@@ -265,11 +302,13 @@ void CManualDlg::Set_ManualPos(int nPos)
 	m_rdoManualBtm1.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
 	m_rdoManualBtm2.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
 	m_rdoManualUnload.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
+	m_rdoManualRepeat.Set_Color(RGB(0x00, 0x00, 0x00), COLOR_DEFAULT);
 
 	if (nPos == 1) { m_rdoManualLoad.SetCheck(TRUE);    m_rdoManualLoad.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT); }
 	if (nPos == 2) { m_rdoManualBtm1.SetCheck(TRUE);   m_rdoManualBtm1.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT); }
 	if (nPos == 3) { m_rdoManualBtm2.SetCheck(TRUE);   m_rdoManualBtm2.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT); }
 	if (nPos == 4) { m_rdoManualUnload.SetCheck(TRUE);  m_rdoManualUnload.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT); }
+	if (nPos == 5) { m_rdoManualRepeat.SetCheck(TRUE);  m_rdoManualRepeat.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT); }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
