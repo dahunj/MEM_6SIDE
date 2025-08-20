@@ -188,12 +188,20 @@ void CManualRepeatRunDlg::OnBnClickedChkRepeatRun()
 
 void CManualRepeatRunDlg::AddComboListPicker()
 {
-	m_cboPicker.AddString("Btm1 Picker (Angle Tray)");
+	/*m_cboPicker.AddString("Btm1 Picker (Angle Tray)");
 	m_cboPicker.AddString("Btm2 Picker (Buffer)");
 	m_cboPicker.AddString("Sort1 Picker (Buffer 1)");
 	m_cboPicker.AddString("Sort1 Picker (Buffer 2)");
 	m_cboPicker.AddString("Sort2 Picker (Buffer 1)");
-	m_cboPicker.AddString("Sort2 Picker (Buffer 2)");
+	m_cboPicker.AddString("Sort2 Picker (Buffer 2)");*/
+
+	m_cboPicker.AddString("Btm1 Picker(open/close)");	
+	m_cboPicker.AddString("Btm2 Picker(Open/Close)");	
+	m_cboPicker.AddString("Sort1 Picker(Open/Close)");
+	m_cboPicker.AddString("Sort1 Picker(Up/Down)");
+	m_cboPicker.AddString("Sort2 Picker(Open/Close)");
+	m_cboPicker.AddString("Sort2 Picker(Up/Down)");
+	
 }
 
 BOOL CManualRepeatRunDlg::CheckMotionPos()
@@ -264,30 +272,32 @@ void CManualRepeatRunDlg::Repeat_Action()
 	m_strTemp.Format("%d", m_nRepeatCase);
 	m_lblCase.SetWindowText(m_strTemp);
 
-	if(m_nRepeatCase == 100 && !g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0))
+	if((m_nRepeatCase == 100 && !g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0)) 
+		|| (m_nRepeatCase == 200 && !g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0)))
 	{
 		m_bThreadAction = FALSE;
 		m_pThreadAction = NULL;
 		AfxMessageBox("Btm1 Picker Z Ready Up ¾Æ´Õ´Ï´Ù.");
 		return;
 	}
-	if(m_nRepeatCase == 200 && !g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0))
+	if((m_nRepeatCase == 300 && !g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0)) 
+		|| (m_nRepeatCase == 400 && !g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0)))
 	{
 		m_bThreadAction = FALSE;
 		m_pThreadAction = NULL;
 		AfxMessageBox("Btm2 Picker Z Ready Up ¾Æ´Õ´Ï´Ù.");
 		return;
 	}
-	if((m_nRepeatCase == 300 && !g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
-		||(m_nRepeatCase == 400 && !g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)))
+	if((m_nRepeatCase == 500 && !g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
+		||(m_nRepeatCase == 600 && !g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)))
 	{
 		m_bThreadAction = FALSE;
 		m_pThreadAction = NULL;
 		AfxMessageBox("Sort 1 Picker Z Ready Up ¾Æ´Õ´Ï´Ù.");
 		return;
 	}
-	if((m_nRepeatCase == 500 && !g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
-		|| (m_nRepeatCase == 600 && !g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)))
+	if((m_nRepeatCase == 700 && !g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
+		|| (m_nRepeatCase == 800 && !g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)))
 	{
 		m_bThreadAction = FALSE;
 		m_pThreadAction = NULL;
@@ -303,340 +313,128 @@ void CManualRepeatRunDlg::Repeat_Action()
 	
 	//Btm1 Picker :100
 	case 100:
-		//Btm1 X Tray position ¾Æ´Ï¸é Stop 
-		if(!g_objCommon.Check_Position(AX_BTM1_PICKER_X, 0) && !g_objCommon.Check_Position(AX_BTM1_PICKER_X, 1)
-			&& !g_objCommon.Check_Position(AX_BTM1_PICKER_X, 2) && !g_objCommon.Check_Position(AX_BTM1_PICKER_X, 3))
-		{
-			m_bThreadAction = FALSE;
-			m_pThreadAction = NULL;
-			AfxMessageBox("Btm1 Picker (Tray) Position ¾Æ´Õ´Ï´Ù.");
-			return;
-		}
-
-		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0))
-		{
-			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 1); // Tray down
-			m_nRepeatCase = 110;
-		}		
-		break;
-	case 110:
-		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 1))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Set_Btm1PickerClose(m_nPickerNumSelected); // close
-			m_nRepeatCase = 120;
-		}
-		break;
-	case 120:
-		if(g_objCommon.Get_Btm1PickerClose(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 0); // z up 
-			m_nRepeatCase = 130;
-		}
-		break;
-	case 130:
-		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0) && g_objCommon.Get_Btm1PickerClose(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 1); // z down
-			m_nRepeatCase = 140;
-		}
-		break;
-	case 140:
-		if(g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 1))
 		{
 			theApp.uSleep(m_nActionDelay);
 			g_objCommon.Set_Btm1PickerOpen(m_nPickerNumSelected); //open
-			m_nRepeatCase = 150;
-		}
+			m_nRepeatCase = 110;
+		}		
 		break;
-	case 150:
-		if(g_objCommon.Get_Btm1PickerOpen(m_nPickerNumSelected))
+	case 110:		
 		{
 			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 0);// Z up 
+			g_objCommon.Set_Btm1PickerClose(m_nPickerNumSelected); // close
 			m_nRepeatCase = 100;
 		}
-		break;
-//////////
-	case 200:
-
-		//Btm2 X Buffer position ¾Æ´Ï¸é Stop 
-		if(!g_objCommon.Check_Position(AX_BTM2_PICKER_X, 2) && !g_objCommon.Check_Position(AX_BTM2_PICKER_X, 3)
-			&& !g_objCommon.Check_Position(AX_BTM2_PICKER_X, 4) && !g_objCommon.Check_Position(AX_BTM2_PICKER_X, 5))
+		break;	
+/////////////////////////////////////////////////////////////////////////////////
+	
+/////////////////////////////////////////////////////////////////////////////
+	case 200:		
+		if(1)
 		{
-			m_bThreadAction = FALSE;
-			m_pThreadAction = NULL;
-			AfxMessageBox("Btm2 Picker (Buffer) Position ¾Æ´Õ´Ï´Ù.");
-			return;
-		}
-		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0))
-		{
-			g_objCommon.Move_Position(AX_BTM2_PICKER_Z, 3); //Buffer down 
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_Btm2PickerOpen(m_nPickerNumSelected); //open
 			m_nRepeatCase = 210;
 		}
 		break;
 	case 210:
-		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 3))
+		if(1)
 		{
 			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Set_Btm2PickerClose(m_nPickerNumSelected);
-			m_nRepeatCase = 220;
-		}
-		break;
-	case 220:
-		if(g_objCommon.Get_Btm2PickerClose(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_BTM2_PICKER_Z, 0);
-			m_nRepeatCase = 230;
-		}
-		break;
-	case 230:
-		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0) && g_objCommon.Get_Btm2PickerClose(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_BTM2_PICKER_Z, 3); // Buffer down
-			m_nRepeatCase = 240;
-		}
-		break;
-	case 240:
-		if(g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 3))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Set_Btm2PickerOpen(m_nPickerNumSelected); //open
-			m_nRepeatCase = 250;
-		}
-		break;
-	case 250:
-		if(g_objCommon.Get_Btm2PickerOpen(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_BTM2_PICKER_Z, 0);// Z up 
+			g_objCommon.Set_Btm2PickerClose(m_nPickerNumSelected); //close
 			m_nRepeatCase = 200;
 		}
 		break;
-	// Sort 1 - buffer 1
+		/////////////////////////////////////////////////////////////////////////////
+		// Sort 1 - buffer 1
 	case 300:
-		if(!g_objCommon.Check_Position(AX_SORT_PICKER1_X, 0) )
+		if(1)
 		{
-			m_bThreadAction = FALSE;
-			m_pThreadAction = NULL;
-			AfxMessageBox("Sort1 Picker (Buffer1) Position ¾Æ´Õ´Ï´Ù.");
-			return;
-		}
-		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
-		{
-			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 1);
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_SortPicker1Open(m_nPickerNumSelected); //open
 			m_nRepeatCase = 310;
 		}
 		break;
 	case 310:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 1))
+		if(1)
 		{
 			theApp.uSleep(m_nActionDelay);
 			g_objCommon.Set_SortPicker1Close(m_nPickerNumSelected);
-			m_nRepeatCase = 320;
-		}
-		break;
-	case 320:
-		if(g_objCommon.Get_SortPicker1Close(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);
-			m_nRepeatCase = 330;
-		}
-		break;
-	case 330:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0) && g_objCommon.Get_SortPicker1Close(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 1); // z down
-			m_nRepeatCase = 340;
-		}
-		break;
-	case 340:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 1))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Set_SortPicker1Open(m_nPickerNumSelected); //open
-			m_nRepeatCase = 350;
-		}
-		break;
-	case 350:
-		if(g_objCommon.Get_SortPicker1Open(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);// Z up 
 			m_nRepeatCase = 300;
 		}
 		break;
+	
 		// Sort 1 - buffer 2
 	case 400:
-		if(!g_objCommon.Check_Position(AX_SORT_PICKER1_X, 1) )
+		if(!g_objCommon.Check_Position(AX_SORT_PICKER1_X, 1) || !g_objCommon.Check_Position(AX_SORT_PICKER1_X, 0) )
 		{
 			m_bThreadAction = FALSE;
 			m_pThreadAction = NULL;
-			AfxMessageBox("Sort1 Picker (Buffer2) Position ¾Æ´Õ´Ï´Ù.");
+			AfxMessageBox("Sort1 Picker (Buffer ) Position ¾Æ´Õ´Ï´Ù.");
 			return;
 		}
-		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
+		if(1)
 		{
-			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 5);
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_SortPicker1Up(m_nPickerNumSelected);
 			m_nRepeatCase = 410;
 		}
 		break;
 	case 410:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 5))
+		if(1)
 		{
 			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Set_SortPicker1Close(m_nPickerNumSelected);
-			m_nRepeatCase = 420;
-		}
-		break;
-	case 420:
-		if(g_objCommon.Get_SortPicker1Close(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);
-			m_nRepeatCase = 430;
-		}
-		break;
-	case 430:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0) && g_objCommon.Get_SortPicker1Close(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 5); // z down
-			m_nRepeatCase = 440;
-		}
-		break;
-	case 440:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 5))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Set_SortPicker1Open(m_nPickerNumSelected); //open
-			m_nRepeatCase = 450;
-		}
-		break;
-	case 450:
-		if(g_objCommon.Get_SortPicker1Open(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);// Z up 
+			g_objCommon.Set_SortPicker1Down(m_nPickerNumSelected);
 			m_nRepeatCase = 400;
 		}
 		break;
-	// Sort 2 - buffer 1
+		/////////////////////////////////////////////////////////////////////////////
+		// Sort 1 - buffer 1
 	case 500:
-		if(!g_objCommon.Check_Position(AX_SORT_PICKER2_X, 0)) // X buffer 1 
+		if(1)
 		{
-			m_bThreadAction = FALSE;
-			m_pThreadAction = NULL;
-			AfxMessageBox("Sort 2 Picker (Buffer 1) Position ¾Æ´Õ´Ï´Ù.");
-			return;
-		}
-		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
-		{
-			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 1);
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_SortPicker2Open(m_nPickerNumSelected); //open
 			m_nRepeatCase = 510;
 		}
 		break;
 	case 510:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 1))
+		if(1)
 		{
 			theApp.uSleep(m_nActionDelay);
 			g_objCommon.Set_SortPicker2Close(m_nPickerNumSelected);
-			m_nRepeatCase = 520;
-		}
-		break;
-	case 520:
-		if(g_objCommon.Get_SortPicker2Close(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 0);
-			m_nRepeatCase = 530;
-		}
-		break;
-	case 530:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0) && g_objCommon.Get_SortPicker2Close(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 1); // z down
-			m_nRepeatCase = 540;
-		}
-		break;
-	case 540:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 1))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Set_SortPicker2Open(m_nPickerNumSelected); //open
-			m_nRepeatCase = 550;
-		}
-		break;
-	case 550:
-		if(g_objCommon.Get_SortPicker2Open(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 0);// Z up 
 			m_nRepeatCase = 500;
 		}
 		break;
-		// Sort 2 - buffer 1
+
+		// Sort 1 - buffer 2
 	case 600:
-		if(!g_objCommon.Check_Position(AX_SORT_PICKER2_X, 1)) // buffer 2 X
+		if(!g_objCommon.Check_Position(AX_SORT_PICKER1_X, 1) || !g_objCommon.Check_Position(AX_SORT_PICKER1_X, 0) )
 		{
 			m_bThreadAction = FALSE;
 			m_pThreadAction = NULL;
-			AfxMessageBox("Sort 2 Picker (Buffer 2) Position ¾Æ´Õ´Ï´Ù.");
+			AfxMessageBox("Sort2 Picker (Buffer ) Position ¾Æ´Õ´Ï´Ù.");
 			return;
 		}
-		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
+		if(1)
 		{
-			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 5);
+			theApp.uSleep(m_nActionDelay);
+			g_objCommon.Set_SortPicker2Up(m_nPickerNumSelected);
 			m_nRepeatCase = 610;
 		}
 		break;
 	case 610:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 5))
+		if(1)
 		{
 			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Set_SortPicker2Close(m_nPickerNumSelected);
-			m_nRepeatCase = 620;
-		}
-		break;
-	case 620:
-		if(g_objCommon.Get_SortPicker2Close(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 0);
-			m_nRepeatCase = 630;
-		}
-		break;
-	case 630:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0) && g_objCommon.Get_SortPicker2Close(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 5); // z down
-			m_nRepeatCase = 640;
-		}
-		break;
-	case 640:
-		if(g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 5))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Set_SortPicker2Open(m_nPickerNumSelected); //open
-			m_nRepeatCase = 650;
-		}
-		break;
-	case 650:
-		if(g_objCommon.Get_SortPicker2Open(m_nPickerNumSelected))
-		{
-			theApp.uSleep(m_nActionDelay);
-			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 0);// Z up 
+			g_objCommon.Set_SortPicker2Down(m_nPickerNumSelected);
 			m_nRepeatCase = 600;
 		}
 		break;
+
+	
+
+	
 	}
 	
 }
@@ -645,7 +443,7 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 {
 	m_cboPickNum.ResetContent();
 
-	if(m_cboPicker.GetCurSel() == 0) // btm1 picker 
+	if(m_cboPicker.GetCurSel() == 0) // btm1 picker open close 
 	{
 		m_nRepeatCase = 100;
 		for(int i = 1; i < gData.nBtmPickQt+1 ; i++)
@@ -658,8 +456,8 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 			m_strLog.Format("Btm1 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
 		}
-	}
-	else if(m_cboPicker.GetCurSel() == 1) // Btm2 picker
+	}	
+	else if(m_cboPicker.GetCurSel() == 1) // Btm2 picker open close 
 	{
 		m_nRepeatCase = 200;
 		for(int i = 1; i < gData.nBtmPickQt+1 ; i++)
@@ -672,8 +470,8 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 			m_strLog.Format("Btm2 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
 		}
-	}
-	else if(m_cboPicker.GetCurSel() == 2) //sort 1 picker
+	}	
+	else if(m_cboPicker.GetCurSel() == 2) //sort 1 picker open close 
 	{
 		m_nRepeatCase = 300;
 		for(int i = 1; i < gData.nSortPickQt+1 ; i++)
@@ -682,33 +480,34 @@ void CManualRepeatRunDlg::OnCbnSelchangeCboPicker()
 			m_cboPickNum.AddString(m_strLog);
 		}		
 	}
-	else if(m_cboPicker.GetCurSel() == 3) //sort 1 picker 
+	else if(m_cboPicker.GetCurSel() == 3) //sort 1 picker up down
 	{
 		m_nRepeatCase = 400;
 		for(int i = 1; i < gData.nSortPickQt+1 ; i++)
 		{	
 			m_strLog.Format("Sort1 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
-		}	
+		}		
 	}
-	else if(m_cboPicker.GetCurSel() == 4) //sort 2 picker
+	else if(m_cboPicker.GetCurSel() == 4) //sort 2 picker open close 
 	{
 		m_nRepeatCase = 500;
 		for(int i = 1; i < gData.nSortPickQt+1 ; i++)
 		{	
 			m_strLog.Format("Sort2 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
-		}		
+		}	
 	}
-	else if(m_cboPicker.GetCurSel() == 5) //sort 2 picker 
+	else if(m_cboPicker.GetCurSel() == 5) //sort 2 picker up down 
 	{
 		m_nRepeatCase = 600;
 		for(int i = 1; i < gData.nSortPickQt+1 ; i++)
 		{	
-			m_strLog.Format("Sort 2CM No.: %d", i);
+			m_strLog.Format("Sort2 CM No.: %d", i);
 			m_cboPickNum.AddString(m_strLog);
 		}	
 	}
+	
 }
 
 
