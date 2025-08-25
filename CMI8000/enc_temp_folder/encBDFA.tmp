@@ -995,7 +995,7 @@ BOOL CSequenceMain::Check_NgTrayFull()
 	}
 	if (gData.InfoNgTray[1][gData.nTrayY-1][gData.nTrayX-1] > 0) 
 	{
-		return TRUE;	//
+5		return TRUE;	//
 	}
 	//if (gData.InfoNgTray[3][gData.nTrayY-1][gData.nTrayX-1] > 0) return TRUE;	// N4 2개 트레이 씀 
 	return FALSE;
