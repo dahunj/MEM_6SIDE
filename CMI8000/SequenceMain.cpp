@@ -2154,7 +2154,13 @@ BOOL CSequenceMain::LoadTray_Run()
 				
 				g_dlgWork.Enable_UserInput(nLtWorkPort, FALSE);
 				if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) {
-					Job_LotStart(nLtWorkPort);				
+					Job_LotStart(nLtWorkPort);	
+					if(Check_InspectLotEnd(nLtWorkPort, 1) && Check_InspectLotEnd(nLtWorkPort, 2) 
+						&& Check_NgBufferLotEnd(nLtWorkPort) && nLtWorkPort == 1 && gData.nPNoNgTray == 2 )
+					{
+						gData.nPNoNgTray = 1; 
+						//연속랏이 아니라 다시 port 1번에서 돌렸다가 다시 Port 1번에서 돌릴때는 NG Stage 정보 초기화 
+					}
 				}
 				//MCC
 				m_strLog.Format("Tray Get, pNo : %d", nLtWorkPort);
@@ -7319,9 +7325,10 @@ BOOL CSequenceMain::SortPicker1_Run()
 				if (Check_InspectLotEnd(gData.nPNoNgTray, 1)) {
 					if (Check_NgBufferLotEnd(gData.nPNoNgTray) ) 
 					{	
-						if(gData.nPNoSortPick[1] == gData.nPNoNgTray) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
-						
+						// 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
 						// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
+						if(gData.nPNoSortPick[1] == gData.nPNoNgTray && !Check_SortPickerEmpty(2) ) return TRUE; 
+						
 						if (m_pEquipData->bUseApdAlarm) {	// 2023.05.11+
 							m_nSortPick1Case = 60; m_tSortPick1Loop.Set_LoopTime(10000); break;	// LotEnd Case
 						}
@@ -8511,7 +8518,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 					if (Check_NgBufferLotEnd(gData.nPNoNgTray)) 
 					{	// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
 
-						if(gData.nPNoSortPick[0] == gData.nPNoNgTray) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
+						if(gData.nPNoSortPick[0] == gData.nPNoNgTray && !Check_SortPickerEmpty(1) ) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
 
 						if (m_pEquipData->bUseApdAlarm) {	// 2023.05.11+
 							m_nSortPick2Case = 60; m_tSortPick2Loop.Set_LoopTime(10000); break;	// LotEnd Case
