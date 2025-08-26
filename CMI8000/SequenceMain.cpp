@@ -2155,11 +2155,11 @@ BOOL CSequenceMain::LoadTray_Run()
 				g_dlgWork.Enable_UserInput(nLtWorkPort, FALSE);
 				if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) {
 					Job_LotStart(nLtWorkPort);	
-					if(Check_InspectLotEnd(nLtWorkPort, 1) && Check_InspectLotEnd(nLtWorkPort, 2) 
-						&& Check_NgBufferLotEnd(nLtWorkPort) && nLtWorkPort == 1 && gData.nPNoNgTray == 2 )
+					if(Check_InspectLotEnd(2, 1) && Check_InspectLotEnd(2, 2) 
+						&& Check_NgBufferLotEnd(2) && nLtWorkPort == 1 && gData.nPNoNgTray == 2 )
 					{
 						gData.nPNoNgTray = 1; 
-						//연속랏이 아니라 다시 port 1번에서 돌렸다가 다시 Port 1번에서 돌릴때는 NG Stage 정보 초기화 
+						//연속랏이 아니라 port 1번에서 돌렸다가 다시 Port 1번에서 돌릴때는 NG Stage 정보 초기화 
 					}
 				}
 				//MCC
