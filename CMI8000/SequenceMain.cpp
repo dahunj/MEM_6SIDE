@@ -7227,6 +7227,27 @@ BOOL CSequenceMain::SortPicker1_Run()
 		break;
 	case 14:	// 정보전달, Grip Open
 		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 3) && g_objCommon.Get_SortPicker1DownMulti(nSp1StartNo+1, nSp1DownSu)) {
+			
+
+			g_objCommon.Set_SortPicker1OpenMulti(nSp1StartNo+1, nSp1DownSu);
+			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(10000);
+			m_tSortPick1Loop.Takt_End(nTaktZone,13);
+			m_tSortPick1Loop.Takt_Start(nTaktZone, 14);
+		}
+		break;
+	case 15 :	// Picker Up
+		if (g_objCommon.Get_SortPicker1OpenMulti(nSp1StartNo+1, nSp1DownSu)) {
+			g_objCommon.Set_SortPicker1Up(0);
+			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);	//Ready Up
+			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(5000);
+			m_tSortPick1Loop.Takt_End(nTaktZone,14);
+			m_tSortPick1Loop.Takt_Start(nTaktZone, 15);
+		}
+		break;
+	case 16:	// Position Check
+		if (g_objCommon.Get_SortPicker1Up(0) && g_objCommon.Get_InfoSortPicker1Close() 
+			&& g_objCommon.Get_InfoSortPicker1Check() && g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) 
+		{
 			for (int i = 0; i < nSp1DownSu; i++) {
 				gData.InfoNgTray[nSp1WorkNg][nSp1TrayPosY][nSp1TrayPosX+i] = gData.InfoSortPick[0][nSp1StartNo+i]; 
 				gData.InfoSortPick[0][nSp1StartNo+i] = 0;
@@ -7254,25 +7275,6 @@ BOOL CSequenceMain::SortPicker1_Run()
 			if (Check_SortPickerEmpty(1)) gData.nPNoSortPick[0] = 0;
 			g_dlgWork.PostMessage(UM_UPDATE_TRAY_INFO, 5, nSp1WorkNg);
 
-			g_objCommon.Set_SortPicker1OpenMulti(nSp1StartNo+1, nSp1DownSu);
-			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(10000);
-			m_tSortPick1Loop.Takt_End(nTaktZone,13);
-			m_tSortPick1Loop.Takt_Start(nTaktZone, 14);
-		}
-		break;
-	case 15 :	// Picker Up
-		if (g_objCommon.Get_SortPicker1OpenMulti(nSp1StartNo+1, nSp1DownSu)) {
-			g_objCommon.Set_SortPicker1Up(0);
-			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);	//Ready Up
-			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(5000);
-			m_tSortPick1Loop.Takt_End(nTaktZone,14);
-			m_tSortPick1Loop.Takt_Start(nTaktZone, 15);
-		}
-		break;
-	case 16:	// Position Check
-		if (g_objCommon.Get_SortPicker1Up(0) && g_objCommon.Get_InfoSortPicker1Close() 
-			&& g_objCommon.Get_InfoSortPicker1Check() && g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) 
-		{
 			
 			if (Check_NgTrayFull()) {
 				if (m_nNgTrayCase == 10) m_nNgTrayCase = 11;
@@ -7640,10 +7642,11 @@ BOOL CSequenceMain::SortPicker1_Run()
 		break;
 	case 28:	// Buffer 복귀
 		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) {
-			if (Check_InspectLotEnd(gData.nULPNo, 1)) {
+			if (Check_InspectLotEnd(gData.nULPNo, 1)) 
+			{
 				if (Check_NgBufferLotEnd(gData.nULPNo)) {	// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
 
-					if(gData.nPNoSortPick[1] == gData.nPNoNgTray && !Check_SortPickerEmpty(2)) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
+					if(gData.nPNoSortPick[1] == gData.nPNoNgTray && !Check_SortPickerEmpty(2) ) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
 
 					if (m_pEquipData->bUseApdAlarm) {	// 2023.05.11+
 						m_nSortPick1Case = 60; m_tSortPick1Loop.Set_LoopTime(10000); break;	// LotEnd Case
@@ -8409,6 +8412,29 @@ BOOL CSequenceMain::SortPicker2_Run()
 		break;
 	case 14:	// 정보전달, Vac Off
 		if (g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 3) && g_objCommon.Get_SortPicker2DownMulti(nSp2StartNo+1, nSp2DownSu)) {
+			
+
+			g_objCommon.Set_SortPicker2OpenMulti(nSp2StartNo+1, nSp2DownSu);
+			m_nSortPick2Case++; m_tSortPick2Loop.Set_LoopTime(10000);
+
+			m_tSortPick2Loop.Takt_End(nTaktZone,13);
+			m_tSortPick2Loop.Takt_Start(nTaktZone, 14);
+		}
+		break;
+	case 15 :	// Picker Up
+		if (g_objCommon.Get_SortPicker2OpenMulti(nSp2StartNo+1, nSp2DownSu)) {
+			g_objCommon.Set_SortPicker2Up(0);
+			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 0);	//Ready Up
+			m_nSortPick2Case++; m_tSortPick2Loop.Set_LoopTime(5000);
+
+			m_tSortPick2Loop.Takt_End(nTaktZone,14);
+			m_tSortPick2Loop.Takt_Start(nTaktZone, 15);
+		}
+		break;
+	case 16:	// Position Check
+		if (g_objCommon.Get_SortPicker2Up(0) && g_objCommon.Get_InfoSortPicker2Close() 
+			&& g_objCommon.Get_InfoSortPicker2Check() && g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) 
+		{
 			for (int i = 0; i < nSp2DownSu; i++) {
 				gData.InfoNgTray[nSp2WorkNg][nSp2TrayPosY][nSp2TrayPosX+i] = gData.InfoSortPick[1][nSp2StartNo+i]; 
 				gData.InfoSortPick[1][nSp2StartNo+i] = 0;
@@ -8435,26 +8461,8 @@ BOOL CSequenceMain::SortPicker2_Run()
 			if (Check_SortPickerEmpty(2)) gData.nPNoSortPick[1] = 0;
 			g_dlgWork.PostMessage(UM_UPDATE_TRAY_INFO, 5, nSp2WorkNg);
 
-			g_objCommon.Set_SortPicker2OpenMulti(nSp2StartNo+1, nSp2DownSu);
-			m_nSortPick2Case++; m_tSortPick2Loop.Set_LoopTime(10000);
 
-			m_tSortPick2Loop.Takt_End(nTaktZone,13);
-			m_tSortPick2Loop.Takt_Start(nTaktZone, 14);
-		}
-		break;
-	case 15 :	// Picker Up
-		if (g_objCommon.Get_SortPicker2OpenMulti(nSp2StartNo+1, nSp2DownSu)) {
-			g_objCommon.Set_SortPicker2Up(0);
-			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 0);	//Ready Up
-			m_nSortPick2Case++; m_tSortPick2Loop.Set_LoopTime(5000);
 
-			m_tSortPick2Loop.Takt_End(nTaktZone,14);
-			m_tSortPick2Loop.Takt_Start(nTaktZone, 15);
-		}
-		break;
-	case 16:	// Position Check
-		if (g_objCommon.Get_SortPicker2Up(0) && g_objCommon.Get_InfoSortPicker2Close() 
-			&& g_objCommon.Get_InfoSortPicker2Check() && g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) {
 			
 			if (Check_NgTrayFull()) {
 				if (m_nNgTrayCase == 10) m_nNgTrayCase = 11;
@@ -8848,7 +8856,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 				if (Check_NgBufferLotEnd(gData.nULPNo)) 
 				{	// NG Buffer에 모듈이 없으면 LotEnd 모듈이 있으면 포트 넘버 확인 후 언로딩 작업.
 
-					if(gData.nPNoSortPick[0] == gData.nPNoNgTray && !Check_SortPickerEmpty(1)) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
+					if(gData.nPNoSortPick[0] == gData.nPNoNgTray && !Check_SortPickerEmpty(1) ) return TRUE; // 다른 소트 피커가 NG buffer 모듈에 대한 작업을 하고 있으면 대기 
 
 					if (m_pEquipData->bUseApdAlarm) {	// 2023.05.11+
 						m_nSortPick2Case = 60; m_tSortPick2Loop.Set_LoopTime(10000); break;	// LotEnd Case
