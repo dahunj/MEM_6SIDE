@@ -74,6 +74,7 @@ CSequenceMain::CSequenceMain()
 	Reset_MainRunCase();
 
 	gData.dEmptyPort_Z_Limit = 300;
+	gData.nPNoNgTray = 1;
 }
 
 CSequenceMain::~CSequenceMain()
@@ -648,6 +649,9 @@ BOOL CSequenceMain::LotEnd_Run()
 	strMsg.Format("Lot End.");
 	g_objCommon.Show_Alarm(strMsg);
 
+	if(gData.nPNoNgTray ==1) gData.nPNoNgTray =2;
+	else if(gData.nPNoNgTray == 2)  gData.nPNoNgTray = 1;
+
 	strMsg.Format("Lot End.\n\nSpecial NG Count\n(N1:%d, N2:%d, N3:%d, N4:%d, MES:%d)",
 		gLot.nSNgCount[nPx][1], gLot.nSNgCount[nPx][2], gLot.nSNgCount[nPx][3], gLot.nSNgCount[nPx][5], gLot.nSNgCount[nPx][0]);
 	g_objCommon.Show_Alarm(strMsg);
@@ -686,7 +690,7 @@ void CSequenceMain::Set_ClearRunData(int nType)
 	memset(gData.InfoNgBuffer, 0x00, sizeof(int) * 2 * 5);
 
 	gData.nPNoTrayPick = gData.nPNoBtm1Pick = gData.nPNoBtm2Pick = 0;
-	gData.nPNoNgTray = gData.nPNoGoodTray = 0;
+	gData.nPNoGoodTray = 0;
 	gData.nLPNo = gData.nULPNo = 0;
 	memset(gData.nPNoAnglePort, 0x00, sizeof(int) * 2);
 	memset(gData.nPNoAngleTray, 0x00, sizeof(int) * 2);
@@ -2006,7 +2010,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	if(nPortNo == 1) memset(gData.cJudgeCode1, 0x00, sizeof(char) *  30 * 40 * 7);
 	if(nPortNo == 2) memset(gData.cJudgeCode2, 0x00, sizeof(char) *  30 * 40 * 7);
 
-	gData.nPNoNgTray = gData.nPNoGoodTray = 0;
+	gData.nPNoGoodTray = 0;
 	gData.nGoodTrayCount = 0;
 
 	gLot.nGoodCount[nPx] = gLot.nNgCount[nPx] = 0;
@@ -10004,7 +10008,8 @@ BOOL CSequenceMain::NgTray_Run()
 				gData.bNGTrayWait = TRUE;
 				gData.bContinueLotEnd = TRUE;
 				g_dlgWork.PostMessage(UM_SHOW_MSG, 2, NULL);
-				
+				if(gData.nPNoNgTray ==1) gData.nPNoNgTray =2;
+				else if(gData.nPNoNgTray == 2)  gData.nPNoNgTray = 1;
 			} 
 			else if (m_bUnloadLotEnd) 
 			{
