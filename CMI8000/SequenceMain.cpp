@@ -10978,6 +10978,10 @@ BOOL CSequenceMain::Run_Simulation()
 	if(m_nEmptyTrayXCase == 18){
 		m_nEmptyTrayXCase = 20;
 	}
+
+	if(m_nEmptyTrayXCase == 22){
+		m_pDX01->iEmptyPortTopCheck = FALSE;
+	}
 	
 	
 	return TRUE;
