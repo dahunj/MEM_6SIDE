@@ -1377,7 +1377,7 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		bDone = FALSE;	// return FALSE;	// Btm1_3D
 	
 	if (!bDone) {
-		if (m_pEquipData->bUseInspectSkip || (GetTickCount() - gData.dwSkipTime_Sort1 > m_pEquipData->nDelayAdd[4]) ) 
+		if (m_pEquipData->bUseInspectSkip || (GetTickCount() - gData.dwSkipTime_Sort1 - gLot.dwStopTime > m_pEquipData->nDelayAdd[4]) ) 
 		{	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 			gData.nInspectInfo[nPx][nTx][nCx] = 4;
 			gMes.sJudge[nPx][nTx][nCx] = "N1";
@@ -1496,7 +1496,7 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 		//bDone = FALSE;	// return FALSE;	// Btm1_3D
 	
 	if (!bDone) {
-		if (m_pEquipData->bUseInspectSkip || (GetTickCount() - gData.dwSkipTime_Sort2 > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
+		if (m_pEquipData->bUseInspectSkip || (GetTickCount() - gData.dwSkipTime_Sort2 - gLot.dwStopTime > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 			gData.nInspectInfo[nPx][nTx][nCx] = 4;
 			gMes.sJudge[nPx][nTx][nCx] = "N1";
 			strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
@@ -2218,7 +2218,7 @@ BOOL CSequenceMain::LoadTray_Run()
 			m_tLoadTrayLoop.Takt_Start(nTaktZone, 9);
 		}
 		break;
-	case 10:	// Tray Slave In
+	case 10:	// Tray Slave In		
 		if (m_pDX01->iLoadStageMasterIn && !m_pDX01->iLoadStageMasterOut)
 		{
 			m_pDY01->oLoadStageSlaveIn = TRUE;
