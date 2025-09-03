@@ -647,10 +647,7 @@ BOOL CSequenceMain::LotEnd_Run()
 
 	g_objMES.Set_Status(3);
 	strMsg.Format("Lot End.");
-	g_objCommon.Show_Alarm(strMsg);
-
-	if(gData.nPNoNgTray ==1) gData.nPNoNgTray =2;
-	else if(gData.nPNoNgTray == 2)  gData.nPNoNgTray = 1;
+	g_objCommon.Show_Alarm(strMsg);	
 
 	strMsg.Format("Lot End.\n\nSpecial NG Count\n(N1:%d, N2:%d, N3:%d, N4:%d, MES:%d)",
 		gLot.nSNgCount[nPx][1], gLot.nSNgCount[nPx][2], gLot.nSNgCount[nPx][3], gLot.nSNgCount[nPx][5], gLot.nSNgCount[nPx][0]);
@@ -1873,6 +1870,9 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	gData.nTrayUseCount[nPx] = 0;
 	gData.nCmUseCount[nPx] = 0;
+
+	if(gData.nPNoNgTray ==1) gData.nPNoNgTray =2;
+	else if(gData.nPNoNgTray == 2)  gData.nPNoNgTray = 1;
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
@@ -10015,8 +10015,7 @@ BOOL CSequenceMain::NgTray_Run()
 				gData.bNGTrayWait = TRUE;
 				gData.bContinueLotEnd = TRUE;
 				g_dlgWork.PostMessage(UM_SHOW_MSG, 2, NULL);
-				if(gData.nPNoNgTray ==1) gData.nPNoNgTray =2;
-				else if(gData.nPNoNgTray == 2)  gData.nPNoNgTray = 1;
+				
 			} 
 			else if (m_bUnloadLotEnd) 
 			{
