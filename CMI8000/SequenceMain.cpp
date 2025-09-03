@@ -74,7 +74,12 @@ CSequenceMain::CSequenceMain()
 	Reset_MainRunCase();
 
 	gData.dEmptyPort_Z_Limit = 300;
-	gData.nPNoNgTray = 1;
+	gData.nPNoNgTray = 0;
+	gData.bSortPickFirstNgPass[0] = gData.bSortPickFirstNgPass[1] = FALSE;
+	gData.nSortPickFirstPortNo[0] = gData.nSortPickFirstPortNo[1] = 0;
+	gData.bSortPickFirstAction[0] = gData.bSortPickFirstAction[1] = TRUE;
+	gData.nSortPickFirstLotCnt[0] = gData.nSortPickFirstLotCnt[1] = 0;
+	gData.nSortPickStartedLotCnt[0] = gData.nSortPickStartedLotCnt[1] = 0;
 }
 
 CSequenceMain::~CSequenceMain()
@@ -663,6 +668,15 @@ BOOL CSequenceMain::LotEnd_Run()
 
 void CSequenceMain::Set_ClearRunData(int nType)
 {
+	if(nType == 0)
+	{
+		gData.bSortPickFirstAction[0] = gData.bSortPickFirstAction[1] = TRUE;
+		gData.bSortPickFirstNgPass[0] = gData.bSortPickFirstNgPass[1] = FALSE;
+		gData.nSortPickFirstPortNo[0] = gData.nSortPickFirstPortNo[1] = 0;
+		gData.nSortPickFirstLotCnt[0] = gData.nSortPickFirstLotCnt[1] = 0;
+		gData.nSortPickStartedLotCnt[0] = gData.nSortPickStartedLotCnt[1] = 0;
+	}
+
 	memset(gData.bReload, 0x00, sizeof(BOOL) * 7);
 	memset(gData.bScanDone, 0x00, sizeof(BOOL) * 7);
 	memset(gData.byInspectDone, 0x00, sizeof(BYTE) * 2 * 30 * 40);
@@ -1870,9 +1884,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	gData.nTrayUseCount[nPx] = 0;
 	gData.nCmUseCount[nPx] = 0;
-
-	if(gData.nPNoNgTray ==1) gData.nPNoNgTray =2;
-	else if(gData.nPNoNgTray == 2)  gData.nPNoNgTray = 1;
+	
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
@@ -2154,13 +2166,8 @@ BOOL CSequenceMain::LoadTray_Run()
 				
 				g_dlgWork.Enable_UserInput(nLtWorkPort, FALSE);
 				if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) {
-					Job_LotStart(nLtWorkPort);	
-					if(Check_InspectLotEnd(2, 1) && Check_InspectLotEnd(2, 2) 
-						&& Check_NgBufferLotEnd(2) && nLtWorkPort == 1 && gData.nPNoNgTray == 2 )
-					{
-						gData.nPNoNgTray = 1; 
-						//연속랏이 아니라 port 1번에서 돌렸다가 다시 Port 1번에서 돌릴때는 NG Stage 정보 초기화 
-					}
+					Job_LotStart(nLtWorkPort);
+					
 				}
 				//MCC
 				m_strLog.Format("Tray Get, pNo : %d", nLtWorkPort);
@@ -6987,6 +6994,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 				}
 			}
 			gData.nPNoSortPick[0] = gData.nPNoBuffTray[nSp1WorkBuff-1];
+		
 
 			if (gData.nTNoSortPick[0][0] == 1 &&  gData.nCNoSortPick[0][0] == 9) {
 				gLot.dwUphStart = GetTickCount();
@@ -7092,11 +7100,41 @@ BOOL CSequenceMain::SortPicker1_Run()
 			(m_nSortPick2Case >= 40 && m_nSortPick2Case < 60) ||
 			//(m_nSortPick2Case >= 60 && m_nSortPick2Case < 70) ||	// APD 확인중에도 갈수있다.
 			(m_nSortPick2Case == 12) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
-			(m_nSortPick2Case == 17)) {
-
-			if ((gData.nPNoSortPick[0] != gData.nPNoNgTray) && (gData.nPNoSortPick[0] != 0)) {
-				if (gData.nPNoNgTray != 0) return TRUE;
+			(m_nSortPick2Case == 17)) 
+		{
+			if(gData.nSortPickFirstPortNo[0] != gData.nPNoSortPick[0])
+			{
+				gData.nSortPickFirstPortNo[0] = gData.nPNoSortPick[0];
+				gData.bSortPickFirstAction[0] = TRUE;
+				if(gData.nPNoNgTray == 0) 
+				{
+					gData.nSortPickStartedLotCnt[0]++;
+				}
+				else
+				{
+					gData.nSortPickFirstLotCnt[0] = 0;
+					gData.nSortPickStartedLotCnt[0] = 0;
+					gData.bSortPickFirstAction[0] = FALSE;
+				}
+								
+				//랏 엔드 후에 다음 랏 소트피커 처음 NG 동작 
+				if(gData.nSortPickFirstLotCnt[0] + 1 == gData.nSortPickStartedLotCnt[0]) 
+				{
+					//pass		
+					//no collision 
+				}
+				//랏엔드 전에 다음 랏 소트피커 처음 NG 동작
+				else if(gData.nSortPickFirstLotCnt[0] + 1 < gData.nSortPickStartedLotCnt[0])
+				{
+					gData.bSortPickFirstNgPass[0] = FALSE;
+				}
 			}
+			if ((gData.nPNoSortPick[0] != gData.nPNoNgTray && gData.nPNoSortPick[0] != 0 && gData.nPNoNgTray != 0 )
+				|| (!gData.bSortPickFirstNgPass[0] && gData.bSortPickFirstAction[0])) 
+			{
+				return TRUE;			
+			}
+
 			m_nSortPick1Case = 10; m_tSortPick1Loop.Set_LoopTime(10000);
 				m_tSortPick1Loop.Takt_Start(nTaktZone, 7);
 			m_tSortPick1Loop.Takt_End(nTaktZone, 7);
@@ -7191,15 +7229,21 @@ BOOL CSequenceMain::SortPicker1_Run()
 
 	case 12:	// Move to NG Unload Position
 		if ((gData.nPNoSortPick[0] != gData.nPNoNgTray) && (gData.nPNoSortPick[0] != 0)) {
-			if (gData.nPNoNgTray != 0) return TRUE;
+			if (gData.nPNoNgTray != 0) return TRUE; 
 		}
-		if (m_nNgTrayCase != 10) { m_nSortPick1Case = 10; m_tSortPick1Loop.Set_LoopTime(10000); return TRUE; }
+		if (m_nNgTrayCase != 10) 
+		{ 
+			m_nSortPick1Case = 10; m_tSortPick1Loop.Set_LoopTime(10000);
+			return TRUE; 
+		}
 		if (bLastNgBuffPick1 == TRUE) bLastNgBuffPick1 = FALSE;
 
-		if (Select_SortPickNgPos(1, nSp1StartNo, nSp1PickCnt)) {	// startNo 0base pickCnt 1base
-			if (Select_NgTrayPos(1, nSp1WorkNg, nSp1TrayPosX, nSp1TrayPosY)) {
-				// 한Case에서 오는게 아니라 따로 추출해서 입력해준다.
-						
+		if (Select_SortPickNgPos(1, nSp1StartNo, nSp1PickCnt)) 
+		{	// startNo 0base pickCnt 1base
+			if (Select_NgTrayPos(1, nSp1WorkNg, nSp1TrayPosX, nSp1TrayPosY))
+			{
+				
+				// 한Case에서 오는게 아니라 따로 추출해서 입력해준다.						
 				if (!Select_NgTrayPos(1, nSp1WorkNg, nSp1TrayPosX, nSp1TrayPosY)) nSp1TrayPosX = 0;	// Tray 교체중...
 				nSp1TrayCnt = gData.nTrayX - nSp1TrayPosX;
 				nSp1DownSu = ((nSp1PickCnt < nSp1TrayCnt) ? nSp1PickCnt : nSp1TrayCnt);
@@ -7249,6 +7293,10 @@ BOOL CSequenceMain::SortPicker1_Run()
 		{
 			g_objCommon.Set_SortPicker1Up(0);
 			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);	//Ready Up
+
+			gData.bSortPickFirstAction[0] = FALSE;
+			
+
 			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(5000);
 
 			for (int i = 0; i < nSp1DownSu; i++) {
@@ -7287,6 +7335,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 		if (g_objCommon.Get_SortPicker1Up(0) && g_objCommon.Get_InfoSortPicker1Close() 
 			&& g_objCommon.Get_InfoSortPicker1Check() && g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) 
 		{			
+			
+
 			if (Check_NgTrayFull()) {
 				if (m_nNgTrayCase == 10) m_nNgTrayCase = 11;
 			}
@@ -7590,7 +7640,9 @@ BOOL CSequenceMain::SortPicker1_Run()
 		}
 		break;
 	case 25 :	// Picker Up
-		if (g_objCommon.Get_SortPicker1OpenMulti(nSp1StartNo+1, nSp1DownSu)) {
+		if (g_objCommon.Get_SortPicker1OpenMulti(nSp1StartNo+1, nSp1DownSu)) 
+		{
+			gData.bSortPickFirstAction[0] = FALSE;
 			g_objCommon.Set_SortPicker1Up(0);
 			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);	//Ready Up
 			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(5000);
@@ -8164,6 +8216,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 				}
 			}
 			gData.nPNoSortPick[1] = gData.nPNoBuffTray[nSp2WorkBuff-1];
+			
 
 			if ((gData.nCNoSortPick[1][0] == 1 || gData.nCNoSortPick[1][0] == 5 || gData.nCNoSortPick[1][0] == 9) && nSp2TrayPosY == 0) {
 				if (gData.nTNoSortPick[1][0] == 1 && gData.nCNoSortPick[1][0] == 1) {
@@ -8264,10 +8317,40 @@ BOOL CSequenceMain::SortPicker2_Run()
 			(m_nSortPick1Case >= 40 && m_nSortPick1Case < 60) ||
 			//(m_nSortPick1Case >= 60 && m_nSortPick1Case < 70) ||	// APD 확인중에도 갈수있다.
 			(m_nSortPick1Case == 12) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
-			(m_nSortPick1Case == 17)) {
+			(m_nSortPick1Case == 17)) 
+		{
+			if(gData.nSortPickFirstPortNo[1] != gData.nPNoSortPick[1])
+			{
+				gData.nSortPickFirstPortNo[1] = gData.nPNoSortPick[1];
+				gData.bSortPickFirstAction[1] = TRUE;
+				if(gData.nPNoNgTray == 0) 
+				{
+					gData.nSortPickStartedLotCnt[1]++;
+				}
+				else
+				{
+					gData.nSortPickFirstLotCnt[1] = 0;
+					gData.nSortPickStartedLotCnt[1] = 0;
+					gData.bSortPickFirstAction[1] = FALSE;
+				}
 
-			if ((gData.nPNoSortPick[1] != gData.nPNoNgTray) && (gData.nPNoSortPick[1] != 0)) {
-				if (gData.nPNoNgTray != 0) return TRUE;
+				//랏 엔드 후에 다음 랏 소트피커 처음 NG 동작 
+				if(gData.nSortPickFirstLotCnt[1] + 1 == gData.nSortPickStartedLotCnt[1]) 
+				{
+					//pass		
+					//no collision 
+				}
+				//랏엔드 전에 다음 랏 소트피커 처음 NG 동작
+				else if(gData.nSortPickFirstLotCnt[1] + 1 < gData.nSortPickStartedLotCnt[1])
+				{
+					gData.bSortPickFirstNgPass[1] = FALSE;
+				}
+			}
+		
+			if ((gData.nPNoSortPick[1] != gData.nPNoNgTray && gData.nPNoSortPick[1] != 0 && gData.nPNoNgTray != 0)  
+				|| (!gData.bSortPickFirstNgPass && gData.bSortPickFirstAction[1]))
+			{
+				return TRUE;
 			}
 			m_nSortPick2Case = 10; m_tSortPick2Loop.Set_LoopTime(10000);
 
@@ -8381,7 +8464,9 @@ BOOL CSequenceMain::SortPicker2_Run()
 		if (bLastNgBuffPick2 == TRUE) bLastNgBuffPick2 = FALSE;
 
 		if (Select_SortPickNgPos(2, nSp2StartNo, nSp2PickCnt)) {
-			if (Select_NgTrayPos(2, nSp2WorkNg, nSp2TrayPosX, nSp2TrayPosY)) {
+			if (Select_NgTrayPos(2, nSp2WorkNg, nSp2TrayPosX, nSp2TrayPosY)) 
+			{
+				
 				// 한Case에서 오는게 아니라 따로 추출해서 입력해준다.
 				
 				if (!Select_NgTrayPos(2, nSp2WorkNg, nSp2TrayPosX, nSp2TrayPosY)) nSp2TrayPosX = 0;	// Tray 교체중...
@@ -8475,6 +8560,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 		if (g_objCommon.Get_SortPicker2Up(0) && g_objCommon.Get_InfoSortPicker2Close() 
 			&& g_objCommon.Get_InfoSortPicker2Check() && g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) 
 		{			
+			gData.bSortPickFirstAction[1] = FALSE;
 			if (Check_NgTrayFull()) {
 				if (m_nNgTrayCase == 10) m_nNgTrayCase = 11;
 			}
@@ -8799,7 +8885,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 			g_objCommon.Set_SortPicker2Up(0);
 			g_objCommon.Move_Position(AX_SORT_PICKER2_Z, 0);	//Ready Up
 			m_nSortPick2Case++; m_tSortPick2Loop.Set_LoopTime(5000);
-
+			gData.bSortPickFirstAction[1] = FALSE;
 			m_tSortPick2Loop.Takt_End(nTaktZone, 24);
 			m_tSortPick2Loop.Takt_Start(nTaktZone, 25);
 		}
@@ -10014,6 +10100,12 @@ BOOL CSequenceMain::NgTray_Run()
 				// 장비 종료만 아니면 대기상태로 만들어 준다.
 				gData.bNGTrayWait = TRUE;
 				gData.bContinueLotEnd = TRUE;
+				gData.bSortPickFirstNgPass[0] = gData.bSortPickFirstNgPass[1] = TRUE;
+				if(gData.nPNoNgTray == 0) 
+				{
+					gData.nSortPickFirstLotCnt[0]++;
+					gData.nSortPickFirstLotCnt[1]++;
+				}
 				g_dlgWork.PostMessage(UM_SHOW_MSG, 2, NULL);
 				
 			} 

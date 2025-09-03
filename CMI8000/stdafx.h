@@ -78,8 +78,8 @@
 
 
 //주석처리하면 SIMULATION 
-#define AJIN_BOARD_USE 
-#define LOT_BARCODE_USE
+//#define AJIN_BOARD_USE 
+//#define LOT_BARCODE_USE
 
 // 2~5호기 옵션
 #define EDITION_2ND 		// 2~5호기
@@ -311,6 +311,11 @@ typedef struct {
 
 	BOOL	bCapVisionAlarm;
 
+	BOOL	bSortPickFirstAction[2]; //포트 번호가 전이랑 다를때 TRUE
+	BOOL	bSortPickFirstNgPass[2];
+	int		nSortPickFirstPortNo[2];
+	int		nSortPickFirstLotCnt[2];
+	int		nSortPickStartedLotCnt[2];
 
 } GLOVAL_DATA;
 
