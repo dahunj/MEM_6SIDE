@@ -74,7 +74,8 @@ CSequenceMain::CSequenceMain()
 	Reset_MainRunCase();
 
 	gData.dEmptyPort_Z_Limit = 300;
-	gData.nPNoNgTray = 1;
+
+	
 }
 
 CSequenceMain::~CSequenceMain()
@@ -655,7 +656,7 @@ BOOL CSequenceMain::LotEnd_Run()
 
 	m_pEquipData->bResultTestUse = FALSE;	// LOT 끝나면 Reset
 	gData.bNgTrayEnd = FALSE;
-
+	gData.bSortPickCompletelyLotEnd = TRUE;
 	return TRUE;
 }
 
@@ -785,7 +786,15 @@ void CSequenceMain::Set_ClearRunData(int nType)
 	pMainDlg->Set_LampFlicker_Good(FALSE);
 	pMainDlg->Set_LampFlicker_Empty(FALSE);
 
-	if (nType == 0) m_pEquipData->bResultTestUse = FALSE;	// LOT 끝나면 Reset
+
+	if(nType == 0)
+	{
+		gData.nPNoNgTray = 1;
+		gData.bSortPickCompletelyLotEnd = TRUE;
+		m_pEquipData->bResultTestUse = FALSE;	// LOT 끝나면 Reset
+	}
+
+
 	gData.bCapTrayLoad = FALSE;
 	gLot.nNGT = gLot.nNGC = gLot.nGDT = gLot.nG1DC = 0;
 
@@ -1871,9 +1880,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	gData.nTrayUseCount[nPx] = 0;
 	gData.nCmUseCount[nPx] = 0;
 
-	if(gData.nPNoNgTray ==1) gData.nPNoNgTray =2;
-	else if(gData.nPNoNgTray == 2)  gData.nPNoNgTray = 1;
-
+	
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 	gLot.dwLotEnd[nPx] = GetTickCount();
@@ -2155,12 +2162,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				g_dlgWork.Enable_UserInput(nLtWorkPort, FALSE);
 				if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) {
 					Job_LotStart(nLtWorkPort);	
-					if(Check_InspectLotEnd(2, 1) && Check_InspectLotEnd(2, 2) 
-						&& Check_NgBufferLotEnd(2) && nLtWorkPort == 1 && gData.nPNoNgTray == 2 )
-					{
-						gData.nPNoNgTray = 1; 
-						//연속랏이 아니라 port 1번에서 돌렸다가 다시 Port 1번에서 돌릴때는 NG Stage 정보 초기화 
-					}
+				
 				}
 				//MCC
 				m_strLog.Format("Tray Get, pNo : %d", nLtWorkPort);
@@ -6988,6 +6990,12 @@ BOOL CSequenceMain::SortPicker1_Run()
 			}
 			gData.nPNoSortPick[0] = gData.nPNoBuffTray[nSp1WorkBuff-1];
 
+			if(gData.bSortPickCompletelyLotEnd)
+			{	
+				gData.nPNoNgTray = gData.nPNoSortPick[0];
+				gData.bSortPickCompletelyLotEnd = FALSE;
+			}
+
 			if (gData.nTNoSortPick[0][0] == 1 &&  gData.nCNoSortPick[0][0] == 9) {
 				gLot.dwUphStart = GetTickCount();
 			}
@@ -7092,7 +7100,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 			(m_nSortPick2Case >= 40 && m_nSortPick2Case < 60) ||
 			//(m_nSortPick2Case >= 60 && m_nSortPick2Case < 70) ||	// APD 확인중에도 갈수있다.
 			(m_nSortPick2Case == 12) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
-			(m_nSortPick2Case == 17)) {
+			(m_nSortPick2Case == 17))
+		{			
 
 			if ((gData.nPNoSortPick[0] != gData.nPNoNgTray) && (gData.nPNoSortPick[0] != 0)) {
 				if (gData.nPNoNgTray != 0) return TRUE;
@@ -8164,6 +8173,12 @@ BOOL CSequenceMain::SortPicker2_Run()
 				}
 			}
 			gData.nPNoSortPick[1] = gData.nPNoBuffTray[nSp2WorkBuff-1];
+
+			if(gData.bSortPickCompletelyLotEnd)
+			{	
+				gData.nPNoNgTray = gData.nPNoSortPick[1];
+				gData.bSortPickCompletelyLotEnd = FALSE;
+			}
 
 			if ((gData.nCNoSortPick[1][0] == 1 || gData.nCNoSortPick[1][0] == 5 || gData.nCNoSortPick[1][0] == 9) && nSp2TrayPosY == 0) {
 				if (gData.nTNoSortPick[1][0] == 1 && gData.nCNoSortPick[1][0] == 1) {
@@ -10015,6 +10030,9 @@ BOOL CSequenceMain::NgTray_Run()
 				gData.bNGTrayWait = TRUE;
 				gData.bContinueLotEnd = TRUE;
 				g_dlgWork.PostMessage(UM_SHOW_MSG, 2, NULL);
+
+				if(gData.nPNoNgTray ==1) gData.nPNoNgTray = 2;
+				else if(gData.nPNoNgTray == 2)  gData.nPNoNgTray = 1;
 				
 			} 
 			else if (m_bUnloadLotEnd) 

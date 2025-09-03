@@ -310,8 +310,8 @@ typedef struct {
 	int		nCmNoMESNG[24];
 
 	BOOL	bCapVisionAlarm;
-
-
+	BOOL	bSortPickCompletelyLotEnd;
+	
 } GLOVAL_DATA;
 
 typedef struct {
