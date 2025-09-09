@@ -1815,11 +1815,13 @@ BOOL CSequenceInit::Initial_Simulation()
 	{
 		m_pDX02->iAngleStage1Exist = FALSE;
 		m_pDX02->iAngleStage2Exist = FALSE;
+
+		g_objAJinAXL.Get_pStatus(AX_ANGLE_STAGE1_Y)->dPos =  m_pMoveData->dAngleStage1Y[0];
+		g_objAJinAXL.Get_pStatus(AX_ANGLE_STAGE2_Y)->dPos =  m_pMoveData->dAngleStage2Y[4];
+		g_objAJinAXL.Get_pStatus(AX_ANGLE_STAGE1_Z)->dPos =  m_pMoveData->dAngleStage1Z[0];
+		g_objAJinAXL.Get_pStatus(AX_ANGLE_STAGE2_Z)->dPos =  m_pMoveData->dAngleStage2Z[1];
 	}
-	else if(m_niAngleStageCase == 21)
-	{
-		g_objAJinAXL.Move_Absolute(AX_ANGLE_STAGE1_Z, 110);
-	}
+	
 
 	if(m_niInspStageCase == 6 || m_niInspStageCase == 11)
 	{

@@ -10,6 +10,35 @@
 
 #include "AJinDefine.h"
 
+
+#include <afxwin.h>
+#include <afxmt.h>
+#include <set>
+#include <vector>
+#include <algorithm>
+
+// 공유 예시 카운터(테스트용)
+static CCriticalSection s_csCounter;
+
+
+// =======================
+// ThreadIdManager (선언)
+// =======================
+class ThreadIdManager
+{
+public:
+	ThreadIdManager();
+
+	int  AllocateId();
+	void ReleaseId(int id);
+
+private:
+	CCriticalSection m_cs;
+	std::set<int>    m_freeIds;  // 재사용 가능한 ID
+	int              m_nextId;   // 아직 한 번도 안 쓴 ID 시작값
+};
+
+
 class CAJinAXL
 {
 public:
@@ -165,6 +194,46 @@ public:
 	BOOL   Get_MotorRun(int nAxis) { return m_Status[nAxis].bRun; }
 
 	void Save_AxisList();	// 값 입력하기 위한 테스트 프로그램
+
+
+public:
+	
+
+
+	int		StartThread(int nType, int nAxis, double dPos);					// 새 워커 시작. 성공 시 쓰레드 ID(>0) 반환, 실패 시 0 반환
+	void	GetCompletedIds(std::vector<int>& outCompleted);	// 완료된 쓰레드 ID들을 out에 채우고 내부 큐는 비움
+	int		RunningCount() const;								// (옵션) 현재 실행 중으로 추정되는 개수
+
+private:
+								
+	struct ThreadArgs   // 워커 스레드에서 사용할 인자
+	{
+		CAJinAXL*		pRunner;
+		int				id;
+		int				type;
+		int				nAxisNo;
+		double			dPosTarget;		
+	};
+		
+	static UINT __cdecl WorkerProc(LPVOID pParam);		// 워커 스레드 함수 (정적)
+	void NotifyDone(int id);						// 워커 종료 시 내부에서 호출 (ID 반납 + 완료 큐 적재)
+
+	bool TryDequeue(int nAxis, int& out);
+
+private:
+
+	// 완료 ID 큐
+	CCriticalSection	m_csCompleted;
+	std::vector<int>	m_completedIds;
+
+	// 실행 중 개수 추정치
+	mutable CCriticalSection m_csRunning;
+	int m_runningCount;
+
+	// ID 매니저
+	ThreadIdManager m_idMgr;
+
+
 };
 
 extern CAJinAXL g_objAJinAXL;

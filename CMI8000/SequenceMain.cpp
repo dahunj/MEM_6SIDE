@@ -7376,9 +7376,18 @@ BOOL CSequenceMain::SortPicker1_Run()
 
 							// Inline Mode에서는 Unload 버튼을 사용하지 않는다.
 							if (!m_pEquipData->bUseInlineMode) {
-								if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
-								if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) { gData.bGoodTrayWait = TRUE; }
-								if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
+								if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) 
+								{ 
+									gData.bGoodTrayWait = TRUE;
+								}
+								if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) 
+								{ 
+									gData.bGoodTrayWait = TRUE; 
+								}
+								if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) 
+								{ 
+									gData.bGoodTrayWait = TRUE;
+								}
 							}
 						}
 						if (!gData.bGoodTrayLotEnd[0] && m_nGoodTray1Case > 20 && m_nGoodTray1Case < 30) { gData.bGoodTrayLotEnd[0] = TRUE; }
@@ -7703,9 +7712,18 @@ BOOL CSequenceMain::SortPicker1_Run()
 					}  else {
 						// Inline Mode에서는 Unload 버튼을 사용하지 않는다.
 						if (!m_pEquipData->bUseInlineMode) {
-							if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
-							if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) { gData.bGoodTrayWait = TRUE; }
-							if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
+							if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) 
+							{ 
+								gData.bGoodTrayWait = TRUE;
+							}
+							if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) 
+							{ 
+								gData.bGoodTrayWait = TRUE;
+							}
+							if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) 
+							{ 
+								gData.bGoodTrayWait = TRUE; 
+							}
 						}
 					}
 					if (!gData.bGoodTrayLotEnd[0] && m_nGoodTray1Case > 20 && m_nGoodTray1Case < 30) { gData.bGoodTrayLotEnd[0] = TRUE; }
@@ -7996,9 +8014,18 @@ BOOL CSequenceMain::SortPicker1_Run()
 
 				// Inline Mode에서는 Unload 버튼을 사용하지 않는다.
 				if (!m_pEquipData->bUseInlineMode) {
-					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
-					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) { gData.bGoodTrayWait = TRUE; }
-					if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
+					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) 
+					{ 
+						gData.bGoodTrayWait = TRUE;
+					}
+					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) 
+					{ 
+						gData.bGoodTrayWait = TRUE;
+					}
+					if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) 
+					{ 
+						gData.bGoodTrayWait = TRUE;
+					}
 				}
 			}
 			if (!gData.bGoodTrayLotEnd[0] && m_nGoodTray1Case > 20 && m_nGoodTray1Case < 30) { gData.bGoodTrayLotEnd[0] = TRUE; }
@@ -8573,9 +8600,18 @@ BOOL CSequenceMain::SortPicker2_Run()
 
 							// Inline Mode에서는 Unload 버튼을 사용하지 않는다.
 							if (!m_pEquipData->bUseInlineMode) {
-								if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
-								if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) { gData.bGoodTrayWait = TRUE; }
-								if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
+								if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) 
+								{ 
+									gData.bGoodTrayWait = TRUE;
+								}
+								if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) 
+								{ 
+									gData.bGoodTrayWait = TRUE; 
+								}
+								if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) 
+								{ 
+									gData.bGoodTrayWait = TRUE; 
+								}
 							}
 						}
 						if (!gData.bGoodTrayLotEnd[0] && m_nGoodTray1Case > 20 && m_nGoodTray1Case < 30) { gData.bGoodTrayLotEnd[0] = TRUE; }
@@ -8919,9 +8955,18 @@ BOOL CSequenceMain::SortPicker2_Run()
 					}  else {
 						// Inline Mode에서는 Unload 버튼을 사용하지 않는다.
 						if (!m_pEquipData->bUseInlineMode) {
-							if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
-							if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) { gData.bGoodTrayWait = TRUE; }
-							if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
+							if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) 
+							{ 
+								gData.bGoodTrayWait = TRUE; 
+							}
+							if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) 
+							{ 
+								gData.bGoodTrayWait = TRUE;
+							}
+							if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) 
+							{ 
+								gData.bGoodTrayWait = TRUE;
+							}
 						}
 					}
 					if (!gData.bGoodTrayLotEnd[0] && m_nGoodTray1Case > 20 && m_nGoodTray1Case < 30) { gData.bGoodTrayLotEnd[0] = TRUE; }
@@ -9231,9 +9276,18 @@ BOOL CSequenceMain::SortPicker2_Run()
 
 				// Inline Mode에서는 Unload 버튼을 사용하지 않는다.
 				if (!m_pEquipData->bUseInlineMode) {
-					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
-					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) { gData.bGoodTrayWait = TRUE; }
-					if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) { gData.bGoodTrayWait = TRUE; }
+					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) 
+					{ 
+						gData.bGoodTrayWait = TRUE;
+					}
+					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) 
+					{ 
+						gData.bGoodTrayWait = TRUE;
+					}
+					if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) 
+					{ 
+						gData.bGoodTrayWait = TRUE;
+					}
 				}
 			}
 			if (!gData.bGoodTrayLotEnd[0] && m_nGoodTray1Case > 20 && m_nGoodTray1Case < 30) { gData.bGoodTrayLotEnd[0] = TRUE; }
@@ -10930,25 +10984,7 @@ BOOL CSequenceMain::Run_Simulation()
 		m_pDX01->iEmptyPortExist = TRUE;
 		m_pDX01->iEmptyPortTopCheck = TRUE;
 	}	
-	
-	
-	if(m_nEmptyTrayYCase == 2){//4
-		g_objCommon.Move_Position(AX_EMPTY_TRANS2_Y, 1);
-		g_objCommon.Set_EmptyTrayYDown();
-		m_nEmptyTrayYCase = 11;
-	}
-	if(m_nEmptyTrayYCase == 14){
-		m_nEmptyTrayYCase = 15;
-		m_pDX01->iEmptyPortExist = FALSE;
-		m_pDX01->iEmptyPortTopCheck = FALSE;
-		m_pDX13->iEmptyTrans2Exist = TRUE;
-	}
-	if(m_nEmptyTrayYCase == 22){
-		m_pDX13->iEmptyTrans2Exist = FALSE;
-		m_pDX12->iGoodTrayBufferBottom = TRUE;
-		iGoodTrayBufferCount++;
-		iGoodTrayBufferCount++;
-	}
+		
 
 	if(m_nGoodTray1Case == 11){
 		m_pDX12->iGoodStage1Exist = TRUE;
@@ -10998,6 +11034,30 @@ BOOL CSequenceMain::Run_Simulation()
 
 	if(m_nEmptyTrayXCase == 22){
 		m_pDX01->iEmptyPortTopCheck = FALSE;
+	}
+
+	if(m_nEmptyTrayYCase == 1)
+	{
+		m_pDX13->iEmptyTrans2Exist = FALSE;
+	}
+	
+
+	if(m_nEmptyTrayYCase == 2){//4
+		g_objCommon.Move_Position(AX_EMPTY_TRANS2_Y, 1);
+		g_objCommon.Set_EmptyTrayYDown();
+		m_nEmptyTrayYCase = 11;
+	}
+	if(m_nEmptyTrayYCase == 14){
+		m_nEmptyTrayYCase = 15;
+		m_pDX01->iEmptyPortExist = FALSE;
+		m_pDX01->iEmptyPortTopCheck = FALSE;
+		m_pDX13->iEmptyTrans2Exist = TRUE;
+	}
+	if(m_nEmptyTrayYCase == 22){
+		m_pDX13->iEmptyTrans2Exist = FALSE;
+		m_pDX12->iGoodTrayBufferBottom = TRUE;
+		iGoodTrayBufferCount++;
+		iGoodTrayBufferCount++;
 	}
 	
 	

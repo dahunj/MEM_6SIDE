@@ -78,8 +78,8 @@
 
 
 //주석처리하면 SIMULATION 
-#define AJIN_BOARD_USE 
-#define LOT_BARCODE_USE
+//#define AJIN_BOARD_USE 
+//#define LOT_BARCODE_USE
 
 // 2~5호기 옵션
 #define EDITION_2ND 		// 2~5호기
@@ -90,8 +90,10 @@
 // EVMS 사용 옵션 (2024.01.26)
 // #define USE_AVI_EVMS		// EVMS 폴더 사용
 
-#define SIM_WAITTIMES	 10		//
-#define SIM_WAITTIMEM	 10		//
+#define SIM_WAITTIMES	 1		//
+#define SIM_WAITTIMEM	 1		//
+
+#define	VELOCITY_WEIGHT	 5
 
 ///////////////////////////////////////////////////////////////////////////////
 

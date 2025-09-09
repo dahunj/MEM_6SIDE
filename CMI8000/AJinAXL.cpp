@@ -5,6 +5,10 @@
 #include "CMI8000.h"
 #include <math.h>
 #include "MESInterface.h"
+#include "Common.h"
+#include "FifoTaskProcessor.h"
+
+
 
 // AJin Board Library
 #include "AXL.h"
@@ -26,6 +30,10 @@ CAJinAXL::CAJinAXL(void)
 	m_bThreadAJin = FALSE;
 
 	m_bReadVelocity = FALSE;
+
+	m_runningCount = 0;
+
+	
 }
 
 CAJinAXL::~CAJinAXL(void)
@@ -86,6 +94,12 @@ BOOL CAJinAXL::Initialize()
 
 	m_bThreadAJin = TRUE;
 	m_pThreadAJin = AfxBeginThread(Thread_AJin, NULL);
+
+
+	if (!proc.Start())
+	{		
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -756,12 +770,194 @@ void CAJinAXL::Save_AxisList()
 ///////////////////////////////////////////////////////////////////////////////
 
 void CAJinAXL::Sim_SetMotion(int nNo, int nAxis, double dPos)
-{
-	Sleep(SIM_WAITTIMEM);
-	if		(nNo == 1)	g_objAJinAXL.m_Status[nAxis].dPos = dPos;
-	else if (nNo == 2)	g_objAJinAXL.m_Status[nAxis].dPos = g_objAJinAXL.m_Status[nAxis].dPos + dPos;
-	else if (nNo == 3)	g_objAJinAXL.m_Status[nAxis].dPos = dPos;
+{	
+	Task t;
+	t.nType = nNo;
+	t.nAxis = nAxis;
+	t.dPos = dPos;
+	t.id = 0;
+
+	proc.Enqueue(t);
+	::Sleep(SIM_WAITTIMEM);		
 }
+
+
+
+
+
+ThreadIdManager::ThreadIdManager()
+	: m_nextId(1)
+{
+}
+
+int ThreadIdManager::AllocateId()
+{
+	CSingleLock lock(&m_cs, TRUE);
+	if (!m_freeIds.empty())
+	{
+		std::set<int>::iterator it = m_freeIds.begin();
+		int id = *it;
+		m_freeIds.erase(it);
+		return id;
+	}
+	return m_nextId++;
+}
+
+void ThreadIdManager::ReleaseId(int id)
+{
+	CSingleLock lock(&m_cs, TRUE);
+	m_freeIds.insert(id);
+}
+
+
+int CAJinAXL::StartThread(int nType, int nAxis, double dPos)
+{
+	// 1) ID 배정
+	int id = m_idMgr.AllocateId();
+	if (id <= 0) return 0;
+
+	// 2) 인자 준비
+	ThreadArgs* pArgs	= new ThreadArgs;
+	pArgs->pRunner		= this;
+	pArgs->id			= id;
+	pArgs->nAxisNo		= nAxis;
+	pArgs->type			= nType;
+	pArgs->dPosTarget	= dPos;
+
+	// 3) 스레드 시작
+	CWinThread* pThread = AfxBeginThread(&CAJinAXL::WorkerProc, pArgs);
+	if (!pThread)
+	{
+		m_idMgr.ReleaseId(id);
+		delete pArgs;
+		return 0;
+	}
+
+	// 실행 중 개수 증가
+	{
+		CSingleLock lock(&m_csRunning, TRUE);
+		++m_runningCount;
+	}
+
+	return id;
+}
+
+
+// 정적 워커 스레드 함수
+UINT __cdecl CAJinAXL::WorkerProc(LPVOID pParam)
+{
+	ThreadArgs* pArgs = reinterpret_cast<ThreadArgs*>(pParam);
+	if (!pArgs) return 0;
+
+	CAJinAXL* pRunner = pArgs->pRunner;
+	const int id = pArgs->id;
+
+	const int nType = pArgs->type;
+	const int nAxis = pArgs->nAxisNo;
+	double dSpeed = g_objAJinAXL.Get_pParam(nAxis)->dSpeedM;
+	
+	double dPos = pArgs->dPosTarget;
+	double dPosCur = g_objAJinAXL.m_Status[nAxis].dPos;
+	
+	
+	g_objAJinAXL.Get_pStatus(nAxis)->bRun = TRUE;
+
+	if(nType == 1 || nType == 3)
+	{	
+		while(TRUE)
+		{	
+			::Sleep(SIM_WAITTIMEM);
+
+			if(dPos >= dPosCur)
+			{
+				g_objAJinAXL.m_Status[nAxis].dPos += (dSpeed/1000)*VELOCITY_WEIGHT;
+				if(g_objAJinAXL.m_Status[nAxis].dPos > dPos) break;
+			}
+			else if(dPos < dPosCur)
+			{
+				g_objAJinAXL.m_Status[nAxis].dPos -= (dSpeed/1000)*VELOCITY_WEIGHT;
+				if(g_objAJinAXL.m_Status[nAxis].dPos < dPos) break;
+			}
+		
+		}
+		
+		g_objAJinAXL.Get_pStatus(nAxis)->bRun = FALSE;
+		g_objAJinAXL.m_Status[nAxis].dPos = dPos;				
+	}
+	else if(nType == 2)
+	{
+		double target = g_objAJinAXL.m_Status[nAxis].dPos + dPos;
+
+		while(TRUE)
+		{
+			::Sleep(SIM_WAITTIMEM);
+
+			if(dPos >= dPosCur)
+			{
+				g_objAJinAXL.m_Status[nAxis].dPos += (dSpeed/1000)*VELOCITY_WEIGHT;
+				if(g_objAJinAXL.m_Status[nAxis].dPos > target) break;
+			}
+			else if(dPos < dPosCur)
+			{
+				g_objAJinAXL.m_Status[nAxis].dPos -= (dSpeed/1000)*VELOCITY_WEIGHT;
+				if(g_objAJinAXL.m_Status[nAxis].dPos < target) break;
+			}			
+			
+		}
+		
+		g_objAJinAXL.Get_pStatus(nAxis)->bRun = FALSE;
+		g_objAJinAXL.m_Status[nAxis].dPos = target;	
+
+	}
+	
+
+	// 종료 통지
+	if (pRunner)
+		pRunner->NotifyDone(id);
+
+	// 인자 해제
+	delete pArgs;
+	return 0;
+}
+
+
+
+
+void CAJinAXL::GetCompletedIds(std::vector<int>& outCompleted)
+{
+	outCompleted.clear();
+	CSingleLock lock(&m_csCompleted, TRUE);
+	if (!m_completedIds.empty())
+	{
+		outCompleted.swap(m_completedIds); // 한번에 비우기
+	}
+}
+
+int CAJinAXL::RunningCount() const
+{
+	CSingleLock lock(const_cast<CCriticalSection*>(&m_csRunning), TRUE);
+	return m_runningCount;
+}
+
+
+void CAJinAXL::NotifyDone(int id)
+{
+	// 1) ID 반납
+	m_idMgr.ReleaseId(id);
+
+	// 2) 완료 큐 적재
+	{
+		CSingleLock lock(&m_csCompleted, TRUE);
+		m_completedIds.push_back(id);
+	}
+
+	// 3) 실행 중 개수 감소
+	{
+		CSingleLock lock(&m_csRunning, TRUE);
+		if (m_runningCount > 0) --m_runningCount;
+	}
+}
+
 
 void CAJinAXL::Sim_SetOutToIn(int nNo)
 {
@@ -1422,3 +1618,4 @@ void CAJinAXL::Sim_SetOutToIn(int nNo)
 		
 	}
 }
+
