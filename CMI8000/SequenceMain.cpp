@@ -2137,7 +2137,16 @@ BOOL CSequenceMain::LoadTray_Run()
 		m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
 		m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
 		break;
-	case 3:		// Check Position, Lot Start
+	case 3:		// Check Position, Lot Start		
+		#ifndef AJIN_BOARD_USE
+				if (m_bUnloadLotEnd || gData.bCycleStop) {
+					nLtWorkPort = 0;
+					m_nLoadTrayCase = 0;	// 사이클스탑이면 투입된 모듈 트레이까지만 작업 후 종료.
+
+				}
+		#endif
+
+
 		if ((nLtWorkPort == 1 && g_objCommon.Check_Position(AX_LOAD_STAGE_X, 0)) || 
 			(nLtWorkPort == 2 && g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1))) 
 		{
