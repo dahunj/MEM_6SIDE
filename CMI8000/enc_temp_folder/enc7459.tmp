@@ -1002,9 +1002,6 @@ void CWorkDlg::Check_Lamp()
 				} 
 				else 
 				{
-					#ifndef AJIN_BOARD_USE
-						pDX14->iLoad1Sw = FALSE;
-					#endif
 					g_objCommon.Show_MsgBox(1, "Port1 Lot 정보를 확인해 주십시오.");
 				}
 			}
@@ -1029,9 +1026,9 @@ void CWorkDlg::Check_Lamp()
 				} 
 				else 
 				{
-					#ifndef AJIN_BOARD_USE
-						pDX14->iLoad2Sw = FALSE;
-					#endif
+				#ifndef AJIN_BOARD_USE
+					pDX14->iLoad2Sw = FALSE;
+	#endif
 					g_objCommon.Show_MsgBox(1, "Port2 Lot 정보를 확인해 주십시오.");
 				}
 			}

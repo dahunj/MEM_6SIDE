@@ -93,7 +93,7 @@
 #define SIM_WAITTIMES	 1		//
 #define SIM_WAITTIMEM	 1		//
 
-#define	VELOCITY_WEIGHT	 8
+#define	VELOCITY_WEIGHT	 
 
 ///////////////////////////////////////////////////////////////////////////////
 

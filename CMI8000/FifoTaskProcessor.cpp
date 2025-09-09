@@ -31,14 +31,8 @@ FifoTaskProcessor::FifoTaskProcessor()
 		InitializeCriticalSection(&s_csCounter);
 		s_inited = true;
 	}
-
-	 for(int i = 0; i < AXIS_COUNT; i++)
-	 {
-		 m_head[i] = 0;
-	 }
-	 
-
-
+	m_head = 0;
+	
 	m_evtNewTask = CreateEvent(NULL, FALSE, FALSE, NULL); // auto-reset
 }
 
@@ -83,11 +77,9 @@ void FifoTaskProcessor::Stop()
 
 	// 큐 정리
 	EnterCriticalSection(&m_cs);
-	for(int i = 0; i < AXIS_COUNT; i++)
-	{				
-		m_tasks[i].clear();
-		m_head[i] = 0;				
-	}
+	m_tasks.clear();
+	m_head = 0;				
+	
 
 	
 	LeaveCriticalSection(&m_cs);
@@ -104,12 +96,7 @@ void FifoTaskProcessor::Stop()
 void FifoTaskProcessor::Enqueue(const Task& t)
 {
 	EnterCriticalSection(&m_cs);
-
-	for(int i = 0; i < AXIS_COUNT; i++)
-	{
-		m_tasks[i].push_back(t);
-	}
-	
+	m_tasks.push_back(t);
 	LeaveCriticalSection(&m_cs);
 
 	SetEvent(m_evtNewTask); // 워커 깨우기
@@ -136,16 +123,7 @@ size_t FifoTaskProcessor::PendingCount() const
 {
 	size_t pending = 0;
 	EnterCriticalSection(&m_cs);
-
-	for(int i = 0; i < AXIS_COUNT; i++)
-	{
-		if (m_head[i] < m_tasks[i].size()) 
-		{
-			pending = m_tasks[i].size() - m_head[i];
-		}
-	}
-
-	
+	if (m_head < m_tasks.size()) pending = m_tasks.size() - m_head;
 	LeaveCriticalSection(&m_cs);
 	return pending;
 }
@@ -165,83 +143,73 @@ void FifoTaskProcessor::Run()
 		// 1) 종료 조건/작업 유무 확인
 		Task t;
 		bool haveTask = false;
-
-
-		for(int i = 0 ; i < AXIS_COUNT; i++)
+		
+		EnterCriticalSection(&m_cs);
+		if (m_stop && m_head >= m_tasks.size())
 		{
-			EnterCriticalSection(&m_cs);
-			if (m_stop && m_head[i] >= m_tasks[i].size())
-			{
-				LeaveCriticalSection(&m_cs);
-				break; // 큐 비었고 정지면 종료
-			}
-			haveTask = TryDequeue_NoLock(t); // m_cs 보유 상태에서 호출
-			
-
 			LeaveCriticalSection(&m_cs);
+			break; // 큐 비었고 정지면 종료
+		}
+		haveTask = TryDequeue_NoLock(t); // m_cs 보유 상태에서 호출
+		
+		LeaveCriticalSection(&m_cs);
 
-			if (haveTask)
-			{
-				// 실행 카운트 +1
-				EnterCriticalSection(&m_csRunning);
-				++m_runningCount;
-				LeaveCriticalSection(&m_csRunning);
+		if (haveTask)
+		{
+			// 실행 카운트 +1
+			EnterCriticalSection(&m_csRunning);
+			++m_runningCount;
+			LeaveCriticalSection(&m_csRunning);
 
-				// 2) 실제 작업 처리(순차)
-				EnterCriticalSection(&s_csCounter);			
-				g_objAJinAXL.Get_pStatus(t.nAxis)->bRun = TRUE;
-				g_objAJinAXL.StartThread(t.nType, t.nAxis, t.dPos);	
+			// 2) 실제 작업 처리(순차)
+			EnterCriticalSection(&s_csCounter);			
+			g_objAJinAXL.Get_pStatus(t.nAxis)->bRun = TRUE;
+			g_objAJinAXL.StartThread(t.nType, t.nAxis, t.dPos);	
 
-				LeaveCriticalSection(&s_csCounter);
+			LeaveCriticalSection(&s_csCounter);
 
-				//// 완료 큐에 적재
-				//EnterCriticalSection(&m_csCompleted);
-				//m_completedIds.push_back(t.id);
-				//LeaveCriticalSection(&m_csCompleted);
+			//// 완료 큐에 적재
+			//EnterCriticalSection(&m_csCompleted);
+			//m_completedIds.push_back(t.id);
+			//LeaveCriticalSection(&m_csCompleted);
 
-				// 실행 카운트 -1
-				EnterCriticalSection(&m_csRunning);
-				if (m_runningCount > 0) --m_runningCount;
-				LeaveCriticalSection(&m_csRunning);
+			// 실행 카운트 -1
+			EnterCriticalSection(&m_csRunning);
+			if (m_runningCount > 0) --m_runningCount;
+			LeaveCriticalSection(&m_csRunning);
 
-				continue; // 다음 루프
-			}
+			continue; // 다음 루프
+		}
 
-			// 3) 대기: 새 작업 또는 주기적 타임아웃으로 정지 플래그 재확인
-			WaitForSingleObject(m_evtNewTask, 1);
-		}		
+		// 3) 대기: 새 작업 또는 주기적 타임아웃으로 정지 플래그 재확인
+		WaitForSingleObject(m_evtNewTask, 1);
+
 	}
 	//Final End
 }
 
 bool FifoTaskProcessor::TryDequeue_NoLock(Task& out)
 {
-	for(int i = 0; i < AXIS_COUNT; i++)
-	{			
-		if (m_head[i] < m_tasks[i].size())
+
+	if (m_head < m_tasks.size())
+	{
+		int nHeadNo = m_head;
+		int nAxis = m_tasks[m_head].nAxis;
+		if(g_objAJinAXL.Get_pStatus(nAxis)->bRun) 
 		{
-			int nHeadNo = m_head[i];
-			int nAxis = m_tasks[i][nHeadNo].nAxis;
-			if(g_objAJinAXL.Get_pStatus(nAxis)->bRun) 
-			{
-				return FALSE;
-			}
-
-
-			out = m_tasks[i][m_head[i]++];
-
-			// head가 많이 전진했으면 압축(잔여만 앞으로)
-			if (m_head[i] > 1024 && m_head[i] * 2 > m_tasks[i].size())
-			{
-				std::vector<Task> tmp(m_tasks[i].begin() + m_head[i], m_tasks[i].end());
-				m_tasks[i].swap(tmp);
-				m_head[i] = 0;
-			}
-			return true;
+			return FALSE;
 		}
-	}
-	
-	
-	
+
+
+		out = m_tasks[m_head++]; // head가 많이 전진했으면 압축(잔여만 앞으로)
+		
+		if (m_head > 1024 && m_head * 2 > m_tasks.size())
+		{
+			std::vector<Task> tmp(m_tasks.begin() + m_head, m_tasks.end());
+			m_tasks.swap(tmp);
+			m_head = 0;
+		}
+		return true;
+	}	
 	return false;
 }

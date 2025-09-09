@@ -9901,7 +9901,7 @@ BOOL CSequenceMain::GoodTray2_Run()
 					//m_pDY15->oDoor05Unlock = TRUE;
 					g_objAJinAXL.Write_Output(12);
 					g_objAJinAXL.Write_Output(15);
-						gData.bGoodTrayWait = TRUE;
+					gData.bGoodTrayWait = TRUE;
 				}
 			}
 			if (m_pEquipData->bUseInlineMode && !bgs2EmptyTray) {
@@ -10753,7 +10753,7 @@ BOOL CSequenceMain::EmptyTrayY_Run()
 					m_strLog.Format("Empty Picker Y, 14-2");g_objLogFile.Save_MCCLog(m_strLog);
 					m_nEmptyTrayElCase = 2;	// Slow Up
 				}
-				m_nEmptyTrayYCase++; m_tEmptyTrayYLoop.Set_LoopTime(15000);
+				m_nEmptyTrayYCase++; m_tEmptyTrayYLoop.Set_LoopTime(5000);
 			}			
 		}
 		break;

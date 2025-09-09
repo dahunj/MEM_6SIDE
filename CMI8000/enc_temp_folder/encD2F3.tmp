@@ -9901,7 +9901,7 @@ BOOL CSequenceMain::GoodTray2_Run()
 					//m_pDY15->oDoor05Unlock = TRUE;
 					g_objAJinAXL.Write_Output(12);
 					g_objAJinAXL.Write_Output(15);
-						gData.bGoodTrayWait = TRUE;
+					gData.bGoodTrayWait = TRUE;
 				}
 			}
 			if (m_pEquipData->bUseInlineMode && !bgs2EmptyTray) {
@@ -10753,7 +10753,7 @@ BOOL CSequenceMain::EmptyTrayY_Run()
 					m_strLog.Format("Empty Picker Y, 14-2");g_objLogFile.Save_MCCLog(m_strLog);
 					m_nEmptyTrayElCase = 2;	// Slow Up
 				}
-				m_nEmptyTrayYCase++; m_tEmptyTrayYLoop.Set_LoopTime(15000);
+				m_nEmptyTrayYCase++; m_tEmptyTrayYLoop.Set_LoopTime(5000);
 			}			
 		}
 		break;
@@ -10761,7 +10761,7 @@ BOOL CSequenceMain::EmptyTrayY_Run()
 		if (m_nBtm2PickCase < 8 || m_nBtm2PickCase > 21 ||
 			g_objCommon.Check_Position(AX_BTM2_PICKER_X, 2)|| g_objCommon.Check_Position(AX_BTM2_PICKER_X, 3)||
 			g_objCommon.Check_Position(AX_BTM2_PICKER_X, 4)|| g_objCommon.Check_Position(AX_BTM2_PICKER_X, 5)) {	// Btm2 검사 위치 아닐때
-			m_nEmptyTrayYCase++; m_tEmptyTrayYLoop.Set_LoopTime(15000);
+			m_nEmptyTrayYCase++; m_tEmptyTrayYLoop.Set_LoopTime(5000);
 		}
 		return TRUE;
 	case 16:	// Move to Good Tray Position

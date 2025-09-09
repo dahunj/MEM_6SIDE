@@ -52,8 +52,8 @@ private:
 
 private:
 	// --- 큐(벡터) + head 인덱스 ---
-	std::vector<Task> m_tasks[AXIS_COUNT];
-	size_t            m_head[AXIS_COUNT];
+	std::vector<Task> m_tasks;
+	size_t            m_head;
 
 	// --- 동기화/제어 ---
 	mutable CRITICAL_SECTION  m_cs;             // 큐 보호
