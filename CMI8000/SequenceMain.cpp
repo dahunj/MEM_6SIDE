@@ -7111,6 +7111,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 			(m_nSortPick2Case == 12) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
 			(m_nSortPick2Case == 17))
 		{			
+			Check_PNoNgTray(1);
 
 			if ((gData.nPNoSortPick[0] != gData.nPNoNgTray) && (gData.nPNoSortPick[0] != 0)) {
 				if (gData.nPNoNgTray != 0) return TRUE;
@@ -7149,6 +7150,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 				//(m_nSortPick2Case >= 60 && m_nSortPick2Case < 70) ||	// APD 확인중에도 갈수있다.
 				(m_nSortPick2Case == 17)) {
 
+				Check_PNoNgTray(1);
 				if ((gData.nPNoSortPick[0] != gData.nPNoNgTray) && (gData.nPNoSortPick[0] != 0)) {
 					if (gData.nPNoNgTray != 0) return TRUE; 
 				}
@@ -7208,6 +7210,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 		return TRUE;
 
 	case 12:	// Move to NG Unload Position
+		Check_PNoNgTray(1);
 		if ((gData.nPNoSortPick[0] != gData.nPNoNgTray) && (gData.nPNoSortPick[0] != 0)) {
 			if (gData.nPNoNgTray != 0) return TRUE;
 		}
@@ -7324,7 +7327,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 					//(m_nSortPick2Case >= 60 && m_nSortPick2Case < 70) ||	// APD 확인중에도 갈수있다.
 					(m_nSortPick2Case == 22) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
 					(m_nSortPick2Case == 27)) {
-
+					Check_PNoNgTray(1);
 					if ((gData.nPNoSortPick[0] != gData.nPNoGoodTray) && (gData.nPNoSortPick[0] != 0)) {
 						if (gData.nPNoGoodTray != 0) return TRUE;
 					}
@@ -8316,7 +8319,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 			//(m_nSortPick1Case >= 60 && m_nSortPick1Case < 70) ||	// APD 확인중에도 갈수있다.
 			(m_nSortPick1Case == 12) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
 			(m_nSortPick1Case == 17)) {
-
+			Check_PNoNgTray(2);
 			if ((gData.nPNoSortPick[1] != gData.nPNoNgTray) && (gData.nPNoSortPick[1] != 0)) {
 				if (gData.nPNoNgTray != 0) return TRUE;
 			}
@@ -8358,7 +8361,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 				(m_nSortPick1Case >= 40 && m_nSortPick1Case < 60) ||
 				//(m_nSortPick1Case >= 60 && m_nSortPick1Case < 70) ||	// APD 확인중에도 갈수있다.
 				(m_nSortPick1Case == 17)) {
-
+				Check_PNoNgTray(2);
 				if ((gData.nPNoSortPick[1] != gData.nPNoNgTray) && (gData.nPNoSortPick[1] != 0)) {
 					if (gData.nPNoNgTray != 0) return TRUE;
 				}
@@ -8430,7 +8433,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 		}
 		if (m_nNgTrayCase != 10) { m_nSortPick2Case = 10; m_tSortPick2Loop.Set_LoopTime(10000); return TRUE; }
 		if (bLastNgBuffPick2 == TRUE) bLastNgBuffPick2 = FALSE;
-
+		Check_PNoNgTray(2);
 		if (Select_SortPickNgPos(2, nSp2StartNo, nSp2PickCnt)) {
 			if (Select_NgTrayPos(2, nSp2WorkNg, nSp2TrayPosX, nSp2TrayPosY)) {
 				// 한Case에서 오는게 아니라 따로 추출해서 입력해준다.
@@ -8546,7 +8549,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 					//(m_nSortPick1Case >= 60 && m_nSortPick1Case < 70) ||	// APD 확인중에도 갈수있다.
 					(m_nSortPick1Case == 22) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
 					(m_nSortPick1Case == 27)) {
-
+					Check_PNoNgTray(2);
 					if ((gData.nPNoSortPick[1] != gData.nPNoGoodTray) && (gData.nPNoSortPick[1] != 0)) {
 						if (gData.nPNoGoodTray != 0) return TRUE;
 					}
@@ -11071,4 +11074,16 @@ BOOL CSequenceMain::Run_Simulation()
 	
 	
 	return TRUE;
+}
+
+void CSequenceMain::Check_PNoNgTray(int nSortPickNo)
+{
+	if(gData.nPNoSortPick[nSortPickNo-1] == 1 && gLot.bLotEndComplete[1])
+	{
+		gData.nPNoNgTray = 1;
+	}
+	else if(gData.nPNoSortPick[nSortPickNo-1] == 2 && gLot.bLotEndComplete[0])
+	{
+		gData.nPNoNgTray = 2;
+	}
 }
