@@ -3,6 +3,7 @@
 #pragma once
 
 #include "WorkInfoDlg.h"
+#include "afxwin.h"
 
 #define UM_UPDATE_MODEL			WM_USER+1
 #define UM_UPDATE_TRAY_INFO		WM_USER+2
@@ -149,9 +150,20 @@ public:
 	afx_msg void OnBnClickedButton3();
 	afx_msg void OnBnClickedButton4();
 	afx_msg void OnBnClickedButton5();
-	afx_msg void OnBnClickedButton6();
-	afx_msg void OnBnClickedButton7();
+
 	
+	afx_msg void OnBnClickedBtnPortzInit();
+	afx_msg void OnBnClickedBtnLaserconnect();
+	afx_msg void OnBnClickedBtnLaserGetdata();
+	afx_msg void OnBnClickedButton6();
+
+
+	CButton m_Btn1;
+	CButton m_Btn2;
+	CButton m_Btn3;
+	CButton m_Btn4;
+	CButton m_Btn5;
+	CButton m_Btn6;
 };
 
 extern CWorkDlg g_dlgWork;

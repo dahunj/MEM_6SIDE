@@ -92,6 +92,12 @@ void CWorkDlg::DoDataExchange(CDataExchange* pDX)
 	for (int i = 0; i <  4; i++) DDX_Control(pDX, IDC_BTN_NG_CLEAR_0 + i, m_btnNgClear[i]);
 	DDX_Control(pDX, IDC_BTN_BUFFER_CHANGE, m_btnBuffChange);
 	DDX_Control(pDX, IDC_BTN_BUFFER_COMPLETE, m_btnBuffComplete);
+	DDX_Control(pDX, IDC_BUTTON1, m_Btn1);
+	DDX_Control(pDX, IDC_BUTTON2, m_Btn2);
+	DDX_Control(pDX, IDC_BUTTON3, m_Btn3);
+	DDX_Control(pDX, IDC_BUTTON5, m_Btn5);
+	DDX_Control(pDX, IDC_BUTTON4, m_Btn4);
+	DDX_Control(pDX, IDC_BUTTON6, m_Btn6);
 }
 
 BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
@@ -129,9 +135,12 @@ BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CWorkDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CWorkDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CWorkDlg::OnBnClickedButton5)
-	ON_BN_CLICKED(IDC_BUTTON6, &CWorkDlg::OnBnClickedButton6)
-	ON_BN_CLICKED(IDC_BUTTON7, &CWorkDlg::OnBnClickedButton7)
+
 	
+	ON_BN_CLICKED(IDC_BTN_PORTZ_INIT, &CWorkDlg::OnBnClickedBtnPortzInit)
+	ON_BN_CLICKED(IDC_BTN_LASERCONNECT, &CWorkDlg::OnBnClickedBtnLaserconnect)
+	ON_BN_CLICKED(IDC_BTN_LASER_GETDATA, &CWorkDlg::OnBnClickedBtnLaserGetdata)
+	ON_BN_CLICKED(IDC_BUTTON6, &CWorkDlg::OnBnClickedButton6)
 END_MESSAGE_MAP()
 
 // CWorkDlg 메시지 처리기입니다.
@@ -144,6 +153,17 @@ BOOL CWorkDlg::OnInitDialog()
 	SetWindowPos(this, 0, 75, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
 	Initial_Controls();
+
+
+#ifdef AJIN_BOARD_USE
+	m_Btn1.ShowWindow(FALSE);
+	m_Btn2.ShowWindow(FALSE);
+	m_Btn3.ShowWindow(FALSE);
+	m_Btn4.ShowWindow(FALSE);
+	m_Btn5.ShowWindow(FALSE);
+	m_Btn6.ShowWindow(FALSE);
+#endif
+
 
 	m_pWorkInfoDlg = new CWorkInfoDlg(this);
 	m_pWorkInfoDlg->Create(IDD_WORK_INFO_DLG, this);
@@ -730,22 +750,15 @@ BOOL CWorkDlg::Work_Start()
 	}
 
 	//buffer stage 이전 상태 기억 및 체크 
-	double	dRange = gAlm.dMotionChkPos;
-	if (dRange < 0.05) 
-	{
-		//skip
-	}
+
 	else if((gAlm.bBufferUpStatus[0] != pDX09->iBufferStage1Up) || (gAlm.bBufferUpStatus[1] != pDX09->iBufferStage2Up)
 		|| (gAlm.bBufferDownStatus[0] != pDX09->iBufferStage1Down) || (gAlm.bBufferDownStatus[1] != pDX09->iBufferStage2Down))
 	{
-		
-
 		strTemp.Format("Buffer Stage 상태 체크 하세요 1Up :%d, 1Down:%d, 2Up:%d, 2Down:%d", gAlm.bBufferUpStatus[0],gAlm.bBufferDownStatus[0],gAlm.bBufferUpStatus[1],gAlm.bBufferDownStatus[1] );
 		g_objLogFile.Save_HandlerLog(strTemp);
 
 		g_objCommon.Show_MsgBox(1, strTemp);
-		m_rdoWorkStop.SetCheck(TRUE);
-		return FALSE;
+
 	}
 
 
@@ -982,6 +995,9 @@ void CWorkDlg::Check_Lamp()
 				} 
 				else 
 				{
+					#ifndef AJIN_BOARD_USE
+						pDX14->iLoad1Sw = FALSE;
+					#endif
 					g_objCommon.Show_MsgBox(1, "Port1 Lot 정보를 확인해 주십시오.");
 				}
 			}
@@ -1006,6 +1022,9 @@ void CWorkDlg::Check_Lamp()
 				} 
 				else 
 				{
+					#ifndef AJIN_BOARD_USE
+						pDX14->iLoad2Sw = FALSE;
+					#endif
 					g_objCommon.Show_MsgBox(1, "Port2 Lot 정보를 확인해 주십시오.");
 				}
 			}
@@ -1684,7 +1703,15 @@ void CWorkDlg::OnBnClickedBtnIdleReport()
 
 void CWorkDlg::OnBnClickedButton1()
 {
-	gData.dEmptyPort_Z_Limit = g_objDataManager.Get_pMoveData()->dEmptyPortZ[2];
+	DX_DATA_00 *pDX00 = g_objAJinAXL.Get_pDX00();
+	DX_DATA_14 *pDX14 = g_objAJinAXL.Get_pDX14();
+	DX_DATA_15 *pDX15 = g_objAJinAXL.Get_pDX15();
+	pDX14->iLoad1Sw = TRUE;
+	pDX00->iLoadPort1Bottom = TRUE; // 1번 포트에 트레이 넣는다고 가정(1포트 시뮬레이션 위해)
+	pDX15->iDoor02Unlock = FALSE; //문이 락 걸려 있다고 가정 
+
+
+	
 	//PostMessage(UM_UPDATE_BARCODE, NULL, NULL);
 	//BOOL ret = g_objLogFile.Check_BarcodeLog("CPP00034A/560/DVRI1144N014");
 	//BOOL ret = g_objMES.Read_APDResult("APDTEST7");
@@ -1693,15 +1720,14 @@ void CWorkDlg::OnBnClickedButton1()
 
 void CWorkDlg::OnBnClickedButton2()
 {
-	DX_DATA_12 *pDX12 = g_objAJinAXL.Get_pDX12();
-	pDX12->iGoodPortBottom = FALSE;
+	
 
-	//DX_DATA_00 *pDX00 = g_objAJinAXL.Get_pDX00();
-	//DX_DATA_14 *pDX14 = g_objAJinAXL.Get_pDX14();
-	//DX_DATA_15 *pDX15 = g_objAJinAXL.Get_pDX15();
-	//pDX14->iLoad2Sw = TRUE;
-	//pDX00->iLoadPort2Bottom = TRUE; // 2번 포트에 트레이 넣는다고 가정(2포트 시뮬레이션 위해)
-	//pDX15->iDoor03Unlock = FALSE; //문이 락 걸려 있다고 가정 
+	DX_DATA_00 *pDX00 = g_objAJinAXL.Get_pDX00();
+	DX_DATA_14 *pDX14 = g_objAJinAXL.Get_pDX14();
+	DX_DATA_15 *pDX15 = g_objAJinAXL.Get_pDX15();
+	pDX14->iLoad2Sw = TRUE;
+	pDX00->iLoadPort2Bottom = TRUE; // 2번 포트에 트레이 넣는다고 가정(2포트 시뮬레이션 위해)
+	pDX15->iDoor03Unlock = FALSE; //문이 락 걸려 있다고 가정 
 	
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
@@ -1709,15 +1735,10 @@ void CWorkDlg::OnBnClickedButton2()
 
 void CWorkDlg::OnBnClickedButton3()
 {
-	//연속랏 시뮬레이션 할 경우 
+	DX_DATA_12 *pDX12 = g_objAJinAXL.Get_pDX12();
+	pDX12->iGoodPortBottom = FALSE;
 
-	DX_DATA_00 *pDX00 = g_objAJinAXL.Get_pDX00();
-	DX_DATA_14 *pDX14 = g_objAJinAXL.Get_pDX14();
-	DX_DATA_15 *pDX15 = g_objAJinAXL.Get_pDX15();
-	pDX14->iLoad1Sw = TRUE;
-	pDX00->iLoadPort1Bottom = TRUE; // 1번 포트에 트레이 넣는다고 가정(1포트 시뮬레이션 위해)
-	pDX15->iDoor02Unlock = FALSE; //문이 락 걸려 있다고 가정 
-		
+	
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
@@ -1734,7 +1755,7 @@ void CWorkDlg::OnBnClickedButton4()
 void CWorkDlg::OnBnClickedButton5()
 {
 	gData.bNGTrayWait = FALSE;
-	gData.bGoodTrayWait = FALSE;
+	
 	/*ULONGLONG size = 0;
 	CString strRAM;
 
@@ -1744,17 +1765,25 @@ void CWorkDlg::OnBnClickedButton5()
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
 
-
 void CWorkDlg::OnBnClickedButton6()
 {
-	g_objLaserComm.Connect();
+	
+	
+	DY_DATA_12 *pDY12 = g_objAJinAXL.Get_pDY12();
+	DY_DATA_15 *pDY15 = g_objAJinAXL.Get_pDY15();
+
+	pDY12->oGoodPortSlideLock = TRUE; pDY12->oGoodPortSlideUnlock = FALSE;
+	g_objAJinAXL.Write_Output(12);
+
+	
+	gData.bGoodTrayWait = FALSE;
+	gData.bGoodTrayLotEnd[0] = FALSE;
+	gData.bGoodTrayLotEnd[1] = FALSE;
 }
 
 
-void CWorkDlg::OnBnClickedButton7()
-{
-	g_objLaserComm.Set_M0();// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.	
-}
+
+
 
 void CWorkDlg::WriteCMCount(int nPortNo)
 {
@@ -1795,6 +1824,26 @@ void CWorkDlg::FakeLoadPortSensor()
 	gData.nCmUseCount[1] = nTemp2;
 	if (nTemp2 > 1 || nTemp2 < 2400) pDX00->iLoadPort2Bottom = TRUE;
 
+}
+
+
+
+
+void CWorkDlg::OnBnClickedBtnPortzInit()
+{
+	gData.dEmptyPort_Z_Limit = g_objDataManager.Get_pMoveData()->dEmptyPortZ[2];
+}
+
+
+void CWorkDlg::OnBnClickedBtnLaserconnect()
+{
+	g_objLaserComm.Connect();
+}
+
+
+void CWorkDlg::OnBnClickedBtnLaserGetdata()
+{
+	g_objLaserComm.Set_M0();// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.	
 }
 
 

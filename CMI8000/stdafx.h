@@ -1,6 +1,6 @@
-// stdafx.h : ÀÚÁÖ »ç¿ëÇÏÁö¸¸ ÀÚÁÖ º¯°æµÇÁö´Â ¾Ê´Â
-// Ç¥ÁØ ½Ã½ºÅÛ Æ÷ÇÔ ÆÄÀÏ ¹× ÇÁ·ÎÁ§Æ® °ü·Ã Æ÷ÇÔ ÆÄÀÏÀÌ 
-// µé¾î ÀÖ´Â Æ÷ÇÔ ÆÄÀÏÀÔ´Ï´Ù.
+// stdafx.h : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½Ê´ï¿½
+// Ç¥ï¿½ï¿½ ï¿½Ã½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+// ï¿½ï¿½ï¿? ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
 #pragma once
 
 #ifndef _SECURE_ATL
@@ -8,29 +8,29 @@
 #endif
 
 #ifndef VC_EXTRALEAN
-#define VC_EXTRALEAN            // °ÅÀÇ »ç¿ëµÇÁö ¾Ê´Â ³»¿ëÀº Windows Çì´õ¿¡¼­ Á¦¿ÜÇÕ´Ï´Ù.
+#define VC_EXTRALEAN            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Windows ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
 #endif
 
 #include "targetver.h"
 
-#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS      // ÀÏºÎ CString »ý¼ºÀÚ´Â ¸í½ÃÀûÀ¸·Î ¼±¾ðµË´Ï´Ù.
+#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS      // ï¿½Ïºï¿½ CString ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ë´Ï´ï¿?.
 
-// MFCÀÇ °øÅë ºÎºÐ°ú ¹«½Ã °¡´ÉÇÑ °æ°í ¸Þ½ÃÁö¿¡ ´ëÇÑ ¼û±â±â¸¦ ÇØÁ¦ÇÕ´Ï´Ù.
+// MFCï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ÎºÐ°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿? ï¿½Þ½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½â¸? ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
 #define _AFX_ALL_WARNINGS
 
-#include <afxwin.h>         // MFC ÇÙ½É ¹× Ç¥ÁØ ±¸¼º ¿ä¼ÒÀÔ´Ï´Ù.
-#include <afxext.h>         // MFC È®ÀåÀÔ´Ï´Ù.
+#include <afxwin.h>         // MFC ï¿½Ù½ï¿½ ï¿½ï¿½ Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿?.
+#include <afxext.h>         // MFC È®ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
 
-#include <afxdisp.h>        // MFC ÀÚµ¿È­ Å¬·¡½ºÀÔ´Ï´Ù.
+#include <afxdisp.h>        // MFC ï¿½Úµï¿½È­ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
 
 #ifndef _AFX_NO_OLE_SUPPORT
-#include <afxdtctl.h>           // Internet Explorer 4 °ø¿ë ÄÁÆ®·Ñ¿¡ ´ëÇÑ MFC Áö¿øÀÔ´Ï´Ù.
+#include <afxdtctl.h>           // Internet Explorer 4 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½Ñ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ MFC ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
 #endif
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>             // Windows °ø¿ë ÄÁÆ®·Ñ¿¡ ´ëÇÑ MFC Áö¿øÀÔ´Ï´Ù.
+#include <afxcmn.h>             // Windows ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½Ñ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ MFC ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
-#include <afxcontrolbars.h>     // MFCÀÇ ¸®º» ¹× ÄÁÆ®·Ñ ¸·´ë Áö¿ø
+#include <afxcontrolbars.h>     // MFCï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 
 #ifdef _UNICODE
@@ -77,59 +77,61 @@
 #define MAIN_VERSION	_T("V 3.5.1.2 MEM")
 
 
-//ÁÖ¼®Ã³¸®ÇÏ¸é SIMULATION 
+//ï¿½Ö¼ï¿½Ã³ï¿½ï¿½ï¿½Ï¸ï¿½ SIMULATION 
 #define AJIN_BOARD_USE 
 #define LOT_BARCODE_USE
 
-// 2~5È£±â ¿É¼Ç
-#define EDITION_2ND 		// 2~5È£±â
+// 2~5È£ï¿½ï¿½ ï¿½É¼ï¿½
+#define EDITION_2ND 		// 2~5È£ï¿½ï¿½
 
-// Å×½ºÆ® ·± ¿É¼Ç
-//#define DRY_RUN_TEST		// Dry Run Test ½Ã »ç¿ë
+// ï¿½×½ï¿½Æ® ï¿½ï¿½ ï¿½É¼ï¿½
+//#define DRY_RUN_TEST		// Dry Run Test ï¿½ï¿½ ï¿½ï¿½ï¿?
 
-// EVMS »ç¿ë ¿É¼Ç (2024.01.26)
-// #define USE_AVI_EVMS		// EVMS Æú´õ »ç¿ë
+// EVMS ï¿½ï¿½ï¿? ï¿½É¼ï¿½ (2024.01.26)
+// #define USE_AVI_EVMS		// EVMS ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?
 
-#define SIM_WAITTIMES	 10		//
-#define SIM_WAITTIMEM	 10		//
+#define SIM_WAITTIMES	 1		//
+#define SIM_WAITTIMEM	 1		//
+
+#define	VELOCITY_WEIGHT	 8
 
 ///////////////////////////////////////////////////////////////////////////////
 
-extern CString gsCurrentDir;	// ÇöÀç ÇÁ·ÎÁ§Æ® Æú´õ
-extern CString gsComputerName;	// ÇöÀç ÄÄÇ»ÅÍ ÀÌ¸§
+extern CString gsCurrentDir;	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
+extern CString gsComputerName;	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç»ï¿½ï¿½ ï¿½Ì¸ï¿½
 
 typedef struct {
-	CString sEnvPath;				// È¯°æ¼³Á¤ ÆÄÀÏ °æ·Î
-	CString sLogPath;				// LOG ÆÄÀÏ °æ·Î
+	CString sEnvPath;				// È¯ï¿½æ¼³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?
+	CString sLogPath;				// LOG ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?
 
 	CString	sLotID[2];
 	CString	sOperID;				// Operator
 	CString	sRecipe;				// Model
 
-	int		nTrayUseCount[2];		// »ç¿ëÀÚ ÀÔ·ÂÇÑ Tray °¹¼ö
-	int		nCmUseCount[2];			// »ç¿ëÀÚ ÀÔ·ÂÇÑ CM °¹¼ö
-	int		nCmMaxCount;			// ÇÑ Æ®·¹ÀÌÀÇ ÃÖ´ë CM °¹¼ö
+	int		nTrayUseCount[2];		// ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½Ô·ï¿½ï¿½ï¿½ Tray ï¿½ï¿½ï¿½ï¿½
+	int		nCmUseCount[2];			// ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½Ô·ï¿½ï¿½ï¿½ CM ï¿½ï¿½ï¿½ï¿½
+	int		nCmMaxCount;			// ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ CM ï¿½ï¿½ï¿½ï¿½
 
-	int		nLPNo;					// Load ÂÊ Port No
+	int		nLPNo;					// Load ï¿½ï¿½ Port No
 	int		nLoadTrayCount[2];
 	int		nEmptyTrayCount;
 	int		nGoodTrayCount;
-	int		nGoodStageTrayNo[2];	// GoodTraycount °ªÀ» Stage º°·Î ÀúÀåÇØÁØ´Ù.
+	int		nGoodStageTrayNo[2];	// GoodTraycount ï¿½ï¿½ï¿½ï¿½ Stage ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
 	int		nNgTrayNo;
 	int		nULPNo;					// Unload Port No
 	int		nErrPNo;
 
-	int		InfoAnglePortTray[5][8];// Angle Port Tray Á¤º¸ Ç¥½Ã (0:Not Use, 9:Use)
-	int		InfoAngleTray[2][5][8];	// Load Tray Á¤º¸ Ç¥½Ã (0:Not Use, 9:Use)
-	int		InfoBuffTray[2][5][8];	// Buffer Tray Á¤º¸ Ç¥½Ã (0:Not Use, 1:Exist)
-	int		InfoGoodTray[5][8];		// Good Tray Á¤º¸ Ç¥½Ã (0:Empty, 1:Exist)
-	int		InfoNgTray[4][5][8];	// NG Tray Á¤º¸ Ç¥½Ã (0:Empty, 2:Exist)
-	int		InfoNgBuffer[2][5];		// NG Buffer Á¤º¸ Ç¥½Ã (0:Empty, 2:Exist)
+	int		InfoAnglePortTray[5][8];// Angle Port Tray ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ (0:Not Use, 9:Use)
+	int		InfoAngleTray[2][5][8];	// Load Tray ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ (0:Not Use, 9:Use)
+	int		InfoBuffTray[2][5][8];	// Buffer Tray ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ (0:Not Use, 1:Exist)
+	int		InfoGoodTray[5][8];		// Good Tray ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ (0:Empty, 1:Exist)
+	int		InfoNgTray[4][5][8];	// NG Tray ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ (0:Empty, 2:Exist)
+	int		InfoNgBuffer[2][5];		// NG Buffer ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½ (0:Empty, 2:Exist)
 
-	int		InfoBtm1Pick[10];		// 0:ÁÂ»ó´Ü
-	int		InfoInspect[3][10];		// 0~2:½ºÅ×ÀÌÁö¹øÈ£, 0:ÁÂ»ó´Ü
-	int		InfoBtm2Pick[10];		// 0:ÁÂ»ó´Ü
-	int		InfoSortPick[2][5];		// 0: Rear 1: Front, 0~5:ÁÂÃøºÎÅÍ 0 
+	int		InfoBtm1Pick[10];		// 0:ï¿½Â»ï¿½ï¿?
+	int		InfoInspect[3][10];		// 0~2:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£, 0:ï¿½Â»ï¿½ï¿?
+	int		InfoBtm2Pick[10];		// 0:ï¿½Â»ï¿½ï¿?
+	int		InfoSortPick[2][5];		// 0: Rear 1: Front, 0~5:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0 
 
 	int		nPNoTrayPick;			// Tray Picker Port No (1, 2)
 	int		nPNoAnglePort[2];		// Angle Port Port No (1, 2)
@@ -162,29 +164,29 @@ typedef struct {
 
 	BOOL	bReload[7];				// 0:Angle, 1:Btm1_Specular, 2:Top1, 3:Top2, 4:Btm2 5:Btm1_Angle 6:Btm1_3D
 	BOOL	bScanDone[7];			// 0:Angle, 1:Btm1_Specular, 2:Top1, 3:Top2, 4:Btm2, 5:Btm1_Angle 6:Btm1_3D
-	// Port º°·Î ÀúÀåÇØ¾ßÇÔ.
-	BYTE	byInspectDone[2][30][40];	// °Ë»ç¿Ï·á (5bit »ç¿ë ==> 0:Angle, 1:Btm1, 2:Top1, 3:Top2, 4:Btm2)
-	int		nInspectInfo[2][30][40];	// °Ë»ç°á°ú (0:Empty, 1:Good, 2:Normal, 3:Mes, 4:N1, 5:N2)
-	CString sNGData[2][30][40][7];		// NG ÄÚµå  (0:Angle, 1:Btm1_SP, 2:Top1, 3:Top2, 4:Btm2 5:Btm1_AG 6:Btm1_3D)
-	char	cJudgeCode1[30][40][7];	// ÆÇÁ¤ÄÚµå (0:Angle, 1:Btm1_SP, 2:Top1, 3:Top2, 4:Btm2 5:Btm1_AG 6:Btm1_3D)
+	// Port ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½.
+	BYTE	byInspectDone[2][30][40];	// ï¿½Ë»ï¿½Ï·ï¿? (5bit ï¿½ï¿½ï¿? ==> 0:Angle, 1:Btm1, 2:Top1, 3:Top2, 4:Btm2)
+	int		nInspectInfo[2][30][40];	// ï¿½Ë»ï¿½ï¿½ï¿½ (0:Empty, 1:Good, 2:Normal, 3:Mes, 4:N1, 5:N2)
+	CString sNGData[2][30][40][7];		// NG ï¿½Úµï¿½  (0:Angle, 1:Btm1_SP, 2:Top1, 3:Top2, 4:Btm2 5:Btm1_AG 6:Btm1_3D)
+	char	cJudgeCode1[30][40][7];	// ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ (0:Angle, 1:Btm1_SP, 2:Top1, 3:Top2, 4:Btm2 5:Btm1_AG 6:Btm1_3D)
 	char    cJudgeCode2[30][40][7];
 	
 	CString sSortWaitStartTime[2];
-	BOOL	bRosDone[2][30][40];		// ROS ÆÇÁ¤ ´ë±â Log ¿ë
+	BOOL	bRosDone[2][30][40];		// ROS ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿? Log ï¿½ï¿½
 
-	BOOL	bCycleStop;				// Run Áß°£¿¡ ¸ØÃâ¶§ (ÃÊ±âÈ­ ÇÊ¿ä)
+	BOOL	bCycleStop;				// Run ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¶§ (ï¿½Ê±ï¿½È­ ï¿½Ê¿ï¿½)
 
-	CString	sErrBtm1PickNo;			// Error »ó¼¼ Ã³¸® (Picker 1 ~ 10)
-	int		nErrBtm1PickIdx;		// MTBA °³¼± ·Î±× (2024.01.24)
-	int		nErrBtm2PickIdx;		// MTBA °³¼± ·Î±× (2024.01.24)
+	CString	sErrBtm1PickNo;			// Error ï¿½ï¿½ Ã³ï¿½ï¿½ (Picker 1 ~ 10)
+	int		nErrBtm1PickIdx;		// MTBA ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ (2024.01.24)
+	int		nErrBtm2PickIdx;		// MTBA ï¿½ï¿½ï¿½ï¿½ ï¿½Î±ï¿½ (2024.01.24)
 
-	BOOL	bNgTrayEnd;				// Lot Á¾·á µÇ°í NG Door ¸ÕÀú ¿­¼ö ÀÖ°Ô ÇØÁØ´Ù. 
-	BOOL	bNGTrayWait;			// NG ¸ðµâ Á¦°ÅÇÏ°í ´Ù½Ã ÅõÀÔ ÇÒ¶§±îÁö ´ë±â
+	BOOL	bNgTrayEnd;				// Lot ï¿½ï¿½ï¿½ï¿½ ï¿½Ç°ï¿½ NG Door ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½Ø´ï¿½. 
+	BOOL	bNGTrayWait;			// NG ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò¶ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?
 	BOOL	bGoodTrayLotEnd[2];
-	BOOL	bGoodTrayWait;			// Good ¸ðµâ ¹èÃâ ¿Ï·á±îÁö ´ë±â
+	BOOL	bGoodTrayWait;			// Good ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ï¿½ï¿½ï¿? ï¿½ï¿½ï¿?
 	BOOL	bEmptyZWait;			// Empty Z Port Full Tray
 
-	BOOL	bLoadLampOn[2];			// Load Port Lamp ÄÑÁö´Â ½ÃÁ¡À» Lot EndµÇ´Â ½ÃÁ¡À¸·Î ¹Ù²ãÁØ´Ù.
+	BOOL	bLoadLampOn[2];			// Load Port Lamp ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Lot Endï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ø´ï¿½.
 
 	BOOL	bTop1MirrorErr[3];		// Top1 Mirror Down Error : TRUE
 	int		nTop1MirrorErrNo;		// Top1 Mirror Error No : TRUE
@@ -198,12 +200,12 @@ typedef struct {
 	DWORD	dwGoodTray2LoadingTime;
 	DWORD	dwGoodTray2UnloadingTime;
 
-	DWORD	dwBtm1ScanTime;			// Load Complete ºÎÅÍ Scan Complete±îÁö
-	DWORD	dwTop1ScanTime;			// Load Complete ºÎÅÍ Scan Complete±îÁö
-	DWORD	dwTop2ScanTime;			// Load Complete ºÎÅÍ Scan Complete±îÁö
-	DWORD	dwBtm2ScanTime;			// Load Complete ºÎÅÍ Scan Complete±îÁö
+	DWORD	dwBtm1ScanTime;			// Load Complete ï¿½ï¿½ï¿½ï¿½ Scan Completeï¿½ï¿½ï¿½ï¿½
+	DWORD	dwTop1ScanTime;			// Load Complete ï¿½ï¿½ï¿½ï¿½ Scan Completeï¿½ï¿½ï¿½ï¿½
+	DWORD	dwTop2ScanTime;			// Load Complete ï¿½ï¿½ï¿½ï¿½ Scan Completeï¿½ï¿½ï¿½ï¿½
+	DWORD	dwBtm2ScanTime;			// Load Complete ï¿½ï¿½ï¿½ï¿½ Scan Completeï¿½ï¿½ï¿½ï¿½
 
-	DWORD	dwMStopStartTime;		// ÀÛ¾÷ÀÚ ±âÀÎ ¾Ë¶÷, Stop ¹öÆ°or½ºÀ§Ä¡ ´­·¯¼­ Àåºñ ¼¼¿üÀ»¶§ 
+	DWORD	dwMStopStartTime;		// ï¿½Û¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¶ï¿½, Stop ï¿½ï¿½Æ°orï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	DWORD	dwMStopEndTime;
 	DWORD	dwMStopProcTime;
 
@@ -216,40 +218,40 @@ typedef struct {
 	BOOL	bBuffTrayChange;		//
 	BOOL	bContinueLotEnd;
 
-	BOOL	bVisionVerErr;			// Vision ÇÁ·Î±×·¥ ¹öÀüÀÌ³ª ÆÄ¶ó¹ÌÅÍ ¹öÀüÀÌ ´Þ¶ó ¾Ë¶÷ÀÌ ³ª¸é ´Ù½Ã LotStart º¸³»Áà¾ßÇÑ´Ù.
+	BOOL	bVisionVerErr;			// Vision ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¶ï¿½ ï¿½Ë¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ LotStart ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿?.
 	BOOL	bFirstLotStart;
 	BOOL	bMesFirstLot;
 
-	double	dEmptyPortZUpOffset;	// Empty Port ZÃà Up Offset À§Ä¡ ÀúÀå ÇØÁØ´Ù.
-	double	dEmptyPortZDownOffset;	// Empty Port ZÃà Down Offset À§Ä¡ ÀúÀå ÇØÁØ´Ù.
+	double	dEmptyPortZUpOffset;	// Empty Port Zï¿½ï¿½ Up Offset ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø´ï¿½.
+	double	dEmptyPortZDownOffset;	// Empty Port Zï¿½ï¿½ Down Offset ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø´ï¿½.
 	BOOL	bEmptyFull;
 
 	int		nErrAngleStageNo;
 	int		nErrBufferStageNo;
 
-	CString	sErrVisionLotID;		// ºñÀü¿¡¼­ ¾Ë¶÷À» º¸³»ÁØ LotID ÀúÀå.
+	CString	sErrVisionLotID;		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ LotID ï¿½ï¿½ï¿½ï¿½.
 
-	BOOL	bBuffStageMove;			// Sort Picker º¹±ÍÇÒ¶§ Buffer YÃàÀÌ ¿òÁ÷¿´À¸¸é ´Ù¸¥ Sort Picker º¹±ÍÇÒ¶§´Â Buffer YÃàÀ» ¿òÁ÷ÀÌ¸é ¾ÈµÈ´Ù.
-	BOOL	bLotEndBeep;			// NG Full ¾Ë¸²À½ ¶§¹®¿¡ LotEnd ¾Ë¸²À½ÀÌ Skip ¾ÈµÇ°Ô ÇØÁØ´Ù.
+	BOOL	bBuffStageMove;			// Sort Picker ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ Buffer Yï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ Sort Picker ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ï¿½ï¿½ Buffer Yï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ÈµÈ´ï¿½.
+	BOOL	bLotEndBeep;			// NG Full ï¿½Ë¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ LotEnd ï¿½Ë¸ï¿½ï¿½ï¿½ï¿½ï¿½ Skip ï¿½ÈµÇ°ï¿½ ï¿½ï¿½ï¿½Ø´ï¿½.
 
-	int		nMesPortNo;				// ¿¬¼Ó¶ù Áß MES ¾Ë¶÷ ¹ß»ýÇÏ¸é ´Ù½Ã ½ÃÀÛÇÒ¼ö ÀÖ°Ô ÇØÁØ´Ù.
+	int		nMesPortNo;				// ï¿½ï¿½ï¿½Ó¶ï¿½ ï¿½ï¿½ MES ï¿½Ë¶ï¿½ ï¿½ß»ï¿½ï¿½Ï¸ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½Ø´ï¿½.
 
 	int		nSp1Timer;
 	int		nSp2Timer;
 
 	BOOL	bAlignReply;
-	BOOL	bEmptyZTopCheckRepeat;	// Empty ZÃà Top Check Sensor È®ÀÎÀ» 2¹øÇØÁØ´Ù.
+	BOOL	bEmptyZTopCheckRepeat;	// Empty Zï¿½ï¿½ Top Check Sensor È®ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
 
-	int		nBtWorkSortPickNo;	// Buffer Tray ÀÛ¾÷ ÁßÀÎ Sort Picker No.
+	int		nBtWorkSortPickNo;	// Buffer Tray ï¿½Û¾ï¿½ ï¿½ï¿½ï¿½ï¿½ Sort Picker No.
 
-	// ¸¶Áö¸· Tray´Â LotEnd°¡ µÇ¸é Á¤º¸°¡ ¾ø±â¶§¹®¿¡ ¹Ì¸® ÀúÀåÇØµÐ´Ù.
-	CString sCLotID[2];				// Cap Àåºñ¿¡ º¸³¾ LotID
-	int		nCPortNo[2];			// Cap Àåºñ¿¡ º¸³¾ Port No
-	int		nCGoodTrayCount[2];		// Cap Àåºñ¿¡ º¸³¾ stageº° Tray No
-	int		nCTrayCmCnt[2];			// Cap Àåºñ¿¡ Tray º¸³¾¶§ stageº° Tray¿¡ µé¾îÀÖ´Â ¸ðµâ¼ö
-	BOOL	bCapTrayUnload;			// Cap Àåºñ¿¡¼­ Æ®·¹ÀÌ¸¦ °¡Á®°¬´ÂÁö È®ÀÎ
-	BOOL	bCapTrayLoad;			// Good Port¿¡ Æ®·¹ÀÌ¸¦ ÀûÀçÇßÀ»¶§
-	int		nLastTrayNo;			// ¸¶Áö¸· Tray ¹øÈ£ ÀúÀå
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Trayï¿½ï¿½ LotEndï¿½ï¿½ ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¶§ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ØµÐ´ï¿½.
+	CString sCLotID[2];				// Cap ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ LotID
+	int		nCPortNo[2];			// Cap ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ Port No
+	int		nCGoodTrayCount[2];		// Cap ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ stageï¿½ï¿½ Tray No
+	int		nCTrayCmCnt[2];			// Cap ï¿½ï¿½ï¿? Tray ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ stageï¿½ï¿½ Trayï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿? ï¿½ï¿½ï¿½ï¿½
+	BOOL	bCapTrayUnload;			// Cap ï¿½ï¿½ñ¿¡¼ï¿? Æ®ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+	BOOL	bCapTrayLoad;			// Good Portï¿½ï¿½ Æ®ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	int		nLastTrayNo;			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Tray ï¿½ï¿½È£ ï¿½ï¿½ï¿½ï¿½
 
 	CString sListName;
 	CString sYYMMDD;
@@ -260,30 +262,30 @@ typedef struct {
 
 	CString	sComName;
 
-	// Log Ç¥ÁØÈ­
+	// Log Ç¥ï¿½ï¿½È­
 	CString sStdMotionFile;
 	CString sEfficiencyFile;
-	int		nStdEqNo;	// Log Ç¥ÁØÈ­ (¼³ºñ¹øÈ£)
-	int		nStdLotNo;	// Log Ç¥ÁØÈ­ (ÇÏ·ç ±âÁØÀ¸·Î ÀÛ¾÷ÇÑ Lot ¹øÈ£)
-	int		nStdLogDay;	// Log Ç¥ÁØÈ­ (¼³ºñ¹øÈ£)
+	int		nStdEqNo;	// Log Ç¥ï¿½ï¿½È­ (ï¿½ï¿½ï¿½ï¿½ï¿½È?)
+	int		nStdLotNo;	// Log Ç¥ï¿½ï¿½È­ (ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½ï¿½ï¿½ Lot ï¿½ï¿½È£)
+	int		nStdLogDay;	// Log Ç¥ï¿½ï¿½È­ (ï¿½ï¿½ï¿½ï¿½ï¿½È?)
 
-	int		nVisionFOBMode;	// Vision¿¡¼­ FOB ¸ðµå·Î ½ºÅ¸Æ®ÇÏ¸é ¸Þ¼¼ÁöÃ¢ Ç¥½Ã, ±¸µ¿Áß FOB ¸ðµå·Î º¯°æÇÏ¸é ¼³ºñ Á¤ÁöÇÏµµ·Ï ÇØÁØ´Ù.
+	int		nVisionFOBMode;	// Visionï¿½ï¿½ï¿½ï¿½ FOB ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸Æ®ï¿½Ï¸ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½Ã¢ Ç¥ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ FOB ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø´ï¿½.
 
-	int		nCmJigNo[2][30][40][10];	// CM Jig Á¤º¸ ÀúÀå [Port][Tray][CM][Unit]
+	int		nCmJigNo[2][30][40][10];	// CM Jig ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ [Port][Tray][CM][Unit]
 										// Unit 0:Angle Stage, 1:BTM1 Picker, 2:Inspection Stage No, 3:Inspection Stage Jig No, 4:BTM2 Picker
 										// Unit 5:Buffer Stage No, 6:Buffer Stage Pocket No, 7:Sort Picker No, 8:Sort Picker Jig No
-	int		nJigNgCnt[2][8][10];		// Áö±×º° ºÒ·® Ä«¿îÆ® [Port][Unit][Jig]
+	int		nJigNgCnt[2][8][10];		// ï¿½ï¿½ï¿½×ºï¿½ ï¿½Ò·ï¿½ Ä«ï¿½ï¿½Æ® [Port][Unit][Jig]
 										// Unit 0: BTM1, 1:Insp1 Top1, 2:Insp2 Top1, 3:Insp3 Top1, 4:Insp1 Top2, 5:Insp1 Top2, 6:Insp3 Top2, 7:BTM2
-	double	dJigNgOver[8][10];			// Error¿¡ Ç¥½ÃÇÏ±â À§ÇØ Áö±×º° ºÒ·®À²ÀÌ ¼³Á¤Ä¡º¸´Ù ³Ñ¾úÀ»¶§ ÀúÀå.
-	int		nJigNgOverCnt[8][10];		// Error¿¡ Ç¥½ÃÇÏ±â À§ÇØ Áö±×º° ºÒ·®À²ÀÌ ¼³Á¤Ä¡º¸´Ù ³Ñ¾úÀ»¶§ ÀúÀå. 
+	double	dJigNgOver[8][10];			// Errorï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½×ºï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+	int		nJigNgOverCnt[8][10];		// Errorï¿½ï¿½ Ç¥ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½×ºï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. 
 
-	CString	sAPDNgItem;			// APD Result ÆÄÀÏ È®ÀÎ °á°ú NG Item.
-	BOOL	bAPDResultErr;			// APD Result ÆÄÀÏ È®ÀÎ °á°ú.
-	BOOL	bAviApdRequest;			// Vision APD µ¥ÀÌÅÍ ¿äÃ»
-	BOOL	bAviApdReceive[6];		// Visionº° APD µ¥ÀÌÅÍ ¹Þ¾Ò³ª È®ÀÎ(0~4), APD ±â·Ï ¿Ï·á(6) ÈÄ Lotend
-	int		nAviApdCnt[5];			// Vision APD ÀÌ¹ÌÁö GV°ª °³¼ö
-	CString sVisionGV[5][20];		// 6side Vision 5°³(0:AG, 1:BTM1, 2:TOP1, 3:TOP2, 4:BTM2), ÀÌ¹ÌÁö ¼ö·®Àº ºñÀü´ç ÃÖ´ë 10¿©Àå.
-	double	dAssyLoadCellAvg;		// APD¿¡ ÀÔ·ÂÇÒ CapForce °ª.
+	CString	sAPDNgItem;			// APD Result ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ï¿? NG Item.
+	BOOL	bAPDResultErr;			// APD Result ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ï¿?.
+	BOOL	bAviApdRequest;			// Vision APD ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»
+	BOOL	bAviApdReceive[6];		// Visionï¿½ï¿½ APD ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Ò³ï¿½ È®ï¿½ï¿½(0~4), APD ï¿½ï¿½ï¿? ï¿½Ï·ï¿½(6) ï¿½ï¿½ Lotend
+	int		nAviApdCnt[5];			// Vision APD ï¿½Ì¹ï¿½ï¿½ï¿½ GVï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	CString sVisionGV[5][20];		// 6side Vision 5ï¿½ï¿½(0:AG, 1:BTM1, 2:TOP1, 3:TOP2, 4:BTM2), ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ 10ï¿½ï¿½ï¿½ï¿½.
+	double	dAssyLoadCellAvg;		// APDï¿½ï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ CapForce ï¿½ï¿½.
 
 	BOOL	b3DStart;
 	CString sLaserData1;
@@ -291,7 +293,7 @@ typedef struct {
 
 	BOOL	b3DGrabFailErr;
 
-	DWORD	dwSkipTime_Sort1;		// ÀÛ¾÷ÀÚ ±âÀÎ ¾Ë¶÷, Stop ¹öÆ°or½ºÀ§Ä¡ ´­·¯¼­ Àåºñ ¼¼¿üÀ»¶§ 
+	DWORD	dwSkipTime_Sort1;		// ï¿½Û¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ë¶ï¿½, Stop ï¿½ï¿½Æ°orï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	DWORD	dwSkipTime_Sort2;
 
 	BOOL	bWasUnlock;
@@ -305,7 +307,7 @@ typedef struct {
 
 	double	dEmptyPort_Z_Limit;
 
-	int		nPNoMESNG[24]; //MES¿Í ½Ç¹° ¼ö·® ºÒÀÏÄ¡ °¹¼ö ÃÖ´ë 24°³ °¡Á¤ 
+	int		nPNoMESNG[24]; //MESï¿½ï¿½ ï¿½Ç¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ 24ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 	int		nTNoMESNG[24];
 	int		nCmNoMESNG[24];
 
@@ -328,7 +330,7 @@ typedef struct {
 	int		nNgCount[2];
 	int		nSNgCount[2][6];			// Special NG (MES, N1, N2)
 
-	int		nMatchingNgCount[2][6];		//MESº¸´Ù ½Ç¹° ¼ö·® ÀûÀº ¸¸Å­ °¹¼ö Áõ°¡ 
+	int		nMatchingNgCount[2][6];		//MESï¿½ï¿½ï¿½ï¿½ ï¿½Ç¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å­ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 	
 	int		nBsNgCount[2];				// Barcode Shift
 	int		nRosRequest[2];
@@ -337,7 +339,7 @@ typedef struct {
 	int		nRosRepair[2];
 	int		nRosTimeOut[2];
 
-	// Inline ModeÀÏ¶§ Ä¸ Á¶¸³ ¿Ï·á ÈÄ MES ¿Ï°øÇÏµµ·Ï Á¤º¸ ÀúÀå.
+	// Inline Modeï¿½Ï¶ï¿½ Ä¸ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½ MES ï¿½Ï°ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	CString sCALotID[2];
 	CString sCAStartTime[2];
 	CString sCAEndTime[2];
@@ -386,27 +388,27 @@ typedef struct {
 
 typedef struct {
 	double  dTaktTime;
-	double	dTakt[24][50];	// ½Ã°£´ç °¢ LotÀÇ Takt (½Ã°£´ç ÃÖ´ë 50°³)
-	int		nLotCount[24];	// ½Ã°£´ç Lot ¼ö·® (0~23)
-	int		nCmCount[2];	// ÁÖ°£(0:7~19h), ¾ß°£(1:19~7h)
+	double	dTakt[24][50];	// ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ Lotï¿½ï¿½ Takt (ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ 50ï¿½ï¿½)
+	int		nLotCount[24];	// ï¿½Ã°ï¿½ï¿½ï¿½ Lot ï¿½ï¿½ï¿½ï¿½ (0~23)
+	int		nCmCount[2];	// ï¿½Ö°ï¿½(0:7~19h), ï¿½ß°ï¿½(1:19~7h)
 } GLOVAL_UPH;
 
 typedef struct {
 	int		nLotStatus;				// 0:Stop, 1:Start Send, 2:Start Receive
 	DWORD	dwLotStartTime;			// Lot Start time
 
-	// Host Àü°øÁ¤ Data
-	CString		sHostLotID;			//Host ¼ö½Å Lot ID
-	CString		sHostRecipe;		//Host ¼ö½Å Recipe ID
-	CString		sHostModel;			//Host ¼ö½Å Recipe ID
-	int			nHostCount;			//Host ¼ö½Å CM ÃÑ°¹¼ö
-	CString		sHostCancelCode;	//Host Cancel ¼ö½Å code
-	CString		sHostCancelText;	//Host Cancel ¼ö½Å ³»¿ë
+	// Host ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Data
+	CString		sHostLotID;			//Host ï¿½ï¿½ï¿½ï¿½ Lot ID
+	CString		sHostRecipe;		//Host ï¿½ï¿½ï¿½ï¿½ Recipe ID
+	CString		sHostModel;			//Host ï¿½ï¿½ï¿½ï¿½ Recipe ID
+	int			nHostCount;			//Host ï¿½ï¿½ï¿½ï¿½ CM ï¿½Ñ°ï¿½ï¿½ï¿½
+	CString		sHostCancelCode;	//Host Cancel ï¿½ï¿½ï¿½ï¿½ code
+	CString		sHostCancelText;	//Host Cancel ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-	// Àåºñ ½ÇÀû Data	// LJH Portº°·Î °ü¸®ÇØ¾ßÇÒÁö Á¤ÇØ¾ßÇÑ´Ù.
-	CString		sBarID[2][30][40];		//Barcode ID(Àåºñ) [30]:Tray No, [42]:Pocket No
-	CString		sJudge[2][30][40];		//N:NG, H:Special NG, M:¼º´ÉºÒ·®(MES NG)
-	CString		sNGCode[2][30][40];		//´ëÇ¥NG Code
+	// ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ Data	// LJH Portï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½Ñ´ï¿½.
+	CString		sBarID[2][30][40];		//Barcode ID(ï¿½ï¿½ï¿?) [30]:Tray No, [42]:Pocket No
+	CString		sJudge[2][30][40];		//N:NG, H:Special NG, M:ï¿½ï¿½ï¿½ÉºÒ·ï¿½(MES NG)
+	CString		sNGCode[2][30][40];		//ï¿½ï¿½Ç¥NG Code
 } GLOVAL_MES;
 
 extern GLOVAL_DATA	gData;
