@@ -295,6 +295,7 @@ public:
 	void Set_LotLoadEnable(BOOL bOn, int nNo) { m_bLotLoadEnable[nNo] = bOn; }
 
 	void Init_NgTray(int nIdx);
+	void Check_PNoNgTray(int nSortPickNo);
 
 #ifdef VISION_REPEAT
 	void Set_StartIndexJig(int nJig) { m_nStartIndexJig = nJig; }

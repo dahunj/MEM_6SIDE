@@ -7102,7 +7102,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 			(m_nSortPick2Case == 12) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
 			(m_nSortPick2Case == 17))
 		{			
-
+		
+			Check_PNoNgTray(1);
 			if ((gData.nPNoSortPick[0] != gData.nPNoNgTray) && (gData.nPNoSortPick[0] != 0)) {
 				if (gData.nPNoNgTray != 0) return TRUE;
 			}
@@ -7199,6 +7200,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 		return TRUE;
 
 	case 12:	// Move to NG Unload Position
+		Check_PNoNgTray(1);
 		if ((gData.nPNoSortPick[0] != gData.nPNoNgTray) && (gData.nPNoSortPick[0] != 0)) {
 			if (gData.nPNoNgTray != 0) return TRUE;
 		}
@@ -7316,6 +7318,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 					(m_nSortPick2Case == 22) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
 					(m_nSortPick2Case == 27)) {
 
+					Check_PNoNgTray(1);
 					if ((gData.nPNoSortPick[0] != gData.nPNoGoodTray) && (gData.nPNoSortPick[0] != 0)) {
 						if (gData.nPNoGoodTray != 0) return TRUE;
 					}
@@ -8281,6 +8284,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 			(m_nSortPick1Case == 12) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
 			(m_nSortPick1Case == 17)) {
 
+			Check_PNoNgTray(2);
 			if ((gData.nPNoSortPick[1] != gData.nPNoNgTray) && (gData.nPNoSortPick[1] != 0)) {
 				if (gData.nPNoNgTray != 0) return TRUE;
 			}
@@ -8323,6 +8327,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 				//(m_nSortPick1Case >= 60 && m_nSortPick1Case < 70) ||	// APD 확인중에도 갈수있다.
 				(m_nSortPick1Case == 17)) {
 
+				Check_PNoNgTray(2);
 				if ((gData.nPNoSortPick[1] != gData.nPNoNgTray) && (gData.nPNoSortPick[1] != 0)) {
 					if (gData.nPNoNgTray != 0) return TRUE;
 				}
@@ -8511,6 +8516,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 					(m_nSortPick1Case == 22) && (gData.nPNoSortPick[0] != gData.nPNoSortPick[1])||
 					(m_nSortPick1Case == 27)) {
 
+					Check_PNoNgTray(2);
 					if ((gData.nPNoSortPick[1] != gData.nPNoGoodTray) && (gData.nPNoSortPick[1] != 0)) {
 						if (gData.nPNoGoodTray != 0) return TRUE;
 					}
@@ -11003,3 +11009,17 @@ BOOL CSequenceMain::Run_Simulation()
 	
 	return TRUE;
 }
+
+void CSequenceMain::Check_PNoNgTray(int nSortPickNo)
+{
+	if(gData.nPNoSortPick[nSortPickNo-1] == 1 && gLot.bLotEndComplete[1])
+	{
+		gData.nPNoNgTray = 1;
+	}
+	else if(gData.nPNoSortPick[nSortPickNo-1] == 2 && gLot.bLotEndComplete[0])
+	{
+		gData.nPNoNgTray = 2;
+	}
+}
+
+
