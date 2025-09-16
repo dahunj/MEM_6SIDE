@@ -1437,7 +1437,7 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		if (nInfo == 9) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;
 	}
 
-	for(int i = 0; i < gLot.nSNgCount[nPx][0]; i++ )
+	for(int i = 0; i < gLot.nMatchingNgCount[nPx][0]; i++ )
 	{
 		if(gData.nPNoMESNG[i] == nPortNo && gData.nTNoMESNG[i] == nTrayNo && gData.nCmNoMESNG[i] == nCmNo)
 		{
