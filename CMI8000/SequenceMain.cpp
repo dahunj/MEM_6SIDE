@@ -7080,10 +7080,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 		for (int i = 0; i < 5; i++) {
 			if (gData.InfoSortPick[0][i] == 1 || gData.InfoSortPick[0][i] == 9) gLot.nGoodCount[nSp1PNo-1]++;
 			else if (gData.InfoSortPick[0][i] != 0 ) gLot.nNgCount[nSp1PNo-1]++;
-			
-			for (int j = 0; j < 6; j++) {
-				if (gData.InfoSortPick[0][i] == j + 3)	gLot.nSNgCount[nSp1PNo-1][j]++;	// S-NG (3,4,5,6,7,8)
-			}
+						
 			Write_LotJudge(nSp1PNo, gData.nTNoSortPick[0][i], gData.nCNoSortPick[0][i], gData.InfoSortPick[0][i], 1);
 		}
 		g_dlgWork.PostMessage(UM_VISION_RESULT, nSp1PNo, NULL);
@@ -8289,9 +8286,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 		for (int i = 0; i < 5; i++) {
 			if (gData.InfoSortPick[1][i] == 1 || gData.InfoSortPick[1][i] == 9) gLot.nGoodCount[nSp2PNo-1]++;
 			else if (gData.InfoSortPick[1][i] != 0) gLot.nNgCount[nSp2PNo-1]++;
-			for (int j = 0; j < 6; j++) {
-				if (gData.InfoSortPick[1][i] == j + 3)	gLot.nSNgCount[nSp2PNo-1][j]++;	// S-NG (3,4,5,6,7,8)
-			}
+		
 			Write_LotJudge(nSp2PNo, gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i], gData.InfoSortPick[1][i], 2);
 		}
 		g_dlgWork.PostMessage(UM_VISION_RESULT, nSp2PNo, NULL);
