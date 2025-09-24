@@ -1720,13 +1720,11 @@ void CWorkDlg::OnBnClickedButton1()
 
 void CWorkDlg::OnBnClickedButton2()
 {
-	
-
 	DX_DATA_00 *pDX00 = g_objAJinAXL.Get_pDX00();
 	DX_DATA_14 *pDX14 = g_objAJinAXL.Get_pDX14();
 	DX_DATA_15 *pDX15 = g_objAJinAXL.Get_pDX15();
 	pDX14->iLoad2Sw = TRUE;
-	pDX00->iLoadPort2Bottom = TRUE; // 2번 포트에 트레이 넣는다고 가정(2포트 시뮬레이션 위해)
+	pDX00->iLoadPort2Bottom = TRUE;//pDX00->iLoadPort2Bottom = TRUE; // 2번 포트에 트레이 넣는다고 가정(2포트 시뮬레이션 위해)
 	pDX15->iDoor03Unlock = FALSE; //문이 락 걸려 있다고 가정 
 	
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.

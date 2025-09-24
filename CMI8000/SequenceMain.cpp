@@ -7592,7 +7592,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 		break;
 	case 24:	// 정보전달, Vac Off
 		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 2) && g_objCommon.Get_SortPicker1DownMulti(nSp1StartNo+1, nSp1DownSu)) {
-			for (int i = 0; i < nSp1DownSu; i++) {
+			for (int i = 0; i < nSp1DownSu; i++) 
+			{
 				gData.InfoGoodTray[nSp1TrayPosY][nSp1TrayPosX+i] = gData.InfoSortPick[0][nSp1StartNo+i]; 
 				gData.InfoSortPick[0][nSp1StartNo+i] = 0;
 
@@ -9642,11 +9643,13 @@ BOOL CSequenceMain::GoodTray1_Run()
 		return TRUE;
 
 	case 55:	// Z Axis Move to Moving Up Position
-		if (g_objCommon.Check_Position(AX_GOOD_STAGE1_Y, 0)) {
+		if (g_objCommon.Check_Position(AX_GOOD_STAGE1_Y, 0)) 
+		{
 			double dS1Y = g_objAJinAXL.Get_Position(AX_GOOD_STAGE1_Y);
 			double dS2Y = g_objAJinAXL.Get_Position(AX_GOOD_STAGE2_Y);
 			double dDiff = fabs(dS1Y-dS2Y);
-			if (dDiff > TRAY_WIDTH) {	// Good Stage Y Position Check
+			if (dDiff > TRAY_WIDTH)
+			{	// Good Stage Y Position Check
 				m_tGoodTray1Loop.Takt_Start(nTaktZone, 11);
 				g_objCommon.Move_Position(AX_GOOD_STAGE1_Z, 1);
 				m_nGoodTray1Case++; m_tGoodTray1Loop.Set_LoopTime(5000);
