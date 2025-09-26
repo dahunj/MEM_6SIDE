@@ -9638,7 +9638,7 @@ BOOL CSequenceMain::GoodTray1_Run()
 		if (m_nGoodTray2Case > 15 && m_nGoodTray2Case < 50) {
 			m_pDY12->oGoodStage1MasterIn = FALSE; m_pDY12->oGoodStage1SlaveIn = FALSE;
 			g_objAJinAXL.Write_Output(12);
-			m_nGoodTray1Case++; m_tGoodTray1Loop.Set_LoopTime(5000);
+			m_nGoodTray1Case++; m_tGoodTray1Loop.Set_LoopTime(60000);
 		}
 		return TRUE;
 
@@ -9648,7 +9648,7 @@ BOOL CSequenceMain::GoodTray1_Run()
 			double dS1Y = g_objAJinAXL.Get_Position(AX_GOOD_STAGE1_Y);
 			double dS2Y = g_objAJinAXL.Get_Position(AX_GOOD_STAGE2_Y);
 			double dDiff = fabs(dS1Y-dS2Y);
-			if (dDiff > TRAY_WIDTH)
+			if (dDiff > TRAY_WIDTH && g_objCommon.Get_GoodTray1MasterSlaveOut())
 			{	// Good Stage Y Position Check
 				m_tGoodTray1Loop.Takt_Start(nTaktZone, 11);
 				g_objCommon.Move_Position(AX_GOOD_STAGE1_Z, 1);
@@ -9976,7 +9976,7 @@ BOOL CSequenceMain::GoodTray2_Run()
 		if (m_nGoodTray1Case > 15 && m_nGoodTray1Case < 50) {
 			m_pDY12->oGoodStage2MasterIn = FALSE; m_pDY12->oGoodStage2SlaveIn = FALSE;
 			g_objAJinAXL.Write_Output(12);
-			m_nGoodTray2Case++; m_tGoodTray2Loop.Set_LoopTime(5000);
+			m_nGoodTray2Case++; m_tGoodTray2Loop.Set_LoopTime(60000);
 		}
 		return TRUE;
 
@@ -9985,7 +9985,7 @@ BOOL CSequenceMain::GoodTray2_Run()
 			double dS1Y = g_objAJinAXL.Get_Position(AX_GOOD_STAGE1_Y);
 			double dS2Y = g_objAJinAXL.Get_Position(AX_GOOD_STAGE2_Y);
 			double dDiff = fabs(dS1Y-dS2Y);
-			if (dDiff > TRAY_WIDTH) {	// Good Stage Y Position Check
+			if (dDiff > TRAY_WIDTH && g_objCommon.Get_GoodTray2MasterSlaveOut()) {	// Good Stage Y Position Check
 				m_tGoodTray2Loop.Takt_Start(nTaktZone, 11);
 				g_objCommon.Move_Position(AX_GOOD_STAGE2_Z, 1);
 				m_nGoodTray2Case++; m_tGoodTray2Loop.Set_LoopTime(5000);
