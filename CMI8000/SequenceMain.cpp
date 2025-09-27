@@ -352,7 +352,8 @@ UINT CSequenceMain::Thread_MainRun(LPVOID lpVoid)
 
 		
 		// Cap Attach가 정지하면 AVI도 정지해준다.
-		if (g_objSequenceMain.m_pEquipData->bUseInlineMode && g_objCapAttach.Is_StatusCapAttach() == 0) {
+		if (g_objSequenceMain.m_pEquipData->bUseInlineMode && g_objCapAttach.Is_StatusCapAttach() == 0) 
+		{
 			g_dlgWork.MachineStopLog("CAP_ATTACH_STOP");	// Cap Attach 알람 또는 정지에 의한 설비 멈춤.
 			
 			if(gData.bCapVisionAlarm)
@@ -360,7 +361,8 @@ UINT CSequenceMain::Thread_MainRun(LPVOID lpVoid)
 				gData.bCapVisionAlarm = FALSE;
 				g_dlgWork.PostMessage(UM_SHOW_MSG, 5, NULL);
 			}
-			else{
+			else
+			{
 				g_dlgWork.PostMessage(UM_SHOW_MSG, 3, NULL);
 			}
 			
