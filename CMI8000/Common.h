@@ -65,13 +65,30 @@ protected:
 private:
 	LONGLONG	m_nFreq;		// Frequence
 
+	
+	LONG g_initDone;
+	LONG g_lock;
+
 public:
+	void Lock()
+	{
+		while (InterlockedCompareExchange(&g_lock, 1, 0) != 0)
+			Sleep(0);
+	}
+	void Unlock()
+	{
+		InterlockedExchange(&g_lock, 0);
+	}
+	ULONGLONG	GetTickCount64Compat();
+
 	void DoEvents();
 	void uSleep(int msec);
 	void MakeFolder(CString sPath);
 	void Save_MotionPos();
 	int	 Check_MotionPos();
 
+	
+	
 	BOOL Check_Position(int nAxis, int nMoveIdx, double dRange = 0.1);
 	void Move_Position(int nAxis, int nMoveIdx);
 

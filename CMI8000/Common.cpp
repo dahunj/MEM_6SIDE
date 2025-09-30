@@ -40,6 +40,9 @@ CCommon::CCommon()
 	LARGE_INTEGER freq;
 	QueryPerformanceFrequency(&freq);
 	m_nFreq = freq.QuadPart;
+
+	g_initDone = 0;
+	g_lock = 0;
 }
 
 CCommon::~CCommon()
@@ -141,6 +144,32 @@ int CCommon::Check_MotionPos()
 		if (fabs(dCurrentPos - dCheckPos) > dRange) return i;
 	}
 	return nMotionNo;
+}
+
+ULONGLONG CCommon::GetTickCount64Compat()
+{
+	static DWORD      s_last32 = 0;
+	static ULONGLONG  s_high64 = 0;
+	static LONG       s_inited = 0;
+
+	DWORD cur32 = ::GetTickCount();
+
+	if (InterlockedCompareExchange(&s_inited, 1, 0) == 0)
+	{
+		s_last32 = cur32;
+		return (s_high64 + (ULONGLONG)cur32);
+	}
+
+	Lock();
+
+	if (cur32 < s_last32)
+		s_high64 += (1ULL << 32);
+
+	s_last32 = cur32;
+	ULONGLONG result = s_high64 + (ULONGLONG)cur32;
+
+	Unlock();
+	return result;
 }
 
 BOOL CCommon::Check_Position(int nAxis, int nMoveIdx, double dRange)
