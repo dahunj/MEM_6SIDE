@@ -1079,6 +1079,7 @@ void CCMI8000Dlg::Set_LotStateTime()
 		if (!gAlm.bBegin)
 		{
 			gLot.dwStopTime += dwTime;
+			gLot.dwTempStopTime = dwTime;
 		}
 		break;
 	}

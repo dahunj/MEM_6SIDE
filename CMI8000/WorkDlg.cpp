@@ -351,7 +351,8 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 		if (!m_bAutoRunning) {		// First AutoRun
 			if (!Work_Start()) { SetTimer(0, 100, NULL); m_rdoWorkStop.SetCheck(TRUE); m_rdoWorkStart.SetCheck(FALSE); return; }
 
-			if (g_objSequenceInit.Get_InitComplete()) {
+			if (g_objSequenceInit.Get_InitComplete()) 
+			{
 
 				m_bAutoRunning = TRUE;
 				BOOL bLoad1 = g_objSequenceMain.Get_LotLoadEnable(0);

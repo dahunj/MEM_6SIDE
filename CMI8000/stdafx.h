@@ -74,7 +74,7 @@
 #endif
 
 
-#define MAIN_VERSION	_T("V 3.5.1.08 MEM")
+#define MAIN_VERSION	_T("V 3.5.1.09 MEM")
 
 
 //주석처리하면 SIMULATION 
@@ -354,6 +354,7 @@ typedef struct {
 	int		nErrorCount;
 	DWORD	dwRunTime;
 	DWORD	dwStopTime;
+	DWORD	dwTempStopTime;
 	DWORD	dwErrorTime;
 
 	BOOL	bLotEndComplete[2];

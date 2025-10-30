@@ -672,6 +672,9 @@ void CSetupEquipDlg::Save_EquipData()
 	INI.Set_Bool("EQUIPMENT", "MANUAL_TAKT_TEST", m_chkManualTaktTest.GetCheck());
 	INI.Set_Bool("EQUIPMENT", "DOOR_LOCK", m_rdoDoorLock[1].GetCheck());
 
+	if(m_rdoDoorLock[1].GetCheck()) pEquipData->bUseDoorLock = TRUE;
+	else	pEquipData->bUseDoorLock = FALSE;
+
 	//Save 할때 door interlock 시작 시간 및 끝 시간 계산 
 	if(m_rdoDoorLock[1].GetCheck() && gData.bWasUnlock)
 	{
@@ -861,8 +864,6 @@ void CSetupEquipDlg::Save_EquipDataForAllParam()
 	m_edtResultTest[3].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("RESULT_TEST", "N4", nData);
 
 	g_objLogFile.Save_HandlerLog("[Setup Equip] Save Click");
-
-	
 	
 }
 

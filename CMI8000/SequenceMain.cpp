@@ -733,6 +733,8 @@ void CSequenceMain::Set_ClearRunData(int nType)
 	gData.dwGoodTray1UnloadingTime = 0;
 	gData.dwGoodTray2LoadingTime = 0;
 	gData.dwGoodTray2UnloadingTime = 0;
+
+	gLot.dwTempStopTime = 0;
 	gLot.nErrorCount = 0;
 	gLot.dwRunTime = gLot.dwErrorTime = gLot.dwStopTime = 0;
 	gLot.bLotEndComplete[0] = FALSE;
@@ -1389,7 +1391,7 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		ULONGLONG lluTick = g_objCommon.GetTickCount64Compat();
 		m_strLog.Format("Currrent Tick sort1: %llu", lluTick);
 		g_objLogFile.Save_TestLog(m_strLog);
-		if (m_pEquipData->bUseInspectSkip || (lluTick - gData.lluSkipTime_Sort1 > m_pEquipData->nDelayAdd[4]) ) 
+		if (m_pEquipData->bUseInspectSkip || (lluTick - gData.lluSkipTime_Sort1 - gLot.dwTempStopTime > m_pEquipData->nDelayAdd[4]) ) 
 		{	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 			gData.nInspectInfo[nPx][nTx][nCx] = 4;
 			gMes.sJudge[nPx][nTx][nCx] = "N1";
@@ -1512,7 +1514,7 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 	g_objLogFile.Save_TestLog(m_strLog);
 
 	if (!bDone) {
-		if (m_pEquipData->bUseInspectSkip || (lluTick - gData.lluSkipTime_Sort2  > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
+		if (m_pEquipData->bUseInspectSkip || (lluTick - gData.lluSkipTime_Sort2 - gLot.dwTempStopTime  > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 			gData.nInspectInfo[nPx][nTx][nCx] = 4;
 			gMes.sJudge[nPx][nTx][nCx] = "N1";
 			strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
