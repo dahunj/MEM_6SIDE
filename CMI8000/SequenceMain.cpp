@@ -1616,6 +1616,22 @@ void CSequenceMain::Set_ScanError(int nErrNo, int nTrayNo1, int nTrayNo2, int nT
 	if (strErrMsg != "") g_objCommon.Set_ErrorSubMessage(strErrMsg);
 }
 
+double CSequenceMain::Get_TactEach(int nPickNo, int nPickIdx, int nPortNo, int nTrayNo, int nCmNo)
+{
+	double dTact = 0;
+	gUph.dwTactEachLater[nPickNo-1][nPickIdx] = GetTickCount();
+	if(gUph.dwTactEachPre[nPickNo-1][nPickIdx] == 0) 
+	{
+		//pass
+	}
+	else{
+		dTact = gUph.dwTactEachLater[nPickNo-1][nPickIdx] - gUph.dwTactEachPre[nPickNo-1][nPickIdx];
+		dTact = dTact/1000;
+	}
+	return dTact;
+		
+}
+
 void CSequenceMain::Write_LotJudge(int nPortNo, int nTrayNo, int nCmNo, int nInfo, int nSpNo)
 {
 	CString strTemp;
@@ -7117,7 +7133,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 			}
 		}
 		break;
-	case 7:	// Wait Move to Ng Position
+	case 7:	// Wait Move to select Ng or good
 		// SortPicker2번이 Pickup 작업중, Good Unload 작업중,  NG Buffer 작업중이면 NG로 갈수있다.
 		if ((m_nSortPick2Case >=  0 && m_nSortPick2Case < 10) ||
 			(m_nSortPick2Case >= 19 && m_nSortPick2Case < 30) ||
@@ -7272,8 +7288,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 		}
 		break;
 	case 14:	// 정보전달, Grip Open
-		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 3) && g_objCommon.Get_SortPicker1DownMulti(nSp1StartNo+1, nSp1DownSu)) {
-			
+		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 3) && g_objCommon.Get_SortPicker1DownMulti(nSp1StartNo+1, nSp1DownSu)) 
+		{			
 			g_objCommon.Set_SortPicker1OpenMulti(nSp1StartNo+1, nSp1DownSu);
 			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(10000);
 			m_tSortPick1Loop.Takt_End(nTaktZone,13);
@@ -7307,6 +7323,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 				sNgTray.Format("NG-%d", nSp1WorkNg + 1);
 				g_objLogFile.Save_OutTray(sNgTray, 1, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("NG", nSp1WorkNg, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
+
+				Get_TactEach(1, nSp1StartNo+i, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 
 				gData.nTNoSortPick[0][nSp1StartNo+i] = gData.nCNoSortPick[0][nSp1StartNo+i] = 0;
 			}

@@ -255,7 +255,10 @@ private:
 	BOOL Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int &Info, int nSortNo);
 	void Set_InspectError(int nPortNo, int nTrayNo, int nCmNo);
 	void Set_ScanError(int nErrNo, int nTrayNo1, int nTrayNo2, int nTrayNo3, int nTrayNo4, int nCmNo1, int nCmNo2, int nCmNo3, int nCmNo4);
+	
 	void Write_LotJudge(int nPortNo, int nTrayNo, int nCmNo, int nInfo, int nSpNo);
+	double Get_TactEach(int nPickNo, int nPickIdx, int nPortNo, int nTrayNo, int nCmNo);
+
 
 	BOOL Check_LoadLotEnd(int nPNo, int nMode=0);
 	BOOL Check_LoadLotEndBtm1(int nPNo, int angletrayNo);

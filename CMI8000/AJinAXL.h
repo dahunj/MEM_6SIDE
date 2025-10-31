@@ -198,8 +198,6 @@ public:
 
 public:
 	
-
-
 	int		StartThread(int nType, int nAxis, double dPos);					// 새 워커 시작. 성공 시 쓰레드 ID(>0) 반환, 실패 시 0 반환
 	void	GetCompletedIds(std::vector<int>& outCompleted);	// 완료된 쓰레드 ID들을 out에 채우고 내부 큐는 비움
 	int		RunningCount() const;								// (옵션) 현재 실행 중으로 추정되는 개수

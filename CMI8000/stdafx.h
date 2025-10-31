@@ -392,6 +392,9 @@ typedef struct {
 	double	dTakt[24][50];	// 시간당 각 Lot의 Takt (시간당 최대 50개)
 	int		nLotCount[24];	// 시간당 Lot 수량 (0~23)
 	int		nCmCount[2];	// 주간(0:7~19h), 야간(1:19~7h)
+
+	DWORD	dwTactEachPre[2][6]; //2 sort picker, sort pick max count 6
+	DWORD	dwTactEachLater[2][6]; //2 sort picker, sort pick max count 6
 } GLOVAL_UPH;
 
 typedef struct {
