@@ -141,6 +141,8 @@ BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_LASERCONNECT, &CWorkDlg::OnBnClickedBtnLaserconnect)
 	ON_BN_CLICKED(IDC_BTN_LASER_GETDATA, &CWorkDlg::OnBnClickedBtnLaserGetdata)
 	ON_BN_CLICKED(IDC_BUTTON6, &CWorkDlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &CWorkDlg::OnBnClickedButton7)
+	ON_BN_CLICKED(IDC_BUTTON9, &CWorkDlg::OnBnClickedButton9)
 END_MESSAGE_MAP()
 
 // CWorkDlg 메시지 처리기입니다.
@@ -1846,3 +1848,21 @@ void CWorkDlg::OnBnClickedBtnLaserGetdata()
 }
 
 
+
+
+void CWorkDlg::OnBnClickedButton7()
+{
+	gData.dwSkipTime_Sort1 = GetTickCount();
+}
+
+
+void CWorkDlg::OnBnClickedButton9()
+{
+	gData.dwSkipTime_Sort2 = GetTickCount();
+	DWORD dwTemp = (gData.dwSkipTime_Sort2 - gData.dwSkipTime_Sort1);
+
+	if(dwTemp > 30000)
+	{
+		AfxMessageBox("good");
+	}
+}

@@ -293,8 +293,8 @@ typedef struct {
 
 	BOOL	b3DGrabFailErr;
 
-	ULONGLONG	lluSkipTime_Sort1;		// 작업자 기인 알람, Stop 버튼or스위치 눌러서 장비 세웠을때 
-	ULONGLONG	lluSkipTime_Sort2;
+	DWORD	dwSkipTime_Sort1;		// 작업자 기인 알람, Stop 버튼or스위치 눌러서 장비 세웠을때 
+	DWORD	dwSkipTime_Sort2;
 
 	BOOL	bWasUnlock;
 	CTime	tDoorUnlockStartMin;

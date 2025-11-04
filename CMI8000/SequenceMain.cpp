@@ -1386,12 +1386,12 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 	if (m_pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) 
 		bDone = FALSE;	// return FALSE;	// Btm1_3D
 	
+	DWORD dwTick = GetTickCount();
 	if (!bDone) 
-	{
-		ULONGLONG lluTick = g_objCommon.GetTickCount64Compat();
-		m_strLog.Format("Currrent Tick sort1: %llu", lluTick);
+	{		
+		m_strLog.Format("Currrent Tick sort1: %lu", dwTick);
 		g_objLogFile.Save_TestLog(m_strLog);
-		if (m_pEquipData->bUseInspectSkip || (lluTick - gData.lluSkipTime_Sort1 - gLot.dwTempStopTime > m_pEquipData->nDelayAdd[4]) ) 
+		if (m_pEquipData->bUseInspectSkip || ((dwTick - gData.dwSkipTime_Sort1) > m_pEquipData->nDelayAdd[4]) ) 
 		{	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 			gData.nInspectInfo[nPx][nTx][nCx] = 4;
 			gMes.sJudge[nPx][nTx][nCx] = "N1";
@@ -1509,12 +1509,14 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 	//if (m_pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) 
 		//bDone = FALSE;	// return FALSE;	// Btm1_3D
 	
-	ULONGLONG lluTick = GetTickCount();
-	m_strLog.Format("Currrent Tick sort 2: %lu", lluTick);
-	g_objLogFile.Save_TestLog(m_strLog);
+	DWORD dwTick = GetTickCount();
+	
+	if (!bDone) 
+	{
+		m_strLog.Format("Currrent Tick sort 2: %lu", dwTick);
+		g_objLogFile.Save_TestLog(m_strLog);
 
-	if (!bDone) {
-		if (m_pEquipData->bUseInspectSkip || (lluTick - gData.lluSkipTime_Sort2 - gLot.dwTempStopTime  > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
+		if (m_pEquipData->bUseInspectSkip || ((dwTick - gData.dwSkipTime_Sort2)  > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 			gData.nInspectInfo[nPx][nTx][nCx] = 4;
 			gMes.sJudge[nPx][nTx][nCx] = "N1";
 			strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
@@ -2109,6 +2111,8 @@ BOOL CSequenceMain::LoadTray_Run()
 	static int nLtWorkPort = 0;			// 작업중인 Port (1 ~ 2)
 	static BOOL bAlignFirst = FALSE;	// Tray Align 재확인
 
+	static DWORD dwStartTick = 0, dwEndTick = 0;
+
 	// LJH 1번 투입시 2번에 Tray 있으면 가져가야한다...
 	// Load Tray Lot 투입시 도어락, 버튼 확인하여 Tray Loading 작업 못하게 막아준다.
 	if (((m_bLotLoadEnable[0] == TRUE && (m_pEquipData->bUseDoorLock && m_pDX15->iDoor02Unlock) && (nLtWorkPort == 1 && m_nLoadTrayCase > 3 && m_nLoadTrayCase < 10)) ||
@@ -2344,6 +2348,7 @@ BOOL CSequenceMain::LoadTray_Run()
 					g_objInspector.Set_LotStart(INSPECTOR_ALL, gData.sLotID[nLtWorkPort-1], nLtWorkPort, m_pEquipData->sVisionProgVer, m_pEquipData->sVisionParaVer);
 					gData.bVisionVerErr = FALSE;
 				}
+				dwStartTick = GetTickCount();
 				m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);	// 30초 (Wait for Vision Ready)
 				m_tLoadTrayLoop.Takt_End(nTaktZone, 16);
 				m_tLoadTrayLoop.Takt_Start(nTaktZone, 17);
@@ -2355,12 +2360,23 @@ BOOL CSequenceMain::LoadTray_Run()
 		}
 		break;
 	case 18:	// Check Lot Ready
+		dwEndTick = GetTickCount() - dwStartTick;
 		if (g_objInspector.Check_LotReady()) 
 		{
 			m_nLoadTrayCase = 20; m_tLoadTrayLoop.Set_LoopTime(5000);
 			m_tLoadTrayLoop.Takt_End(nTaktZone, 17);
 			m_tLoadTrayLoop.Takt_Start(nTaktZone, 18);
 		}
+		else if(dwEndTick > 25000)
+		{
+			m_nLoadTrayCase = 19; m_tLoadTrayLoop.Set_LoopTime(5000);
+		}
+		break;
+	case 19:
+		dwStartTick = GetTickCount();
+		g_objInspector.Set_LotStart(INSPECTOR_ALL, gData.sLotID[nLtWorkPort-1], nLtWorkPort, m_pEquipData->sVisionProgVer, m_pEquipData->sVisionParaVer);
+		gData.bVisionVerErr = FALSE;
+		m_nLoadTrayCase = 18; m_tLoadTrayLoop.Set_LoopTime(20000);
 		break;
 
 	case 20:	// Tray X Unload Position, Tray Pick Up Waiting
@@ -7098,8 +7114,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(30000);	// 검사 완료
 			m_tSortPick1Loop.Takt_End(nTaktZone, 4);
 			m_tSortPick1Loop.Takt_Start(nTaktZone, 5);
-			gData.lluSkipTime_Sort1 = g_objCommon.GetTickCount64Compat();
-			m_strLog.Format("Skip Time Sort 1 : %llu", gData.lluSkipTime_Sort1);
+			gData.dwSkipTime_Sort1 = GetTickCount();
+			m_strLog.Format("Skip Time Sort 1 : %lu", gData.dwSkipTime_Sort1);
 			g_objLogFile.Save_TestLog(m_strLog);
 		} 
 		break;
@@ -8312,8 +8328,8 @@ BOOL CSequenceMain::SortPicker2_Run()
 
 			m_tSortPick2Loop.Takt_End(nTaktZone, 4);
 			m_tSortPick2Loop.Takt_Start(nTaktZone, 5);
-			gData.lluSkipTime_Sort2 = g_objCommon.GetTickCount64Compat();
-			m_strLog.Format("Skip Time Sort 2 : %llu", gData.lluSkipTime_Sort2);
+			gData.dwSkipTime_Sort2 = GetTickCount();
+			m_strLog.Format("Skip Time Sort 2 : %lu", gData.dwSkipTime_Sort2);
 			g_objLogFile.Save_TestLog(m_strLog);
 		} 
 		break;

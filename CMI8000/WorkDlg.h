@@ -164,6 +164,8 @@ public:
 	CButton m_Btn4;
 	CButton m_Btn5;
 	CButton m_Btn6;
+	afx_msg void OnBnClickedButton7();
+	afx_msg void OnBnClickedButton9();
 };
 
 extern CWorkDlg g_dlgWork;
