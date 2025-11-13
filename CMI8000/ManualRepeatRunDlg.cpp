@@ -201,7 +201,6 @@ void CManualRepeatRunDlg::AddComboListPicker()
 	m_cboPicker.AddString("Sort1 Picker(Up/Down)");
 	m_cboPicker.AddString("Sort2 Picker(Open/Close)");
 	m_cboPicker.AddString("Sort2 Picker(Up/Down)");
-	
 }
 
 BOOL CManualRepeatRunDlg::CheckMotionPos()
@@ -209,7 +208,8 @@ BOOL CManualRepeatRunDlg::CheckMotionPos()
 	CString strTemp;
 
 	int nMotionNo = g_objCommon.Check_MotionPos();
-	if (nMotionNo < 99) {
+	if (nMotionNo < 99) 
+	{
 		double dCurrentPos = g_objAJinAXL.Get_Position(nMotionNo);
 		CString strName = g_objAJinAXL.Get_AxisName(nMotionNo);
 		strTemp.Format("Motion(%s) 위치를 Check 하세요.\n이전위치(%0.3lf) != 현재위치(%0.3lf)", strName, gAlm.dMotionPos[nMotionNo], dCurrentPos);
@@ -271,47 +271,43 @@ void CManualRepeatRunDlg::Repeat_Action()
 
 	m_strTemp.Format("%d", m_nRepeatCase);
 	m_lblCase.SetWindowText(m_strTemp);
-
-	if((m_nRepeatCase == 100 && !g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0)) 
-		|| (m_nRepeatCase == 200 && !g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0)))
+	if(m_nRepeatCase == 100 && !g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0))
 	{
 		m_bThreadAction = FALSE;
 		m_pThreadAction = NULL;
 		AfxMessageBox("Btm1 Picker Z Ready Up 아닙니다.");
 		return;
 	}
-	if((m_nRepeatCase == 300 && !g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0)) 
-		|| (m_nRepeatCase == 400 && !g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0)))
+	if(m_nRepeatCase == 200 && !g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0)) 
 	{
 		m_bThreadAction = FALSE;
 		m_pThreadAction = NULL;
 		AfxMessageBox("Btm2 Picker Z Ready Up 아닙니다.");
 		return;
 	}
-	if((m_nRepeatCase == 500 && !g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
-		||(m_nRepeatCase == 600 && !g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)))
+	if((m_nRepeatCase == 300 && !g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0))
+		||(m_nRepeatCase == 400 && !g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)))
 	{
 		m_bThreadAction = FALSE;
 		m_pThreadAction = NULL;
 		AfxMessageBox("Sort 1 Picker Z Ready Up 아닙니다.");
 		return;
 	}
-	if((m_nRepeatCase == 700 && !g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
-		|| (m_nRepeatCase == 800 && !g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)))
+	if((m_nRepeatCase == 500 && !g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0))
+		|| (m_nRepeatCase == 600 && !g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)))
 	{
 		m_bThreadAction = FALSE;
 		m_pThreadAction = NULL;
 		AfxMessageBox("Sort 2 Picker Z Ready Up 아닙니다.");
 		return;
 	}
-
-
+	
 	switch(m_nRepeatCase)
 	{
 	case 0:
 		break;
-	
-	//Btm1 Picker :100
+
+		//Btm1 Picker :100
 	case 100:
 		{
 			theApp.uSleep(m_nActionDelay);
@@ -326,9 +322,9 @@ void CManualRepeatRunDlg::Repeat_Action()
 			m_nRepeatCase = 100;
 		}
 		break;	
-/////////////////////////////////////////////////////////////////////////////////
-	
-/////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////
+
+		/////////////////////////////////////////////////////////////////////////////
 	case 200:		
 		if(1)
 		{
@@ -346,7 +342,7 @@ void CManualRepeatRunDlg::Repeat_Action()
 		}
 		break;
 		/////////////////////////////////////////////////////////////////////////////
-		// Sort 1 - buffer 1
+		// Sort 1 - open/close
 	case 300:
 		if(1)
 		{
@@ -363,16 +359,16 @@ void CManualRepeatRunDlg::Repeat_Action()
 			m_nRepeatCase = 300;
 		}
 		break;
-	
-		// Sort 1 - buffer 2
+
+		// Sort 1 - up/down
 	case 400:
-		if(!g_objCommon.Check_Position(AX_SORT_PICKER1_X, 1) || !g_objCommon.Check_Position(AX_SORT_PICKER1_X, 0) )
+		if(!g_objCommon.Check_Position(AX_SORT_PICKER1_X, 1) && !g_objCommon.Check_Position(AX_SORT_PICKER1_X, 0) )
 		{
 			m_bThreadAction = FALSE;
 			m_pThreadAction = NULL;
 			AfxMessageBox("Sort1 Picker (Buffer ) Position 아닙니다.");
 			return;
-		}
+		}	
 		if(1)
 		{
 			theApp.uSleep(m_nActionDelay);
@@ -389,7 +385,7 @@ void CManualRepeatRunDlg::Repeat_Action()
 		}
 		break;
 		/////////////////////////////////////////////////////////////////////////////
-		// Sort 1 - buffer 1
+		// Sort 2 - open/close 
 	case 500:
 		if(1)
 		{
@@ -407,9 +403,9 @@ void CManualRepeatRunDlg::Repeat_Action()
 		}
 		break;
 
-		// Sort 1 - buffer 2
+		// Sort 2 - up/down 
 	case 600:
-		if(!g_objCommon.Check_Position(AX_SORT_PICKER1_X, 1) || !g_objCommon.Check_Position(AX_SORT_PICKER1_X, 0) )
+		if(!g_objCommon.Check_Position(AX_SORT_PICKER2_X, 1) && !g_objCommon.Check_Position(AX_SORT_PICKER2_X, 0) )
 		{
 			m_bThreadAction = FALSE;
 			m_pThreadAction = NULL;
@@ -430,11 +426,7 @@ void CManualRepeatRunDlg::Repeat_Action()
 			g_objCommon.Set_SortPicker2Down(m_nPickerNumSelected);
 			m_nRepeatCase = 600;
 		}
-		break;
-
-	
-
-	
+		break;	
 	}
 	
 }
