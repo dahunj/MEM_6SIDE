@@ -432,6 +432,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			}
 			if(pEquipData->bUseDoorLock) g_objCommon.Locking_MainDoor(TRUE, TRUE);
 			pMainDlg->Enable_ModeButton(FALSE);
+			g_objCommon.Check_PortArea(TRUE);
 		}
 
 	} 

@@ -410,6 +410,7 @@ BOOL CCommon::Check_MainDoor(BOOL bAuto)
 	if (pDX15->iDoor17Unlock) { /*Show_Alarm("Main 17번 Door(X1516) Unlocked.");*/ Show_Error(27); return FALSE; }
 	if (pDX15->iDoor18Unlock) { /*Show_Alarm("Main 18번 Door(X1517) Unlocked.");*/ Show_Error(28); return FALSE; }
 	if (pDX15->iDoor19Unlock) { /*Show_Alarm("Main 19번 Door(X1518) Unlocked.");*/ Show_Error(29); return FALSE; }
+	if (pDX15->iDoor20Unlock) { /*Show_Alarm("Main 19번 Door(X1518) Unlocked.");*/ Show_Error(30); return FALSE; }
 #endif
 	return TRUE;
 }
@@ -667,12 +668,12 @@ void CCommon::Locking_MainDoor(BOOL bLock, BOOL bAuto)
 {
 	DY_DATA_15 *pDY15 = g_objAJinAXL.Get_pDY15();
 
-	// 0000 0000 0000 0111 1111 1111 1111 1111
-	// 0    0    0    7    F    F    F    F
+	// 0000 0000 0000 1111 1111 1111 1111 1111
+	// 0    0    0    F    F    F    F    F
 	if (bLock) {
 		BOOL bLoad1 = g_objSequenceMain.Get_LotLoadEnable(0);
 		BOOL bLoad2 = g_objSequenceMain.Get_LotLoadEnable(1);
-		pDY15->nValue &= ~0x7FFFF;	// All Lock
+		pDY15->nValue &= ~0xFFFFF;	// All Lock
 		if (bAuto && bLoad1)				pDY15->nValue |= 0x2;	// Except 2
 		if (bAuto && bLoad2)				pDY15->nValue |= 0x4;	// Except 3
 		if (bAuto && gData.bNGTrayWait)		pDY15->nValue |= 0x8;	// Except 4
@@ -692,7 +693,7 @@ void CCommon::Locking_MainDoor(BOOL bLock, BOOL bAuto)
 			if (GetTickCount() - dwStart > 5000) break;	// 5초
 			theApp.DoEvents();
 		}
-		pDY15->nValue |= 0x7FFFF;
+		pDY15->nValue |= 0xFFFFF;
 	}
 	g_objAJinAXL.Write_Output(15);
 }
