@@ -501,18 +501,18 @@ BOOL CCommon::Check_PortArea(BOOL bAuto)
 
 	// Load Port1
 	if (!pDX00->iLoadPortAreaCheck && (pDX00->iLoadPort1SlideOpen || pDX00->iLoadPort1SlideClose)) {
-		Show_Alarm("Load Port Area(X0006) 감지 되었습니다."); return FALSE;
+		//Show_Alarm("Load Port Area(X0006) 감지 되었습니다."); return FALSE;
 	}
 
 	// Load Port2
 	if (!pDX00->iLoadPortAreaCheck && (pDX00->iLoadPort2SlideOpen || pDX00->iLoadPort2SlideClose)) {
-		Show_Alarm("Load Port Area(X0006) 감지 되었습니다."); return FALSE;
+		//Show_Alarm("Load Port Area(X0006) 감지 되었습니다."); return FALSE;
 	}
 
 	// Empty Port
 #ifdef EDITION_2ND
 	if (!pDX01->iEmptyPortAreaCheck	&& (pDX01->iEmptyPortSlideOpen || pDX01->iEmptyPortSlideClose)) {
-		Show_Alarm("Empty Port Area(X0728) 감지 되었습니다."); return FALSE;
+		//Show_Alarm("Empty Port Area(X0728) 감지 되었습니다."); return FALSE;
 	}
 #else
 	if (!pDX07->iEmptyPortAreaCheck	&& (pDX07->iEmptyPortSlideOpen || pDX07->iEmptyPortSlideClose)) {
@@ -521,13 +521,16 @@ BOOL CCommon::Check_PortArea(BOOL bAuto)
 #endif
 
 	// Ng Port
-	if (!pDX09->iNgPortAreaCheck && (pDX09->iNgPortSlideOpen || pDX09->iNgPortSlideClose)) {
-		Show_Alarm("Ng Port Area(X0930) 감지 되었습니다."); return FALSE;
+	if (!pDX09->iNgPortAreaCheck && (pDX09->iNgPortSlideOpen || pDX09->iNgPortSlideClose)) 
+	{
+		Show_MsgBox(1, "Ng Port Area(X0930) 감지 되었습니다.");
+		//Show_Alarm("Ng Port Area(X0930) 감지 되었습니다."); return FALSE;
 	}
 
 	//Good Port
 	if (!pDX12->iGoodPortAreaCheck && (pDX12->iGoodPortSlideOpen || pDX12->iGoodPortSlideClose)) {
-		Show_Alarm("Good Port Area(X1206) 감지 되었습니다."); return FALSE;
+		//Show_MsgBox(1, "Good Port Area(X1206) 감지 되었습니다.");
+		//Show_Alarm("Good Port Area(X1206) 감지 되었습니다."); return FALSE;
 	}
 #endif
 	return TRUE;
@@ -676,7 +679,9 @@ void CCommon::Locking_MainDoor(BOOL bLock, BOOL bAuto)
 		if (bAuto && gData.bGoodTrayWait)	pDY15->nValue |= 0x10;	// Except 5
 		if (bAuto && gData.bEmptyZWait)		pDY15->nValue |= 0x200;	// Except 10
 		
-	} else {
+	} 
+	else
+	{
 		DWORD dwStart = GetTickCount();
 		while (TRUE) {
 			BOOL bMove = FALSE;

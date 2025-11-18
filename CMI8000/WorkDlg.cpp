@@ -406,7 +406,9 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 				g_objCommon.Show_Error(40);		// 초기화 완료 에러
 			}
 
-		} else {				// Auto Running
+		} 
+		else 
+		{				// Auto Running
 			// MES 통신 완료일 때 장비 구동하기 위해...
 			if (g_objMES.m_bMESUse && g_objMES.m_nMESSequence == 2) {
 				g_objMES.m_nMESSequence = 3;
@@ -428,6 +430,8 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 					g_objCommon.TopBlowSunctionOnOff(FALSE);
 				}
 			}
+			if(pEquipData->bUseDoorLock) g_objCommon.Locking_MainDoor(TRUE, TRUE);
+			pMainDlg->Enable_ModeButton(FALSE);
 		}
 
 	} 

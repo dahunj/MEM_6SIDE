@@ -2420,10 +2420,13 @@ BOOL CSequenceMain::LoadTray_Run()
 			if (gData.nLoadTrayCount[nLtWorkPort-1] >= gData.nTrayUseCount[nLtWorkPort-1]) {
 				m_bLotLoadEnable[nLtWorkPort-1] = TRUE;	// Port에서 트레이 로드 완료
 
-				if (nLtWorkPort == 1) { 
+				if (nLtWorkPort == 1) 
+				{ 
 					m_pDY00->oLoadPort1SlideLock = FALSE; m_pDY00->oLoadPort1SlideUnlock = TRUE; 
 					nLtWorkPort = 2;
-				} else if (nLtWorkPort == 2) {
+				}
+				else if (nLtWorkPort == 2)
+				{
 					m_pDY00->oLoadPort2SlideLock = FALSE; m_pDY00->oLoadPort2SlideUnlock = TRUE; 
 					nLtWorkPort = 1;
 				}
