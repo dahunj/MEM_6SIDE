@@ -4422,16 +4422,23 @@ BOOL CSequenceMain::Inspection1_Run()
 			if (!m_tInspect1Loop.Waiting_Time(10)) return TRUE;
 
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;
+			g_objAJinAXL.Write_Output(6);
+			m_nInspect1Case = 5; m_tInspect1Loop.Set_LoopTime(5000); 
+			bTaktSave1 = FALSE;
+		}
+		break;
+	case 5:
+		if(m_pDX06->iCmAlignSlaveOpen && !m_pDX06->iCmAlignSlaveClose)
+		{
+			if (!m_tInspect1Loop.Waiting_Time(50)) return TRUE;
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect1Case=6; m_tInspect1Loop.Set_LoopTime(5000); 
-			bTaktSave1 = FALSE;
+			m_nInspect1Case = 6; m_tInspect1Loop.Set_LoopTime(5000); 
 		}
 		break;
 	case 6:		// Align Z Axis Move to Ready Up Position
 		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Y, 0) && g_objCommon.Get_InfoInspectVacOn(1) &&
-			m_pDX06->iCmAlignMasterOpen && !m_pDX06->iCmAlignMasterClose &&
-			m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose) {
+			m_pDX06->iCmAlignMasterOpen && !m_pDX06->iCmAlignMasterClose && m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose ) {
 			if (!bTaktSave1) {
 				bTaktSave1 = TRUE;
 				m_tInspect1Loop.Takt_End(nTaktZone,5);
@@ -5008,11 +5015,19 @@ BOOL CSequenceMain::Inspection2_Run()
 			// io WRITE를 동시에 하면 씹힐수 있어서 딜레이 추가
 			if (!m_tInspect2Loop.Waiting_Time(10)) return TRUE;
 
-			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;
+			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;			
+			g_objAJinAXL.Write_Output(6);
+			m_nInspect2Case = 5; m_tInspect2Loop.Set_LoopTime(5000); 
+			bTaktSave2 = FALSE;
+		}
+		break;
+	case 5:
+		if(m_pDX06->iCmAlignSlaveOpen && !m_pDX06->iCmAlignSlaveClose)
+		{
+			if (!m_tInspect2Loop.Waiting_Time(50)) return TRUE;
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect2Case = 6; m_tInspect2Loop.Set_LoopTime(5000); 
-			bTaktSave2 = FALSE;
 		}
 		break;
 	case 6:		// Align Z Axis Move to Ready Up Position
@@ -5587,8 +5602,17 @@ BOOL CSequenceMain::Inspection3_Run()
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect3Case = 6; m_tInspect3Loop.Set_LoopTime(5000); 
+			m_nInspect3Case = 5; m_tInspect3Loop.Set_LoopTime(5000); 
 			bTaktSave3 = FALSE;
+		}
+		break;
+	case 5:
+		if(m_pDX06->iCmAlignSlaveOpen && !m_pDX06->iCmAlignSlaveClose)
+		{
+			if (!m_tInspect3Loop.Waiting_Time(50)) return TRUE;
+			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
+			g_objAJinAXL.Write_Output(6);
+			m_nInspect3Case = 6; m_tInspect3Loop.Set_LoopTime(5000); 
 		}
 		break;
 	case 6:		// Align Z Axis Move to Ready Up Position

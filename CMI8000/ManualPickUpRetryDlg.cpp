@@ -369,8 +369,7 @@ void CManualPickUpRetryDlg::Repeat_Action()
 			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 0); // z up 
 			m_strLog.Format("[Retry] Case : %d", m_nRepeatCase);
 			g_objLogFile.Save_HandlerLog(m_strLog);
-
-			
+						
 			m_nRepeatCase = 0;m_chkRepeatRun.SetCheck(FALSE);
 			OnBnClickedChkRepeatRun();
 			return;

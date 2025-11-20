@@ -69,6 +69,8 @@ private:
 	LONG g_initDone;
 	LONG g_lock;
 
+	CString m_strLog;
+
 public:
 	void Lock()
 	{

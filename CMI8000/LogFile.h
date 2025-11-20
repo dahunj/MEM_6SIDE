@@ -35,6 +35,9 @@ public:
 	void Save_PickerLog(CString sLog);
 	void Save_MCCLog(CString sLog, int nPNo);
 	void Save_MCCLog(CString sLog);
+	void Save_MotionLog(CString sLog);
+
+
 	void Save_DoorInterlock(int nPNo, CString sLog, BOOL bfirst);
 	void Save_PCLog(int nPNo, CString sLog);
 

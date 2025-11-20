@@ -28,6 +28,7 @@ CCriticalSection g_csMachineStopLog;
 CCriticalSection g_csCmTrackingLog;
 CCriticalSection g_csMCCLog;
 CCriticalSection g_csBarcodeLog;
+CCriticalSection g_csMotionLog;
 
 CLogFile::CLogFile()
 {
@@ -1436,6 +1437,41 @@ void CLogFile::Save_MCCLog(CString sLog)
 	g_csMCCLog.Unlock();
 
 }
+
+
+
+void CLogFile::Save_MotionLog(CString sLog)
+{
+	g_csMotionLog.Lock();
+
+	CString strPath = gData.sLogPath + "\\Motion";
+
+	Create_Folder(strPath);
+
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	CString strFile, strSave;
+	strFile.Format("%s\\%04d%02d%02d_Motion.txt", strPath, time.wYear, time.wMonth, time.wDay);
+
+	CFile file;
+	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
+		try {
+			file.SeekToEnd();
+
+			strSave.Format("[%02d:%02d:%02d.%03d], %s\r\n", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds, sLog);
+
+			file.Write(strSave, strSave.GetLength());
+			file.Close();
+
+		} catch (CFileException *pEx) {
+			pEx->Delete();
+		}
+	}
+	g_csMotionLog.Unlock();
+
+}
+
 
 void CLogFile::Save_DoorInterlock(int nPNo, CString sLog, BOOL bfirst)
 {

@@ -228,7 +228,12 @@ BOOL CCommon::Check_Position(int nAxis, int nMoveIdx, double dRange)
 		if (nAxis == AX_EMPTY_PORT_Z)		dCheckPos = pMoveData->dEmptyPortZ[nMoveIdx];		// AXIS 44
 		if (nAxis == AX_EMPTY_TRANS2_Y)		dCheckPos = pMoveData->dEmptyTrans2Y[nMoveIdx];		// AXIS 45
 
-		if (fabs(dCurrentPos - dCheckPos) < dRange) return TRUE;
+		if (fabs(dCurrentPos - dCheckPos) < dRange)
+		{
+			m_strLog.Format("Axis No.:%d, dCurrentPos:%0.2lf, dCheckPos:%0.2lf",nAxis, dCurrentPos, dCheckPos);
+			g_objLogFile.Save_MotionLog(m_strLog);
+			return TRUE;
+		}
 
 	} else return FALSE;
 
@@ -524,8 +529,8 @@ BOOL CCommon::Check_PortArea(BOOL bAuto)
 	// Ng Port
 	if (!pDX09->iNgPortAreaCheck && (pDX09->iNgPortSlideOpen || pDX09->iNgPortSlideClose)) 
 	{
-		Show_MsgBox(1, "Ng Port Area(X0930) 감지 되었습니다.");
-		//Show_Alarm("Ng Port Area(X0930) 감지 되었습니다."); return FALSE;
+		//Show_MsgBox(1, "Ng Port Area(X0930) 감지 되었습니다.");
+		Show_Alarm("Ng Port Area(X0930) 감지 되었습니다."); return FALSE;
 	}
 
 	//Good Port
@@ -992,16 +997,42 @@ BOOL CCommon::Get_Btm1PickerDown(int nSub)
 			!pDX04->iBtm1PickerUp05 && pDX04->iBtm1PickerDown05 &&
 			!pDX04->iBtm1PickerUp06 && pDX04->iBtm1PickerDown06 &&
 			!pDX04->iBtm1PickerUp07 && pDX04->iBtm1PickerDown07 &&
-			!pDX04->iBtm1PickerUp08 && pDX04->iBtm1PickerDown08) return TRUE;
+			!pDX04->iBtm1PickerUp08 && pDX04->iBtm1PickerDown08) 
+			{
+				m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+				g_objLogFile.Save_MotionLog(m_strLog);
+				return TRUE;
+			}
 	}
-	else if (nSub ==  1 && !pDX03->iBtm1PickerUp01 && pDX03->iBtm1PickerDown01) return TRUE;
-	else if (nSub ==  2 && !pDX03->iBtm1PickerUp02 && pDX03->iBtm1PickerDown02) return TRUE;
-	else if (nSub ==  3 && !pDX03->iBtm1PickerUp03 && pDX03->iBtm1PickerDown03) return TRUE;
-	else if (nSub ==  4 && !pDX03->iBtm1PickerUp04 && pDX03->iBtm1PickerDown04) return TRUE;
-	else if (nSub ==  5 && !pDX04->iBtm1PickerUp05 && pDX04->iBtm1PickerDown05) return TRUE;
-	else if (nSub ==  6 && !pDX04->iBtm1PickerUp06 && pDX04->iBtm1PickerDown06) return TRUE;
-	else if (nSub ==  7 && !pDX04->iBtm1PickerUp07 && pDX04->iBtm1PickerDown07) return TRUE;
-	else if (nSub ==  8 && !pDX04->iBtm1PickerUp08 && pDX04->iBtm1PickerDown08) return TRUE;
+	else if (nSub ==  1 && !pDX03->iBtm1PickerUp01 && pDX03->iBtm1PickerDown01)
+	{
+		m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+		g_objLogFile.Save_MotionLog(m_strLog);
+		return TRUE;
+	}
+	else if (nSub ==  2 && !pDX03->iBtm1PickerUp02 && pDX03->iBtm1PickerDown02)
+	{m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	else if (nSub ==  3 && !pDX03->iBtm1PickerUp03 && pDX03->iBtm1PickerDown03)
+	{ 
+		m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);	
+		g_objLogFile.Save_MotionLog(m_strLog);return TRUE;
+	}
+	else if (nSub ==  4 && !pDX03->iBtm1PickerUp04 && pDX03->iBtm1PickerDown04)
+	{ m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	else if (nSub ==  5 && !pDX04->iBtm1PickerUp05 && pDX04->iBtm1PickerDown05)
+	{ m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	else if (nSub ==  6 && !pDX04->iBtm1PickerUp06 && pDX04->iBtm1PickerDown06)
+	{ m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	else if (nSub ==  7 && !pDX04->iBtm1PickerUp07 && pDX04->iBtm1PickerDown07)
+	{ m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	else if (nSub ==  8 && !pDX04->iBtm1PickerUp08 && pDX04->iBtm1PickerDown08)
+	{ m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
 	return FALSE;
 #else
 	DX_DATA_03 *pDX03 = g_objAJinAXL.Get_pDX03();
@@ -1090,16 +1121,19 @@ BOOL CCommon::Get_Btm1PickerOpen(int nSub)
 		if (pDX03->iBtm1PickerOpen01 && pDX03->iBtm1PickerOpen02 &&
 			pDX03->iBtm1PickerOpen03 && pDX03->iBtm1PickerOpen04 &&
 			pDX03->iBtm1PickerOpen05 && pDX03->iBtm1PickerOpen06 &&
-			pDX03->iBtm1PickerOpen07 && pDX03->iBtm1PickerOpen08) return TRUE;
+			pDX03->iBtm1PickerOpen07 && pDX03->iBtm1PickerOpen08) 
+		{
+			m_strLog.Format("Get_Btm1PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog);
+			return TRUE;}
 	}
-	else if (nSub ==  1 && pDX03->iBtm1PickerOpen01) return TRUE;
-	else if (nSub ==  2 && pDX03->iBtm1PickerOpen02) return TRUE;
-	else if (nSub ==  3 && pDX03->iBtm1PickerOpen03) return TRUE;
-	else if (nSub ==  4 && pDX03->iBtm1PickerOpen04) return TRUE;
-	else if (nSub ==  5 && pDX03->iBtm1PickerOpen05) return TRUE;
-	else if (nSub ==  6 && pDX03->iBtm1PickerOpen06) return TRUE;
-	else if (nSub ==  7 && pDX03->iBtm1PickerOpen07) return TRUE;
-	else if (nSub ==  8 && pDX03->iBtm1PickerOpen08) return TRUE;
+	else if (nSub ==  1 && pDX03->iBtm1PickerOpen01){m_strLog.Format("Get_Btm1PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  2 && pDX03->iBtm1PickerOpen02){m_strLog.Format("Get_Btm1PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  3 && pDX03->iBtm1PickerOpen03){m_strLog.Format("Get_Btm1PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  4 && pDX03->iBtm1PickerOpen04){m_strLog.Format("Get_Btm1PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  5 && pDX03->iBtm1PickerOpen05){m_strLog.Format("Get_Btm1PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  6 && pDX03->iBtm1PickerOpen06){m_strLog.Format("Get_Btm1PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  7 && pDX03->iBtm1PickerOpen07){m_strLog.Format("Get_Btm1PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  8 && pDX03->iBtm1PickerOpen08){m_strLog.Format("Get_Btm1PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	return FALSE;
 }
 
@@ -1126,16 +1160,16 @@ BOOL CCommon::Get_Btm1PickerClose(int nSub)
 		if (pDX03->iBtm1PickerExist01 && pDX03->iBtm1PickerExist02 &&
 			pDX03->iBtm1PickerExist03 && pDX03->iBtm1PickerExist04 &&
 			pDX03->iBtm1PickerExist05 && pDX03->iBtm1PickerExist06 &&
-			pDX03->iBtm1PickerExist07 && pDX03->iBtm1PickerExist08) return TRUE;
+			pDX03->iBtm1PickerExist07 && pDX03->iBtm1PickerExist08){m_strLog.Format("Get_Btm1PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	}
-	else if (nSub ==  1 && pDX03->iBtm1PickerExist01) return TRUE;
-	else if (nSub ==  2 && pDX03->iBtm1PickerExist02) return TRUE;
-	else if (nSub ==  3 && pDX03->iBtm1PickerExist03) return TRUE;
-	else if (nSub ==  4 && pDX03->iBtm1PickerExist04) return TRUE;
-	else if (nSub ==  5 && pDX03->iBtm1PickerExist05) return TRUE;
-	else if (nSub ==  6 && pDX03->iBtm1PickerExist06) return TRUE;
-	else if (nSub ==  7 && pDX03->iBtm1PickerExist07) return TRUE;
-	else if (nSub ==  8 && pDX03->iBtm1PickerExist08) return TRUE;
+	else if (nSub ==  1 && pDX03->iBtm1PickerExist01){m_strLog.Format("Get_Btm1PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  2 && pDX03->iBtm1PickerExist02){m_strLog.Format("Get_Btm1PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  3 && pDX03->iBtm1PickerExist03){m_strLog.Format("Get_Btm1PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  4 && pDX03->iBtm1PickerExist04){m_strLog.Format("Get_Btm1PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  5 && pDX03->iBtm1PickerExist05){m_strLog.Format("Get_Btm1PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  6 && pDX03->iBtm1PickerExist06){m_strLog.Format("Get_Btm1PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  7 && pDX03->iBtm1PickerExist07){m_strLog.Format("Get_Btm1PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  8 && pDX03->iBtm1PickerExist08){m_strLog.Format("Get_Btm1PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	return FALSE;
 }
 
@@ -1647,19 +1681,19 @@ BOOL CCommon::Get_Btm2PickerOpen(int nSub)
 		if (pDX07->iBtm2PickerOpen01 && pDX07->iBtm2PickerOpen02 &&
 			pDX07->iBtm2PickerOpen03 && pDX07->iBtm2PickerOpen04 &&
 			pDX07->iBtm2PickerOpen05 && pDX07->iBtm2PickerOpen06 &&
-			pDX07->iBtm2PickerOpen07 && pDX07->iBtm2PickerOpen08) return TRUE;
+			pDX07->iBtm2PickerOpen07 && pDX07->iBtm2PickerOpen08){m_strLog.Format("Get_Btm2PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	}
-	BOOL bRet = TRUE;
-	if ((nSub ==  1 ) && !pDX07->iBtm2PickerOpen01) bRet = FALSE;
-	if ((nSub ==  2 ) && !pDX07->iBtm2PickerOpen02) bRet = FALSE;
-	if ((nSub ==  3 ) && !pDX07->iBtm2PickerOpen03) bRet = FALSE;
-	if ((nSub ==  4 ) && !pDX07->iBtm2PickerOpen04) bRet = FALSE;
-	if ((nSub ==  5 ) && !pDX07->iBtm2PickerOpen05) bRet = FALSE;
-	if ((nSub ==  6 ) && !pDX07->iBtm2PickerOpen06) bRet = FALSE;
-	if ((nSub ==  7 ) && !pDX07->iBtm2PickerOpen07) bRet = FALSE;
-	if ((nSub ==  8 ) && !pDX07->iBtm2PickerOpen08) bRet = FALSE;
-
-	return bRet;
+	
+	if ((nSub ==  1 ) && pDX07->iBtm2PickerOpen01){m_strLog.Format("Get_Btm2PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  2 ) && pDX07->iBtm2PickerOpen02){m_strLog.Format("Get_Btm2PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  3 ) && pDX07->iBtm2PickerOpen03){m_strLog.Format("Get_Btm2PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  4 ) && pDX07->iBtm2PickerOpen04){m_strLog.Format("Get_Btm2PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  5 ) && pDX07->iBtm2PickerOpen05){m_strLog.Format("Get_Btm2PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  6 ) && pDX07->iBtm2PickerOpen06){m_strLog.Format("Get_Btm2PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  7 ) && pDX07->iBtm2PickerOpen07){m_strLog.Format("Get_Btm2PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  8 ) && pDX07->iBtm2PickerOpen08){m_strLog.Format("Get_Btm2PickerOpen, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	
+	return FALSE;
 }
 
 
@@ -1685,19 +1719,19 @@ BOOL CCommon::Get_Btm2PickerClose(int nSub)
 		if (pDX07->iBtm2PickerExist01 && pDX07->iBtm2PickerExist02 &&
 			pDX07->iBtm2PickerExist03 && pDX07->iBtm2PickerExist04 &&
 			pDX07->iBtm2PickerExist05 && pDX07->iBtm2PickerExist06 &&
-			pDX07->iBtm2PickerExist07 && pDX07->iBtm2PickerExist08) return TRUE;
+			pDX07->iBtm2PickerExist07 && pDX07->iBtm2PickerExist08){m_strLog.Format("Get_Btm2PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	}
-	BOOL bRet = TRUE;
-	if ((nSub ==  1 ) && !pDX07->iBtm2PickerExist01) bRet = FALSE;
-	if ((nSub ==  2 ) && !pDX07->iBtm2PickerExist02) bRet = FALSE;
-	if ((nSub ==  3 ) && !pDX07->iBtm2PickerExist03) bRet = FALSE;
-	if ((nSub ==  4 ) && !pDX07->iBtm2PickerExist04) bRet = FALSE;
-	if ((nSub ==  5 ) && !pDX07->iBtm2PickerExist05) bRet = FALSE;
-	if ((nSub ==  6 ) && !pDX07->iBtm2PickerExist06) bRet = FALSE;
-	if ((nSub ==  7 ) && !pDX07->iBtm2PickerExist07) bRet = FALSE;
-	if ((nSub ==  8 ) && !pDX07->iBtm2PickerExist08) bRet = FALSE;
+	
+	if ((nSub ==  1 ) && pDX07->iBtm2PickerExist01){m_strLog.Format("Get_Btm2PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  2 ) && pDX07->iBtm2PickerExist02){m_strLog.Format("Get_Btm2PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  3 ) && pDX07->iBtm2PickerExist03){m_strLog.Format("Get_Btm2PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  4 ) && pDX07->iBtm2PickerExist04){m_strLog.Format("Get_Btm2PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  5 ) && pDX07->iBtm2PickerExist05){m_strLog.Format("Get_Btm2PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  6 ) && pDX07->iBtm2PickerExist06){m_strLog.Format("Get_Btm2PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  7 ) && pDX07->iBtm2PickerExist07){m_strLog.Format("Get_Btm2PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	if ((nSub ==  8 ) && pDX07->iBtm2PickerExist08){m_strLog.Format("Get_Btm2PickerClose, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 
-	return bRet;
+	return FALSE;
 }
 
 
@@ -1922,12 +1956,12 @@ BOOL CCommon::Get_SortPicker1Open(int nSub)
 	DX_DATA_10 *pDX10 = g_objAJinAXL.Get_pDX10();
 	if (nSub == 0) {
 		if (pDX10->iSortPicker1Open1 && pDX10->iSortPicker1Open2 &&
-			pDX10->iSortPicker1Open3 && pDX10->iSortPicker1Open4) return TRUE;
+			pDX10->iSortPicker1Open3 && pDX10->iSortPicker1Open4){m_strLog.Format("Get_SortPicker1Open, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	}
-	else if (nSub ==  1 && pDX10->iSortPicker1Open1) return TRUE;
-	else if (nSub ==  2 && pDX10->iSortPicker1Open2) return TRUE;
-	else if (nSub ==  3 && pDX10->iSortPicker1Open3) return TRUE;
-	else if (nSub ==  4 && pDX10->iSortPicker1Open4) return TRUE;
+	else if (nSub ==  1 && pDX10->iSortPicker1Open1){m_strLog.Format("Get_SortPicker1Open, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  2 && pDX10->iSortPicker1Open2){m_strLog.Format("Get_SortPicker1Open, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  3 && pDX10->iSortPicker1Open3){m_strLog.Format("Get_SortPicker1Open, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  4 && pDX10->iSortPicker1Open4){m_strLog.Format("Get_SortPicker1Open, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	return FALSE;
 }
 
@@ -1947,12 +1981,12 @@ BOOL CCommon::Get_SortPicker1Close(int nSub)
 	DX_DATA_10 *pDX10 = g_objAJinAXL.Get_pDX10();
 	if (nSub == 0) {
 		if (pDX10->iSortPicker1Exist1 && pDX10->iSortPicker1Exist2 &&
-			pDX10->iSortPicker1Exist3 && pDX10->iSortPicker1Exist4) return TRUE;
+			pDX10->iSortPicker1Exist3 && pDX10->iSortPicker1Exist4){m_strLog.Format("Get_SortPicker1Close, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	}
-	else if (nSub ==  1 && pDX10->iSortPicker1Exist1) return TRUE;
-	else if (nSub ==  2 && pDX10->iSortPicker1Exist2) return TRUE;
-	else if (nSub ==  3 && pDX10->iSortPicker1Exist3) return TRUE;
-	else if (nSub ==  4 && pDX10->iSortPicker1Exist4) return TRUE;
+	else if (nSub ==  1 && pDX10->iSortPicker1Exist1){m_strLog.Format("Get_SortPicker1Close, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  2 && pDX10->iSortPicker1Exist2){m_strLog.Format("Get_SortPicker1Close, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  3 && pDX10->iSortPicker1Exist3){m_strLog.Format("Get_SortPicker1Close, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  4 && pDX10->iSortPicker1Exist4){m_strLog.Format("Get_SortPicker1Close, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	return FALSE;
 }
 
@@ -2191,12 +2225,12 @@ BOOL CCommon::Get_SortPicker2Open(int nSub)
 	DX_DATA_11 *pDX11 = g_objAJinAXL.Get_pDX11();
 	if (nSub == 0) {
 		if (pDX11->iSortPicker2Open1 && pDX11->iSortPicker2Open2 &&
-			pDX11->iSortPicker2Open3 && pDX11->iSortPicker2Open4) return TRUE;
+			pDX11->iSortPicker2Open3 && pDX11->iSortPicker2Open4){m_strLog.Format("Get_SortPicker2Open, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	}
-	else if (nSub ==  1 && pDX11->iSortPicker2Open1) return TRUE;
-	else if (nSub ==  2 && pDX11->iSortPicker2Open2) return TRUE;
-	else if (nSub ==  3 && pDX11->iSortPicker2Open3) return TRUE;
-	else if (nSub ==  4 && pDX11->iSortPicker2Open4) return TRUE;
+	else if (nSub ==  1 && pDX11->iSortPicker2Open1){m_strLog.Format("Get_SortPicker2Open, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  2 && pDX11->iSortPicker2Open2){m_strLog.Format("Get_SortPicker2Open, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  3 && pDX11->iSortPicker2Open3){m_strLog.Format("Get_SortPicker2Open, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  4 && pDX11->iSortPicker2Open4){m_strLog.Format("Get_SortPicker2Open, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	return FALSE;
 }
 
@@ -2215,12 +2249,12 @@ BOOL CCommon::Get_SortPicker2Close(int nSub)
 	DX_DATA_11 *pDX11 = g_objAJinAXL.Get_pDX11();
 	if (nSub == 0) {
 		if (pDX11->iSortPicker2Exist1 && pDX11->iSortPicker2Exist2 &&
-			pDX11->iSortPicker2Exist3 && pDX11->iSortPicker2Exist4) return TRUE;
+			pDX11->iSortPicker2Exist3 && pDX11->iSortPicker2Exist4){m_strLog.Format("Get_SortPicker2Close, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	}
-	else if (nSub ==  1 && pDX11->iSortPicker2Exist1) return TRUE;
-	else if (nSub ==  2 && pDX11->iSortPicker2Exist2) return TRUE;
-	else if (nSub ==  3 && pDX11->iSortPicker2Exist3) return TRUE;
-	else if (nSub ==  4 && pDX11->iSortPicker2Exist4) return TRUE;
+	else if (nSub ==  1 && pDX11->iSortPicker2Exist1){m_strLog.Format("Get_SortPicker2Close, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  2 && pDX11->iSortPicker2Exist2){m_strLog.Format("Get_SortPicker2Close, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  3 && pDX11->iSortPicker2Exist3){m_strLog.Format("Get_SortPicker2Close, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
+	else if (nSub ==  4 && pDX11->iSortPicker2Exist4){m_strLog.Format("Get_SortPicker2Close, nSub:%d",nSub);g_objLogFile.Save_MotionLog(m_strLog); return TRUE;}
 	return FALSE;
 }
 
