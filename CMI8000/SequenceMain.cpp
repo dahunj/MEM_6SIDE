@@ -4430,7 +4430,7 @@ BOOL CSequenceMain::Inspection1_Run()
 	case 5:
 		if(m_pDX06->iCmAlignSlaveOpen && !m_pDX06->iCmAlignSlaveClose)
 		{
-			if (!m_tInspect1Loop.Waiting_Time(50)) return TRUE;
+			if (!m_tInspect1Loop.Waiting_Time(300)) return TRUE;
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect1Case = 6; m_tInspect1Loop.Set_LoopTime(5000); 
@@ -5024,7 +5024,7 @@ BOOL CSequenceMain::Inspection2_Run()
 	case 5:
 		if(m_pDX06->iCmAlignSlaveOpen && !m_pDX06->iCmAlignSlaveClose)
 		{
-			if (!m_tInspect2Loop.Waiting_Time(50)) return TRUE;
+			if (!m_tInspect2Loop.Waiting_Time(300)) return TRUE;
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect2Case = 6; m_tInspect2Loop.Set_LoopTime(5000); 
@@ -5600,7 +5600,7 @@ BOOL CSequenceMain::Inspection3_Run()
 			if (!m_tInspect3Loop.Waiting_Time(10)) return TRUE;
 
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;
-			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
+			//m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect3Case = 5; m_tInspect3Loop.Set_LoopTime(5000); 
 			bTaktSave3 = FALSE;
@@ -5609,7 +5609,7 @@ BOOL CSequenceMain::Inspection3_Run()
 	case 5:
 		if(m_pDX06->iCmAlignSlaveOpen && !m_pDX06->iCmAlignSlaveClose)
 		{
-			if (!m_tInspect3Loop.Waiting_Time(50)) return TRUE;
+			if (!m_tInspect3Loop.Waiting_Time(300)) return TRUE;
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect3Case = 6; m_tInspect3Loop.Set_LoopTime(5000); 

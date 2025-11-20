@@ -533,7 +533,7 @@ BOOL CCommon::Check_PortArea(BOOL bAuto)
 		Show_Alarm("Ng Port Area(X0930) 감지 되었습니다."); return FALSE;
 	}
 
-	//Good Port
+	//Good Porta
 	if (!pDX12->iGoodPortAreaCheck && (pDX12->iGoodPortSlideOpen || pDX12->iGoodPortSlideClose)) {
 		//Show_MsgBox(1, "Good Port Area(X1206) 감지 되었습니다.");
 		//Show_Alarm("Good Port Area(X1206) 감지 되었습니다."); return FALSE;
