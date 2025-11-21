@@ -593,13 +593,13 @@ void CCMI8000Dlg::Set_CurrentMode(int nMode)
 	} else if (nMode == MODE_INITIAL) {
 		g_dlgInitial.ShowWindow(SW_SHOW);
 		m_stcMainMode.SetWindowText("Initial");
-		m_stcMainOpEng.SetWindowText("Engineer Mode");
+		m_stcMainOpEng.SetWindowText("Operator Mode");//m_stcMainOpEng.SetWindowText("Engineer Mode");
 		g_objLogFile.Save_HandlerLog("[Main Dialog] Initial Mode start");
 
 	} else if (nMode == MODE_WORK) {
 		g_dlgWork.ShowWindow(SW_SHOW);
 		m_stcMainMode.SetWindowText("Work");
-		m_stcMainOpEng.SetWindowText("Engineer Mode");
+		m_stcMainOpEng.SetWindowText("Operator Mode");//m_stcMainOpEng.SetWindowText("Engineer Mode");
 		m_rdoMainWork.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
 		if (!m_rdoMainWork.GetCheck()) m_rdoMainWork.SetCheck(TRUE);
 		g_objLogFile.Save_HandlerLog("[Main Dialog] Work Mode start");
