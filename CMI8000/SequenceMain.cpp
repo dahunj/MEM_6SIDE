@@ -10166,7 +10166,8 @@ BOOL CSequenceMain::NgTray_Run()
 			m_strLog.Format("NG Stage, %d", GetTickCount() - m_dwNgTray);
 			g_objLogFile.Save_TestLog(m_strLog);
 
-			if (!m_bUnloadLotEnd && Check_NgTrayFull()) {
+			if (!m_bUnloadLotEnd && Check_NgTrayFull()) 
+			{
 				gData.bNGTrayWait = TRUE; 
 				g_dlgWork.PostMessage(UM_SHOW_MSG, 1, NULL);
 				if (m_pThreadNgFullBeep == NULL) m_pThreadNgFullBeep = AfxBeginThread(Thread_NgFullBeep, (LPVOID)(2000));

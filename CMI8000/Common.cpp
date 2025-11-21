@@ -527,7 +527,7 @@ BOOL CCommon::Check_PortArea(BOOL bAuto)
 #endif
 
 	// Ng Port
-	if (!pDX09->iNgPortAreaCheck && (pDX09->iNgPortSlideOpen || pDX09->iNgPortSlideClose)) 
+	if (!pDX09->iNgPortAreaCheck && (pDX09->iNgPortSlideOpen || pDX09->iNgPortSlideClose) && !gData.bNGTrayWait) 
 	{
 		//Show_MsgBox(1, "Ng Port Area(X0930) 감지 되었습니다.");
 		Show_Alarm("Ng Port Area(X0930) 감지 되었습니다."); return FALSE;
