@@ -1938,7 +1938,6 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	m_dwLastUnLoad = gLot.dwLotEnd[nPx] - m_dwLastUnLoad;
 
 	m_strLog.Format("LotID,%s,Start_Time,%s,End_Time,%s,Time,%d,Tray_Count,%02d,CM_Count,%04d,Tack,%0.7lf,%d,%d",
-		//gLot.sLotID[nPx], gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], gLot.dTackTime, gLot.nGoodCount[nPx], gLot.nNgCount[nPx]);
 		gLot.sLotID[nPx], gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], gLot.dTackTime, gLot.nGoodCount[nPx], gLot.nNgCount[nPx]);
 	g_objLogFile.Save_HandlerLog(m_strLog);
 
@@ -1949,8 +1948,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	
 	m_strLog.Format("%s,%s,%s,%d,%02d,%04d,%0.7lf,%d,%d,%d,%d,%d,%d",
-		gLot.sLotID[nPx], gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], 0, gLot.nGoodCount[nPx], gLot.nNgCount[nPx],
-		//gLot.sLotID[nPx], gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], gLot.dTackTime, gLot.nGoodCount[nPx], gLot.nNgCount[nPx],
+		gLot.sLotID[nPx], gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], gLot.dTackTime, gLot.nGoodCount[nPx], gLot.nNgCount[nPx],
 		gLot.nSNgCount[nPx][1], gLot.nSNgCount[nPx][2], gLot.nSNgCount[nPx][3], gLot.nSNgCount[nPx][5], gLot.nSNgCount[nPx][0]);
 	g_objLogFile.Save_JobListLog(m_strLog, TRUE);
 
