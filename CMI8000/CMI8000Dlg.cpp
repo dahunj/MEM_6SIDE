@@ -397,7 +397,27 @@ void CCMI8000Dlg::OnBnClickedRdoMainWork()
 
 void CCMI8000Dlg::OnBnClickedRdoMainManual()
 {
-	Set_CurrentMode(MODE_MANUAL);
+#ifdef DRY_RUN_TEST
+	g_dlgSetup.Set_LoginUser(2);	// SI
+	Set_CurrentMode(MODE_SETUP);
+#else
+	int nUser = 0;
+	if (g_objCommon.Show_Password(nUser) == IDOK) {
+		theApp.bParamMode = FALSE;
+		g_dlgSetup.Set_LoginUser(nUser);
+		Set_CurrentMode(MODE_MANUAL);
+
+	} else {
+		int nMode = theApp.Get_MainMode();
+		if (nMode == MODE_WORK) m_rdoMainWork.SetCheck(TRUE);
+		if (nMode == MODE_MANUAL) m_rdoMainManual.SetCheck(TRUE);
+		if (nMode == MODE_SETUP) m_rdoMainSetup.SetCheck(TRUE);
+		if (nMode == MODE_PROHIBIT) m_rdoMainProhibit.SetCheck(TRUE);
+		if (nMode == MODE_PARAM) m_rdoMainParm.SetCheck(TRUE);
+	}
+#endif
+
+	//Set_CurrentMode(MODE_MANUAL);
 }
 
 void CCMI8000Dlg::OnBnClickedRdoMainSetup()
