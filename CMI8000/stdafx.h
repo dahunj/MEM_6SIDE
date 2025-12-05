@@ -74,7 +74,7 @@
 #endif
 
 
-#define MAIN_VERSION	_T("V 3.5.1.16 MEM")
+#define MAIN_VERSION	_T("V 3.5.1.17 MEM")
 
 
 //林籍贸府窍搁 SIMULATION 
@@ -394,7 +394,7 @@ typedef struct {
 	int		nCmCount[2];	// 林埃(0:7~19h), 具埃(1:19~7h)
 
 	DWORD	dwTactEachPre[2][6]; //2 sort picker, sort pick max count 6
-	DWORD	dwTactEachLater[2][6]; //2 sort picker, sort pick max count 6
+	DWORD	dwTactEachPost[2][6]; //2 sort picker, sort pick max count 6
 } GLOVAL_UPH;
 
 typedef struct {

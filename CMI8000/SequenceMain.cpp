@@ -1618,18 +1618,22 @@ void CSequenceMain::Set_ScanError(int nErrNo, int nTrayNo1, int nTrayNo2, int nT
 	if (strErrMsg != "") g_objCommon.Set_ErrorSubMessage(strErrMsg);
 }
 
-double CSequenceMain::Get_TactEach(int nPickNo, int nPickIdx, int nPortNo, int nTrayNo, int nCmNo)
+double CSequenceMain::Get_TactEach(CString sLotID, int nPickNo, int nPickIdx, int nPortNo, int nTrayNo, int nCmNo)
 {
 	double dTact = 0;
-	gUph.dwTactEachLater[nPickNo-1][nPickIdx] = GetTickCount();
+	gUph.dwTactEachPost[nPickNo-1][nPickIdx] = GetTickCount();
 	if(gUph.dwTactEachPre[nPickNo-1][nPickIdx] == 0) 
 	{
 		//pass
 	}
-	else{
-		dTact = gUph.dwTactEachLater[nPickNo-1][nPickIdx] - gUph.dwTactEachPre[nPickNo-1][nPickIdx];
+	else
+	{
+		dTact = gUph.dwTactEachPost[nPickNo-1][nPickIdx] - gUph.dwTactEachPre[nPickNo-1][nPickIdx];
 		dTact = dTact/1000;
+		m_strLog.Format("[Gripper Tact],LotID:%s,SortPicker:%d,Picker Idx:%d,CM PortNo:%d,CM TrayNo:%d, CM No:%d, Tact(s):%0.2lf", sLotID, nPickNo, nPickIdx, nPortNo, nTrayNo, nCmNo, dTact);
+		g_objLogFile.Save_HandlerLog(m_strLog);
 	}
+	gUph.dwTactEachPre[nPickNo-1][nPickIdx] = GetTickCount();
 	return dTact;
 		
 }
@@ -7350,7 +7354,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);	//Ready Up
 			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(5000);
 
-			for (int i = 0; i < nSp1DownSu; i++) {
+			for (int i = 0; i < nSp1DownSu; i++) 
+			{
 				gData.InfoNgTray[nSp1WorkNg][nSp1TrayPosY][nSp1TrayPosX+i] = gData.InfoSortPick[0][nSp1StartNo+i]; 
 				gData.InfoSortPick[0][nSp1StartNo+i] = 0;
 
@@ -7371,7 +7376,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 				g_objLogFile.Save_OutTray(sNgTray, 1, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("NG", nSp1WorkNg, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 
-				Get_TactEach(1, nSp1StartNo+i, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
+				Get_TactEach(gLot.sLotID[nSp1PNo-1],1, nSp1StartNo+i, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 
 				gData.nTNoSortPick[0][nSp1StartNo+i] = gData.nCNoSortPick[0][nSp1StartNo+i] = 0;
 			}
@@ -7542,7 +7547,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 		return TRUE;
 
 	case 18:	// Move to NG Tray1 Position
-		if (g_objAJinAXL.Is_Done(AX_SORT_PICKER1_X)) {
+		if (g_objAJinAXL.Is_Done(AX_SORT_PICKER1_X)) 
+		{
 			g_objCommon.Move_Position(AX_SORT_PICKER1_X, 2);	// Good1
 			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(10000);
 			m_tSortPick1Loop.Takt_Start(nTaktZone, 18);
@@ -7622,9 +7628,11 @@ BOOL CSequenceMain::SortPicker1_Run()
 
 			if ((nSp1WorkGood == 1 && g_objAJinAXL.Is_Done(AX_GOOD_STAGE1_Y)) || 
 				(nSp1WorkGood == 2 && g_objAJinAXL.Is_Done(AX_GOOD_STAGE2_Y))) {
-				if (Select_GoodTrayPos(nSp1TrayPosX, nSp1TrayPosY)) {
+				if (Select_GoodTrayPos(nSp1TrayPosX, nSp1TrayPosY)) 
+				{
 					
-					if (Select_SortPickGoodPos(1, nSp1StartNo, nSp1PickCnt)) {	//startNo:0base, PickCnt:1base
+					if (Select_SortPickGoodPos(1, nSp1StartNo, nSp1PickCnt)) 
+					{	//startNo:0base, PickCnt:1base
 						if (!Select_GoodTrayPos(nSp1TrayPosX, nSp1TrayPosY)) nSp1TrayPosX = 0;	// Tray 교체중...
 						nSp1TrayCnt = gData.nTrayX - nSp1TrayPosX;
 						nSp1DownSu = ((nSp1PickCnt < nSp1TrayCnt) ? nSp1PickCnt : nSp1TrayCnt);
@@ -7687,6 +7695,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 				g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], "OK", sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				g_objLogFile.Save_OutTray("GOOD", gData.nGoodTrayCount, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("GOOD", gData.nGoodTrayCount, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
+
+				Get_TactEach(gLot.sLotID[nSp1PNo-1], 1, nSp1StartNo+i, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 
 				gData.nTNoSortPick[0][nSp1StartNo+i] = gData.nCNoSortPick[0][nSp1StartNo+i] = 0;
 			}
@@ -7876,8 +7886,10 @@ BOOL CSequenceMain::SortPicker1_Run()
 	// NG Buffer place
 	case 40:	// Move to NG Buffer Position
 		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0) && g_objAJinAXL.Is_Done(AX_SORT_PICKER1_X) && g_objAJinAXL.Is_Done(AX_SORT_PICKER1_P)) {
-			if (Select_SortPickNgPos(1, nSp1StartNo, nSp1PickCnt, TRUE)) {	// startNo 0base pickCnt 1base
-				if (Select_NgBufferPos(1, nSp1TrayPosX)) {	// Ng Buffer에 자리가 있을때
+			if (Select_SortPickNgPos(1, nSp1StartNo, nSp1PickCnt, TRUE))  // startNo 0base pickCnt 1base
+			{	
+				if (Select_NgBufferPos(1, nSp1TrayPosX))  // Ng Buffer에 자리가 있을때
+				{	
 					// 한Case에서 오는게 아니라 따로 추출해서 입력해준다.
 							
 					nSp1TrayCnt = gData.nSortPickQt - nSp1TrayPosX;
@@ -8598,6 +8610,9 @@ BOOL CSequenceMain::SortPicker2_Run()
 				g_objLogFile.Save_OutTray(sNgTray, 1, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("NG", nSp2WorkNg, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 
+				Get_TactEach(gLot.sLotID[nSp2PNo-1], 2, nSp2StartNo+i, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
+
+
 				gData.nTNoSortPick[1][nSp2StartNo+i] = gData.nCNoSortPick[1][nSp2StartNo+i] = 0;
 			}
 			gData.nULPNo = gData.nPNoNgTray = gData.nPNoSortPick[1];
@@ -8928,6 +8943,8 @@ BOOL CSequenceMain::SortPicker2_Run()
 				g_objLogFile.Save_OutTray("GOOD", gData.nGoodTrayCount, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("GOOD", gData.nGoodTrayCount, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 
+				Get_TactEach(gLot.sLotID[nSp2PNo-1], 2, nSp2StartNo+i, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
+				
 				gData.nTNoSortPick[1][nSp2StartNo+i] = gData.nCNoSortPick[1][nSp2StartNo+i] = 0;
 			}
 			gData.nULPNo = gData.nPNoGoodTray = gData.nPNoSortPick[1]; 
