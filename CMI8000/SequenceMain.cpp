@@ -2022,14 +2022,18 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	// Jig별 불량율 계산.
 	BOOL bJigErr = FALSE;
-	if (m_pEquipData->nJigNgRate > 0 && m_pEquipData->nJigNgCnt > 0) {
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 10; j++) {
+	if (m_pEquipData->nJigNgRate > 0 && m_pEquipData->nJigNgCnt > 0) 
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
 				gData.nJigNgOverCnt[i][j] = 0;
 				gData.dJigNgOver[i][j] = 0.0;
 				if (gData.nJigNgCnt[nPx][i][j] < m_pEquipData->nJigNgCnt) continue;	// Jig Ng 최소 수량 이상일때만 Rate 확인.
 				dNgRate = (double)(gData.nJigNgCnt[nPx][i][j]) / (double)(gLot.nNgCount[nPx]) * 100;	// 각 Jig 불량수/전체 불량수
-				if (dNgRate > (m_pEquipData->nJigNgRate - 0.01)) {
+				if (dNgRate > (m_pEquipData->nJigNgRate - 0.01)) 
+				{
 					gData.nJigNgOverCnt[i][j] = gData.nJigNgCnt[nPx][i][j];
 					gData.dJigNgOver[i][j] = dNgRate;
 					bJigErr = TRUE;
