@@ -11,13 +11,19 @@ public:
 	CManualPickUpRetryDlg(CWnd* pParent = NULL);   // 표준 생성자입니다.
 	virtual ~CManualPickUpRetryDlg();
 
-	CGroupCS	m_Group[1];
+	CGroupCS	m_Group[6];
 	CLabelCS	m_Label[3];
 	CComboCS	m_cboPicker;
 	CComboCS	m_cboPickNum;
 	CEditCS		m_edtDelay;
 	CCheckCS	m_chkRepeatRun;
 	CLabelCS	m_lblCase;
+
+	CButtonCS	m_btnBtm1Retry[8];
+	CButtonCS	m_btnBtm2Retry[8];
+	CButtonCS	m_btnSort1Retry[8];
+	CButtonCS	m_btnSort2Retry[8];
+
 
 	CEditCS		m_edtMsg;
 
@@ -69,4 +75,16 @@ public:
 	afx_msg void OnBnClickedChkRepeatRun();
 	afx_msg void OnCbnSelchangeCboPicker();
 	afx_msg void OnCbnSelchangeCboPickNum();
+
+	afx_msg void OnBtnBtm1Retry(UINT nID);
+	afx_msg void OnBtnBtm2Retry(UINT nID);
+	afx_msg void OnBtnSort1Retry(UINT nID);
+	afx_msg void OnBtnSort1Buffer2Retry(UINT nID);
+	afx_msg void OnBtnSort2Retry(UINT nID);
+	afx_msg void OnBtnSort2Buffer2Retry(UINT nID);
+
+
+	void ThreadRun();
+	void ThreadStop();
+	afx_msg void OnBnClickedBtnStop();
 };

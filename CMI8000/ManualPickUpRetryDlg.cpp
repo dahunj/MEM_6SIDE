@@ -31,7 +31,7 @@ CManualPickUpRetryDlg::~CManualPickUpRetryDlg()
 void CManualPickUpRetryDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_GROUP_0, m_Group[0]);
+	for(int i = 0; i < 6; i++)DDX_Control(pDX, IDC_GROUP_0+i, m_Group[i]);
 	for(int i = 0; i < 3; i++) DDX_Control(pDX, IDC_LABEL_0 + i, m_Label[i]);
 	DDX_Control(pDX, IDC_CBO_PICKER, m_cboPicker);
 	DDX_Control(pDX, IDC_CBO_PICK_NUM, m_cboPickNum);
@@ -39,6 +39,11 @@ void CManualPickUpRetryDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHK_REPEAT_RUN, m_chkRepeatRun);
 	DDX_Control(pDX, IDC_EDT_MSG, m_edtMsg);
 	DDX_Control(pDX, IDC_LBL_CASE, m_lblCase);
+
+	for(int i = 0; i < 8; i++) DDX_Control(pDX, IDC_BTN_BTM1_0 + i, m_btnBtm1Retry[i]);
+	for(int i = 0; i < 8; i++) DDX_Control(pDX, IDC_BTN_BTM2_0 + i, m_btnBtm2Retry[i]);
+	for(int i = 0; i < 8; i++) DDX_Control(pDX, IDC_BTN_SORT1_0 + i, m_btnSort1Retry[i]);
+	for(int i = 0; i < 8; i++) DDX_Control(pDX, IDC_BTN_SORT2_0 + i, m_btnSort2Retry[i]);
 }
 
 
@@ -49,6 +54,15 @@ BEGIN_MESSAGE_MAP(CManualPickUpRetryDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHK_REPEAT_RUN, &CManualPickUpRetryDlg::OnBnClickedChkRepeatRun)
 	ON_CBN_SELCHANGE(IDC_CBO_PICKER, &CManualPickUpRetryDlg::OnCbnSelchangeCboPicker)
 	ON_CBN_SELCHANGE(IDC_CBO_PICK_NUM, &CManualPickUpRetryDlg::OnCbnSelchangeCboPickNum)
+
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_BTN_BTM1_0, IDC_BTN_BTM1_7, OnBtnBtm1Retry)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_BTN_BTM2_0, IDC_BTN_BTM2_7, OnBtnBtm2Retry)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_BTN_SORT1_0, IDC_BTN_SORT1_3, OnBtnSort1Retry)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_BTN_SORT2_0, IDC_BTN_SORT2_3, OnBtnSort2Retry)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_BTN_SORT1_4, IDC_BTN_SORT1_7, OnBtnSort1Buffer2Retry)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_BTN_SORT2_4, IDC_BTN_SORT2_7, OnBtnSort2Buffer2Retry)
+
+	ON_BN_CLICKED(IDC_BTN_STOP, &CManualPickUpRetryDlg::OnBnClickedBtnStop)
 END_MESSAGE_MAP()
 
 
@@ -120,13 +134,18 @@ void CManualPickUpRetryDlg::OnTimer(UINT_PTR nIDEvent)
 
 void CManualPickUpRetryDlg::Initial_Controls()
 {
-	m_Group[0].Init_Ctrl("Arial", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT);
+	for (int i = 0; i < 6; i++) m_Group[i].Init_Ctrl("Arial", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT);
 	for (int i = 0; i < 3; i++) m_Label[i].Init_Ctrl("Arial", 10, FALSE, COLOR_DEFAULT, COLOR_DEFAULT);
 	m_cboPicker.Init_Ctrl("Arial", 10, FALSE, COLOR_DEFAULT, COLOR_DEFAULT);
 	m_cboPickNum.Init_Ctrl("Arial", 10, FALSE, COLOR_DEFAULT, COLOR_DEFAULT);
 	m_edtDelay.Init_Ctrl("Arial", 10, FALSE, COLOR_DEFAULT, COLOR_DEFAULT);
 	m_edtMsg.Init_Ctrl("Arial", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT);
 	m_chkRepeatRun.Init_Ctrl("Arial", 10, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
+
+	for (int i = 0; i < 8; i++) m_btnBtm1Retry[i].Init_Ctrl("Arial", 12, FALSE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
+	for (int i = 0; i < 8; i++) m_btnBtm2Retry[i].Init_Ctrl("Arial", 12, FALSE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
+	for (int i = 0; i < 8; i++) m_btnSort1Retry[i].Init_Ctrl("Arial", 12, FALSE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
+	for (int i = 0; i < 8; i++) m_btnSort2Retry[i].Init_Ctrl("Arial", 12, FALSE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 }
 
 void CManualPickUpRetryDlg::OnBnClickedChkRepeatRun()
@@ -370,8 +389,8 @@ void CManualPickUpRetryDlg::Repeat_Action()
 			m_strLog.Format("[Retry] Case : %d", m_nRepeatCase);
 			g_objLogFile.Save_HandlerLog(m_strLog);
 						
-			m_nRepeatCase = 0;m_chkRepeatRun.SetCheck(FALSE);
-			OnBnClickedChkRepeatRun();
+			m_nRepeatCase = 0;
+			ThreadStop();
 			return;
 		}
 		break;
@@ -429,8 +448,7 @@ void CManualPickUpRetryDlg::Repeat_Action()
 			g_objLogFile.Save_HandlerLog(m_strLog);
 
 			m_nRepeatCase = 0;
-			m_chkRepeatRun.SetCheck(FALSE);
-			OnBnClickedChkRepeatRun();
+			ThreadStop();
 			return;
 		}
 		break;
@@ -488,8 +506,7 @@ void CManualPickUpRetryDlg::Repeat_Action()
 			g_objLogFile.Save_HandlerLog(m_strLog);
 
 			m_nRepeatCase = 0;
-			m_chkRepeatRun.SetCheck(FALSE);
-			OnBnClickedChkRepeatRun();
+			ThreadStop();
 			return;
 		}
 		break;
@@ -547,8 +564,7 @@ void CManualPickUpRetryDlg::Repeat_Action()
 			g_objLogFile.Save_HandlerLog(m_strLog);
 
 			m_nRepeatCase = 0;
-			m_chkRepeatRun.SetCheck(FALSE);
-			OnBnClickedChkRepeatRun();
+			ThreadStop();
 			return;
 		}
 		break;
@@ -605,8 +621,7 @@ void CManualPickUpRetryDlg::Repeat_Action()
 			g_objLogFile.Save_HandlerLog(m_strLog);
 
 			m_nRepeatCase = 0;
-			m_chkRepeatRun.SetCheck(FALSE);
-			OnBnClickedChkRepeatRun();
+			ThreadStop();
 			return;
 		}
 		break;
@@ -659,9 +674,8 @@ void CManualPickUpRetryDlg::Repeat_Action()
 			m_strLog.Format("[Retry] Case : %d", m_nRepeatCase);
 			g_objLogFile.Save_HandlerLog(m_strLog);
 
-			m_nRepeatCase = 0;
-			m_chkRepeatRun.SetCheck(FALSE);
-			OnBnClickedChkRepeatRun();
+			m_nRepeatCase = 0;			
+			ThreadStop();
 			return;
 		}
 		break;	
@@ -747,3 +761,219 @@ void CManualPickUpRetryDlg::OnCbnSelchangeCboPickNum()
 }
 
 
+
+void CManualPickUpRetryDlg::OnBtnBtm1Retry(UINT nID)
+{
+	CString m_strLog;
+
+	if (!g_objAJinAXL.Is_Home(AX_BTM1_PICKER_X)) return;
+	if (!g_objAJinAXL.Is_Home(AX_BTM1_PICKER_Z)) return;
+
+	if (!g_objCommon.Check_MainDoor()) return;
+	int nIndex = nID - IDC_BTN_BTM1_0;
+
+	if (!g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0)) 
+	{	
+		AfxMessageBox("Btm1 Z축 위치 확인 후 진행하세요."); 
+		return;
+	}
+
+	m_nRepeatCase = 100;
+	m_nPickerNumSelected = nIndex +1;
+	
+
+	m_strLog.Format("[Manual Retry] Btm1 Picker (%d) Click", nIndex);
+	g_objLogFile.Save_HandlerLog(m_strLog);
+
+	ThreadRun();
+}
+
+
+void CManualPickUpRetryDlg::OnBtnBtm2Retry(UINT nID)
+{
+	CString m_strLog;
+
+	if (!g_objAJinAXL.Is_Home(AX_BTM2_PICKER_X)) return;
+	if (!g_objAJinAXL.Is_Home(AX_BTM2_PICKER_Z)) return;
+
+	if (!g_objCommon.Check_MainDoor()) return;
+	int nIndex = nID - IDC_BTN_BTM2_0;
+
+	if (!g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 0)) 
+	{	
+		AfxMessageBox("Btm2 Z축 위치 확인 후 진행하세요."); 
+		return;
+	}
+
+	m_nRepeatCase = 200;
+	m_nPickerNumSelected = nIndex +1;
+
+
+	m_strLog.Format("[Manual Retry] Btm2  Picker (%d) Click", nIndex);
+	g_objLogFile.Save_HandlerLog(m_strLog);
+
+	ThreadRun();
+}
+
+
+void CManualPickUpRetryDlg::OnBtnSort1Retry(UINT nID)
+{
+	CString m_strLog;
+
+	if (!g_objAJinAXL.Is_Home(AX_SORT_PICKER1_X)) return;
+	if (!g_objAJinAXL.Is_Home(AX_SORT_PICKER1_X)) return;
+
+	if (!g_objCommon.Check_MainDoor()) return;
+	int nIndex = nID - IDC_BTN_SORT1_0;
+
+	if (!g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) 
+	{	
+		AfxMessageBox("Sort 1 Z축 위치 확인 후 진행하세요."); 
+		return;
+	}
+
+	m_nRepeatCase = 300;
+	m_nPickerNumSelected = nIndex +1;
+
+
+	m_strLog.Format("[Manual Retry] Sort 1 Picker (%d) Click", nIndex);
+	g_objLogFile.Save_HandlerLog(m_strLog);
+
+	ThreadRun();
+}
+
+
+void CManualPickUpRetryDlg::OnBtnSort1Buffer2Retry(UINT nID)
+{
+	CString m_strLog;
+
+	if (!g_objAJinAXL.Is_Home(AX_SORT_PICKER1_X)) return;
+	if (!g_objAJinAXL.Is_Home(AX_SORT_PICKER1_X)) return;
+
+	if (!g_objCommon.Check_MainDoor()) return;
+	int nIndex = nID - IDC_BTN_SORT1_4;
+
+	if (!g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) 
+	{	
+		AfxMessageBox("Sort 1 Z축 위치 확인 후 진행하세요."); 
+		return;
+	}
+
+	m_nRepeatCase = 400;
+	m_nPickerNumSelected = nIndex +1;
+
+
+	m_strLog.Format("[Manual Retry] Sort 1 Picker (%d) Click", nIndex);
+	g_objLogFile.Save_HandlerLog(m_strLog);
+
+	ThreadRun();
+}
+
+void CManualPickUpRetryDlg::OnBtnSort2Retry(UINT nID)
+{
+	CString m_strLog;
+
+	if (!g_objAJinAXL.Is_Home(AX_SORT_PICKER2_X)) return;
+	if (!g_objAJinAXL.Is_Home(AX_SORT_PICKER2_X)) return;
+
+	if (!g_objCommon.Check_MainDoor()) return;
+	int nIndex = nID - IDC_BTN_SORT2_0;
+
+	if (!g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) 
+	{	
+		AfxMessageBox("Sort 2 Z축 위치 확인 후 진행하세요."); 
+		return;
+	}
+
+	m_nRepeatCase = 500;
+	m_nPickerNumSelected = nIndex +1;
+
+
+	m_strLog.Format("[Manual Retry] Sort 1 Picker (%d) Click", nIndex);
+	g_objLogFile.Save_HandlerLog(m_strLog);
+
+	ThreadRun();
+}
+
+void CManualPickUpRetryDlg::OnBtnSort2Buffer2Retry(UINT nID)
+{
+	CString m_strLog;
+
+	if (!g_objAJinAXL.Is_Home(AX_SORT_PICKER2_X)) return;
+	if (!g_objAJinAXL.Is_Home(AX_SORT_PICKER2_X)) return;
+
+	if (!g_objCommon.Check_MainDoor()) return;
+	int nIndex = nID - IDC_BTN_SORT2_4;
+
+	if (!g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) 
+	{	
+		AfxMessageBox("Sort 2 Z축 위치 확인 후 진행하세요."); 
+		return;
+	}
+
+	m_nRepeatCase = 600;
+	m_nPickerNumSelected = nIndex +1;
+
+
+	m_strLog.Format("[Manual Retry] Sort 1 Picker (%d) Click", nIndex);
+	g_objLogFile.Save_HandlerLog(m_strLog);
+
+	ThreadRun();
+}
+
+void CManualPickUpRetryDlg::ThreadRun()
+{
+	CString strText, strTemp;
+
+	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
+		
+	m_edtDelay.GetWindowText(strText);
+	m_nActionDelay = atoi(strText);
+
+	m_bThreadAction = TRUE;
+	m_pThreadAction = AfxBeginThread(Thread_ActionRun, this);
+		
+	pMainDlg->Enable_ModeButton(FALSE);
+	pMainDlg->m_btnMainOperator.EnableWindow(FALSE);
+
+	g_dlgManual.m_rdoManualBtm1.EnableWindow(FALSE);
+	g_dlgManual.m_rdoManualBtm2.EnableWindow(FALSE);
+	g_dlgManual.m_rdoManualLoad.EnableWindow(FALSE);
+	g_dlgManual.m_rdoManualUnload.EnableWindow(FALSE);
+}
+
+
+
+void CManualPickUpRetryDlg::ThreadStop()
+{
+	
+	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
+
+	m_nRepeatCase = 0;
+	m_strTemp.Format("%d", m_nRepeatCase);
+	m_lblCase.SetWindowText(m_strTemp);		
+
+	m_bThreadStop = TRUE;
+	m_pThreadStop = AfxBeginThread(Thread_ActionStop, this);
+
+	while(m_bThreadStop) 
+	{	
+		g_objCommon.DoEvents();
+		if(!m_bThreadStop) break;
+	}
+	
+
+	pMainDlg->Enable_ModeButton(TRUE);
+	pMainDlg->m_btnMainOperator.EnableWindow(TRUE);
+
+	g_dlgManual.m_rdoManualBtm1.EnableWindow(TRUE);
+	g_dlgManual.m_rdoManualBtm2.EnableWindow(TRUE);
+	g_dlgManual.m_rdoManualLoad.EnableWindow(TRUE);
+	g_dlgManual.m_rdoManualUnload.EnableWindow(TRUE);
+
+}
+
+void CManualPickUpRetryDlg::OnBnClickedBtnStop()
+{
+	ThreadStop();
+}
