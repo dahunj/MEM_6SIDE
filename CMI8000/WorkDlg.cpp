@@ -69,6 +69,7 @@ void CWorkDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LED_LOT_LOAD_ENABLE, m_ledLotLoadEnable);
 	DDX_Control(pDX, IDC_CHK_CYCLE_STOP, m_chkCycleStop);
 	DDX_Control(pDX, IDC_CHK_MES_USE, m_chkMesUse);
+	DDX_Control(pDX, IDC_CHK_PULLFORCE, m_chkPullForce);
 	DDX_Control(pDX, IDC_CHK_LOTID_INSERT, m_chkLotIDInsert);
 	for (int i = 0; i < 6; i++) DDX_Control(pDX, IDC_PIC_TRAY_BACK_0 + i, m_picTrayBack[i]);
 
@@ -901,10 +902,11 @@ void CWorkDlg::Initial_Controls()
 	m_stcCycleTime.Init_Ctrl("¹ÙÅÁ", 12, TRUE, RGB(0x00, 0xFF, 0x00), RGB(0x00, 0x00, 0x00));
 	m_rdoWorkStart.Init_Ctrl("¹ÙÅÁ", 20, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 	m_rdoWorkStop.Init_Ctrl("¹ÙÅÁ", 20, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
-	m_ledInitComplete.Init_Ctrl("¹ÙÅÁ", 12, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, CLedCS::emGreen, CLedCS::em24);
-	m_ledLotLoadEnable.Init_Ctrl("¹ÙÅÁ", 10, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, CLedCS::emGreen, CLedCS::em16);
-	m_chkCycleStop.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
+	m_ledInitComplete.Init_Ctrl("¹ÙÅÁ", 9, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, CLedCS::emGreen, CLedCS::em16);
+	m_ledLotLoadEnable.Init_Ctrl("¹ÙÅÁ", 9, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, CLedCS::emGreen, CLedCS::em16);
+	m_chkCycleStop.Init_Ctrl("¹ÙÅÁ", 9, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 	m_chkMesUse.Init_Ctrl("Arial", 10, TRUE, RGB(0xFF, 0xFF, 0x00), RGB(0xC0, 0x10, 0x30), CCheckCS::emRed, CCheckCS::emRight);
+	m_chkPullForce.Init_Ctrl("Arial", 10, TRUE, RGB(0xFF, 0xFF, 0x00), RGB(0xC0, 0x10, 0x30), CCheckCS::emRed, CCheckCS::emRight);
 	m_chkLotIDInsert.Init_Ctrl("Arial", 10, TRUE, RGB(0xFF, 0xFF, 0x00), RGB(0x30, 0x70, 0xFF), CCheckCS::emRed, CCheckCS::emRight);
 	for (int i = 0; i < 6; i++) m_picTrayBack[i].Set_Color(COLOR_DEFAULT, RGB(0xF0, 0xF0, 0x80));
 	for (int i = 0; i < 2; i++) m_stcAngleTrayCount[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00));

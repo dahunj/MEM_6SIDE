@@ -54,6 +54,7 @@ public:
 	CLedCS			m_ledLotLoadEnable;
 	CCheckCS		m_chkCycleStop;
 	CCheckCS		m_chkMesUse;
+	CCheckCS		m_chkPullForce;
 	CCheckCS		m_chkLotIDInsert;
 	CPictureCS		m_picTrayBack[6];
 	CStaticCS		m_stcAngleTrayCount[2];
