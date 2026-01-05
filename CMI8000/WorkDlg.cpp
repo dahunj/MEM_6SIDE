@@ -1864,9 +1864,9 @@ void CWorkDlg::OnBnClickedBtnLaserGetdata()
 void CWorkDlg::OnBnClickedButton7()
 {
 	
-	m_toast.ShowToast("tttt", 120,0);
+	
 
-	//gData.dwSkipTime_Sort1 = GetTickCount();
+	gData.dwSkipTime_Sort1 = GetTickCount();
 }
 
 
@@ -1899,6 +1899,8 @@ void CWorkDlg::OnBnClickedChkPullforce()
 
 	if(gData.bPullForce )
 	{
+		m_toast.ShowToast("Pull Force Mode", 120,0);
+
 		pEquipData->bUseInlineMode = TRUE;
 		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
 		//INI.Set_Bool("OPTION", "MES_USE", FALSE);
@@ -1927,6 +1929,8 @@ void CWorkDlg::OnBnClickedChkPullforce()
 	}
 	else
 	{
+		m_toast.ShowWindow(SW_HIDE);
+
 		pEquipData->bUseInlineMode = TRUE;
 		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
 

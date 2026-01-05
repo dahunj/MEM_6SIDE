@@ -21,6 +21,13 @@ CToastMsgDlg::CToastMsgDlg(CWnd* pParent /*=NULL*/)
 	, m_textColor(RGB(255, 255, 255))
 	, m_borderColor(RGB(80, 80, 80))
 {
+	::ZeroMemory(&m_lf, sizeof(m_lf));
+	m_lf.lfCharSet = DEFAULT_CHARSET;
+	m_lf.lfQuality = CLEARTYPE_QUALITY;
+
+	// 기본 폰트 값(원하는 걸로 변경 가능)
+	_tcsncpy_s(m_lf.lfFaceName, _T("Segoe UI"), _TRUNCATE);
+	// 크기는 OnInitDialog에서 DPI 고려해서 세팅해도 됨. (여기선 SetMessageFont로 통일)
 }
 
 BEGIN_MESSAGE_MAP(CToastMsgDlg, CDialogEx)
@@ -51,7 +58,53 @@ BOOL CToastMsgDlg::OnInitDialog()
 
 	ApplyAlpha(m_alpha);
 
+	// 기본 폰트 적용 (예: 14pt Bold)
+	SetMessageFont(48, true, false, false, _T("Segoe UI"));
+
 	return TRUE;
+}
+
+void CToastMsgDlg::ApplyFontToStatic()
+{
+	if (!::IsWindow(m_msgStatic.GetSafeHwnd()))
+		return;
+
+	// 기존 폰트 삭제 후 재생성
+	if (m_msgFont.GetSafeHandle())
+		m_msgFont.DeleteObject();
+
+	m_msgFont.CreateFontIndirect(&m_lf);
+	m_msgStatic.SetFont(&m_msgFont, TRUE);
+
+	m_msgStatic.Invalidate(TRUE);
+}
+
+
+void CToastMsgDlg::SetMessageFont(int heightPt,
+	bool bold,
+	bool italic,
+	bool underline,
+	LPCTSTR faceName)
+{
+	// faceName
+	if (faceName && faceName[0] != 0)
+		_tcsncpy_s(m_lf.lfFaceName, faceName, _TRUNCATE);
+
+	m_lf.lfItalic = italic ? TRUE : FALSE;
+	m_lf.lfUnderline = underline ? TRUE : FALSE;
+	m_lf.lfWeight = bold ? FW_BOLD : FW_NORMAL;
+
+	// 포인트 크기 → 논리단위(픽셀) 변환 (음수: 문자 높이 기준)
+	HDC hdc = ::GetDC(GetSafeHwnd());
+	int logPixelsY = 96;
+	if (hdc)
+	{
+		logPixelsY = ::GetDeviceCaps(hdc, LOGPIXELSY);
+		::ReleaseDC(GetSafeHwnd(), hdc);
+	}
+	m_lf.lfHeight = -MulDiv(heightPt, logPixelsY, 72);
+
+	ApplyFontToStatic();
 }
 
 HBRUSH CToastMsgDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
