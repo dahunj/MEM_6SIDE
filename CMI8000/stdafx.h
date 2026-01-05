@@ -313,6 +313,8 @@ typedef struct {
 
 	BOOL	bCapVisionAlarm;
 	BOOL	bSortPickCompletelyLotEnd;
+
+	BOOL	bPullForce;
 	
 } GLOVAL_DATA;
 

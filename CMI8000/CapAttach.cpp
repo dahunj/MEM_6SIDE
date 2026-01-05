@@ -319,6 +319,22 @@ void CCapAttach::Set_ApdRequest()
 	Send_Command(strSendCmd);
 }
 
+void CCapAttach::Set_VisionAlarmOn()
+{
+	CString	strSendCmd;	
+	strSendCmd.Format("ALARM,ON");
+	Send_Command(strSendCmd);
+}
+
+void CCapAttach::Set_VisionAlarmOff()
+{
+	CString	strSendCmd;
+	
+	strSendCmd.Format("ALARM,OFF");
+	Send_Command(strSendCmd);
+}
+
+
 void CCapAttach::Set_TimeUpdate()
 {
 	SYSTEMTIME time;

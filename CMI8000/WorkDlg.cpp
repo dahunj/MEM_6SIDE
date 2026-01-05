@@ -144,6 +144,7 @@ BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON6, &CWorkDlg::OnBnClickedButton6)
 	ON_BN_CLICKED(IDC_BUTTON7, &CWorkDlg::OnBnClickedButton7)
 	ON_BN_CLICKED(IDC_BUTTON9, &CWorkDlg::OnBnClickedButton9)
+	ON_BN_CLICKED(IDC_CHK_PULLFORCE, &CWorkDlg::OnBnClickedChkPullforce)
 END_MESSAGE_MAP()
 
 // CWorkDlg 메시지 처리기입니다.
@@ -1872,4 +1873,85 @@ void CWorkDlg::OnBnClickedButton9()
 	{
 		AfxMessageBox("good");
 	}
+}
+
+
+void CWorkDlg::OnBnClickedChkPullforce()
+{
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+
+	CIniFileCS INI(gData.sEnvPath + "\\EquipData.ini");
+	if (!INI.Check_File()) { AfxMessageBox("EquipData.ini File Not Found!!!"); return; }
+
+	CString strTemp;
+
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	
+	gData.bPullForce = m_chkPullForce.GetCheck();
+
+	if(gData.bPullForce )
+	{
+		pEquipData->bUseInlineMode = TRUE;
+		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
+		//INI.Set_Bool("OPTION", "MES_USE", FALSE);
+		m_chkMesUse.SetCheck(FALSE);
+		g_objCapAttach.Set_VisionAlarmOff();
+
+		strTemp.Format("%04d%02d%02d%02d:%02d",time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute);
+		m_stcLotId[0].SetWindowText(strTemp);
+
+		pEquipData->bUseVisionAlign = TRUE;
+		INI.Set_Bool("OPTION", "VISION_ALIGN", TRUE);
+		pEquipData->bUseInspectAngle = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_ANGLE", TRUE);
+		pEquipData->bUseInspectBtm1Specular = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_SP", TRUE);
+		pEquipData->bUseInspectBtm1Angle = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_AG", TRUE);
+		pEquipData->bUseInspectBtm13D = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_3D", TRUE);
+		pEquipData->bUseInspectTop1 = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_TOP_1", TRUE);
+		pEquipData->bUseInspectTop2 = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_TOP_2", TRUE);
+		pEquipData->bUseInspectBtm2 = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
+	}
+	else
+	{
+		pEquipData->bUseInlineMode = TRUE;
+		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
+
+		//INI.Set_Bool("OPTION", "MES_USE", TRUE);
+		m_chkMesUse.SetCheck(TRUE);
+
+		g_objCapAttach.Set_VisionAlarmOn();
+		m_stcLotId[0].SetWindowText("");
+
+
+		pEquipData->bUseVisionAlign = TRUE;
+		INI.Set_Bool("OPTION", "VISION_ALIGN", TRUE);
+		pEquipData->bUseInspectAngle = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_ANGLE", TRUE);
+		pEquipData->bUseInspectBtm1Specular = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_SP", TRUE);
+		pEquipData->bUseInspectBtm1Angle = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_AG", TRUE);
+		pEquipData->bUseInspectBtm13D = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_3D", TRUE);
+		pEquipData->bUseInspectTop1 = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_TOP_1", TRUE);
+		pEquipData->bUseInspectTop2 = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_TOP_2", TRUE);
+		pEquipData->bUseInspectBtm2 = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
+	}
+}
+
+void CWorkDlg::Set_PullForce(BOOL bCheck)
+{
+	if(!bCheck) m_chkPullForce.SetCheck(FALSE);
+	else m_chkPullForce.SetCheck(TRUE);
 }

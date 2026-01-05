@@ -1422,7 +1422,15 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		gData.bRosDone[nPx][nTx][nCx] = TRUE;
 	}
 
-	if (m_pEquipData->bResultTestUse)
+	if(gData.bPullForce)
+	{
+		int nJudge = 1;
+		nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
+		if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
+		strLog.Format("PullForce : %d,%d,%d",nInfo, nTx+1, nCx+1);
+		g_objLogFile.Save_TestLog(strLog);
+	}
+	else if (m_pEquipData->bResultTestUse)
 	{
 		int nRand = g_objCommon.Get_Random(0, 99);
 		int nNg1 = m_pEquipData->nResultTestN1;
@@ -1436,7 +1444,7 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		strLog.Format("ResultTest_Use : %d,%d,%d",nInfo, nTx+1, nCx+1);
 		g_objLogFile.Save_TestLog(strLog);
 
-	} 
+	} 	
 	else 
 	{
 		if (gData.bCycleStop && !Get_VisionInspectUse()) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	//Good
@@ -1544,7 +1552,15 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 		gData.bRosDone[nPx][nTx][nCx] = TRUE;
 	}
 
-	if (m_pEquipData->bResultTestUse) {
+	if(gData.bPullForce)
+	{
+		int nJudge = 1;
+		nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
+		if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
+		strLog.Format("PullForce : %d,%d,%d",nInfo, nTx+1, nCx+1);
+		g_objLogFile.Save_TestLog(strLog);
+	}
+	else if (m_pEquipData->bResultTestUse) {
 		int nRand = g_objCommon.Get_Random(0, 99);
 		int nNg1 = m_pEquipData->nResultTestN1;
 		int nNg2 = m_pEquipData->nResultTestN2 + nNg1;
@@ -2071,6 +2087,8 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	gData.bLoadLampOn[nPx] = TRUE;
 
+	
+
 	g_dlgWork.PostMessage(UM_LOT_INFO_CLEAR, nPx, NULL);
 	g_dlgWork.PostMessage(UM_UPDATE_UPH, NULL, NULL);
 	if (bJigErr) g_objCommon.Show_Error(6155);	// 특정 Jig 다량 불량
@@ -2079,6 +2097,12 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 		strErrMsg.Format("#==> %d ea", gLot.nBsNgCount[nPx]);
 		g_objCommon.Set_ErrorSubMessage(strErrMsg);
 		g_objCommon.Show_Error(6180);
+	}
+
+	if(gData.bPullForce)
+	{
+		g_dlgWork.Set_PullForce(FALSE);
+		g_dlgWork.OnBnClickedChkPullforce();
 	}
 //	Beep_Post(1000);
 }

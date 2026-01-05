@@ -167,6 +167,8 @@ public:
 	CButton m_Btn6;
 	afx_msg void OnBnClickedButton7();
 	afx_msg void OnBnClickedButton9();
+	afx_msg void OnBnClickedChkPullforce();
+	void Set_PullForce(BOOL bCheck);
 };
 
 extern CWorkDlg g_dlgWork;

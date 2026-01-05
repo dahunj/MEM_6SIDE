@@ -55,6 +55,10 @@ public:
 	void Set_BarcodeUpdate(int nPortNo, int nTrayNo, int nCmNo, CString sBarcode);
 	void Set_ApdRequest();
 
+	void Set_VisionAlarmOn();
+	void Set_VisionAlarmOff();
+	
+
 	BOOL Is_Opened() { return m_bOpened; }
 	int  Is_StatusCapAttach() { return m_nStatusCapAttach; }
 
