@@ -189,6 +189,9 @@ BOOL CWorkDlg::OnInitDialog()
 	m_rdoWorkStop.SetCheck(TRUE);
 	m_rdoWorkStop.Set_Color(RGB(0xFF, 0x00, 0x00), COLOR_DEFAULT);
 
+	m_toast.Create(IDD_TOASTMSG_DLG, this);
+	m_toast.SetColors(RGB(20,20,120), RGB(255,220,120), RGB(120,120,120));
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
@@ -1860,7 +1863,10 @@ void CWorkDlg::OnBnClickedBtnLaserGetdata()
 
 void CWorkDlg::OnBnClickedButton7()
 {
-	gData.dwSkipTime_Sort1 = GetTickCount();
+	
+	m_toast.ShowToast("tttt", 120,0);
+
+	//gData.dwSkipTime_Sort1 = GetTickCount();
 }
 
 

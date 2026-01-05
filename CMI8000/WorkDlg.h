@@ -5,6 +5,8 @@
 #include "WorkInfoDlg.h"
 #include "afxwin.h"
 
+#include "ToastMsgDlg.h"
+
 #define UM_UPDATE_MODEL			WM_USER+1
 #define UM_UPDATE_TRAY_INFO		WM_USER+2
 #define UM_UPDATE_BARCODE		WM_USER+3
@@ -114,6 +116,9 @@ protected:
 
 private:
 	CWorkInfoDlg *m_pWorkInfoDlg;
+	
+	CToastMsgDlg m_toast;
+
 
 	CBitmap	m_bmpEquipment;
 	BOOL	m_bAutoRunning;
