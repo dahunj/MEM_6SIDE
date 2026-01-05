@@ -51,3 +51,24 @@ _ReSharper*/
 
 #NuGet
 packages/
+CMI8000/CMI8000.sln
+CMI8000/Library/AXL.lib
+CMI8000/Library/CSClientSocketD.lib
+CMI8000/Library/CSClientSocketR.lib
+CMI8000/Library/CSComPortD.lib
+CMI8000/Library/CSComPortR.lib
+CMI8000/Library/CSControlsD.lib
+CMI8000/Library/CSControlsR.lib
+CMI8000/Library/CSGridD.lib
+CMI8000/Library/CSGridR.lib
+CMI8000/Library/CSIniFileD.lib
+CMI8000/Library/CSIniFileR.lib
+CMI8000/Library/CSUdpClientD.lib
+CMI8000/Library/CSUdpClientR.lib
+CMI8000/Library/CSUdpSocketD.lib
+CMI8000/Library/CSUdpSocketR.lib
+UdpDll_VisionEmul/.vs/UdpDll/FileContentIndex/45f80899-a48b-4336-bc6a-ba535d3b6547.vsidx
+UdpDll_VisionEmul/.vs/UdpDll/FileContentIndex/5bdfde93-68ab-475b-a612-7b8a13034306.vsidx
+UdpDll_VisionEmul/.vs/UdpDll/FileContentIndex/a5883a4a-c0b6-467b-b455-5913b055627b.vsidx
+UdpDll_VisionEmul/.vs/UdpDll/FileContentIndex/b7004888-6603-469d-931e-083d090df511.vsidx
+UdpDll_VisionEmul/.vs/UdpDll/FileContentIndex/d1b3d10f-4e8e-49c9-8de2-fbc45fb58213.vsidx
