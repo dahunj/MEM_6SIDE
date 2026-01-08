@@ -6258,8 +6258,8 @@ BOOL CSequenceMain::Btm2Picker_Run()
 			
 			m_tBtm2PickLoop.Takt_Start(nTaktZone, 9);
 			m_tBtm2PickLoop.Takt_End(nTaktZone, 9);
-			if (m_pEquipData->bUseInspectBtm2) {
-				
+			if (m_pEquipData->bUseInspectBtm2)
+			{				
 				g_objLogFile.VisionTakt_Start(BTM2);	// Scan Start
 
 				Set_InspectJigNo(3, nB2pScanNo, nB2JNo1, nB2JNo2, nB2JNo3, nB2JNo4);
@@ -6267,9 +6267,10 @@ BOOL CSequenceMain::Btm2Picker_Run()
 					gData.nTNoBtm2Pick[nB2JNo1-1], gData.nTNoBtm2Pick[nB2JNo2-1], 0, 0,
 					gData.nCNoBtm2Pick[nB2JNo1-1], gData.nCNoBtm2Pick[nB2JNo2-1], 0, 0);
 
-				m_nBtm2PickCase = 10; m_tBtm2PickLoop.Set_LoopTime(30000);
-				
-			} else {
+				m_nBtm2PickCase = 10; m_tBtm2PickLoop.Set_LoopTime(30000);				
+			} 
+			else
+			{
 				if (!m_pEquipData->bUseInspectBtm2) { if(!m_tBtm2PickLoop.Waiting_Time(250)) break; }
 				m_nBtm2PickCase = 15; m_tBtm2PickLoop.Set_LoopTime(5000);
 			}
