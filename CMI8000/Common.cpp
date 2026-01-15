@@ -297,6 +297,71 @@ void CCommon::Move_Position(int nAxis, int nMoveIdx)
 	g_objAJinAXL.Move_Absolute(nAxis, dMovePos);
 }
 
+double CCommon::Get_ActPosition(int nAxis, int nMoveIdx)
+{
+	double dCurrentPos = g_objAJinAXL.Get_Position(nAxis);
+	
+	return dCurrentPos;
+}
+
+double CCommon::Get_MoveDataPosition(int nAxis, int nMoveIdx)
+{
+	MOVE_DATA *pMoveData = g_objDataManager.Get_pMoveData();
+
+	double dMovePos = -999.0;
+
+	if (nAxis == AX_LOAD_STAGE_X)		dMovePos = pMoveData->dLoadStageX[nMoveIdx];		// AXIS 00
+	if (nAxis == AX_LOAD_STAGE_Z)		dMovePos = pMoveData->dLoadStageZ[nMoveIdx];		// AXIS 01
+	if (nAxis == AX_LOAD_PICKER_Y)		dMovePos = pMoveData->dLoadPickerY[nMoveIdx];		// AXIS 02
+	if (nAxis == AX_ANGLE_UNIT_Y)		dMovePos = pMoveData->dAngleUnitY[nMoveIdx];		// AXIS 03
+	if (nAxis == AX_ANGLE_UNIT_X)		dMovePos = pMoveData->dAngleUnitX[nMoveIdx];		// AXIS 04
+	if (nAxis == AX_ANGLE_UNIT_R)		dMovePos = pMoveData->dAngleUnitR[nMoveIdx];		// AXIS 05
+	if (nAxis == AX_VISION_ANGLE_Z)		dMovePos = pMoveData->dVisionAngleZ[nMoveIdx];		// AXIS 06
+	if (nAxis == AX_VISION_ALIGN_Z)		dMovePos = pMoveData->dVisonAlignZ[nMoveIdx];		// AXIS 07
+	if (nAxis == AX_ANGLE_STAGE1_Y)		dMovePos = pMoveData->dAngleStage1Y[nMoveIdx];		// AXIS 08
+	if (nAxis == AX_ANGLE_STAGE1_Z)		dMovePos = pMoveData->dAngleStage1Z[nMoveIdx];		// AXIS 09
+	if (nAxis == AX_ANGLE_STAGE2_Y)		dMovePos = pMoveData->dAngleStage2Y[nMoveIdx];		// AXIS 10
+	if (nAxis == AX_ANGLE_STAGE2_Z)		dMovePos = pMoveData->dAngleStage2Z[nMoveIdx];		// AXIS 11
+	if (nAxis == AX_BTM1_PICKER_X)		dMovePos = pMoveData->dBtm1PickerX[nMoveIdx];		// AXIS 12
+	if (nAxis == AX_BTM1_PICKER_Z)		dMovePos = pMoveData->dBtm1PickerZ[nMoveIdx];		// AXIS 13
+	if (nAxis == AX_BTM1_PICKER_P1)		dMovePos = pMoveData->dBtm1PickerP1[nMoveIdx];		// AXIS 14
+	if (nAxis == AX_BTM1_PICKER_P2)		dMovePos = pMoveData->dBtm1PickerP2[nMoveIdx];		// AXIS 15
+	if (nAxis == AX_BTM1_SHIFT_Y)		dMovePos = pMoveData->dBtm1ShiftY[nMoveIdx];		// AXIS 16
+	if (nAxis == AX_INSPECT_STAGE1_X)	dMovePos = pMoveData->dInspectStage1X[nMoveIdx];	// AXIS 17
+	if (nAxis == AX_INSPECT_STAGE2_X)	dMovePos = pMoveData->dInspectStage2X[nMoveIdx];	// AXIS 18
+	if (nAxis == AX_INSPECT_STAGE3_X)	dMovePos = pMoveData->dInspectStage3X[nMoveIdx];	// AXIS 19
+	if (nAxis == AX_MODULE_ALIGN_Y)		dMovePos = pMoveData->dModuleAlignY[nMoveIdx];		// AXIS 20
+	if (nAxis == AX_MODULE_ALIGN_Z)		dMovePos = pMoveData->dModuleAlignZ[nMoveIdx];		// AXIS 21
+	if (nAxis == AX_VISION_TOP1_Z)		dMovePos = pMoveData->dVisionTop1Z[nMoveIdx];		// AXIS 22
+	if (nAxis == AX_TOP1_MIRROR_Z)		dMovePos = pMoveData->dTop1MirrorZ[nMoveIdx];		// AXIS 23
+	if (nAxis == AX_TOP2_SHIFT_Y)		dMovePos = pMoveData->dTop2ShiftY[nMoveIdx];		// AXIS 24
+	if (nAxis == AX_VISION_TOP2_Z)		dMovePos = pMoveData->dVisionTop2Z[nMoveIdx];		// AXIS 25
+	if (nAxis == AX_BTM2_PICKER_X)		dMovePos = pMoveData->dBtm2PickerX[nMoveIdx];		// AXIS 26
+	if (nAxis == AX_BTM2_PICKER_Z)		dMovePos = pMoveData->dBtm2PickerZ[nMoveIdx];		// AXIS 27
+	if (nAxis == AX_BTM2_PICKER_P1)		dMovePos = pMoveData->dBtm2PickerP1[nMoveIdx];		// AXIS 28
+	if (nAxis == AX_BTM2_PICKER_P2)		dMovePos = pMoveData->dBtm2PickerP2[nMoveIdx];		// AXIS 29
+	if (nAxis == AX_BUFFER_STAGE1_Y)	dMovePos = pMoveData->dBufferStage1Y[nMoveIdx];		// AXIS 30
+	if (nAxis == AX_BUFFER_STAGE2_Y)	dMovePos = pMoveData->dBufferStage2Y[nMoveIdx];		// AXIS 31
+	if (nAxis == AX_SORT_PICKER1_X)		dMovePos = pMoveData->dSortPicker1X[nMoveIdx];		// AXIS 32
+	if (nAxis == AX_SORT_PICKER1_Z)		dMovePos = pMoveData->dSortPicker1Z[nMoveIdx];		// AXIS 33
+	if (nAxis == AX_SORT_PICKER1_P)		dMovePos = pMoveData->dSortPicker1P[nMoveIdx];		// AXIS 34
+	if (nAxis == AX_SORT_PICKER2_X)		dMovePos = pMoveData->dSortPicker2X[nMoveIdx];		// AXIS 35
+	if (nAxis == AX_SORT_PICKER2_Z)		dMovePos = pMoveData->dSortPicker2Z[nMoveIdx];		// AXIS 36
+	if (nAxis == AX_SORT_PICKER2_P)		dMovePos = pMoveData->dSortPicker2P[nMoveIdx];		// AXIS 37
+	if (nAxis == AX_GOOD_STAGE1_Y)		dMovePos = pMoveData->dGoodStage1Y[nMoveIdx];		// AXIS 38
+	if (nAxis == AX_GOOD_STAGE1_Z)		dMovePos = pMoveData->dGoodStage1Z[nMoveIdx];		// AXIS 39
+	if (nAxis == AX_GOOD_STAGE2_Y)		dMovePos = pMoveData->dGoodStage2Y[nMoveIdx];		// AXIS 40
+	if (nAxis == AX_GOOD_STAGE2_Z)		dMovePos = pMoveData->dGoodStage2Z[nMoveIdx];		// AXIS 41
+	if (nAxis == AX_NG_STAGE_Y)			dMovePos = pMoveData->dNgStageY[nMoveIdx];			// AXIS 42
+	if (nAxis == AX_EMPTY_TRANS1_X)		dMovePos = pMoveData->dEmptyTrans1X[nMoveIdx];		// AXIS 43
+	if (nAxis == AX_EMPTY_PORT_Z)		dMovePos = pMoveData->dEmptyPortZ[nMoveIdx];		// AXIS 44
+	if (nAxis == AX_EMPTY_TRANS2_Y)		dMovePos = pMoveData->dEmptyTrans2Y[nMoveIdx];		// AXIS 45
+
+	if (dMovePos == -999) return 0;
+
+	return dMovePos;
+}
+
 void CCommon::Show_Error(int nErrNo)
 {
 	g_csShowError.Lock();

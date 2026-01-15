@@ -662,7 +662,7 @@ void CSetupEquipDlg::Save_EquipData()
 
 	m_stcEquipName.GetWindowText(strData); INI.Set_String("EQUIPMENT", "NAME", strData);
 
-	gData.sRecipe = (m_rdoModel[1].GetCheck() ? "R54B" : "R53B");
+	gData.sRecipe = (m_rdoModel[1].GetCheck() ? "R64B" : "R63B");
 	g_objDataManager.Save_ModelData();
 
 	nData = m_cboLotBarcodePort.GetCurSel(); INI.Set_Integer("EQUIPMENT", "LOT_BARCODE", nData + 1);
@@ -791,7 +791,7 @@ void CSetupEquipDlg::Save_EquipDataForAllParam()
 
 	m_stcEquipName.GetWindowText(strData); INI.Set_String("EQUIPMENT", "NAME", strData);
 
-	gData.sRecipe = (m_rdoModel[1].GetCheck() ? "R54B" : "R53B");
+	gData.sRecipe = (m_rdoModel[1].GetCheck() ? "R64B" : "R63B");
 	g_objDataManager.Save_ModelData();
 
 	nData = m_cboLotBarcodePort.GetCurSel(); INI.Set_Integer("EQUIPMENT", "LOT_BARCODE", nData + 1);

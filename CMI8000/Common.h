@@ -93,6 +93,8 @@ public:
 	
 	BOOL Check_Position(int nAxis, int nMoveIdx, double dRange = 0.1);
 	void Move_Position(int nAxis, int nMoveIdx);
+	double Get_ActPosition(int nAxis, int nMoveIdx);
+	double Get_MoveDataPosition(int nAxis, int nMoveIdx);
 
 	void Show_Error(int nErrNo);
 	void Set_ErrorSubMessage(CString sErrSubMsg);

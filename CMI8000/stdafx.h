@@ -422,3 +422,12 @@ extern GLOVAL_LOT	gLot;
 extern GLOVAL_ALM	gAlm;
 extern GLOVAL_UPH	gUph;
 extern GLOVAL_MES	gMes;
+
+
+
+#define BTM1_PICKER_Z_Ready 0
+#define BTM1_PICKER_Z_TrayDown 1
+#define BTM1_PICKER_Z_BTM1SPDown 2
+#define	BTM1_PICKER_Z_Inspect 3
+#define	BTM1_PICKER_Z_BTM1AG 4
+#define	BTM1_PICKER_Z_BTM13D 5

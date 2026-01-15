@@ -29,6 +29,7 @@ CCriticalSection g_csCmTrackingLog;
 CCriticalSection g_csMCCLog;
 CCriticalSection g_csBarcodeLog;
 CCriticalSection g_csMotionLog;
+CCriticalSection g_csPositionLog;
 
 CLogFile::CLogFile()
 {
@@ -1471,6 +1472,150 @@ void CLogFile::Save_MotionLog(CString sLog)
 	g_csMotionLog.Unlock();
 
 }
+
+
+
+void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nMoveIdx)
+{
+	CString strPath1 = "D:\\EVMS\\TP\\Log";
+	CString strPath2 = "D:\\EVMS\\TP\\Backup";
+	CString strPath3;
+
+	Create_Folder(strPath1);
+	Create_Folder(strPath2);
+
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	strPath3.Format("%s\\POSITION\\%04d%02d%02d", gData.sLogPath, time.wYear, time.wMonth, time.wDay);
+	Create_Folder(strPath3);
+
+	CString strFile1, strFile2, strFile3, strTitle, strTime, strPcName, strSave;
+	strFile1.Format("%s\\%s_%04d%02d%02d%02d_MCC_value.csv", strPath1, gData.sLotID[nPNo-1], time.wYear, time.wMonth, time.wDay, time.wHour);
+	strFile3.Format("%s\\%s_Position.csv", strPath3, gData.sLotID[nPNo-1]);
+
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+
+	CString sPosName = "";
+	if(nAxis == AX_ANGLE_STAGE1_Z)
+	{
+		if(nMoveIdx == 2) sPosName = "ANGLE_STAGE1_Z_Picker Up";
+	}
+	else if(nAxis == AX_ANGLE_STAGE2_Z)
+	{
+		if(nMoveIdx == 2) sPosName = "ANGLE_STAGE2_Z_Picker Up";
+	}
+	else if(nAxis == AX_BTM1_PICKER_Z)
+	{
+		if(nMoveIdx == 0) sPosName = "BTM1_PICKER_Z_Ready";
+		if(nMoveIdx == 1) sPosName = "BTM1_PICKER_Z_Tray Down";
+		if(nMoveIdx == 2) sPosName = "BTM1_PICKER_Z_BTM1 SP Down";
+		if(nMoveIdx == 3) sPosName = "BTM1_PICKER_Z_Inspect";
+		if(nMoveIdx == 4) sPosName = "BTM1_PICKER_Z_BTM1 AG";
+		if(nMoveIdx == 5) sPosName = "BTM1_PICKER_Z_BTM1 3D";
+	}
+	else if(nAxis == AX_MODULE_ALIGN_Z)
+	{
+		if(nMoveIdx == 1) sPosName = "MODULE_ALIGN_Z_Stop Down";
+	}
+	else if(nAxis == AX_TOP1_MIRROR_Z)
+	{
+		if(nMoveIdx == 1) sPosName =  "TOP1_MIRROR_Z_Work Down";
+	}
+	else if(nAxis == AX_BTM2_PICKER_Z)
+	{
+		if(nMoveIdx == 1) sPosName = "BTM2_PICKER_Z_Inspect Down";
+		if(nMoveIdx == 2) sPosName = "BTM2_PICKER_Z_Btm2 Down";
+		if(nMoveIdx == 3) sPosName = "BTM2_PICKER_Z_Buffer Down";
+	}
+	else if(nAxis == AX_SORT_PICKER1_Z)
+	{
+		if(nMoveIdx == 0) sPosName = "SORT_PICKER1_Z_Ready";	
+		if(nMoveIdx == 1) sPosName = "SORT_PICKER1_Z_Buffer 1 Down";	
+		if(nMoveIdx == 2) sPosName = "SORT_PICKER1_Z_Good Down";	
+		if(nMoveIdx == 3) sPosName = "SORT_PICKER1_Z_NG Down";	
+		if(nMoveIdx == 4) sPosName = "SORT_PICKER1_Z_NG Buffer Down";	
+		if(nMoveIdx == 5) sPosName = "SORT_PICKER1_Z_Buffer 2 Down";
+	}
+	else if(nAxis == AX_SORT_PICKER2_Z)
+	{
+		if(nMoveIdx == 0) sPosName = "SORT_PICKER2_Z_Ready";	
+		if(nMoveIdx == 1) sPosName = "SORT_PICKER2_Z_Buffer 1 Down";	
+		if(nMoveIdx == 2) sPosName = "SORT_PICKER2_Z_Good Down";	
+		if(nMoveIdx == 3) sPosName = "SORT_PICKER2_Z_NG Down";	
+		if(nMoveIdx == 4) sPosName = "SORT_PICKER2_Z_NG Buffer Down";	
+		if(nMoveIdx == 5) sPosName = "SORT_PICKER2_Z_Buffer 2 Down";	
+
+	}
+	else if (nAxis == AX_GOOD_STAGE1_Z)
+	{
+		if(nMoveIdx == 0) sPosName = "Good Stage1_Z_Moving Up";
+		if(nMoveIdx == 0) sPosName = "Good Stage1_Z_Unload Up";
+
+	}
+	else if(nAxis == AX_GOOD_STAGE2_Z)
+	{
+		if(nMoveIdx == 0) sPosName = "Good Stage2_Z_Moving Up";
+		if(nMoveIdx == 0) sPosName = "Good Stage2_Z_Unload Up";
+	}
+
+	CString sLog;
+	sLog.Format("%s,%s,%s,%s,%d,%d,%d,%s,%03lf,%03lf", gData.sComName, pEquipData->sEquipName, MAIN_VERSION, gData.sLotID[nPNo-1],
+		nPNo, nTNo, nCmNo, sPosName, g_objCommon.Get_MoveDataPosition(nAxis, nMoveIdx), g_objCommon.Get_ActPosition(nAxis, nMoveIdx));
+	
+
+	g_csPositionLog.Lock();
+
+	CFile file;
+	if (!file.Open(strFile1, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
+	
+	strTitle.Format("Time,Station,Machine,Version,LotNum,Port No,TrayNo,CmNo,Pos Name,Target Pos,Actual Pos\r\n");
+
+	try 
+	{
+		file.SeekToEnd();
+
+		if (file.GetLength() < 1) file.Write(strTitle, strTitle.GetLength());
+
+		strTime.Format("%04d-%02d-%02d %02d:%02d:%02d:%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+						
+		strSave.Format("%s,%s\r\n", strTime, sLog);
+
+		file.Write(strSave, strSave.GetLength());
+		file.Close();		
+	}
+	catch (CFileException *pEx)
+	{
+		pEx->Delete();
+	}
+
+
+	CFile file2;
+	if (!file2.Open(strFile3, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
+
+	strTitle.Format("Time,Station,Machine,Version,LotNum,Port No,TrayNo,CmNo,Pos Name,Target Pos,Actual Pos\r\n");
+
+	try 
+	{
+		file2.SeekToEnd();
+
+		if (file2.GetLength() < 1) file2.Write(strTitle, strTitle.GetLength());
+
+		strTime.Format("%04d-%02d-%02d %02d:%02d:%02d:%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+
+		strSave.Format("%s,%s\r\n", strTime, sLog);
+
+		file2.Write(strSave, strSave.GetLength());
+		file2.Close();
+	}
+	catch (CFileException *pEx)
+	{
+		pEx->Delete();
+	}
+
+	g_csPositionLog.Unlock();
+}
+
 
 
 void CLogFile::Save_DoorInterlock(int nPNo, CString sLog, BOOL bfirst)

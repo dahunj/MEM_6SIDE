@@ -41,6 +41,8 @@ public:
 	void Save_DoorInterlock(int nPNo, CString sLog, BOOL bfirst);
 	void Save_PCLog(int nPNo, CString sLog);
 
+	void Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nMoveIdx);
+
 	void Save_AverageCycle(int nPNo);
 
 	void VisionTakt_Start(int nVision);
