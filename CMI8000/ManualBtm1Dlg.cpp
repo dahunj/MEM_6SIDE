@@ -1182,10 +1182,10 @@ void CManualBtm1Dlg::OnBnClickedRdoBlowOff()
 
 	DY_DATA_09 *pDY09 = g_objAJinAXL.Get_pDY09();
 
-	pDY09->oBtm1BlowPower = TRUE;
+	pDY09->oBtm1BlowPower = FALSE;
 	pDY09->oBtm1BlowOnOff = FALSE;
 
-	pDY09->oTopBlowPower = TRUE;
+	pDY09->oTopBlowPower = FALSE;
 	pDY09->oTopBlowOnOff = FALSE;
 
 	g_objAJinAXL.Write_Output(9);

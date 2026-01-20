@@ -222,7 +222,7 @@ LRESULT CInspector::OnUdpReceive(WPARAM wLocalPort, LPARAM lParam)
 			if (strOp == "READY") Get_LotReady(nInspector, strArg[0], strArg[1], strArg[2], strArg[3]);
 
 		} else if (strCmd == "RELOAD") {
-			if (strOp == "REQUEST") Get_ReloadRequest(nInspector, strArg[0]);
+			if (strOp == "REQUEST") Get_ReloadRequest(nInspector, strArg[0], strArg[1]);
 
 		} else if (strCmd == "SCAN") {
 			if (strOp == "COMPLETE") Get_ScanComplete(nInspector, strArg[0], strArg[1], strArg[2], strArg[3], strArg[4]);
@@ -367,12 +367,13 @@ void CInspector::Get_LotReady(int nInspector, CString sLotId, CString sPortNo, C
 	Set_LotRdyCom(nInspector, sLotId);
 }
 
-void CInspector::Get_ReloadRequest(int nInspector, CString sPc)
+void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision) 
 {
 	// bScanDone[6] ==> 0:Angle, 1:Btm1_SP, 2:Top1, 3:Top2, 4:Btm2 5:Btm1_AG
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 
-	if (nInspector == INSPECTOR_PC1) {			// Align, Angle, Btm1
+	if (nInspector == INSPECTOR_PC1) 
+	{			
 		if (sPc != "PC1") return;
 		Set_ReloadComplete(INSPECTOR_PC1, sPc);
 		
@@ -401,21 +402,23 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc)
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(1, gData.nPNoSortPick[1], gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i]); }
 		}		
 
-	} else if (nInspector == INSPECTOR_PC2) {	// Top1
+	} else if (nInspector == INSPECTOR_PC2) // Top1
+	{	
 		if (sPc != "PC2") return;
 		Set_ReloadComplete(INSPECTOR_PC2, sPc);
 		
-		if (pEquipData->bUseVisionAlign) {	// Align
+		if (pEquipData->bUseVisionAlign && sVision == "ALIGN") {	// Align
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_ANGLE);
 			if (nCase == 5) g_objSequenceMain.Set_MainRunCase(AUTO_VISION_ANGLE, 4);
 		}
 
-		if (pEquipData->bUseInspectAngle && !gData.bScanDone[0]) {	// Angle
+		if (pEquipData->bUseInspectAngle && !gData.bScanDone[0] && sVision == "AG") {	// Angle
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_ANGLE);
 			if (nCase == 15 && nCase < 19) g_objSequenceMain.Set_MainRunCase(AUTO_VISION_ANGLE, 13);
 		}
-
-		if (pEquipData->bUseInspectTop1 && !gData.bScanDone[2]) {	// Top1
+		// Top1
+		if (pEquipData->bUseInspectTop1 && !gData.bScanDone[2] && sVision == "TOP1") 
+		{	
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_INSPECTION1);
 			if (nCase >= 10 && nCase < 15) { gData.bReload[2] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_INSPECTION1, 15); }
 

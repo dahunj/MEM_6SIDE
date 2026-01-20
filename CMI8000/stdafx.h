@@ -431,3 +431,35 @@ extern GLOVAL_MES	gMes;
 #define	BTM1_PICKER_Z_Inspect 3
 #define	BTM1_PICKER_Z_BTM1AG 4
 #define	BTM1_PICKER_Z_BTM13D 5
+
+
+#define MODULE_ALIGN_Z_StopDown 1
+#define TOP1_MIRROR_Z_WorkDown 1
+
+#define BTM2_PICKER_Z_InspectDown 1
+#define BTM2_PICKER_Z_Btm2Down 2
+#define BTM2_PICKER_Z_BufferDown 3
+
+
+
+#define SORT_PICKER1_Z_Ready	0
+#define SORT_PICKER1_Z_Buffer1Down	1
+#define SORT_PICKER1_Z_GoodDown	2
+#define SORT_PICKER1_Z_NGDown	3
+#define SORT_PICKER1_Z_NGBufferDown	4
+#define SORT_PICKER1_Z_Buffer2Down 5
+
+
+#define SORT_PICKER2_Z_Ready	0
+#define SORT_PICKER2_Z_Buffer1Down	1
+#define SORT_PICKER2_Z_GoodDown	2
+#define SORT_PICKER2_Z_NGDown	3
+#define SORT_PICKER2_Z_NGBufferDown	4
+#define SORT_PICKER2_Z_Buffer2Down 5
+
+#define GoodStage1_Z_MovingUp	1
+#define GoodStage1_Z_UnloadUp	3
+
+
+#define GoodStage2_Z_MovingUp	1
+#define GoodStage2_Z_UnloadUp	3

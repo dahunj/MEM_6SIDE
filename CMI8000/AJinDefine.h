@@ -1119,9 +1119,11 @@ typedef union tag_DY_DATA_09 {
 	};
 } DY_DATA_09;		// Digital Output 09
 
-typedef union tag_DY_DATA_10 {
+typedef union tag_DY_DATA_10 
+{
 	DWORD nValue;
-	struct {
+	struct 
+	{
 		DWORD o1000 : 1;					// Y1000
 		DWORD oSortPicker1Down1 : 1;		// Y1001
 		DWORD o1002 : 1;					// Y1002

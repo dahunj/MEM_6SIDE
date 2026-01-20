@@ -350,7 +350,7 @@ BOOL CDataManager::Read_ModelData()
 	if (!INI.Check_File()) { AfxMessageBox("ModelData.ini File Not Found!!!"); return FALSE; }
 	
 	CString strModel = INI.Get_String("MODEL", "NAME", "");
-	gData.sRecipe = (strModel == "" ? "R63B" : strModel);	// Default(R63B)
+	gData.sRecipe = (strModel == "" ? "R53B" : strModel);	// Default(R63B)
 
 	gData.nTrayX = INI.Get_Integer("DATA", "TRAY_X", 4);
 	gData.nTrayY = INI.Get_Integer("DATA", "TRAY_Y", 3);

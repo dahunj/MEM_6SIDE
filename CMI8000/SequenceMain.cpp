@@ -3167,17 +3167,18 @@ BOOL CSequenceMain::AngleTray1_Run()
 	case 10:
 		if (g_objCommon.Check_Position(AX_ANGLE_STAGE1_Z, 2)) 
 		{			
-			for(int i = 0; i < 3; i++)
+			int nCmNo = 0;
+			for(int nTrayPosY = 0; nTrayPosY < 3; nTrayPosY++)
 			{
-				for(int j = 0; j < 4; j++)
+				for(int nTrayPosX = 0; nTrayPosX < 4; nTrayPosX++)
 				{
-					if(gData.InfoAngleTray[0][i][j] > 0)
+					if(gData.InfoAngleTray[0][nTrayPosY][nTrayPosX] > 0)
 					{
-						//pass
-						g_objLogFile.Save_PositionLog(gData.nPNoAngleTray[0],gData.nTNoAngleTray[0], 4*i+j,AX_ANGLE_STAGE1_Z, 2);
+						nCmNo = (gData.nTrayY - 1 - nTrayPosY) * gData.nTrayX +1 +nTrayPosX;
+						g_objLogFile.Save_PositionLog(gData.nPNoAngleTray[0],gData.nTNoAngleTray[0], nCmNo, AX_ANGLE_STAGE1_Z, 2);
 					}
 				}
-			}
+			}			
 
 			m_nAngleTray1Case = 15; m_tAngleTray1Loop.Set_LoopTime(20000);
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 9);
@@ -3492,14 +3493,15 @@ BOOL CSequenceMain::AngleTray2_Run()
 	case 10:
 		if (g_objCommon.Check_Position(AX_ANGLE_STAGE2_Z, 2)) 
 		{			
-			for(int i = 0; i < 3; i++)
+			int nCmNo = 0;
+			for(int nTrayPosY = 0; nTrayPosY < 3; nTrayPosY++)
 			{
-				for(int j = 0; j < 4; j++)
+				for(int nTrayPosX = 0; nTrayPosX < 4; nTrayPosX++)
 				{
-					if(gData.InfoAngleTray[1][i][j] > 0)
+					if(gData.InfoAngleTray[1][nTrayPosY][nTrayPosX] > 0)
 					{
-						//pass
-						g_objLogFile.Save_PositionLog(gData.nPNoAngleTray[1],gData.nTNoAngleTray[1], 4*i+j,AX_ANGLE_STAGE2_Z, 2);
+						nCmNo = (gData.nTrayY - 1 - nTrayPosY) * gData.nTrayX +1 +nTrayPosX;
+						g_objLogFile.Save_PositionLog(gData.nPNoAngleTray[1],gData.nTNoAngleTray[1], nCmNo, AX_ANGLE_STAGE2_Z, 2);
 					}
 				}
 			}
@@ -3730,9 +3732,6 @@ BOOL CSequenceMain::Btm1Picker_Run()
 		// Pick Position
 		if (Select_Btm1PickPos(nB1PStartNo)) 
 		{
-			g_objLogFile.Save_PositionLog(gData.nPNoAngleTray[nB1pWorkTray-1], gData.nTNoAngleTray[nB1pWorkTray-1], -1,
-				AX_BTM2_PICKER_Z, BTM1_PICKER_Z_Ready);
-
 			Select_AngleTrayPos(nB1pWorkTray, nB1pTrayPosY, nB1pRow);
 			if (nB1PStartNo > 3) nB1pRow = 1;
 			else				 nB1pRow = 0;
@@ -3764,6 +3763,8 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			}
 			m_nBtm1PickCase++; m_tBtm1PickLoop.Set_LoopTime(10000);
 
+			g_objLogFile.Save_PositionLog(gData.nPNoAngleTray[nB1pWorkTray-1], gData.nTNoAngleTray[nB1pWorkTray-1], -1,
+				AX_BTM1_PICKER_Z, BTM1_PICKER_Z_Ready);
 			
 
 			nPNo = gData.nPNoBtm1Pick;
@@ -3815,7 +3816,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 					gData.InfoAngleTray[nB1pWorkTray-1][nB1pTrayPosY][nTrayX+i] = 0;
 					gData.nTNoBtm1Pick[nBtmX+i] = gData.nTNoAngleTray[nB1pWorkTray-1];
 
-					// Tray 하단부터 모듈 적재된다.
+					// Tray 상단부터 모듈 적재된다.
 					gData.nCNoBtm1Pick[nBtmX+i] = (gData.InfoBtm1Pick[nBtmX+i] > 0 ? ((gData.nTrayY - 1 - nB1pTrayPosY) * gData.nTrayX + nTrayX + i + 1) : 0);
 
 					g_objLogFile.Save_PositionLog(gData.nPNoAngleTray[nB1pWorkTray - 1], gData.nTNoAngleTray[nB1pWorkTray - 1], gData.nCNoBtm1Pick[nBtmX+i]
@@ -4277,7 +4278,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 	case 23:	// Btm1 Picker Vac Off
 		if (g_objCommon.Check_Position(AX_BTM1_PICKER_Z, BTM1_PICKER_Z_Inspect) && g_objCommon.Get_Btm1PickerDown(0)) 
 		{
-			for (int i = 0; i < 10; i++) 
+			for (int i = 0; i < 8; i++) 
 			{
 				g_objLogFile.Save_PositionLog(gData.nPNoInspect[nB1pInspStageNo-1], gData.nTNoInspect[nB1pInspStageNo-1][0], gData.nCNoInspect[nB1pInspStageNo-1][i], AX_BTM1_PICKER_Z, BTM1_PICKER_Z_Inspect);
 			}
@@ -4491,7 +4492,10 @@ BOOL CSequenceMain::Inspection1_Run()
 		}
 		break;
 	case 3:		// CM Align Master/
-		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1)) {
+		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1)) 
+		{
+			g_objLogFile.Save_PositionLog(gData.nPNoInspect[0],gData.nTNoInspect[0][0], -1, AX_MODULE_ALIGN_Z, MODULE_ALIGN_Z_StopDown);
+			
 			m_pDY06->oCmAlignMasterOpen = FALSE; m_pDY06->oCmAlignMasterClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect1Case = 9; m_tInspect1Loop.Set_LoopTime(5000);
@@ -4501,9 +4505,10 @@ BOOL CSequenceMain::Inspection1_Run()
 		}
 		break;
 	case 9: //Slave Close
-		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose){
-
-			if (!bTaktSave1) {
+		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose)
+		{
+			if (!bTaktSave1)
+			{
 				bTaktSave1 = TRUE; 
 				m_tInspect1Loop.Takt_End(nTaktZone,3); 
 				m_tInspect1Loop.Takt_Start(nTaktZone,9); 
@@ -4521,7 +4526,8 @@ BOOL CSequenceMain::Inspection1_Run()
 	case 4:		// CM Align Vac On and Slave Open
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
 			!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose &&
-			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose) {
+			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose) 
+		{
 				
 			if (!bTaktSave1) {
 				bTaktSave1 = TRUE; 
@@ -4675,8 +4681,11 @@ BOOL CSequenceMain::Inspection1_Run()
 		}
 		break;
 	case 14:	// Send Move Complete
-		if (g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) {
-			
+		if (g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) 
+		{
+			g_objLogFile.Save_PositionLog(gData.nPNoInspect[0],gData.nTNoInspect[0][0], -1, AX_TOP1_MIRROR_Z, TOP1_MIRROR_Z_WorkDown);
+
+
 			g_objLogFile.VisionTakt_Start(TOP1);	// Top1 Mirror Down 이후 Scan
 			g_objInspector.Set_SMoveComplete(INSPECTOR_PC2, "T1");
 			m_nInspect1Case = 10; m_tInspect1Loop.Set_LoopTime(30000);	// 90초
@@ -5090,7 +5099,9 @@ BOOL CSequenceMain::Inspection2_Run()
 		}
 		break;
 	case 3:		// CM Align Master/
-		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1)) {
+		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1)) 
+		{
+			g_objLogFile.Save_PositionLog(gData.nPNoInspect[1],gData.nTNoInspect[1][0], -1, AX_MODULE_ALIGN_Z, MODULE_ALIGN_Z_StopDown);
 			
 			m_pDY06->oCmAlignMasterOpen = FALSE; m_pDY06->oCmAlignMasterClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
@@ -5268,7 +5279,9 @@ BOOL CSequenceMain::Inspection2_Run()
 		}
 		break;
 	case 14:	// Send Move Complete
-		if (g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) {
+		if (g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) 
+		{
+			g_objLogFile.Save_PositionLog(gData.nPNoInspect[1],gData.nTNoInspect[1][0], -1, AX_TOP1_MIRROR_Z, TOP1_MIRROR_Z_WorkDown);
 			
 			g_objLogFile.VisionTakt_Start(TOP1);	// Top1 Mirror Down 이후 Scan
 			g_objInspector.Set_SMoveComplete(INSPECTOR_PC2, "T1");
@@ -5676,7 +5689,9 @@ BOOL CSequenceMain::Inspection3_Run()
 		}
 		break;
 	case 3:		// CM Align Master
-		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1)) {
+		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1))
+		{
+			g_objLogFile.Save_PositionLog(gData.nPNoInspect[2],gData.nTNoInspect[2][0], -1, AX_MODULE_ALIGN_Z, MODULE_ALIGN_Z_StopDown);
 			
 			m_pDY06->oCmAlignMasterOpen = FALSE; m_pDY06->oCmAlignMasterClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
@@ -5860,7 +5875,9 @@ BOOL CSequenceMain::Inspection3_Run()
 		}
 		break;
 	case 14:	// Send Move Complete
-		if (g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) {
+		if (g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) 
+		{
+			g_objLogFile.Save_PositionLog(gData.nPNoInspect[2],gData.nTNoInspect[2][0], -1, AX_TOP1_MIRROR_Z, TOP1_MIRROR_Z_WorkDown);
 			
 			g_objLogFile.VisionTakt_Start(TOP1);	// Top1 Mirror Down 이후 Scan
 			g_objInspector.Set_SMoveComplete(INSPECTOR_PC2, "T1");
@@ -5882,7 +5899,8 @@ BOOL CSequenceMain::Inspection3_Run()
 		m_tInspect3Loop.Takt_End(nTaktZone,15);
 		break;
 	case 16:	// 다음 검사 위치 피치 이동
-		if (g_objAJinAXL.Is_Done(AX_INSPECT_STAGE3_X) && g_objCommon.Check_Position(AX_VISION_TOP1_Z, 0) && g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 0)) {
+		if (g_objAJinAXL.Is_Done(AX_INSPECT_STAGE3_X) && g_objCommon.Check_Position(AX_VISION_TOP1_Z, 0) && g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 0))
+		{
 			if (!bTaktSave3) { bTaktSave3 = TRUE;  }	// Move to Top1 Position
 
 			if (gData.bReload[2]) {
@@ -6246,9 +6264,11 @@ BOOL CSequenceMain::Btm2Picker_Run()
 		}
 		break;
 	case 3:		// 정보전달(Stage->Picker), Btm2 Picker Grip Close
-		if (g_objCommon.Get_Btm2PickerDown(0) && g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 1)) {
+		if (g_objCommon.Get_Btm2PickerDown(0) && g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 1))
+		{
 			if (!m_tBtm2PickLoop.Waiting_Time(50)) break;
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 10; i++) 
+			{
 				gData.InfoBtm2Pick[i] = gData.InfoInspect[nB2pInspStageNo-1][i]; gData.InfoInspect[nB2pInspStageNo-1][i] = 0;
 									   
 				gData.nTNoBtm2Pick[i] = gData.nTNoInspect[nB2pInspStageNo-1][i];
@@ -6260,6 +6280,11 @@ BOOL CSequenceMain::Btm2Picker_Run()
 				int nTNo = gData.nTNoBtm2Pick[i] - 1;
 				int nCNo = gData.nCNoBtm2Pick[i] - 1;
 				if (nCNo > -1) gData.nCmJigNo[nPNo][nTNo][nCNo][BTM2_PICK] = i + 1;	// Btm2 Jig No.
+
+				if(gData.InfoBtm2Pick[i] > 0)
+				{
+					g_objLogFile.Save_PositionLog(gData.nPNoInspect[nB2pInspStageNo-1], gData.nTNoBtm2Pick[i], gData.nCNoBtm2Pick[i], AX_BTM2_PICKER_Z, BTM2_PICKER_Z_InspectDown);
+				}
 			}
 			gData.nPNoBtm2Pick = gData.nPNoInspect[nB2pInspStageNo-1]; gData.nPNoInspect[nB2pInspStageNo-1] = 0;
 
@@ -6340,7 +6365,8 @@ BOOL CSequenceMain::Btm2Picker_Run()
 		if (g_objAJinAXL.Is_MoveDone(AX_BTM2_PICKER_X, dB2pX) && g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 2) &&
 			g_objCommon.Get_InfoBtm2VacOn() && g_objCommon.Get_InfoBtm2Check())
 		{
-			
+			g_objLogFile.Save_PositionLog(gData.nPNoBtm2Pick,gData.nTNoBtm2Pick[0], -1, AX_BTM2_PICKER_Z, BTM2_PICKER_Z_Btm2Down);
+
 			m_tBtm2PickLoop.Takt_Start(nTaktZone, 9);
 			m_tBtm2PickLoop.Takt_End(nTaktZone, 9);
 			if (m_pEquipData->bUseInspectBtm2)
@@ -6396,7 +6422,8 @@ BOOL CSequenceMain::Btm2Picker_Run()
 		break;
 
 	case 14:	// BTM2 Z, I/O Down
-		if (g_objAJinAXL.Is_MoveDone(AX_BTM2_PICKER_X, dB2pX)) {
+		if (g_objAJinAXL.Is_MoveDone(AX_BTM2_PICKER_X, dB2pX)) 
+		{
 			if (!bSave) { bSave = TRUE;  }
 			if (!g_objCommon.Get_InfoBtm2VacOn()) { m_tBtm2PickLoop.Set_LoopTime(0); break;}	// 바로 알람 처리 해준다.
 
@@ -6568,7 +6595,8 @@ BOOL CSequenceMain::Btm2Picker_Run()
 	case 23:	// 정보전달, Btm2 Picker Vac Off
 		if (g_objCommon.Check_Position(AX_BTM2_PICKER_Z, 3))
 		{
-			for (int i = 0; i < gData.nBtmPickQt; i++) {
+			for (int i = 0; i < gData.nBtmPickQt; i++)
+			{
 				int nBtmX = 0, nBuffX = 0;
 				nBtmX = 4 * nB2pRow;
 
@@ -6583,10 +6611,12 @@ BOOL CSequenceMain::Btm2Picker_Run()
 				int nPNo = gData.nPNoBtm2Pick - 1;
 				int nTNo = gData.nTNoBuffTray[nB2pWorkTray-1][nB2pTrayPosY][nBuffX+i] - 1;
 				int nCNo = gData.nCNoBuffTray[nB2pWorkTray-1][nB2pTrayPosY][nBuffX+i] - 1;
-				if (nCNo > -1) {
+				if (nCNo > -1) 
+				{
 					gData.nCmJigNo[nPNo][nTNo][nCNo][BUF_STAGE_NO] = nB2pWorkTray;	// buffer Stage No.
 					gData.nCmJigNo[nPNo][nTNo][nCNo][BUF_JIG_NO]   = nBtmX + i + 1;	// buffer Stage pocket No.
 				}
+				g_objLogFile.Save_PositionLog(gData.nPNoBtm2Pick, gData.nTNoBuffTray[nB2pWorkTray-1][nB2pTrayPosY][nBuffX+i], gData.nCNoBuffTray[nB2pWorkTray-1][nB2pTrayPosY][nBuffX+i], AX_BTM2_PICKER_Z, BTM2_PICKER_Z_BufferDown);
 			}
 			gData.nPNoBuffTray[nB2pWorkTray-1] = gData.nPNoBtm2Pick; 
 			if (Check_Btm2PickerEmpty()) gData.nPNoBtm2Pick = 0;	// 모듈이 없을때 초기화
@@ -7169,7 +7199,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 		{
 			if (nSp1VacErr == 1) { m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(10000); break; }
 
-			for (int i = 0; i < gData.nSortPickQt; i++) {
+			for (int i = 0; i < gData.nSortPickQt; i++) 
+			{
 				gData.InfoSortPick[0][i] = gData.InfoBuffTray[nSp1WorkBuff-1][nSp1TrayPosY][nSp1Base+i]; 
 				gData.InfoBuffTray[nSp1WorkBuff-1][nSp1TrayPosY][nSp1Base+i] = 0;
 
@@ -7182,10 +7213,15 @@ BOOL CSequenceMain::SortPicker1_Run()
 				int nPNo = gData.nPNoBuffTray[nSp1WorkBuff-1] - 1;
 				int nTNo = gData.nTNoSortPick[0][i] - 1;
 				int nCNo = gData.nCNoSortPick[0][i] - 1;
-				if (nCNo > -1) {
+				if (nCNo > -1)
+				{
 					gData.nCmJigNo[nPNo][nTNo][nCNo][SORT_PICK_NO] = 1;		// Sort Picker No.
 					gData.nCmJigNo[nPNo][nTNo][nCNo][SORT_JIG_NO]  = i + 1;	// Sort Picker Jig No.
 				}
+
+				if(nSp1WorkBuff == 1) g_objLogFile.Save_PositionLog(gData.nPNoBuffTray[nSp1WorkBuff-1], gData.nTNoSortPick[0][i], gData.nCNoSortPick[0][i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_Buffer1Down);
+				if(nSp1WorkBuff == 2) g_objLogFile.Save_PositionLog(gData.nPNoBuffTray[nSp1WorkBuff-1], gData.nTNoSortPick[0][i], gData.nCNoSortPick[0][i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_Buffer2Down);
+
 			}
 			gData.nPNoSortPick[0] = gData.nPNoBuffTray[nSp1WorkBuff-1];
 
@@ -7230,7 +7266,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 		} 
 		break;
 	case 4:		// Picker Up
-		if (g_objCommon.Get_InfoSortPicker1Close()) {	// Delay Time만 사용한다.
+		if (g_objCommon.Get_InfoSortPicker1Close()) 
+		{	// Delay Time만 사용한다.
 			if (!m_tSortPick1Loop.Waiting_Time(m_pEquipData->nDelayAdd[2])) break;	// SortPicker1 Delay
 
 			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);	//Ready Up
@@ -7244,6 +7281,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 		if (g_objCommon.Get_InfoSortPicker1Close() && g_objCommon.Get_InfoSortPicker1Check() &&
 			g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0) && g_objCommon.Get_SortPicker1Up(0))
 		{
+			g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0], -1, -1, AX_SORT_PICKER1_Z, SORT_PICKER1_Z_Ready );
 			
 			if (Check_BufferEmpty(nSp1WorkBuff)) {	// Tray Change
 				nSp1TrayPosY = 0;
@@ -7481,6 +7519,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 					else if (gData.InfoNgTray[nSp1WorkNg][nSp1TrayPosY][nSp1TrayPosX+i] == 5) gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1] = "N2";
 					else																	  gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1] = "N1";
 				}
+				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0],gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_NGDown );
+
 				g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				//g_objMES.Set_Result(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				sNgTray.Format("NG-%d", nSp1WorkNg + 1);
@@ -7504,6 +7544,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 		if (g_objCommon.Get_SortPicker1Up(0) && g_objCommon.Get_InfoSortPicker1Close() 
 			&& g_objCommon.Get_InfoSortPicker1Check() && g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) 
 		{			
+			g_objLogFile.Save_PositionLog(gData.nPNoNgTray, -1, -1, AX_SORT_PICKER1_Z, SORT_PICKER1_Z_Ready);
+
 			if (Check_NgTrayFull()) {
 				if (m_nNgTrayCase == 10) m_nNgTrayCase = 11;
 			}
@@ -7790,7 +7832,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 		}
 		break;
 	case 24:	// 정보전달, Vac Off
-		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 2) && g_objCommon.Get_SortPicker1DownMulti(nSp1StartNo+1, nSp1DownSu)) {
+		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 2) && g_objCommon.Get_SortPicker1DownMulti(nSp1StartNo+1, nSp1DownSu)) 
+		{
 			for (int i = 0; i < nSp1DownSu; i++) 
 			{
 				gData.InfoGoodTray[nSp1TrayPosY][nSp1TrayPosX+i] = gData.InfoSortPick[0][nSp1StartNo+i]; 
@@ -7803,6 +7846,9 @@ BOOL CSequenceMain::SortPicker1_Run()
 				int nGTNo = gData.nGoodStageTrayNo[nSp1WorkGood-1];	//gData.nGoodTrayCount;
 				int nGCNo = (gData.nTrayX*nSp1TrayPosY) + nSp1TrayPosX + i + 1;
 				g_objCapAttach.Set_BarcodeUpdate(nSp1PNo, nGTNo, nGCNo, gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1]);
+				
+				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_GoodDown);
+								
 				g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], "OK", sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				g_objLogFile.Save_OutTray("GOOD", gData.nGoodTrayCount, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("GOOD", gData.nGoodTrayCount, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
@@ -7822,7 +7868,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 		}
 		break;
 	case 25 :	// Picker Up
-		if (g_objCommon.Get_SortPicker1OpenMulti(nSp1StartNo+1, nSp1DownSu)) {
+		if (g_objCommon.Get_SortPicker1OpenMulti(nSp1StartNo+1, nSp1DownSu)) 
+		{
 			g_objCommon.Set_SortPicker1Up(0);
 			g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);	//Ready Up
 			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(5000);
@@ -7831,7 +7878,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 		}
 		break;
 	case 26:	// Picker Check
-		if (g_objCommon.Get_SortPicker1Up(0) && g_objCommon.Get_InfoSortPicker1Close() && g_objCommon.Get_InfoSortPicker1Check()) {
+		if (g_objCommon.Get_SortPicker1Up(0) && g_objCommon.Get_InfoSortPicker1Close() && g_objCommon.Get_InfoSortPicker1Check()) 
+		{
 			
 			if (Check_GoodTrayFull()) {
 				if (m_nGoodTray1Case == 20 || m_nGoodTray2Case == 20) {
@@ -7862,7 +7910,10 @@ BOOL CSequenceMain::SortPicker1_Run()
 		}
 		break;
 	case 27:	// Position Check
-		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) {
+		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0)) 
+		{
+			g_objLogFile.Save_PositionLog(gData.nPNoGoodTray, -1, -1, AX_SORT_PICKER1_Z, SORT_PICKER1_Z_Ready);
+			
 			// 한Case에서 오는게 아니라 따로 추출해서 입력해준다.
 			if (Check_SortPickerEmpty(1)){
 				if (!gData.bNGTrayWait && Check_NgBufferFull(1)) {
@@ -8043,11 +8094,15 @@ BOOL CSequenceMain::SortPicker1_Run()
 		}
 		break;
 	case 42:	// 정보전달, Vac Off	// Sort Picker = 0, NG Buffer = 1
-		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 4) && g_objCommon.Get_SortPicker1DownMulti(nSp1StartNo+1, nSp1DownSu)) {
-			for (int i = 0; i < nSp1DownSu; i++) {
+		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 4) && g_objCommon.Get_SortPicker1DownMulti(nSp1StartNo+1, nSp1DownSu)) 
+		{
+			for (int i = 0; i < nSp1DownSu; i++) 
+			{
 				gData.InfoNgBuffer[1][nSp1TrayPosX+i] = gData.InfoSortPick[0][nSp1StartNo+i]; 
 				gData.nTNoNgBuffer[1][nSp1TrayPosX+i] = gData.nTNoSortPick[0][nSp1StartNo+i];
 				gData.nCNoNgBuffer[1][nSp1TrayPosX+i] = gData.nCNoSortPick[0][nSp1StartNo+i];
+
+				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0], gData.nTNoNgBuffer[1][nSp1TrayPosX+i], gData.nCNoNgBuffer[1][nSp1TrayPosX+i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_NGBufferDown);
 
 				gData.InfoSortPick[0][nSp1StartNo+i] = gData.nTNoSortPick[0][nSp1StartNo+i] = gData.nCNoSortPick[0][nSp1StartNo+i] = 0;
 			}
@@ -8071,7 +8126,10 @@ BOOL CSequenceMain::SortPicker1_Run()
 		}
 		break;
 	case 44:	// Position Check
-		if (g_objCommon.Get_SortPicker1Up(0) && g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0) && g_objCommon.Get_InfoSortPicker1Check()) {
+		if (g_objCommon.Get_SortPicker1Up(0) && g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0) && g_objCommon.Get_InfoSortPicker1Check()) 
+		{
+			g_objLogFile.Save_PositionLog(gData.nPNoNgBuffer[1], gData.nTNoNgBuffer[1][0], -1, AX_SORT_PICKER1_Z, SORT_PICKER1_Z_Ready);
+
 			m_tSortPick1Loop.Takt_End(nTaktZone, 43);
 			m_tSortPick1Loop.Takt_Start(nTaktZone, 44);
 			m_tSortPick1Loop.Takt_End(nTaktZone, 44);
@@ -8145,7 +8203,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 		if (g_objCommon.Get_InfoSortPicker1Close() && g_objCommon.Get_InfoSortPicker1Check() &&
 			g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0) && g_objCommon.Get_SortPicker1Up(0))
 		{
-			
+			g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0], gData.nTNoSortPick[0][0], -1, AX_SORT_PICKER1_Z, SORT_PICKER1_Z_Ready);
 			g_objCommon.Move_Position(AX_SORT_PICKER1_P, 0);	// Tray Pitch
 			m_nSortPick1Case = 7; m_tSortPick1Loop.Set_LoopTime(5000);
 			m_tSortPick1Loop.Takt_End(nTaktZone, 53);
@@ -8397,7 +8455,8 @@ BOOL CSequenceMain::SortPicker2_Run()
 		{
 			if (nSp2VacErr == 1) { m_nSortPick2Case++; m_tSortPick2Loop.Set_LoopTime(10000); break;}
 
-			for (int i = 0; i < gData.nSortPickQt; i++) {
+			for (int i = 0; i < gData.nSortPickQt; i++) 
+			{
 				gData.InfoSortPick[1][i] = gData.InfoBuffTray[nSp2WorkBuff-1][nSp2TrayPosY][nSp2Base+i]; 
 				gData.InfoBuffTray[nSp2WorkBuff-1][nSp2TrayPosY][nSp2Base+i] = 0;
 
@@ -8414,6 +8473,10 @@ BOOL CSequenceMain::SortPicker2_Run()
 					gData.nCmJigNo[nPNo][nTNo][nCNo][SORT_PICK_NO] = 2;	// Sort Picker No.
 					gData.nCmJigNo[nPNo][nTNo][nCNo][SORT_JIG_NO]  = i + 1;	// Sort Picker Jig No.
 				}
+
+				if(nSp2WorkBuff == 1) g_objLogFile.Save_PositionLog(gData.nPNoBuffTray[nSp2WorkBuff-1], gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_Buffer1Down);
+				if(nSp2WorkBuff == 2) g_objLogFile.Save_PositionLog(gData.nPNoBuffTray[nSp2WorkBuff-1], gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_Buffer2Down);
+
 			}
 			gData.nPNoSortPick[1] = gData.nPNoBuffTray[nSp2WorkBuff-1];
 
@@ -8466,7 +8529,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 		if (g_objCommon.Get_InfoSortPicker2Close() && g_objCommon.Get_InfoSortPicker2Check() &&
 			g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0) && g_objCommon.Get_SortPicker2Up(0))
 		{
-			
+			g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1], -1, -1, AX_SORT_PICKER2_Z, SORT_PICKER2_Z_Ready );
 			if (Check_BufferEmpty(nSp2WorkBuff)) {	// Tray Change
 				nSp2TrayPosY = 0;
 				gData.nBtWorkSortPickNo = 2;
@@ -8716,6 +8779,9 @@ BOOL CSequenceMain::SortPicker2_Run()
 					else if (gData.InfoNgTray[nSp2WorkNg][nSp2TrayPosY][nSp2TrayPosX+i] == 5) gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1] = "N2";
 					else																	  gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1] = "N1";
 				}
+				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1],gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_NGDown );
+
+
 				g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				sNgTray.Format("NG-%d", nSp2WorkNg + 1);
 				g_objLogFile.Save_OutTray(sNgTray, 1, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
@@ -8738,7 +8804,8 @@ BOOL CSequenceMain::SortPicker2_Run()
 	case 16:	// Position Check
 		if (g_objCommon.Get_SortPicker2Up(0) && g_objCommon.Get_InfoSortPicker2Close() 
 			&& g_objCommon.Get_InfoSortPicker2Check() && g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) 
-		{			
+		{	
+			g_objLogFile.Save_PositionLog(gData.nPNoNgTray, -1, -1, AX_SORT_PICKER2_Z, SORT_PICKER2_Z_Ready);		
 			if (Check_NgTrayFull()) {
 				if (m_nNgTrayCase == 10) m_nNgTrayCase = 11;
 			}
@@ -9038,7 +9105,8 @@ BOOL CSequenceMain::SortPicker2_Run()
 		}
 		break;
 	case 24:	// 정보전달, Vac Off
-		if (g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 2) && g_objCommon.Get_SortPicker2DownMulti(nSp2StartNo+1, nSp2DownSu)) {
+		if (g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 2) && g_objCommon.Get_SortPicker2DownMulti(nSp2StartNo+1, nSp2DownSu)) 
+		{
 			for (int i = 0; i < nSp2DownSu; i++) {
 				gData.InfoGoodTray[nSp2TrayPosY][nSp2TrayPosX+i] = gData.InfoSortPick[1][nSp2StartNo+i]; 
 				gData.InfoSortPick[1][nSp2StartNo+i] = 0;
@@ -9050,6 +9118,9 @@ BOOL CSequenceMain::SortPicker2_Run()
 				int nGTNo = gData.nGoodStageTrayNo[nSp2WorkGood-1];	//gData.nGoodTrayCount;
 				int nGCNo = (gData.nTrayX*nSp2TrayPosY) + nSp2TrayPosX + i + 1;
 				g_objCapAttach.Set_BarcodeUpdate(nSp2PNo, nGTNo, nGCNo, gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1]);
+
+				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_GoodDown);
+				
 				g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], "OK", sInfo, gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				g_objLogFile.Save_OutTray("GOOD", gData.nGoodTrayCount, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("GOOD", gData.nGoodTrayCount, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
@@ -9112,7 +9183,9 @@ BOOL CSequenceMain::SortPicker2_Run()
 		}
 		break;
 	case 27:	// Position Check
-		if (g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) {
+		if (g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0)) 
+		{
+			g_objLogFile.Save_PositionLog(gData.nPNoGoodTray, -1, -1, AX_SORT_PICKER2_Z, SORT_PICKER2_Z_Ready);
 			// 한Case에서 오는게 아니라 따로 추출해서 입력해준다.
 			if (Check_SortPickerEmpty(2)){
 				if (!gData.bNGTrayWait && Check_NgBufferFull(2)) {
@@ -9305,6 +9378,8 @@ BOOL CSequenceMain::SortPicker2_Run()
 				gData.nTNoNgBuffer[0][nSp2TrayPosX+i] = gData.nTNoSortPick[1][nSp2StartNo+i];
 				gData.nCNoNgBuffer[0][nSp2TrayPosX+i] = gData.nCNoSortPick[1][nSp2StartNo+i];
 
+				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1], gData.nTNoNgBuffer[0][nSp2TrayPosX+i], gData.nCNoNgBuffer[0][nSp2TrayPosX+i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_NGBufferDown);
+
 				gData.InfoSortPick[1][nSp2StartNo+i] = gData.nTNoSortPick[1][nSp2StartNo+i] = gData.nCNoSortPick[1][nSp2StartNo+i] = 0;
 			}
 			gData.nPNoNgBuffer[0] = gData.nPNoSortPick[1];
@@ -9332,7 +9407,10 @@ BOOL CSequenceMain::SortPicker2_Run()
 		}
 		break;
 	case 44:	// Positon Check
-		if (g_objCommon.Get_SortPicker2Up(0) && g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0) && g_objCommon.Get_InfoSortPicker2Check()) {
+		if (g_objCommon.Get_SortPicker2Up(0) && g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0) && g_objCommon.Get_InfoSortPicker2Check()) 
+		{
+			g_objLogFile.Save_PositionLog(gData.nPNoNgBuffer[0], gData.nTNoNgBuffer[0][0], -1, AX_SORT_PICKER2_Z, SORT_PICKER2_Z_Ready);
+
 			
 			m_tSortPick2Loop.Takt_End(nTaktZone, 43);
 			m_tSortPick2Loop.Takt_Start(nTaktZone, 44);
@@ -9414,7 +9492,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 		if (g_objCommon.Get_InfoSortPicker2Close() && g_objCommon.Get_InfoSortPicker2Check() &&
 			g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0) && g_objCommon.Get_SortPicker2Up(0))
 		{
-			
+			g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1], gData.nTNoSortPick[1][0], -1, AX_SORT_PICKER2_Z, SORT_PICKER2_Z_Ready);
 			g_objCommon.Move_Position(AX_SORT_PICKER2_P, 0);	// Tray Pitch
 			m_nSortPick2Case = 7; m_tSortPick2Loop.Set_LoopTime(5000);
 
@@ -9637,7 +9715,9 @@ BOOL CSequenceMain::GoodTray1_Run()
 // 		if (m_bUnloadLotEnd && !m_pDX12->iGoodStage1Exist) { m_nGoodTray1Case = 80; }
 // 		return TRUE;
 	case 11:	// Master In
-		if (g_objCommon.Check_Position(AX_GOOD_STAGE1_Z, 1) && m_pDX12->iGoodStage1Exist) {
+		if (g_objCommon.Check_Position(AX_GOOD_STAGE1_Z, 1) && m_pDX12->iGoodStage1Exist)
+		{
+			g_objLogFile.Save_PositionLog(-1,-1,-1,AX_GOOD_STAGE1_Z, GoodStage1_Z_MovingUp);
 			m_dwGoodTray1 = GetTickCount();
 			m_tGoodTray1Loop.Takt_Start(nTaktZone, 1, TRUE);
 			m_pDY12->oGoodStage1MasterIn = TRUE;
@@ -9747,7 +9827,9 @@ BOOL CSequenceMain::GoodTray1_Run()
 		}
 		break;
 	case 26:	// Slave Out
-		if (g_objCommon.Check_Position(AX_GOOD_STAGE1_Z, 3)) {
+		if (g_objCommon.Check_Position(AX_GOOD_STAGE1_Z, 3)) 
+		{
+			g_objLogFile.Save_PositionLog(-1,-1,-1,AX_GOOD_STAGE1_Z, GoodStage1_Z_UnloadUp);
 			m_tGoodTray1Loop.Takt_End(nTaktZone, 7,0);
 			m_tGoodTray1Loop.Takt_Start(nTaktZone, 8);
 			m_pDY12->oGoodStage1SlaveIn = FALSE;
@@ -9975,7 +10057,9 @@ BOOL CSequenceMain::GoodTray2_Run()
 // 		if (m_bUnloadLotEnd && !m_pDX12->iGoodStage2Exist) m_nGoodTray2Case = 80;
 // 		return TRUE;
 	case 11:	// Master In
-		if (g_objCommon.Check_Position(AX_GOOD_STAGE2_Z, 1) && m_pDX12->iGoodStage2Exist) {
+		if (g_objCommon.Check_Position(AX_GOOD_STAGE2_Z, 1) && m_pDX12->iGoodStage2Exist) 
+		{
+			g_objLogFile.Save_PositionLog(-1,-1,-1,AX_GOOD_STAGE2_Z, GoodStage2_Z_MovingUp);
 			m_dwGoodTray2 = GetTickCount();
 			m_tGoodTray2Loop.Takt_Start(nTaktZone, 1, TRUE);
 			m_pDY12->oGoodStage2MasterIn = TRUE;
@@ -10084,7 +10168,9 @@ BOOL CSequenceMain::GoodTray2_Run()
 		}
 		break;
 	case 26:	// Slave Out
-		if (g_objCommon.Check_Position(AX_GOOD_STAGE2_Z, 3)) {
+		if (g_objCommon.Check_Position(AX_GOOD_STAGE2_Z, 3)) 
+		{
+			g_objLogFile.Save_PositionLog(-1,-1,-1,AX_GOOD_STAGE2_Z, GoodStage2_Z_UnloadUp);
 			m_tGoodTray2Loop.Takt_End(nTaktZone, 7,0);
 			m_tGoodTray2Loop.Takt_Start(nTaktZone, 8);
 			m_pDY12->oGoodStage2SlaveIn = FALSE;

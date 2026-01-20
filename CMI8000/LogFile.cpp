@@ -1549,14 +1549,14 @@ void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nM
 	}
 	else if (nAxis == AX_GOOD_STAGE1_Z)
 	{
-		if(nMoveIdx == 0) sPosName = "Good Stage1_Z_Moving Up";
-		if(nMoveIdx == 0) sPosName = "Good Stage1_Z_Unload Up";
+		if(nMoveIdx == 1) sPosName = "Good Stage1_Z_Moving Up";
+		if(nMoveIdx == 3) sPosName = "Good Stage1_Z_Unload Up";
 
 	}
 	else if(nAxis == AX_GOOD_STAGE2_Z)
 	{
-		if(nMoveIdx == 0) sPosName = "Good Stage2_Z_Moving Up";
-		if(nMoveIdx == 0) sPosName = "Good Stage2_Z_Unload Up";
+		if(nMoveIdx == 1) sPosName = "Good Stage2_Z_Moving Up";
+		if(nMoveIdx == 3) sPosName = "Good Stage2_Z_Unload Up";
 	}
 
 	CString sLog;
