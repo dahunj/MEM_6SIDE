@@ -65,7 +65,7 @@ private:
 	void Get_StatusUpdate(int nInspector, CString sStatus);
 
 	void Get_LotReady(int nInspector, CString sLotId, CString sPortNo, CString sProgVer, CString sParaVer);
-	void Get_ReloadRequest(int nInspector, CString sPc);
+	void Get_ReloadRequest(int nInspector, CString sPc, CString sVision);
 	void Get_ScanComplete(int nInspector, CString sGbn, CString sLotId, CString sPortNo, CString sTrayNo, CString sCmNo);
 	void Get_InspectComplete(int nInspector, CString sGbn, CString sLotId, CString sPortNo, CString sTrayNo, CString sCmNo, CString sJudge, CString sNGCode);
 	void Get_AMoveRequest(int nInspector, CString sGbn, CString sZ);
