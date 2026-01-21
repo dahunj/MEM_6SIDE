@@ -1490,6 +1490,8 @@ void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nM
 	strPath3.Format("%s\\POSITION\\%04d%02d%02d", gData.sLogPath, time.wYear, time.wMonth, time.wDay);
 	Create_Folder(strPath3);
 
+	if(nPNo < 1) nPNo = 1;
+
 	CString strFile1, strFile2, strFile3, strTitle, strTime, strPcName, strSave;
 	strFile1.Format("%s\\%s_%04d%02d%02d%02d_MCC_value.csv", strPath1, gData.sLotID[nPNo-1], time.wYear, time.wMonth, time.wDay, time.wHour);
 	strFile3.Format("%s\\%s_Position.csv", strPath3, gData.sLotID[nPNo-1]);

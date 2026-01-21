@@ -21,7 +21,7 @@
 #include "NoWorkDlg.h"
 
 #include "LaserComm.h"
-
+#include "SetupDlg.h"
 
 
 
@@ -1926,6 +1926,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		INI.Set_Bool("OPTION", "INSPECT_TOP_2", TRUE);
 		pEquipData->bUseInspectBtm2 = TRUE;
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
+		g_dlgSetup.m_pSetupEquipDlg->Cancel_EquipData();
 	}
 	else
 	{
@@ -1939,7 +1940,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 
 		g_objCapAttach.Set_VisionAlarmOn();
 		m_stcLotId[0].SetWindowText("");
-
+		m_stcLotId[1].SetWindowText("");
 
 		pEquipData->bUseVisionAlign = TRUE;
 		INI.Set_Bool("OPTION", "VISION_ALIGN", TRUE);
@@ -1957,6 +1958,8 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		INI.Set_Bool("OPTION", "INSPECT_TOP_2", TRUE);
 		pEquipData->bUseInspectBtm2 = TRUE;
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
+
+		g_dlgSetup.m_pSetupEquipDlg->Cancel_EquipData();
 	}
 }
 

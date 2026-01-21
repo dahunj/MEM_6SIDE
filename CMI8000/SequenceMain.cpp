@@ -9717,7 +9717,7 @@ BOOL CSequenceMain::GoodTray1_Run()
 	case 11:	// Master In
 		if (g_objCommon.Check_Position(AX_GOOD_STAGE1_Z, 1) && m_pDX12->iGoodStage1Exist)
 		{
-			g_objLogFile.Save_PositionLog(-1,-1,-1,AX_GOOD_STAGE1_Z, GoodStage1_Z_MovingUp);
+			g_objLogFile.Save_PositionLog(gData.nULPNo,-1,-1,AX_GOOD_STAGE1_Z, GoodStage1_Z_MovingUp);
 			m_dwGoodTray1 = GetTickCount();
 			m_tGoodTray1Loop.Takt_Start(nTaktZone, 1, TRUE);
 			m_pDY12->oGoodStage1MasterIn = TRUE;
@@ -9829,7 +9829,7 @@ BOOL CSequenceMain::GoodTray1_Run()
 	case 26:	// Slave Out
 		if (g_objCommon.Check_Position(AX_GOOD_STAGE1_Z, 3)) 
 		{
-			g_objLogFile.Save_PositionLog(-1,-1,-1,AX_GOOD_STAGE1_Z, GoodStage1_Z_UnloadUp);
+			g_objLogFile.Save_PositionLog(gData.nULPNo,-1,-1,AX_GOOD_STAGE1_Z, GoodStage1_Z_UnloadUp);
 			m_tGoodTray1Loop.Takt_End(nTaktZone, 7,0);
 			m_tGoodTray1Loop.Takt_Start(nTaktZone, 8);
 			m_pDY12->oGoodStage1SlaveIn = FALSE;
@@ -10059,7 +10059,7 @@ BOOL CSequenceMain::GoodTray2_Run()
 	case 11:	// Master In
 		if (g_objCommon.Check_Position(AX_GOOD_STAGE2_Z, 1) && m_pDX12->iGoodStage2Exist) 
 		{
-			g_objLogFile.Save_PositionLog(-1,-1,-1,AX_GOOD_STAGE2_Z, GoodStage2_Z_MovingUp);
+			g_objLogFile.Save_PositionLog(gData.nULPNo,-1,-1,AX_GOOD_STAGE2_Z, GoodStage2_Z_MovingUp);
 			m_dwGoodTray2 = GetTickCount();
 			m_tGoodTray2Loop.Takt_Start(nTaktZone, 1, TRUE);
 			m_pDY12->oGoodStage2MasterIn = TRUE;
@@ -10170,7 +10170,7 @@ BOOL CSequenceMain::GoodTray2_Run()
 	case 26:	// Slave Out
 		if (g_objCommon.Check_Position(AX_GOOD_STAGE2_Z, 3)) 
 		{
-			g_objLogFile.Save_PositionLog(-1,-1,-1,AX_GOOD_STAGE2_Z, GoodStage2_Z_UnloadUp);
+			g_objLogFile.Save_PositionLog(gData.nULPNo,-1,-1,AX_GOOD_STAGE2_Z, GoodStage2_Z_UnloadUp);
 			m_tGoodTray2Loop.Takt_End(nTaktZone, 7,0);
 			m_tGoodTray2Loop.Takt_Start(nTaktZone, 8);
 			m_pDY12->oGoodStage2SlaveIn = FALSE;
