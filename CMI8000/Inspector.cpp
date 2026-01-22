@@ -404,21 +404,21 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 
 	} else if (nInspector == INSPECTOR_PC2) // Top1
 	{	
-		if (sPc != "PC2") return;
+		//if (sPc != "PC2") return;
 		Set_ReloadComplete(INSPECTOR_PC2, sPc);
 		
-		if (pEquipData->bUseVisionAlign && sVision == "ALIGN") 
+		if (pEquipData->bUseVisionAlign && (sPc == "ALIGN" || sPc == "PC2")) 
 		{	// Align
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_ANGLE);
 			if (nCase == 5) g_objSequenceMain.Set_MainRunCase(AUTO_VISION_ANGLE, 4);
 		}
 
-		if (pEquipData->bUseInspectAngle && !gData.bScanDone[0] && sVision == "AG") {	// Angle
+		if (pEquipData->bUseInspectAngle && !gData.bScanDone[0] && (sPc == "AG"|| sPc == "PC2")) {	// Angle
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_ANGLE);
 			if (nCase == 15 && nCase < 19) g_objSequenceMain.Set_MainRunCase(AUTO_VISION_ANGLE, 13);
 		}
 
-		if (pEquipData->bUseInspectTop1 && !gData.bScanDone[2] && sVision == "T1") 
+		if (pEquipData->bUseInspectTop1 && !gData.bScanDone[2] && (sPc == "T1"|| sPc == "PC2")) 
 		{	// Top1
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_INSPECTION1);
 			if (nCase >= 10 && nCase < 15) { gData.bReload[2] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_INSPECTION1, 15); }
