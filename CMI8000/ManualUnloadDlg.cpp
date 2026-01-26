@@ -548,6 +548,11 @@ void CManualUnloadDlg::OnBtnEmptyTrans1XClick(UINT nID)
 	DX_DATA_13 *pDX13 = g_objAJinAXL.Get_pDX13();
 	if (!pDX13->iEmptyTrans1Up || pDX13->iEmptyTrans1Down) { AfxMessageBox("Empty Trans1 Up 상태 확인 후 진행하세요."); return; }
 
+	if(!g_objCommon.Check_Position(AX_EMPTY_TRANS2_Y, 0))
+	{
+		AfxMessageBox("Empty 2 Y가 Good Buffer Port에 없습니다. 회피 후 진행하세요"); return;
+	}
+
 	g_objCommon.Move_Position(AX_EMPTY_TRANS1_X, nIndex);
 
 	m_strLog.Format("[Manual Unload] Empty Trans1 X (%d) Click", nIndex);
@@ -666,6 +671,11 @@ void CManualUnloadDlg::OnBtnEmptyTrans2YClick(UINT nID)
 
 	DX_DATA_13 *pDX13 = g_objAJinAXL.Get_pDX13();
 	if (!pDX13->iEmptyTrans2Up || pDX13->iEmptyTrans2Down) { AfxMessageBox("Empty Trans2 Up 상태 확인 후 진행하세요."); return; }
+
+	if(!g_objCommon.Check_Position(AX_BTM2_PICKER_X, 0))
+	{
+		AfxMessageBox("Btm2 Picker X가 Inspection Pos 에 있지 않습니다. 회피 후 진행하세요."); return;
+	}
 
 	g_objCommon.Move_Position(AX_EMPTY_TRANS2_Y, nIndex);
 

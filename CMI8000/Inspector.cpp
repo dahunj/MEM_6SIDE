@@ -406,7 +406,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 	{	
 		//if (sPc != "PC2") return;
 		Set_ReloadComplete(INSPECTOR_PC2, sPc);
-
+		
 		if (pEquipData->bUseVisionAlign && (sPc == "ALIGN" || sPc == "PC2")) 
 		{	// Align
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_ANGLE);
