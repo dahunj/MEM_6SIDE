@@ -296,7 +296,9 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 		SetTimer(0, 100, NULL);
 
-	} else {
+	} 
+	else
+	{
 		KillTimer(0);
 
 		for (int i = 0; i < 14; i++) m_stcErrPos[i].Set_Color(RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00));
@@ -304,7 +306,7 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		pMainDlg->Set_BuzzerFlicker(FALSE);
 		if (g_objSequenceInit.Get_InitComplete()) pMainDlg->Set_CurrentState(STATE_STOP);
 		else pMainDlg->Set_CurrentState(STATE_NONE);
-		//g_objMES.Set_Alarm(2, m_nErrNo, m_strErrMsg);
+		g_objMES.Set_Alarm(2, m_nErrNo, m_strErrMsg);
 
 		g_objLogFile.Save_HandlerLog("[Error Mode] Close Error");
 
