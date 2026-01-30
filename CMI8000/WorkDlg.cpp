@@ -1903,7 +1903,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 
 		pEquipData->bUseInlineMode = TRUE;
 		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
-		//INI.Set_Bool("OPTION", "MES_USE", FALSE);
+		INI.Set_Bool("OPTION", "MES_USE", FALSE);
 		m_chkMesUse.SetCheck(FALSE);
 		g_objCapAttach.Set_VisionAlarmOff();
 
@@ -1935,7 +1935,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		pEquipData->bUseInlineMode = TRUE;
 		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
 
-		//INI.Set_Bool("OPTION", "MES_USE", TRUE);
+		INI.Set_Bool("OPTION", "MES_USE", TRUE);
 		m_chkMesUse.SetCheck(TRUE);
 
 		g_objCapAttach.Set_VisionAlarmOn();
