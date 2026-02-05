@@ -485,7 +485,7 @@ void CMESInterface::Set_Alarm(int nType, int nAlarmID, CString sText )	//1:발생,
 	Create_Folder(strPath);
 
 	CString strState = (nType == 1 ? "AlarmSet" : "AlarmReset");
-	CString strState2 = (nType == 1 ? "STOP" : "IDLE");
+	CString strState2 = (nType == 1 ? "STOP" : "STOP");
 	CFile file;
 	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
 		try {
@@ -509,7 +509,7 @@ void CMESInterface::Set_Alarm(int nType, int nAlarmID, CString sText )	//1:발생,
 	strFile2.Format("%s\\%04d%02d%02d.txt", strPath2, time.wYear, time.wMonth, time.wDay);
 	Create_Folder(strPath2);
 	
-	strState2 = (nType == 1 ? "STOP" : "IDLE");
+	strState2 = (nType == 1 ? "STOP" : "STOP");
 	CFile file2;
 	if (file2.Open(strFile2, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
 		try {
