@@ -393,6 +393,9 @@ typedef struct {
 
 	BOOL	bBufferUpStatus[2]; //0: buffer 1, 1: buffer 2
 	BOOL	bBufferDownStatus[2];
+
+	int		nAlmCnt[2]; // port 1,2 
+
 } GLOVAL_ALM;
 
 typedef struct {

@@ -119,6 +119,7 @@ BOOL CCMI8000Dlg::OnInitDialog()
 	gData.nVisionFOBMode = 0;
 
 	gLot.dwUphStart = 0;
+	m_dwSetTimer = 0;
 
 	g_objCommon.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
 	g_objInspector.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);

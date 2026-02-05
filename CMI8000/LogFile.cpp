@@ -232,7 +232,7 @@ void CLogFile::Save_JobListLog(CString sLog, BOOL bMode)
 	//Run Time : EndTime - Start Time - Stop Time :  비가동 시간이 제외 되기 때문에 (Start to End 보다는 시간이 짧음)
 	//
 	
-	sTitle.Format("Time,lotNum,Start_Time,End_Time,Run_Time,Unload Start_Time, Unload End_Time,Tact(S-E),Tact(RunTime),Tact(Unload_Time),Alarm_Count,Stop_Time,Efficiency(RunTime), Efficiency(Unload),Tray_Count,CM_Count,Good_Count,NG_Count,NG1_Count,NG2_Count,NG3_Count,NG4_Count,MESNG_Count\r\n");
+	sTitle.Format("Time,lotNum,Start_Time,End_Time,Run_Time,Unload_Time,Tact(S-E),Tact(RunTime),Tact(Unload_Time),Alarm_Count,Stop_Time,Efficiency(RunTime), Efficiency(Unload),Tray_Count,CM_Count,Good_Count,NG_Count,NG1_Count,NG2_Count,NG3_Count,NG4_Count,MESNG_Count\r\n");
 	strFile.Format("%s\\%04d%02d%02d_JobList.txt", strPath, time.wYear, time.wMonth, time.wDay);
 
 	CFile file;
