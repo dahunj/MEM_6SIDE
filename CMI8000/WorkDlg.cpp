@@ -304,7 +304,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			if (gData.nLPNo > 0)  nNo = gData.nLPNo;
 
 		} else { nNo = 1;}
-
+		g_objMES.Set_Status(1);
 		g_objLogFile.Save_HandlerLog("[Work Mode] START S/W push");
 		m_rdoWorkStart.SetCheck(TRUE);
 		pMainDlg->Set_LotErrorLog("START", 903, "Start");
@@ -318,7 +318,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			if (gData.nLPNo > 0)  nNo = gData.nLPNo;
 
 		} else { nNo = 1;}
-
+		g_objMES.Set_Status(2);
 		g_objLogFile.Save_HandlerLog("[Work Mode] STOP S/W push");
 		MachineStopLog("STOP_BUTTON_PUSH");
 		m_rdoWorkStop.SetCheck(TRUE);
@@ -493,15 +493,29 @@ void CWorkDlg::OnBnClickedNgClear(UINT nID)
 	int nIndex = nID - IDC_BTN_NG_CLEAR_0;
 	CString strMsg;
 
-	if (nIndex == 0) strMsg.Format("N1&&N2&&N3 Tray Clear 하시겠습니까?");
+	if (nIndex == 0)
+	{
+		strMsg.Format("N1&&N2&&N3 Tray Clear 하시겠습니까?");
+
+	}
 	if (nIndex == 1) strMsg.Format("N4 Tray Clear 하시겠습니까?");
 	//if (nIndex == 2) strMsg.Format("N1 && N3 Tray Clear 하시겠습니까?");
 	//if (nIndex == 3) strMsg.Format("N2 Tray Clear 하시겠습니까?");
 
 	if (g_objCommon.Show_MsgBox(2, strMsg) == IDOK) {
 		g_objSequenceMain.Init_NgTray(nIndex);
-		if (nIndex == 0) g_objSequenceMain.Init_NgTray(2);	// NG 1 Clear 할 때 NG3도 Clear 한다.
-		if (nIndex == 1) g_objSequenceMain.Init_NgTray(3);	// NG 1 Clear 할 때 NG3도 Clear 한다.
+		if (nIndex == 0)
+		{
+			gData.nTrayCntNG[0]++;
+			gData.nTrayCntNG[2]++;
+			g_objSequenceMain.Init_NgTray(2);	// NG 1 Clear 할 때 NG3도 Clear 한다.
+		}
+		if (nIndex == 1)
+		{
+			gData.nTrayCntNG[1]++;
+			gData.nTrayCntNG[3]++;
+			g_objSequenceMain.Init_NgTray(3);	// NG 1 Clear 할 때 NG3도 Clear 한다.
+		}
 	}	
 }
 
@@ -1059,9 +1073,19 @@ void CWorkDlg::Check_Lamp()
 				} 
 				else 
 				{
-					if (gData.InfoNgTray[0][gData.nTrayY-1][gData.nTrayX-1] > 0) { g_objSequenceMain.Init_NgTray(0); g_objSequenceMain.Init_NgTray(2); }	// N1,N3
-					if (gData.InfoNgTray[1][gData.nTrayY-1][gData.nTrayX-1] > 0) g_objSequenceMain.Init_NgTray(1);	// N4
-					if (gData.InfoNgTray[3][gData.nTrayY-1][gData.nTrayX-1] > 0) g_objSequenceMain.Init_NgTray(3);	// N2
+					if (gData.InfoNgTray[0][gData.nTrayY-1][gData.nTrayX-1] > 0) //N123
+					{ 
+						gData.nTrayCntNG[0]++;
+						gData.nTrayCntNG[2]++;
+						g_objSequenceMain.Init_NgTray(0); g_objSequenceMain.Init_NgTray(2); 
+					}	
+					if (gData.InfoNgTray[1][gData.nTrayY-1][gData.nTrayX-1] > 0) // N4
+					{ 
+						gData.nTrayCntNG[1]++;
+						gData.nTrayCntNG[3]++;
+						g_objSequenceMain.Init_NgTray(1); g_objSequenceMain.Init_NgTray(3); 
+					}	
+					//if (gData.InfoNgTray[3][gData.nTrayY-1][gData.nTrayX-1] > 0) 
 				}
 				gData.bNGTrayWait = FALSE;
 
@@ -1903,7 +1927,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 
 		pEquipData->bUseInlineMode = TRUE;
 		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
-		//INI.Set_Bool("OPTION", "MES_USE", FALSE);
+		INI.Set_Bool("OPTION", "MES_USE", FALSE);
 		m_chkMesUse.SetCheck(FALSE);
 		g_objCapAttach.Set_VisionAlarmOff();
 
@@ -1934,8 +1958,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 
 		pEquipData->bUseInlineMode = TRUE;
 		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
-
-		//INI.Set_Bool("OPTION", "MES_USE", TRUE);
+		INI.Set_Bool("OPTION", "MES_USE", TRUE);
 		m_chkMesUse.SetCheck(TRUE);
 
 		g_objCapAttach.Set_VisionAlarmOn();

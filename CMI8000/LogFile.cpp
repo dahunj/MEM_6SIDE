@@ -1562,7 +1562,7 @@ void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nM
 	}
 
 	CString sLog;
-	sLog.Format("%s,%s,%s,%s,%d,%d,%d,%s,%03lf,%03lf", gData.sComName, pEquipData->sEquipName, MAIN_VERSION, gData.sLotID[nPNo-1],
+	sLog.Format("%s,%s,%s,%s,%s,%d,%d,%d,%s,%03lf,%03lf", gData.sComName, pEquipData->sEquipName, MAIN_VERSION, gData.sLotID[nPNo-1],"",
 		nPNo, nTNo, nCmNo, sPosName, g_objCommon.Get_MoveDataPosition(nAxis, nMoveIdx), g_objCommon.Get_ActPosition(nAxis, nMoveIdx));
 	
 
@@ -1571,7 +1571,7 @@ void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nM
 	CFile file;
 	if (!file.Open(strFile1, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
 	
-	strTitle.Format("Time,Station,Machine,Version,LotNum,Port No,TrayNo,CmNo,Pos Name,Target Pos,Actual Pos\r\n");
+	strTitle.Format("Time,Station,Machine,Version,LotNum,Barcode,Port No,TrayNo,CmNo,Pos Name,Target Pos,Actual Pos\r\n");
 
 	try 
 	{
@@ -1595,7 +1595,7 @@ void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nM
 	CFile file2;
 	if (!file2.Open(strFile3, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
 
-	strTitle.Format("Time,Station,Machine,Version,LotNum,Port No,TrayNo,CmNo,Pos Name,Target Pos,Actual Pos\r\n");
+	strTitle.Format("Time,Station,Machine,Version,LotNum,Barcode,Port No,TrayNo,CmNo,Pos Name,Target Pos,Actual Pos\r\n");
 
 	try 
 	{

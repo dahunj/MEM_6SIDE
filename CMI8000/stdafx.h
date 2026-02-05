@@ -315,7 +315,10 @@ typedef struct {
 	BOOL	bSortPickCompletelyLotEnd;
 
 	BOOL	bPullForce;
-	
+
+	int		nTrayCntNG[4]; // 0  1
+						   // 2  3
+ 	
 } GLOVAL_DATA;
 
 typedef struct {
