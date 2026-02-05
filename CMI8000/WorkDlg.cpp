@@ -862,6 +862,8 @@ BOOL CWorkDlg::Work_Start()
 	}
 
 	g_objSequenceMain.Set_ClearRunData(1);	// 시점 변경 (LotEnd->LotStart)
+	
+
 	gData.bFirstLotStart = TRUE;
 
 	m_stcLotId[0].GetWindowText(strTemp);		// Lot ID

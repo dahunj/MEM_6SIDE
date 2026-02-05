@@ -1090,7 +1090,11 @@ void CCMI8000Dlg::Set_LotStateTime()
 
 	switch(nPreState) {
 	case STATE_RUN:
-		gLot.dwRunTime += dwTime; break;
+		{
+			gLot.dwRunTime += dwTime; 			
+			break;
+		}
+		
 	case STATE_ALARM:
 	case STATE_ERROR:
 		/*gLot.dwErrorTime += dwTime;	gLot.nErrorCount++; break;*/
@@ -1098,7 +1102,8 @@ void CCMI8000Dlg::Set_LotStateTime()
 	default:
 		if (!gAlm.bBegin)
 		{
-			gLot.dwStopTime += dwTime;
+			gLot.dwStopTime[0] += dwTime;
+			gLot.dwStopTime[1] += dwTime;
 			gLot.dwTempStopTime = dwTime;
 		}
 		break;

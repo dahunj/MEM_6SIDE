@@ -330,7 +330,10 @@ typedef struct {
 	DWORD	dwLotEnd[2];
 	int		nTrayCount[2];
 	int		nCmCount[2];
-	double  dTackTime;
+	double  dTackTime_Unload;
+	double  dTactTime_RunTime;
+	double  dTactTime_StoETime; //Start to End 
+
 	int		nGoodCount[2];
 	int		nNgCount[2];
 	int		nSNgCount[2][6];			// Special NG (MES, N1, N2)
@@ -358,7 +361,7 @@ typedef struct {
 
 	int		nErrorCount;
 	DWORD	dwRunTime;
-	DWORD	dwStopTime;
+	DWORD	dwStopTime[2]; //port 1,2 
 	DWORD	dwTempStopTime;
 	DWORD	dwErrorTime;
 
