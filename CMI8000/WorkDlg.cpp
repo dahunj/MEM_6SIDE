@@ -870,6 +870,8 @@ BOOL CWorkDlg::Work_Start()
 	}
 
 	g_objSequenceMain.Set_ClearRunData(1);	// 시점 변경 (LotEnd->LotStart)
+	
+
 	gData.bFirstLotStart = TRUE;
 
 	m_stcLotId[0].GetWindowText(strTemp);		// Lot ID
@@ -1192,7 +1194,11 @@ void CWorkDlg::Reset_AlarmLog()
 	gAlm.sEndTime.Format("%04d%02d%02d_%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
 	gAlm.dwProcTime = gAlm.dwEndTime - gAlm.dwStartTime;
 	
-	gLot.dwErrorTime += gAlm.dwProcTime; gLot.nErrorCount++;
+	gLot.dwErrorTime[PORT1] += gAlm.dwProcTime; 
+	gLot.dwErrorTime[PORT2] += gAlm.dwProcTime;
+		
+	gLot.nErrorCount[PORT1]++;
+	gLot.nErrorCount[PORT2]++;
 
 	strLog.Format("%s,%04d,%s,%s,%s,%d", gAlm.sLotID, gAlm.nAlmNo, gAlm.sAlmMsg, gAlm.sStartTime, gAlm.sEndTime, gAlm.dwProcTime);
 	g_objLogFile.Save_AlarmResetLog(strLog);	// Alarm Reset
