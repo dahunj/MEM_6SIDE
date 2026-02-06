@@ -564,7 +564,7 @@ void CLogFile::Save_ECMLog(int nType, CString strLog)	//nType:1[Alarm], 2[Joblis
 	if (nNo < 0) nNo = 0;
 
 	if (nType == 1) sTitle.Format("Time,Station,Type,lotNum,Error Code,Error,Start_Time,End_Time,Lead_Time\r\n");
-	if (nType == 2) sTitle.Format("Time,Station,Type,lotNum,Start_Time,End_Time,Tack_Time,Tray_Count,CM_Count,Tack,Good_Count,NG_Count,N1_Count,N2_Count,N3_Count,MESNG_Count\r\n");
+	if (nType == 2) sTitle.Format("Time,Station,Type,lotNum,Start_Time,End_Time,Run_Time,Unload_Time,Tact(S-E),Tact(RunTime),Tact(Unload_Time),Alarm_Count,Stop_Time,Efficiency(RunTime), Efficiency(Unload),Tray_Count,CM_Count,Good_Count,NG_Count,N1_Count,N2_Count,N3_Count,N4_Count,MESNG_Count\r\n");
 	if (nType == 3) sTitle.Format("Time,Station,Type,lotNum,Load_Pick,Inspect,Barcode,NG_Pick,Good_Pick,Trans_Pick\r\n");
 	if (nType == 4) sTitle.Format("Time,Station,Type\r\n");
 	
@@ -1517,7 +1517,7 @@ void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nM
 	}
 	else if(nAxis == AX_BTM1_PICKER_Z)
 	{
-		if(nMoveIdx == 0) sPosName = "BTM1_PICKER_Z_Ready";
+		if(nMoveIdx == 0) sPosName = "Btm1PickerZ_Ready";
 		if(nMoveIdx == 1) sPosName = "BTM1_PICKER_Z_Tray Down";
 		if(nMoveIdx == 2) sPosName = "BTM1_PICKER_Z_BTM1 SP Down";
 		if(nMoveIdx == 3) sPosName = "BTM1_PICKER_Z_Inspect";

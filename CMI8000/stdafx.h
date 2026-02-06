@@ -359,11 +359,10 @@ typedef struct {
 	int		nCANgCount[2];
 	int		nCASNgCount[2][6];	
 
-	int		nErrorCount;
-	DWORD	dwRunTime;
-	DWORD	dwStopTime[2]; //port 1,2 
-	DWORD	dwTempStopTime;
-	DWORD	dwErrorTime;
+	int		nErrorCount[2];//port 1,2 
+	DWORD	dwRunTime[2]; // 
+	DWORD	dwStopTime[2];  //stop time = stop S/W time  + error Time, error 로 인한 정지 시간을 포함 한다. 
+	DWORD	dwErrorTime[2]; //
 
 	BOOL	bLotEndComplete[2];
 
@@ -374,7 +373,7 @@ typedef struct {
 	int		nGDT;
 	int		nG1DC;
 
-	DWORD   dwUphStart;
+	DWORD   dwFirstSortPickMoment[2];
 } GLOVAL_LOT;
 
 typedef struct {
@@ -433,8 +432,10 @@ extern GLOVAL_UPH	gUph;
 extern GLOVAL_MES	gMes;
 
 
+const int PORT1 = 0;
+const int PORT2 = 1;
 
-#define BTM1_PICKER_Z_Ready 0
+const int Btm1PickerZ_Ready = 0;
 #define BTM1_PICKER_Z_TrayDown 1
 #define BTM1_PICKER_Z_BTM1SPDown 2
 #define	BTM1_PICKER_Z_Inspect 3

@@ -118,8 +118,9 @@ BOOL CCMI8000Dlg::OnInitDialog()
 	gData.nTrayY = 1;
 	gData.nVisionFOBMode = 0;
 
-	gLot.dwUphStart = 0;
+	
 	m_dwSetTimer = 0;
+	
 
 	g_objCommon.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
 	g_objInspector.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
@@ -1092,7 +1093,8 @@ void CCMI8000Dlg::Set_LotStateTime()
 	switch(nPreState) {
 	case STATE_RUN:
 		{
-			gLot.dwRunTime += dwTime; 			
+			gLot.dwRunTime[PORT1] += dwTime;
+			gLot.dwRunTime[PORT2] += dwTime; 
 			break;
 		}
 		
@@ -1103,9 +1105,8 @@ void CCMI8000Dlg::Set_LotStateTime()
 	default:
 		if (!gAlm.bBegin)
 		{
-			gLot.dwStopTime[0] += dwTime;
-			gLot.dwStopTime[1] += dwTime;
-			gLot.dwTempStopTime = dwTime;
+			gLot.dwStopTime[PORT1] += dwTime;
+			gLot.dwStopTime[PORT2] += dwTime;			
 		}
 		break;
 	}
