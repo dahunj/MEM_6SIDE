@@ -304,10 +304,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			if (gData.nLPNo > 0)  nNo = gData.nLPNo;
 
 		} else { nNo = 1;}
-<<<<<<< HEAD
 
-=======
->>>>>>> Release_MEM25/V3.5.1.20
 		g_objMES.Set_Status(1);
 		g_objLogFile.Save_HandlerLog("[Work Mode] START S/W push");
 		m_rdoWorkStart.SetCheck(TRUE);
@@ -322,10 +319,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			if (gData.nLPNo > 0)  nNo = gData.nLPNo;
 
 		} else { nNo = 1;}
-<<<<<<< HEAD
 
-=======
->>>>>>> Release_MEM25/V3.5.1.20
 		g_objMES.Set_Status(2);
 		g_objLogFile.Save_HandlerLog("[Work Mode] STOP S/W push");
 		MachineStopLog("STOP_BUTTON_PUSH");
