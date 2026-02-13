@@ -507,7 +507,7 @@ void CWorkDlg::OnBnClickedNgClear(UINT nID)
 		if (nIndex == 0)
 		{
 			gData.nTrayCntNG[0]++;
-			gData.nTrayCntNG[2]++;
+			gData.nTrayCntNG[2] = gData.nTrayCntNG[0] + 1;
 			g_objSequenceMain.Init_NgTray(2);	// NG 1 Clear 할 때 NG3도 Clear 한다.
 		}
 		if (nIndex == 1)
@@ -1076,7 +1076,7 @@ void CWorkDlg::Check_Lamp()
 					if (gData.InfoNgTray[0][gData.nTrayY-1][gData.nTrayX-1] > 0) //N123
 					{ 
 						gData.nTrayCntNG[0]++;
-						gData.nTrayCntNG[2]++;
+						gData.nTrayCntNG[2] = gData.nTrayCntNG[0] + 1;
 						g_objSequenceMain.Init_NgTray(0); g_objSequenceMain.Init_NgTray(2); 
 					}	
 					if (gData.InfoNgTray[1][gData.nTrayY-1][gData.nTrayX-1] > 0) // N4
@@ -1908,8 +1908,10 @@ void CWorkDlg::OnBnClickedButton9()
 
 void CWorkDlg::OnBnClickedChkPullforce()
 {
-	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
 
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+	
 	CIniFileCS INI(gData.sEnvPath + "\\EquipData.ini");
 	if (!INI.Check_File()) { AfxMessageBox("EquipData.ini File Not Found!!!"); return; }
 
@@ -1917,7 +1919,6 @@ void CWorkDlg::OnBnClickedChkPullforce()
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
-
 	
 	gData.bPullForce = m_chkPullForce.GetCheck();
 
@@ -1929,9 +1930,13 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
 		INI.Set_Bool("OPTION", "MES_USE", FALSE);
 		m_chkMesUse.SetCheck(FALSE);
+		m_chkMesUse.EnableWindow(FALSE);
+		pEquipData->bUseMES = FALSE;
+		g_objMES.Set_MESUse(FALSE);		
+
 		g_objCapAttach.Set_VisionAlarmOff();
 
-		strTemp.Format("%04d%02d%02d%02d:%02d",time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute);
+		strTemp.Format("%04d%02d%02d%02d_%02d",time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute);
 		m_stcLotId[0].SetWindowText(strTemp);
 
 		pEquipData->bUseVisionAlign = TRUE;
@@ -1951,6 +1956,13 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		pEquipData->bUseInspectBtm2 = TRUE;
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
 		g_dlgSetup.m_pSetupEquipDlg->Cancel_EquipData();
+
+		
+
+		m_stcCmCount[1].EnableWindow(FALSE);
+		pMainDlg->Enable_ModeButton(FALSE);
+		pMainDlg->m_btnMainOperator.EnableWindow(FALSE);
+
 	}
 	else
 	{
@@ -1960,6 +1972,9 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
 		INI.Set_Bool("OPTION", "MES_USE", TRUE);
 		m_chkMesUse.SetCheck(TRUE);
+		m_chkMesUse.EnableWindow(TRUE);
+		pEquipData->bUseMES = TRUE;
+		g_objMES.Set_MESUse(TRUE);
 
 		g_objCapAttach.Set_VisionAlarmOn();
 		m_stcLotId[0].SetWindowText("");
@@ -1983,6 +1998,10 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
 
 		g_dlgSetup.m_pSetupEquipDlg->Cancel_EquipData();
+
+		m_stcCmCount[1].EnableWindow(TRUE);
+		pMainDlg->Enable_ModeButton(TRUE);
+		pMainDlg->m_btnMainOperator.EnableWindow(TRUE);
 	}
 }
 

@@ -71,7 +71,7 @@ UINT CMESInterface::Thread_MES(LPVOID lpVoid)
 
 	strLog.Format("[MESInterface] Thread_MES. Start.");
 	g_objLogFile.Save_MesAgentLog(strLog);
-
+	
 	g_objMES.m_nReadCnt = 0;
 	while (g_objMES.m_bThreadMES) {
 		Sleep(500);

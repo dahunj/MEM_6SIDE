@@ -75,7 +75,10 @@ CSequenceMain::CSequenceMain()
 
 	gData.dEmptyPort_Z_Limit = 300;
 
-	for(int i = 0; i <4; i++) gData.nTrayCntNG[i] = 1;
+	gData.nTrayCntNG[0] = 1;
+	gData.nTrayCntNG[1] = 1;
+	gData.nTrayCntNG[2] = gData.nTrayCntNG[0] + 1;
+	gData.nTrayCntNG[3] = 1;
 }
 
 CSequenceMain::~CSequenceMain()
@@ -659,6 +662,12 @@ BOOL CSequenceMain::LotEnd_Run()
 	m_pEquipData->bResultTestUse = FALSE;	// LOT ³¡³ª¸é Reset
 	gData.bNgTrayEnd = FALSE;
 	gData.bSortPickCompletelyLotEnd = TRUE;
+
+	if(gData.bPullForce)
+	{
+		g_dlgWork.Set_PullForce(FALSE);
+		g_dlgWork.OnBnClickedChkPullforce();
+	}
 	return TRUE;
 }
 
@@ -808,7 +817,10 @@ void CSequenceMain::Set_ClearRunData(int nType)
 
 	gData.b3DStart = FALSE;
 
-	for(int i = 0; i <4; i++) gData.nTrayCntNG[i] = 1;
+	gData.nTrayCntNG[0] = 1;
+	gData.nTrayCntNG[1] = 1;
+	gData.nTrayCntNG[2] = gData.nTrayCntNG[0] + 1;
+	gData.nTrayCntNG[3] = 1;
 
 	
 
@@ -1008,9 +1020,10 @@ BOOL CSequenceMain::Check_GoodTrayFull()
 
 BOOL CSequenceMain::Check_NgTrayFull()
 {
+	
+
 	if (gData.InfoNgTray[0][gData.nTrayY-1][gData.nTrayX-1] > 0) 
-	{	
-		
+	{			
 		return TRUE;	// N1,N2,N3
 	}
 	if (gData.InfoNgTray[1][gData.nTrayY-1][gData.nTrayX-1] > 0) 
@@ -2106,11 +2119,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 		g_objCommon.Show_Error(6180);
 	}
 
-	if(gData.bPullForce)
-	{
-		g_dlgWork.Set_PullForce(FALSE);
-		g_dlgWork.OnBnClickedChkPullforce();
-	}
+
 //	Beep_Post(1000);
 }
 
@@ -7531,7 +7540,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 				g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				//g_objMES.Set_Result(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 								
-				if(nSp1WorkNg == 0  || nSp1WorkNg == 2 )  sNgTray.Format("NG-N1N2N3");
+				if(nSp1WorkNg == 0  || nSp1WorkNg == 2 )  sNgTray.Format("NG");
 				if(nSp1WorkNg == 1  || nSp1WorkNg == 3 )  sNgTray.Format("NG-N4");
 
 				g_objLogFile.Save_OutTray(sNgTray, gData.nTrayCntNG[nSp1WorkNg], nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
@@ -8794,7 +8803,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 
 				g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				
-				if(nSp2WorkNg == 0  || nSp2WorkNg == 2 )  sNgTray.Format("NG-N1N2N3");
+				if(nSp2WorkNg == 0  || nSp2WorkNg == 2 )  sNgTray.Format("NG");
 				if(nSp2WorkNg == 1  || nSp2WorkNg == 3 )  sNgTray.Format("NG-N4");
 				//sNgTray.Format("NG-%d", nSp2WorkNg + 1);
 
