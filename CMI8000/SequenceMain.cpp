@@ -75,15 +75,23 @@ CSequenceMain::CSequenceMain()
 
 	gData.dEmptyPort_Z_Limit = 300;
 
-	gData.nTrayCntNG[0] = 1;
-	gData.nTrayCntNG[1] = 1;
-	gData.nTrayCntNG[2] = gData.nTrayCntNG[0] + 1;
-	gData.nTrayCntNG[3] = 1;
+
+	gData.nTrayCntNG[PORT1][2] = 1;
+	gData.nTrayCntNG[PORT1][3] = 1;
+	gData.nTrayCntNG[PORT1][0] = gData.nTrayCntNG[PORT1][2] + 1;
+	gData.nTrayCntNG[PORT1][1] = gData.nTrayCntNG[PORT1][3] + 1;
+
+	gData.nTrayCntNG[PORT2][2] = 1;
+	gData.nTrayCntNG[PORT2][3] = 1;
+	gData.nTrayCntNG[PORT2][0] = gData.nTrayCntNG[PORT2][2] + 1;
+	gData.nTrayCntNG[PORT2][1] = gData.nTrayCntNG[PORT2][3] + 1;
+
 }
 
 CSequenceMain::~CSequenceMain()
 {
-	if (m_pThreadMainRun) {
+	if (m_pThreadMainRun) 
+	{
 		m_bThreadMainRun = FALSE;
 		WaitForSingleObject(m_pThreadMainRun->m_hThread, INFINITE);
 	}
@@ -817,13 +825,8 @@ void CSequenceMain::Set_ClearRunData(int nType)
 
 	gData.b3DStart = FALSE;
 
-	gData.nTrayCntNG[0] = 1;
-	gData.nTrayCntNG[1] = 1;
-	gData.nTrayCntNG[2] = gData.nTrayCntNG[0] + 1;
-	gData.nTrayCntNG[3] = 1;
 
 	
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2106,6 +2109,14 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	gData.nTrayUseCount[nPx] = 0;	
 
 	gData.bLoadLampOn[nPx] = TRUE;
+
+
+
+	gData.nTrayCntNG[nPx][2] = 1;
+	gData.nTrayCntNG[nPx][3] = 1;
+	gData.nTrayCntNG[nPx][0] = gData.nTrayCntNG[nPx][2] + 1;
+	gData.nTrayCntNG[nPx][1] = gData.nTrayCntNG[nPx][3] + 1;
+
 
 	
 
@@ -7543,8 +7554,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 				if(nSp1WorkNg == 0  || nSp1WorkNg == 2 )  sNgTray.Format("NG");
 				if(nSp1WorkNg == 1  || nSp1WorkNg == 3 )  sNgTray.Format("NG-N4");
 
-				g_objLogFile.Save_OutTray(sNgTray, gData.nTrayCntNG[nSp1WorkNg], nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
-				g_objLogFile.Save_CmTrackingLog("NG", nSp1WorkNg, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
+				g_objLogFile.Save_OutTray(sNgTray, gData.nTrayCntNG[gData.nPNoSortPick[0]-1][nSp1WorkNg], nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
+				g_objLogFile.Save_CmTrackingLog("NG", gData.nTrayCntNG[gData.nPNoSortPick[0]-1][nSp1WorkNg], nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 
 				Get_TactEach(gLot.sLotID[nSp1PNo-1],1, nSp1StartNo+i, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 
@@ -8799,16 +8810,15 @@ BOOL CSequenceMain::SortPicker2_Run()
 					else																	  gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1] = "N1";
 				}
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1],gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_NGDown );
-
-
+				
 				g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				
 				if(nSp2WorkNg == 0  || nSp2WorkNg == 2 )  sNgTray.Format("NG");
 				if(nSp2WorkNg == 1  || nSp2WorkNg == 3 )  sNgTray.Format("NG-N4");
 				//sNgTray.Format("NG-%d", nSp2WorkNg + 1);
 
-				g_objLogFile.Save_OutTray(sNgTray, gData.nTrayCntNG[nSp2WorkNg], nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
-				g_objLogFile.Save_CmTrackingLog("NG", nSp2WorkNg, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
+				g_objLogFile.Save_OutTray(sNgTray, gData.nTrayCntNG[gData.nPNoSortPick[1]-1][nSp2WorkNg], nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
+				g_objLogFile.Save_CmTrackingLog("NG", gData.nTrayCntNG[gData.nPNoSortPick[1]-1][nSp2WorkNg], nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 
 				Get_TactEach(gLot.sLotID[nSp2PNo-1], 2, nSp2StartNo+i, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 

@@ -506,14 +506,15 @@ void CWorkDlg::OnBnClickedNgClear(UINT nID)
 		g_objSequenceMain.Init_NgTray(nIndex);
 		if (nIndex == 0)
 		{
-			gData.nTrayCntNG[0]++;
-			gData.nTrayCntNG[2] = gData.nTrayCntNG[0] + 1;
+			gData.nTrayCntNG[gData.nPNoNgTray-1][2] += 2;
+			gData.nTrayCntNG[gData.nPNoNgTray-1][0] = gData.nTrayCntNG[gData.nPNoNgTray-1][2] + 1;
 			g_objSequenceMain.Init_NgTray(2);	// NG 1 Clear 할 때 NG3도 Clear 한다.
 		}
 		if (nIndex == 1)
 		{
-			gData.nTrayCntNG[1]++;
-			gData.nTrayCntNG[3]++;
+			gData.nTrayCntNG[gData.nPNoNgTray-1][3] += 2;
+			gData.nTrayCntNG[gData.nPNoNgTray-1][1] = gData.nTrayCntNG[gData.nPNoNgTray-1][3] + 1;
+			
 			g_objSequenceMain.Init_NgTray(3);	// NG 1 Clear 할 때 NG3도 Clear 한다.
 		}
 	}	
@@ -1075,14 +1076,15 @@ void CWorkDlg::Check_Lamp()
 				{
 					if (gData.InfoNgTray[0][gData.nTrayY-1][gData.nTrayX-1] > 0) //N123
 					{ 
-						gData.nTrayCntNG[0]++;
-						gData.nTrayCntNG[2] = gData.nTrayCntNG[0] + 1;
+						gData.nTrayCntNG[gData.nPNoNgTray-1][2] += 2;
+						gData.nTrayCntNG[gData.nPNoNgTray-1][0] = gData.nTrayCntNG[gData.nPNoNgTray-1][2] + 1;
 						g_objSequenceMain.Init_NgTray(0); g_objSequenceMain.Init_NgTray(2); 
 					}	
 					if (gData.InfoNgTray[1][gData.nTrayY-1][gData.nTrayX-1] > 0) // N4
 					{ 
-						gData.nTrayCntNG[1]++;
-						gData.nTrayCntNG[3]++;
+						gData.nTrayCntNG[gData.nPNoNgTray-1][3] += 2;
+						gData.nTrayCntNG[gData.nPNoNgTray-1][1] = gData.nTrayCntNG[gData.nPNoNgTray-1][3] + 1;
+					
 						g_objSequenceMain.Init_NgTray(1); g_objSequenceMain.Init_NgTray(3); 
 					}	
 					//if (gData.InfoNgTray[3][gData.nTrayY-1][gData.nTrayX-1] > 0) 

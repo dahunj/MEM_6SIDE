@@ -843,7 +843,7 @@ void CLogFile::Save_CmTrackingLog(CString strOut, int nTrayCount, int nPosX, int
 				time.wYear, time.wMonth, time.wDay,
 				time.wHour, time.wMinute, time.wSecond, gMes.sBarID[nPx][nTx][nCx], strJudge, nPortNo, nTrayNo, nCmNo, 
 				nAStageNo, nBtm1Pick, nIStageNo, nIStageJig, Btm2Pick, nBStageNo, nBStagePocket, nSortPickNo, nSortPickJig,
-				nTrayCount+1, nPosY+1, nPosX+1, 0, 0, 0);
+				nTrayCount, nPosY+1, nPosX+1, 0, 0, 0);
 		}
 		file.Write(strSave, strSave.GetLength());
 		file.Close();

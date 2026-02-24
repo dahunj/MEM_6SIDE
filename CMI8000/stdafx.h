@@ -78,8 +78,8 @@
 
 
 //주석처리하면 SIMULATION 
-#define AJIN_BOARD_USE 
-#define LOT_BARCODE_USE
+//#define AJIN_BOARD_USE 
+//#define LOT_BARCODE_USE
 
 // 2~5호기 옵션
 #define EDITION_2ND 		// 2~5호기
@@ -316,8 +316,8 @@ typedef struct {
 
 	BOOL	bPullForce;
 
-	int		nTrayCntNG[4]; // 0  1
-						   // 2  3
+	int		nTrayCntNG[2][4];			//port 1,2 구분		// 0  1
+															// 2  3
  	
 } GLOVAL_DATA;
 
@@ -426,7 +426,11 @@ extern GLOVAL_ALM	gAlm;
 extern GLOVAL_UPH	gUph;
 extern GLOVAL_MES	gMes;
 
-
+enum PORTNO
+{
+	PORT1 = 0,
+	PORT2 = 1,
+};
 
 #define BTM1_PICKER_Z_Ready 0
 #define BTM1_PICKER_Z_TrayDown 1
