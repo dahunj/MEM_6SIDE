@@ -1957,10 +1957,8 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		INI.Set_Bool("OPTION", "INSPECT_TOP_2", TRUE);
 		pEquipData->bUseInspectBtm2 = TRUE;
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
-		g_dlgSetup.m_pSetupEquipDlg->Cancel_EquipData();
-
+		g_objDataManager.Read_EquipData();
 		
-
 		m_stcCmCount[1].EnableWindow(FALSE);
 		pMainDlg->Enable_ModeButton(FALSE);
 		pMainDlg->m_btnMainOperator.EnableWindow(FALSE);
@@ -1999,7 +1997,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		pEquipData->bUseInspectBtm2 = TRUE;
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
 
-		g_dlgSetup.m_pSetupEquipDlg->Cancel_EquipData();
+		g_objDataManager.Read_EquipData();
 
 		m_stcCmCount[1].EnableWindow(TRUE);
 		pMainDlg->Enable_ModeButton(TRUE);

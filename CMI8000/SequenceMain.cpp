@@ -622,6 +622,8 @@ BOOL CSequenceMain::LotEnd_Run()
 
 	if (Get_IsAutoRun()) return FALSE;
 
+	if ( gData.bPullForce ) return FALSE;
+
 	int nPx = gData.nULPNo - 1;	// 맨마지막 공정인 Good Tray Port No 활용.
 	if (nPx < 0) nPx = 0;
 //	Job_LotEnd(gData.nULPNo);
@@ -662,20 +664,16 @@ BOOL CSequenceMain::LotEnd_Run()
 	g_objMES.Set_Status(3);
 	strMsg.Format("Lot End.");
 	g_objCommon.Show_Alarm(strMsg);	
-
-	strMsg.Format("Lot End.\n\nSpecial NG Count\n(N1:%d, N2:%d, N3:%d, N4:%d, MES:%d)",
-		gLot.nSNgCount[nPx][1], gLot.nSNgCount[nPx][2], gLot.nSNgCount[nPx][3], gLot.nSNgCount[nPx][5], gLot.nSNgCount[nPx][0]);
-	g_objCommon.Show_Alarm(strMsg);
+		
 
 	m_pEquipData->bResultTestUse = FALSE;	// LOT 끝나면 Reset
 	gData.bNgTrayEnd = FALSE;
 	gData.bSortPickCompletelyLotEnd = TRUE;
+		
 
-	if(gData.bPullForce)
-	{
-		g_dlgWork.Set_PullForce(FALSE);
-		g_dlgWork.OnBnClickedChkPullforce();
-	}
+	g_dlgWork.Set_PullForce(FALSE);
+	g_dlgWork.OnBnClickedChkPullforce();
+	
 	return TRUE;
 }
 

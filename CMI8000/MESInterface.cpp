@@ -417,9 +417,8 @@ void CMESInterface::Set_MESUse(BOOL bMESUse)
 
 void CMESInterface::Set_Status(int nState)	//1:Run, 2:Stop, 3:Idle
 {
-#if defined AJIN_BOARD_USE
 	if (!m_bMESUse) return;
-#endif
+
 	g_csMesLog.Lock();
 
 	SYSTEMTIME time;
@@ -477,10 +476,8 @@ void CMESInterface::Set_Status(int nState)	//1:Run, 2:Stop, 3:Idle
 
 void CMESInterface::Set_Alarm(int nType, int nAlarmID, CString sText )	//1:발생, 2:해제
 {
-#if defined AJIN_BOARD_USE
 	if (!m_bMESUse) return;
-#endif
-
+	
 	g_csMesLog.Lock();
 
 	SYSTEMTIME time;
