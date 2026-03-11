@@ -365,7 +365,10 @@ double CCommon::Get_MoveDataPosition(int nAxis, int nMoveIdx)
 void CCommon::Show_Error(int nErrNo)
 {
 	g_csShowError.Lock();
-	if (!g_dlgError.IsWindowVisible() && !g_dlgAlarm.IsWindowVisible()) {
+	if (!g_dlgError.IsWindowVisible() && !g_dlgAlarm.IsWindowVisible())
+	{
+		gAlm.nAlmCnt[0]++;
+		gAlm.nAlmCnt[1]++;
 		g_dlgError.Set_ErrorNumber(nErrNo);
 		g_dlgError.ShowWindow(SW_SHOW);
 	}

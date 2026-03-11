@@ -74,6 +74,11 @@ CSequenceMain::CSequenceMain()
 	Reset_MainRunCase();
 
 	gData.dEmptyPort_Z_Limit = 300;
+		
+	gAlm.nAlmCnt[PORT1] = gAlm.nAlmCnt[PORT2] = 0;
+	gLot.dwStopTime[PORT1] = gLot.dwStopTime[PORT2] = 0;
+
+	gLot.dwFirstSortPickMoment[PORT1] = gLot.dwFirstSortPickMoment[PORT2] = 0;
 
 
 	gData.nTrayCntNG[PORT1][2] = 1;
@@ -670,9 +675,12 @@ BOOL CSequenceMain::LotEnd_Run()
 	gData.bNgTrayEnd = FALSE;
 	gData.bSortPickCompletelyLotEnd = TRUE;
 		
-
-	g_dlgWork.Set_PullForce(FALSE);
-	g_dlgWork.OnBnClickedChkPullforce();
+	if(gData.bPullForce)
+	{
+		g_dlgWork.Set_PullForce(FALSE);
+		g_dlgWork.OnBnClickedChkPullforce();
+	}
+	
 	
 	return TRUE;
 }
@@ -749,14 +757,16 @@ void CSequenceMain::Set_ClearRunData(int nType)
 	gData.dwGoodTray2LoadingTime = 0;
 	gData.dwGoodTray2UnloadingTime = 0;
 
-	gLot.dwTempStopTime = 0;
-	gLot.nErrorCount = 0;
-	gLot.dwRunTime = gLot.dwErrorTime = gLot.dwStopTime = 0;
-	gLot.bLotEndComplete[0] = FALSE;
-	gLot.bLotEndComplete[1] = FALSE;
+	
+	gLot.nErrorCount[PORT1] = gLot.nErrorCount[PORT2] = 0;
+
+	gLot.dwRunTime[PORT1] = gLot.dwRunTime[PORT2] = 0;
+	gLot.dwErrorTime[PORT1] = gLot.dwErrorTime[PORT2] = 0;
+	gLot.bLotEndComplete[PORT1] = FALSE;
+	gLot.bLotEndComplete[PORT2] = FALSE;
 	gData.bFirstLotStart = FALSE;
 
-	gData.nLoadTrayCount[0] = 0; gData.nLoadTrayCount[1] = 0;
+	gData.nLoadTrayCount[PORT1] = 0; gData.nLoadTrayCount[PORT2] = 0;
 	gData.nEmptyTrayCount = (m_nEmptyTrayElCase == 20 ? 1 : 0);
 	gData.nGoodTrayCount = 0;
 
@@ -1901,11 +1911,17 @@ void CSequenceMain::Job_LotStart(int nPortNo)
 	gLot.nCmCount[nLPNo] = gData.nCmUseCount[nLPNo];
 
 	gLot.nBsNgCount[nLPNo] = 0;	// Barcode Shift 불량 수량 초기화
- 	gLot.nErrorCount = 0;
+ 	gLot.nErrorCount[nLPNo] = 0;
  	if (gData.bFirstLotStart) {
-		gData.bFirstLotStart = FALSE;
-		gLot.dwRunTime = gLot.dwErrorTime = gLot.dwStopTime = 0;
+		gData.bFirstLotStart = FALSE;		
 	}
+	gLot.dwRunTime[nLPNo] = 0;
+	gLot.dwErrorTime[nLPNo] = 0;
+	gLot.dwStopTime[nLPNo] = 0;
+	gLot.dwFirstSortPickMoment[nLPNo] = 0;
+	
+	gAlm.nAlmCnt[nLPNo] = 0;
+
 
 	// Log 표준화
 	CString strModel = (gData.sLotID[nLPNo].GetLength() < 8 ? "MODEL" : gData.sLotID[nLPNo].Mid(3, 5));
@@ -1972,29 +1988,49 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	//gLot.dwUphStart : lot start 이후 sort picker 1번이 처음 집는 시점 
 	//gLot.dwLotEnd[nPx] : Lot End 시점 
-	DWORD dwTime = gLot.dwLotEnd[nPx] - gLot.dwUphStart;//gLot.dwLotEnd[nPx] - gLot.dwLotStart[nPx];
-	int iCmCount = gLot.nCmCount[nPx]-8;
-	if(iCmCount <= 0) iCmCount = 1;
-	gLot.dTackTime = dwTime / 1000.0 / (iCmCount);	// Floating-point inexact result
+	
+	DWORD dwTime_StoE = gLot.dwLotEnd[nPx] - gLot.dwLotStart[nPx];
+	DWORD dwTime_RunTime = gLot.dwLotEnd[nPx] - gLot.dwLotStart[nPx] - gLot.dwStopTime[nPx];
+	DWORD dwTime_Unload = gLot.dwLotEnd[nPx] - gLot.dwFirstSortPickMoment[nPx] - gLot.dwStopTime[nPx];//
+
+	//Start to End Tact
+	int nCMCnt_SE = gLot.nCmCount[nPx];
+	if(nCMCnt_SE <= 0) nCMCnt_SE = 1;
+	gLot.dTactTime_StoETime = (dwTime_StoE / 1000.0) / (nCMCnt_SE);
+	
+	//RunTime Tact
+	int nCMCnt_RunTime = gLot.nCmCount[nPx];  
+	if(nCMCnt_RunTime <= 0) nCMCnt_RunTime = 1;
+	gLot.dTactTime_RunTime = (dwTime_RunTime / 1000.0) / (nCMCnt_RunTime);
+
+	//Unload : Full Capacity UPH
+	int nCMCnt_Unload = gLot.nCmCount[nPx]-8;  
+	if(nCMCnt_Unload <= 0) nCMCnt_Unload = 1;
+	gLot.dTackTime_Unload = (dwTime_Unload / 1000.0) / (nCMCnt_Unload);	// Floating-point inexact result
+
+
+	double dEff_RunTime = (double)dwTime_RunTime / (double)dwTime_StoE;
+	double dEff_UnloadTime = (double)dwTime_Unload / (double)dwTime_StoE;
+
 	m_dwLastUnLoad = gLot.dwLotEnd[nPx] - m_dwLastUnLoad;
 
-	m_strLog.Format("LotID,%s,Start_Time,%s,End_Time,%s,Time,%d,Tray_Count,%02d,CM_Count,%04d,Tack,%0.7lf,%d,%d",
-		gLot.sLotID[nPx], gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], gLot.dTackTime, gLot.nGoodCount[nPx], gLot.nNgCount[nPx]);
-	g_objLogFile.Save_HandlerLog(m_strLog);
+	/*m_strLog.Format("LotID,%s,Start_Time,%s,End_Time,%s,Time,%d,Tray_Count,%02d,CM_Count,%04d,Tack,%0.7lf,%d,%d",
+		gLot.sLotID[nPx], gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime_RunTime, dwTime_Unload, gLot.dTactTime_StoETime, gLot.dTactTime_RunTime, gLot.dTackTime_Unload, gAlm.nAlmCnt[nPx], gLot.dwStopTime[nPx], dEff_RunTime, dEff_UnloadTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], gLot.nGoodCount[nPx], gLot.nNgCount[nPx]);
+	g_objLogFile.Save_HandlerLog(m_strLog);*/
 
-	double dOne = (double)(dwTime - m_dwFirstLoad - m_dwLastUnLoad) / (gLot.nCmCount[nPx] - 1);
+	double dOne = (double)(dwTime_Unload - m_dwFirstLoad - m_dwLastUnLoad) / (gLot.nCmCount[nPx] - 1);
 	m_strLog.Format("LotID(%s), Load(%0.3lf), Unload(%0.3lf), Takt as 600 EA Run(%0.6lf)",
 		gLot.sLotID[nPx], (double)m_dwFirstLoad / 1000, (double)m_dwLastUnLoad / 1000, (dOne * 599 + m_dwFirstLoad + m_dwLastUnLoad) / 600000.0);
 	g_objLogFile.Save_HandlerLog(m_strLog);
 
 	
-	m_strLog.Format("%s,%s,%s,%d,%02d,%04d,%0.7lf,%d,%d,%d,%d,%d,%d",
-		gLot.sLotID[nPx], gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], gLot.dTackTime, gLot.nGoodCount[nPx], gLot.nNgCount[nPx],
+	m_strLog.Format("%s,%s,%s,%d,%d,%0.5lf,%0.5lf,%0.5lf,%d,%d,%0.5lf,%0.3lf,%02d,%d,%d,%d,%d,%d,%d,%d,%d",
+		gLot.sLotID[nPx],gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime_RunTime, dwTime_Unload, gLot.dTactTime_StoETime, gLot.dTactTime_RunTime, gLot.dTackTime_Unload, gAlm.nAlmCnt[nPx], gLot.dwStopTime[nPx], dEff_RunTime, dEff_UnloadTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], gLot.nGoodCount[nPx], gLot.nNgCount[nPx],
 		gLot.nSNgCount[nPx][1], gLot.nSNgCount[nPx][2], gLot.nSNgCount[nPx][3], gLot.nSNgCount[nPx][5], gLot.nSNgCount[nPx][0]);
 	g_objLogFile.Save_JobListLog(m_strLog, TRUE);
 
 	// UPH & 생산량
-	gUph.dTaktTime = gLot.dTackTime;
+	gUph.dTaktTime = gLot.dTackTime_Unload;
 
 	if (time.wHour >= 7 && time.wHour < 19) gUph.nCmCount[0] += gLot.nCmCount[nPx];
 	else gUph.nCmCount[1] += gLot.nCmCount[nPx];
@@ -2003,7 +2039,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	int j = gUph.nLotCount[i];
 	if (j > 49) return;		// 1시간에 LOT 수량 MAX 50개
 
-	gUph.dTakt[i][j] = gLot.dTackTime;
+	gUph.dTakt[i][j] = gLot.dTackTime_Unload;
 	gUph.nLotCount[i] = j + 1;
 
 	// Log 표준화
@@ -2041,7 +2077,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	strMsg.Format("\t%s \t%d \t%d \t%d \t%d \t%d \t%d \t%d \t%d \t%0.2lf \t%0.2lf \t%0.2lf \t%0.2lf \t%0.3lf",
 		gLot.sLotID[nPx], nSum, gLot.nGoodCount[nPx], gLot.nNgCount[nPx], gLot.nRosRequest[nPx], gLot.nRosGood[nPx], gLot.nRosNg[nPx], gLot.nRosRepair[nPx], gLot.nRosTimeOut[nPx],
-		dFiltering1, dFiltering2, dRateAvi, dRate, gLot.dTackTime);
+		dFiltering1, dFiltering2, dRateAvi, dRate, gLot.dTackTime_Unload);
 	g_objLogFile.Save_DailyLot(strMsg);
 
 	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
@@ -2052,11 +2088,13 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	strEnd.Format("%s-%s-%s %s:%s:%s",
 		gLot.sEndTime[nPx].Mid(0, 4), gLot.sEndTime[nPx].Mid(4, 2), gLot.sEndTime[nPx].Mid(6, 2), gLot.sEndTime[nPx].Mid(9, 2), gLot.sEndTime[nPx].Mid(11, 2), gLot.sEndTime[nPx].Mid(13, 2));
 	strMsg.Format("%s,%s,%s,%0.3lf,%d,%0.3lf,%0.3lf,%0.3lf,%d,%0.2lf,%0.3lf,%0.3lf,%0.2lf",
-		gLot.sLotID[nPx], strStart, strEnd, gLot.dTackTime, nSum, (double)(gLot.dwRunTime) / 1000, (double)(gLot.dwStopTime) / 1000, (double)(gLot.dwErrorTime) / 1000,
-		gLot.nErrorCount, dRate, 3600 / gLot.dTackTime ,(double)(gLot.dwRunTime + gLot.dwErrorTime + gLot.dwStopTime) / gLot.nErrorCount);
+		gLot.sLotID[nPx], strStart, strEnd, gLot.dTackTime_Unload, nSum, (double)(gLot.dwRunTime[nPx]) / 1000, (double)(gLot.dwStopTime[nPx]) / 1000, (double)(gLot.dwErrorTime[nPx]) / 1000,
+		gLot.nErrorCount, dRate, 3600 / gLot.dTackTime_Unload ,(double)(gLot.dwRunTime[nPx] + gLot.dwStopTime[nPx]) / gLot.nErrorCount[nPx]); //stopTime에 Error Time 도 포함 
 	g_objLogFile.Save_OperatingRatio(strMsg);
 
-	gLot.dwRunTime = gLot.dwErrorTime = gLot.dwStopTime = 0;
+	gLot.dwRunTime[nPx] = gLot.dwErrorTime[nPx] = gLot.dwStopTime[nPx] =0;
+	gAlm.nAlmCnt[nPx] = 0;
+	gLot.dwFirstSortPickMoment[nPx] = 0;
 
 	g_objLogFile.Save_AverageCycle(nPx);
 	g_objLogFile.Save_LotLog(nPortNo);	//gjcs
@@ -7256,18 +7294,19 @@ BOOL CSequenceMain::SortPicker1_Run()
 				gData.bSortPickCompletelyLotEnd = FALSE;
 			}
 
-			if (gData.nTNoSortPick[0][0] == 1 &&  gData.nCNoSortPick[0][0] == 9) {
-				gLot.dwUphStart = GetTickCount();
-			}
 
-			if ((gData.nCNoSortPick[0][0] == 1 || gData.nCNoSortPick[0][0] == 5 || gData.nCNoSortPick[0][0] == 9) && nSp1TrayPosY == 0) {
-				if (gData.nTNoSortPick[0][0] == 1 && gData.nCNoSortPick[0][0] == 1) {
+			if ((gData.nCNoSortPick[0][0] == 1 || gData.nCNoSortPick[0][0] == 5 || gData.nCNoSortPick[0][0] == 9) && nSp1TrayPosY == 0)
+			{
+				if (gData.nTNoSortPick[0][0] == 1 && gData.nCNoSortPick[0][0] == 1)
+				{
 					m_dwULCycleTime = 0;
 					m_dwULPickUpTime = GetTickCount();
-					
+					gLot.dwFirstSortPickMoment[gData.nPNoSortPick[0]-1] = GetTickCount();
 					if (m_pEquipData->bUseInlineMode) g_objCapAttach.Set_LotStart(gData.nPNoSortPick[0]);
 
-				} else {
+				}
+				else 
+				{
 					m_dwULCycleTime = GetTickCount() - m_dwULPickUpTime;
 					m_dwULPickUpTime = GetTickCount();
 					g_dlgWork.PostMessage(UM_UPDATE_UPH, 1, NULL);
@@ -8513,14 +8552,20 @@ BOOL CSequenceMain::SortPicker2_Run()
 				gData.nPNoNgTray = gData.nPNoSortPick[1];
 				gData.bSortPickCompletelyLotEnd = FALSE;
 			}
+						
 
 			if ((gData.nCNoSortPick[1][0] == 1 || gData.nCNoSortPick[1][0] == 5 || gData.nCNoSortPick[1][0] == 9) && nSp2TrayPosY == 0) {
-				if (gData.nTNoSortPick[1][0] == 1 && gData.nCNoSortPick[1][0] == 1) {
+				if (gData.nTNoSortPick[1][0] == 1 && gData.nCNoSortPick[1][0] == 1) 
+				{
 					m_dwULCycleTime = 0;
 					m_dwULPickUpTime = GetTickCount();
+					gLot.dwFirstSortPickMoment[gData.nPNoSortPick[1]-1] = GetTickCount();
+
 					if (m_pEquipData->bUseInlineMode) g_objCapAttach.Set_LotStart(gData.nPNoSortPick[1]);
 
-				} else {
+				} 
+				else 
+				{
 					m_dwULCycleTime = GetTickCount() - m_dwULPickUpTime;
 					m_dwULPickUpTime = GetTickCount();
 					g_dlgWork.PostMessage(UM_UPDATE_UPH, 1, NULL);

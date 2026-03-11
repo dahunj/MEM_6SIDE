@@ -71,7 +71,7 @@ UINT CMESInterface::Thread_MES(LPVOID lpVoid)
 
 	strLog.Format("[MESInterface] Thread_MES. Start.");
 	g_objLogFile.Save_MesAgentLog(strLog);
-	
+
 	g_objMES.m_nReadCnt = 0;
 	while (g_objMES.m_bThreadMES) {
 		Sleep(500);
@@ -659,8 +659,9 @@ void CMESInterface::Set_LotCancel(CString sLotID, int nCount, CString sOperID)
 
 void CMESInterface::Set_LotEnd(CString sLotID, int nCount, CString sOperID, int nOKCount, int nNGCount, int nPNo)
 {
+
 #if defined AJIN_BOARD_USE
-	if (!m_bMESUse) return;
+ 	if (!m_bMESUse) return;
 #endif
 
 	g_csMesLog.Lock();
