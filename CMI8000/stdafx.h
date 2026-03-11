@@ -315,6 +315,7 @@ typedef struct {
 	BOOL	bSortPickCompletelyLotEnd;
 
 	BOOL	bPullForce;
+	BOOL	bPullForceEnd;
 
 	int		nTrayCntNG[2][4];			//port 1,2 ±¸ºÐ		// 0  1
 															// 2  3

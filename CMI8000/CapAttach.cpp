@@ -204,7 +204,8 @@ void CCapAttach::Get_NotifyCmAlignAlarm()
 
 void CCapAttach::Get_PullForceEnd()
 {
-	gData.bPullForce = FALSE;
+	gData.bPullForceEnd = TRUE;
+	//gData.bPullForce = FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////

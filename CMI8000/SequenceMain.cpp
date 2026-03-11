@@ -91,6 +91,8 @@ CSequenceMain::CSequenceMain()
 	gData.nTrayCntNG[PORT2][0] = gData.nTrayCntNG[PORT2][2] + 1;
 	gData.nTrayCntNG[PORT2][1] = gData.nTrayCntNG[PORT2][3] + 1;
 
+	gData.bPullForceEnd = FALSE;
+
 }
 
 CSequenceMain::~CSequenceMain()
@@ -627,7 +629,9 @@ BOOL CSequenceMain::LotEnd_Run()
 
 	if (Get_IsAutoRun()) return FALSE;
 
-	if ( gData.bPullForce ) return FALSE;
+	if ( !gData.bPullForceEnd ) return FALSE;
+
+	gData.bPullForceEnd = FALSE;
 
 	int nPx = gData.nULPNo - 1;	// 맨마지막 공정인 Good Tray Port No 활용.
 	if (nPx < 0) nPx = 0;
@@ -676,7 +680,7 @@ BOOL CSequenceMain::LotEnd_Run()
 	gData.bSortPickCompletelyLotEnd = TRUE;
 		
 	if(gData.bPullForce)
-	{
+	{		
 		g_dlgWork.Set_PullForce(FALSE);
 		g_dlgWork.OnBnClickedChkPullforce();
 	}

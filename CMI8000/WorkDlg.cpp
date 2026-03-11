@@ -1965,7 +1965,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		
 		m_stcCmCount[1].EnableWindow(FALSE);
 		pMainDlg->Enable_ModeButton(FALSE);
-		pMainDlg->m_btnMainOperator.EnableWindow(FALSE);
+		pMainDlg->m_btnMainOperator.EnableWindow(FALSE);		
 
 	}
 	else
