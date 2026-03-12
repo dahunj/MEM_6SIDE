@@ -1168,7 +1168,7 @@ BOOL CSequenceMain::Select_AngleTrayPos(int nNo, int &nTrayPosY, int &nRow)
 	nTrayPosY = nRow = -1;
 	if (Check_AngleTrayEmpty()) return FALSE;
 
-	for (int y = 0; y <gData.nTrayY; y++) {
+	for (int y = 0; y < gData.nTrayY; y++) {
 		if (gData.InfoAngleTray[nNo-1][y][3] > 0) { nTrayPosY = y; nRow = y%2; break;}
 	}
 	if (nTrayPosY == -1 || nRow == -1) return FALSE;
@@ -3764,17 +3764,20 @@ BOOL CSequenceMain::Btm1Picker_Run()
 		//if(m_bBtm1ModulePick && !g_objCommon.Get_InfoBtm1PickerClose())break;
 		if ((g_objCommon.Check_Position(AX_BTM1_PICKER_X, 0) || g_objCommon.Check_Position(AX_BTM1_PICKER_X, 1) ||
 			g_objCommon.Check_Position(AX_BTM1_PICKER_X, 2) || g_objCommon.Check_Position(AX_BTM1_PICKER_X, 3)) && 
-			g_objCommon.Check_Position(AX_BTM1_PICKER_P1, 0) && g_objCommon.Check_Position(AX_BTM1_PICKER_P2, 0)) {
+			g_objCommon.Check_Position(AX_BTM1_PICKER_P1, 0) && g_objCommon.Check_Position(AX_BTM1_PICKER_P2, 0))
+		{
 			if (m_nAngleTray1Case != 20 && m_nAngleTray2Case != 20) break;	// ÀÎÅÍ¶ô
 			if(bAngleGo1){	m_nAngleTray1Case = 21;	bAngleGo1 = FALSE; }
 			if(bAngleGo2){	m_nAngleTray2Case = 21;	bAngleGo2 = FALSE;}
 
-			if(m_nAngleTray1Case >= 21){
-				if (m_nAngleTray2Case != 20)break;
+			if(m_nAngleTray1Case >= 21)
+			{
+				if (m_nAngleTray2Case != 20) break;
 			}
 
-			if(m_nAngleTray2Case >= 21){
-				if (m_nAngleTray1Case != 20)break;
+			if(m_nAngleTray2Case >= 21)
+			{
+				if (m_nAngleTray1Case != 20) break;
 			}
 
 			if (m_nAngleTray1Case == 20) nB1pWorkTray = 1;
