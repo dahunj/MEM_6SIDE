@@ -91,7 +91,7 @@ CSequenceMain::CSequenceMain()
 	gData.nTrayCntNG[PORT2][0] = gData.nTrayCntNG[PORT2][2] + 1;
 	gData.nTrayCntNG[PORT2][1] = gData.nTrayCntNG[PORT2][3] + 1;
 
-	gData.bPullForceEnd = FALSE;
+	gData.bPullForceEnd = TRUE;
 
 }
 
@@ -631,7 +631,7 @@ BOOL CSequenceMain::LotEnd_Run()
 
 	if ( !gData.bPullForceEnd ) return FALSE;
 
-	gData.bPullForceEnd = FALSE;
+	gData.bPullForceEnd = TRUE;
 
 	int nPx = gData.nULPNo - 1;	// 맨마지막 공정인 Good Tray Port No 활용.
 	if (nPx < 0) nPx = 0;
@@ -654,7 +654,7 @@ BOOL CSequenceMain::LotEnd_Run()
 	gData.bLoadLampOn[0] = FALSE;
 	gData.bLoadLampOn[1] = FALSE;
 
-	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
+	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*) AfxGetApp()->GetMainWnd();
 	pMainDlg->Set_LampFlicker_Load1(FALSE);
 	pMainDlg->Set_LampFlicker_Load2(FALSE);
 	pMainDlg->Set_LampFlicker_Ng(FALSE);
@@ -1909,7 +1909,7 @@ void CSequenceMain::Job_LotStart(int nPortNo)
 	GetLocalTime(&time);
 
 	gLot.sLotID[nLPNo] = gData.sLotID[nLPNo];
-	gLot.sStartTime[nLPNo].Format("%04d%02d%02d_%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+	gLot.sStartTime[nLPNo].Format("%04d-%02d-%02d %02d:%02d:%02d.%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 	m_dwFirstLoad = gLot.dwLotStart[nLPNo] = GetTickCount();
 	gLot.nTrayCount[nLPNo] = gData.nTrayUseCount[nLPNo];
 	gLot.nCmCount[nLPNo] = gData.nCmUseCount[nLPNo];
@@ -1975,7 +1975,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 	gLot.dwLotEnd[nPx] = GetTickCount();
-	gLot.sEndTime[nPx].Format("%04d%02d%02d_%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+	gLot.sEndTime[nPx].Format("%04d-%02d-%02d %02d:%02d:%02d.%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 
 	g_objInspector.Set_LotEnd(INSPECTOR_ALL, gData.sLotID[nPx], nPortNo);
 	g_objDispatcher.Set_LotEnd(nPortNo);
@@ -2028,8 +2028,8 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	g_objLogFile.Save_HandlerLog(m_strLog);
 
 	
-	m_strLog.Format("%s,%s,%s,%d,%d,%0.5lf,%0.5lf,%0.5lf,%d,%d,%0.5lf,%0.3lf,%02d,%d,%d,%d,%d,%d,%d,%d,%d",
-		gLot.sLotID[nPx],gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime_RunTime, dwTime_Unload, gLot.dTactTime_StoETime, gLot.dTactTime_RunTime, gLot.dTackTime_Unload, gAlm.nAlmCnt[nPx], gLot.dwStopTime[nPx], dEff_RunTime, dEff_UnloadTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], gLot.nGoodCount[nPx], gLot.nNgCount[nPx],
+	m_strLog.Format("%s,%s,%s,%d,%d,%0.3lf,%0.3lf,%0.3lf,%0.3lf,%0.3lf,%0.3lf,%d,%d,%0.5lf,%0.3lf,%02d,%d,%d,%d,%d,%d,%d,%d,%d",
+		gLot.sLotID[nPx],gLot.sStartTime[nPx], gLot.sEndTime[nPx], dwTime_RunTime, dwTime_Unload, gLot.dTactTime_StoETime, gLot.dTactTime_RunTime, gLot.dTackTime_Unload,3600.0/gLot.dTactTime_StoETime, 3600.0/gLot.dTactTime_RunTime, 3600.0/gLot.dTackTime_Unload, gAlm.nAlmCnt[nPx], gLot.dwStopTime[nPx], dEff_RunTime, dEff_UnloadTime, gLot.nTrayCount[nPx], gLot.nCmCount[nPx], gLot.nGoodCount[nPx], gLot.nNgCount[nPx],
 		gLot.nSNgCount[nPx][1], gLot.nSNgCount[nPx][2], gLot.nSNgCount[nPx][3], gLot.nSNgCount[nPx][5], gLot.nSNgCount[nPx][0]);
 	g_objLogFile.Save_JobListLog(m_strLog, TRUE);
 
@@ -7815,7 +7815,8 @@ BOOL CSequenceMain::SortPicker1_Run()
 				m_tSortPick1Loop.Takt_End(nTaktZone,20);
 
 			} else {
-				if (Select_SortPickGoodPos(1, nSp1StartNo, nSp1PickCnt)) {
+				if (Select_SortPickGoodPos(1, nSp1StartNo, nSp1PickCnt)) 
+				{
 					if (!(g_objCommon.Get_InfoSortPicker1Close() && g_objCommon.Get_InfoSortPicker1Check())) break;
 					// 한Case에서 오는게 아니라 따로 추출해서 입력해준다.
 					g_objCommon.Move_Position(AX_SORT_PICKER1_Z, 0);	// Ready Up
@@ -7824,7 +7825,9 @@ BOOL CSequenceMain::SortPicker1_Run()
 					m_tSortPick1Loop.Takt_End(nTaktZone,19);
 					m_tSortPick1Loop.Takt_Start(nTaktZone, 20);
 					m_tSortPick1Loop.Takt_End(nTaktZone,20);
-				} else {
+				}
+				else
+				{
 					m_nSortPick1Case = 27; m_tSortPick1Loop.Set_LoopTime(10000);
 					m_tSortPick1Loop.Takt_End(nTaktZone,19);
 					m_tSortPick1Loop.Takt_Start(nTaktZone, 20);

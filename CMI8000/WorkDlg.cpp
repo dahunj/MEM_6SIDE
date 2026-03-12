@@ -1930,6 +1930,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 
 	if(gData.bPullForce )
 	{
+		gData.bPullForceEnd = FALSE;
 		m_toast.ShowToast("Pull Force Mode", 120,0);
 
 		pEquipData->bUseInlineMode = TRUE;
@@ -1970,6 +1971,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 	}
 	else
 	{
+		gData.bPullForceEnd = TRUE;
 		m_toast.ShowWindow(SW_HIDE);
 
 		pEquipData->bUseInlineMode = TRUE;
