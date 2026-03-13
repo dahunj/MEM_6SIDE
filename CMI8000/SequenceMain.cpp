@@ -4052,15 +4052,14 @@ BOOL CSequenceMain::Btm1Picker_Run()
 
 	case 15:	// X Move to Pitch & Inspection End Check
 		//if (!m_pEquipData->bUseInspectBtm1Specular) { if(!m_tBtm1PickLoop.Waiting_Time(500)) break; }
-		if(!g_objCommon.Get_Btm1PickerDown(0)){
+		if(!g_objCommon.Get_Btm1PickerDown(0))
+		{
 			g_objCommon.Set_Btm1PickerDown(); break; 
 		}
 		if (g_objAJinAXL.Is_MoveDone(AX_BTM1_PICKER_X, dB1pX) && g_objAJinAXL.Is_Done(AX_BTM1_PICKER_Z)
 			&& g_objCommon.Check_Position(AX_BTM1_PICKER_P1, 0) && g_objCommon.Check_Position(AX_BTM1_PICKER_P2, 0)
 			&& g_objCommon.Get_Btm1PickerDown(0) && g_objCommon.Check_Position(AX_BTM1_SHIFT_Y, 0) ) 
 		{
-			
-
 			//nB1pScanNo++;
 			m_tBtm1PickLoop.Takt_Start(nTaktZone, 15);
 			m_tBtm1PickLoop.Takt_End(nTaktZone, 15 );
