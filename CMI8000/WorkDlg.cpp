@@ -307,7 +307,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 		g_objMES.Set_Status(1);
 		g_objLogFile.Save_HandlerLog("[Work Mode] START S/W push");
 		m_rdoWorkStart.SetCheck(TRUE);
-		pMainDlg->Set_LotErrorLog("START", 903, "Start");
+		if(gData.sLotID[nNo] != "" && gData.sLotID[nNo] != "LOT_ID") pMainDlg->Set_LotErrorLog("START", 903, "Start");
 		g_objLogFile.Save_EfficiencyLog(1, "Run", 903, "Run Start");
 		SetTimer(0, 100, NULL); return;
 
@@ -322,7 +322,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 		g_objLogFile.Save_HandlerLog("[Work Mode] STOP S/W push");
 		MachineStopLog("STOP_BUTTON_PUSH");
 		m_rdoWorkStop.SetCheck(TRUE);
-		pMainDlg->Set_LotErrorLog("STOP", 904, "Stop");
+		//pMainDlg->Set_LotErrorLog("STOP", 904, "Stop");
 		g_objLogFile.Save_EfficiencyLog(1, "Stop", 904, "Stop Button Push");
 		SetTimer(0, 100, NULL); return;
 	}

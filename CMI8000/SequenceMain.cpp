@@ -1944,7 +1944,7 @@ void CSequenceMain::Job_LotStart(int nPortNo)
 	g_objCommon.Get_RAMSize(strRAM);
 	g_objCommon.Get_HardInfo(strHardDisk);
 		
-	strLog.Format("%s,%s,%s,%s,%s",gData.sLotID[nLPNo],gData.sRecipe, strCPU,strRAM,strHardDisk);
+	strLog.Format("%s,%s,%s,%s,%s,%s",gData.sLotID[nLPNo],gData.sRecipe, strCPU,strRAM,strHardDisk,"");
 	g_objLogFile.Save_PCLog(nLPNo+1, strLog);
 
 	// Motion 파일명 : LotID_생성년월일시_공정명_Normal_#호기번호_PC이름_모델명_순번.csv
@@ -2068,8 +2068,8 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	strEquip = m_pEquipData->sEquipName.Right(2);
 	double dNgRate = (nSum == 0 ? 0.0 : gLot.nNgCount[nPx] * 100.0 / nSum);
 
-	strMsg.Format("%s,%s,%s,%s,%s,%d,%d,%d,%0.2lf%%,%d,%d,%d",
-		strStart, strEnd, strTerm, strEquip, gLot.sLotID[nPx], nSum, gLot.nGoodCount[nPx], gLot.nNgCount[nPx], dNgRate,
+	strMsg.Format("%s,%s,%s,%s,%d,%d,%d,%0.2lf%%,%d,%d,%d",
+		 strStart, strEnd, strTerm, strEquip, nSum, gLot.nGoodCount[nPx], gLot.nNgCount[nPx], dNgRate,
 		gLot.nSNgCount[nPx][1], gLot.nSNgCount[nPx][2], gLot.nSNgCount[nPx][0]);
 
 	g_objLogFile.Save_LotResult(nPx, strMsg);
@@ -9975,7 +9975,7 @@ BOOL CSequenceMain::GoodTray1_Run()
 			GetLocalTime(&time);
 			gData.sGoodTray1UnloadTime.Format("%04d-%02d-%02d %02d:%02d:%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
 			gData.dwGoodTray1UnloadingTime = GetTickCount();	// Tray Unloading 완료한 시각
-			g_objLogFile.Save_UnloadingTime(1, gData.nULPNo);
+			//g_objLogFile.Save_UnloadingTime(1, gData.nULPNo);
 
 			m_tGoodTray1Loop.Takt_End(nTaktZone, 9,0);
 			m_strLog.Format("Good Stage1, %d", GetTickCount() - m_dwGoodTray1);
@@ -10317,7 +10317,7 @@ BOOL CSequenceMain::GoodTray2_Run()
 			GetLocalTime(&time);
 			gData.sGoodTray2UnloadTime.Format("%04d-%02d-%02d %02d:%02d:%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
 			gData.dwGoodTray2UnloadingTime = GetTickCount();	// Tray Unloading 완료한 시각
-			g_objLogFile.Save_UnloadingTime(2, gData.nULPNo);
+			//g_objLogFile.Save_UnloadingTime(2, gData.nULPNo);
 
 			m_tGoodTray2Loop.Takt_End(nTaktZone, 9,0);
 			m_strLog.Format("Good Stage2, %d", GetTickCount() - m_dwGoodTray2);
