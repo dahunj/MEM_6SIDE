@@ -775,13 +775,12 @@ BOOL CWorkDlg::Work_Start()
 		g_objCommon.Show_MsgBox(1, strTemp);
 		m_rdoWorkStop.SetCheck(TRUE);
 		return FALSE;
-	}
-
-	//buffer stage 이전 상태 기억 및 체크 
-
-	else if((gAlm.bBufferUpStatus[0] != pDX09->iBufferStage1Up) || (gAlm.bBufferUpStatus[1] != pDX09->iBufferStage2Up)
+	}	
+	else if(((gAlm.bBufferUpStatus[0] != pDX09->iBufferStage1Up) || (gAlm.bBufferUpStatus[1] != pDX09->iBufferStage2Up)
 		|| (gAlm.bBufferDownStatus[0] != pDX09->iBufferStage1Down) || (gAlm.bBufferDownStatus[1] != pDX09->iBufferStage2Down))
+		&& gAlm.dMotionChkPos > 0)
 	{
+		//buffer stage 이전 상태 기억 및 체크 
 		strTemp.Format("Buffer Stage 상태 체크 하세요 1-Up :%d, 1-Down:%d, 2-Up:%d, 2-Down:%d", gAlm.bBufferUpStatus[0],gAlm.bBufferDownStatus[0],gAlm.bBufferUpStatus[1],gAlm.bBufferDownStatus[1] );
 		g_objLogFile.Save_HandlerLog(strTemp);
 
