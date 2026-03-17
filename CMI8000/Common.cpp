@@ -100,12 +100,46 @@ void CCommon::Save_MotionPos()
 	}
 
 	DX_DATA_09 *pDX09 = g_objAJinAXL.Get_pDX09();
+
+
+	g_objCommon.uSleep(100);
+	BOOL bStatusDone = FALSE;
+	BOOL bError = FALSE;
+	DWORD dwStartTick = 0, dwEndTick = 0;
+
+	dwStartTick = GetTickCount();
+
+	while(!bStatusDone )
+	{
+		dwEndTick = GetTickCount();
+		if(GetTickCount() - dwStartTick > 5000)
+		{
+			bError = TRUE;
+			break;
+		}
+
+		bStatusDone = TRUE;
+		if(pDX09->iBufferStage1Up == FALSE && pDX09->iBufferStage1Down == FALSE)
+		{
+			bStatusDone = FALSE;
+		}
+		if(pDX09->iBufferStage2Up == FALSE && pDX09->iBufferStage2Down == FALSE)
+		{
+			bStatusDone = FALSE;
+		}
+		if(bStatusDone) break;
+	}
+	
+
 	gAlm.bBufferUpStatus[0] = pDX09->iBufferStage1Up;
 	gAlm.bBufferUpStatus[1] = pDX09->iBufferStage2Up;
 	gAlm.bBufferDownStatus[0] = pDX09->iBufferStage1Down;
 	gAlm.bBufferDownStatus[1] = pDX09->iBufferStage2Down;
 	
-	if (nCount == 0) return;
+	
+
+
+	if (nCount == 0 && !bError) return;
 
 	uSleep(1000);
 	nCount = 0;
@@ -115,7 +149,7 @@ void CCommon::Save_MotionPos()
 			else nCount++;
 		}
 	}
-	if (nCount == 0) return;
+	if (nCount == 0  && !bError) return;
 
 	uSleep(3000);
 	for(int i=0; i<AXIS_COUNT; i++) {
@@ -123,6 +157,9 @@ void CCommon::Save_MotionPos()
 			if(g_objAJinAXL.Is_Done(i)) gAlm.dMotionPos[i] = g_objAJinAXL.Get_Position(i);
 		}
 	}
+
+	if(bError) g_objCommon.Show_Error(7000);
+
 }
 
 int CCommon::Check_MotionPos()
