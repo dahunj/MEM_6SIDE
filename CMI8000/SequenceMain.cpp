@@ -3166,11 +3166,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 
 			m_bAngleInspComplete = FALSE;
 			g_objCommon.Move_Position(AX_ANGLE_STAGE1_Z, 3);	// Support Ready Position
-
-			//MCC
-			m_strLog.Format("Angle Stage 1 Tray Get, pNo:%d, TNo:%d",gData.nPNoAngleTray[0], gData.nTNoAngleTray[0]);
-			g_objLogFile.Save_MCCLog(m_strLog);
-
+						
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
 		}
 		break;
@@ -3495,10 +3491,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 
 			m_bAngleInspComplete = FALSE;
 			g_objCommon.Move_Position(AX_ANGLE_STAGE2_Z, 3);	// Support Ready Position
-
-			//MCC
-			m_strLog.Format("Angle Stage 2 Tray Get, pNo:%d, TNo:%d",gData.nPNoAngleTray[1], gData.nTNoAngleTray[1]);
-			g_objLogFile.Save_MCCLog(m_strLog);
+					
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
 		}
 		break;
@@ -3953,9 +3946,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 				m_tBtm1PickLoop.Takt_End(nTaktZone, 4,"Infomation Exchanged (Tray to Btm1 Pick)");
 				m_tBtm1PickLoop.Takt_Start(nTaktZone, 5);m_tBtm1PickLoop.Takt_End(nTaktZone, 5, "Picker Not Full[S]");
 				m_nBtm1PickCase = 2; m_tBtm1PickLoop.Set_LoopTime(5000);
-				//MCC
-				m_strLog.Format("Btm 1 position cal to pick ");
-				g_objLogFile.Save_MCCLog(m_strLog);
+			
 			}
 
 		
@@ -4014,8 +4005,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			
 			int nBtmX = 4 * nB1pRow;
 			g_objLogFile.Save_PositionLog(gData.nPNoBtm1Pick, gData.nTNoBtm1Pick[nBtmX], -1, AX_BTM1_PICKER_Z, BTM1_PICKER_Z_BTM1SPDown );
-
-			g_objLogFile.VisionTakt_Start(BTM1);	// Stiffener Scan Start
+						
 			if (m_pEquipData->bUseInspectBtm1Specular) 
 			{
 				Set_InspectJigNo(0, nB1pScanNo, nB1INo1, nB1INo2, nB1INo3, nB1INo4);	// 검사하는 피커 번호를 설정해준다.
@@ -4567,7 +4557,7 @@ BOOL CSequenceMain::Inspection1_Run()
 						m_pDX05->iInspectStage1Up && !m_pDX05->iInspectStage1Down & g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0)) {
 						m_dwInspect1 = GetTickCount();
 						m_tInspect1Loop.Takt_Start(nTaktZone, 1, TRUE);
-						m_tInspect1Loop.Takt_End(nTaktZone,1);
+						m_tInspect1Loop.Takt_End(nTaktZone,1, "X Move to Module Align or Wait(Align) Position[S]");
 						g_objCommon.Move_Position(AX_INSPECT_STAGE1_X, 1);
 						m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(9000);
 					} else {
@@ -4609,17 +4599,15 @@ BOOL CSequenceMain::Inspection1_Run()
 	case 9: //Slave Close
 		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose)
 		{
-			if (!bTaktSave1)
-			{
-				bTaktSave1 = TRUE; 
-				m_tInspect1Loop.Takt_End(nTaktZone,3); 
-				m_tInspect1Loop.Takt_Start(nTaktZone,9); 
-			}
+		
 			//g_objCommon.Set_InspectVacOff(1, 0);	// Vac Off
 			//if(!m_tInspect1Loop.Waiting_Time(400)) break;
 
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
+
+			m_tInspect1Loop.Takt_End(nTaktZone,3); 
+			m_tInspect1Loop.Takt_Start(nTaktZone,9); 
 			m_nInspect1Case = 4; m_tInspect1Loop.Set_LoopTime(10000);
 			bTaktSave1 = FALSE;
 		}
@@ -4629,13 +4617,7 @@ BOOL CSequenceMain::Inspection1_Run()
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
 			!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose &&
 			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose) 
-		{
-				
-			if (!bTaktSave1) {
-				bTaktSave1 = TRUE; 
-				m_tInspect1Loop.Takt_End(nTaktZone,9); 
-				m_tInspect1Loop.Takt_Start(nTaktZone,4); 
-			}
+		{		
 			g_objCommon.Set_InfoInspectVacOn(1, 1);	// Vac On
 
 			// io WRITE를 동시에 하면 씹힐수 있어서 딜레이 추가
@@ -4643,6 +4625,9 @@ BOOL CSequenceMain::Inspection1_Run()
 
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
+
+			m_tInspect1Loop.Takt_End(nTaktZone,9); 
+			m_tInspect1Loop.Takt_Start(nTaktZone,4); 
 			m_nInspect1Case = 5; m_tInspect1Loop.Set_LoopTime(5000); 
 			bTaktSave1 = FALSE;
 		}
@@ -4653,19 +4638,21 @@ BOOL CSequenceMain::Inspection1_Run()
 			if (!m_tInspect1Loop.Waiting_Time(300)) return TRUE;
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
+
+			m_tInspect1Loop.Takt_End(nTaktZone,4); 
+			m_tInspect1Loop.Takt_Start(nTaktZone,5);
 			m_nInspect1Case = 6; m_tInspect1Loop.Set_LoopTime(5000); 
 		}
 		break;
 	case 6:		// Align Z Axis Move to Ready Up Position
 		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Y, 0) && g_objCommon.Get_InfoInspectVacOn(1) &&
 			m_pDX06->iCmAlignMasterOpen && !m_pDX06->iCmAlignMasterClose && m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose ) {
-			if (!bTaktSave1) {
-				bTaktSave1 = TRUE;
-				m_tInspect1Loop.Takt_End(nTaktZone,5);
-				m_tInspect1Loop.Takt_Start(nTaktZone, 6);
-			}
+			
 			//if(!m_tInspect1Loop.Waiting_Time(100)) break;
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 0);
+
+			m_tInspect1Loop.Takt_End(nTaktZone,5);
+			m_tInspect1Loop.Takt_Start(nTaktZone, 6);
 			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000); 
 			bTaktSave1 = FALSE;
 		}
@@ -4673,7 +4660,8 @@ BOOL CSequenceMain::Inspection1_Run()
 	case 7:		// 안전확인 & Move to Top1 Position	// Mirror 실린더 확인
 		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0) && g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 0) && g_objCommon.Get_InfoInspectVacOn(1)) {
 			
-			if (1) {	// Mirror 확인 안한다.
+			if (1)
+			{	// Mirror 확인 안한다.
 				// 다운 상태이거나 Top2, Unload 위치에 있으면 이동
 				if (!m_pDX05->iInspectStage3Up && m_pDX05->iInspectStage3Down && !m_pDX05->iInspectStage3Fwd && m_pDX05->iInspectStage3Bwd) {	// 다운 상태
 					dIs1PosX = m_pMoveData->dInspectStage1X[2];	// T1 Pos
@@ -4706,9 +4694,7 @@ BOOL CSequenceMain::Inspection1_Run()
 		break;
 	case 8:		// Send Load Complete
 		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE1_X, dIs1PosX) && g_objCommon.Check_Position(AX_VISION_TOP1_Z, 0) && g_objCommon.Get_InfoInspectVacOn(1)) {
-			
-			g_objLogFile.VisionTakt_Start(TOP1);	// Top1 Scan Start
-
+						
 			if (m_pEquipData->bUseInspectTop1)
 			{
 				if (gData.bTop1MirrorErr[0])
@@ -4722,13 +4708,16 @@ BOOL CSequenceMain::Inspection1_Run()
 					gData.nTNoInspect[0][nI1JNo1-1], gData.nTNoInspect[0][nI1JNo2-1], 0, 0,
 					gData.nCNoInspect[0][nI1JNo1-1], gData.nCNoInspect[0][nI1JNo2-1], 0, 0);
 
-				m_nInspect1Case = 10; m_tInspect1Loop.Set_LoopTime(30000);
 				m_tInspect1Loop.Takt_Start(nTaktZone, 8);
 				m_tInspect1Loop.Takt_End(nTaktZone,8);
+				m_nInspect1Case = 10; m_tInspect1Loop.Set_LoopTime(30000);
+				
 
 			} 
 			else
 			{
+				m_tInspect1Loop.Takt_Start(nTaktZone, 8);
+				m_tInspect1Loop.Takt_End(nTaktZone,8);
 				m_nInspect1Case = 15; m_tInspect1Loop.Set_LoopTime(5000);
 			}
 			nIs1ScanNo++;
@@ -4744,12 +4733,11 @@ BOOL CSequenceMain::Inspection1_Run()
 	case 11:	// Top1 Z Focus Move
 		if (g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) 
 		{
-			m_strLog.Format("MCC,(07) Inspection1, T1 Z Focus Move Start");
-			g_objLogFile.Save_MCCLog(m_strLog);
-
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP1_Z, m_dTop1Z);
-			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(5000);
+
 			m_tInspect1Loop.Takt_Start(nTaktZone, 11);
+			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(5000);
+			
 			
 		}
 		break;
@@ -4772,10 +4760,6 @@ BOOL CSequenceMain::Inspection1_Run()
 	case 13:	// Top1 Mirror Z Move
 		if (g_objAJinAXL.Is_Done(AX_TOP1_MIRROR_Z) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) 
 		{
-			//g_objLogFile.VisionTakt_Save(AUTO_INSPECTION1, 21, TOP1);	// Top1 Module Position Inspect Complete
-			m_strLog.Format("MCC,(07) Inspection1, T1 Mirror Z Move Start");
-			g_objLogFile.Save_MCCLog(m_strLog);
-
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP1_Z, m_dTop1Z);
 			g_objCommon.Move_Position(AX_TOP1_MIRROR_Z, 1);
 			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(5000);
@@ -4787,8 +4771,6 @@ BOOL CSequenceMain::Inspection1_Run()
 		{
 			g_objLogFile.Save_PositionLog(gData.nPNoInspect[0],gData.nTNoInspect[0][0], -1, AX_TOP1_MIRROR_Z, TOP1_MIRROR_Z_WorkDown);
 
-
-			g_objLogFile.VisionTakt_Start(TOP1);	// Top1 Mirror Down 이후 Scan
 			g_objInspector.Set_SMoveComplete(INSPECTOR_PC2, "T1");
 			m_nInspect1Case = 10; m_tInspect1Loop.Set_LoopTime(30000);	// 90초
 
@@ -4817,12 +4799,14 @@ BOOL CSequenceMain::Inspection1_Run()
 			if (nIs1ScanNo > gData.nScanCnt) {	// 모델별로 피치이동 횟수가 다르다.
 				nIs1ScanNo = 0;
 				bTaktSave1 = FALSE;
-				m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);
 
 				m_tInspect1Loop.Takt_Start(nTaktZone, 16);
 				m_tInspect1Loop.Takt_End(nTaktZone,16);
+				m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);								
 
-			} else {
+			} 
+			else
+			{
 				double dCurPos = g_objAJinAXL.Get_Position(AX_INSPECT_STAGE3_X);
 				double dT2Pos = m_pMoveData->dInspectStage3X[3];// + m_pEquipData->dInspectPitchX * 2;
 				double dUnPos = m_pMoveData->dInspectStage3X[4];	//Unload Pos
@@ -4834,26 +4818,32 @@ BOOL CSequenceMain::Inspection1_Run()
 				// 첫번째 스캔이후는 앞의 스테이지가 Unload 위치거나 Down 상태일때 진행가능.
 				if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 4) || (dCurPos >= dT2Pos && dCurPos <= dUnPos) ||
 					(!m_pDX05->iInspectStage3Up && m_pDX05->iInspectStage3Down && !m_pDX05->iInspectStage3Fwd && m_pDX05->iInspectStage3Bwd)) {
-					if (Select_Top1ScanPos(AUTO_INSPECTION1, nIs1ScanNo)) {
-						
+					if (Select_Top1ScanPos(AUTO_INSPECTION1, nIs1ScanNo))
+					{						
 						dIs1PosX = m_pMoveData->dInspectStage1X[2] + nIs1ScanNo * m_pEquipData->dInspectPitchX;
 						g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE1_X, dIs1PosX);
 						m_nInspect1Case = 8; m_tInspect1Loop.Set_LoopTime(10000);
 						m_tInspect2Loop.Set_LoopTime(15000);//뒤에 따라오는 스테이지 알람 대기시간 초기화 
 
 						if(nIs1ScanNo == 3 && m_nInspect2Case == 1 && g_objAJinAXL.Is_Done(AX_INSPECT_STAGE2_X)
-							&& g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0) && g_objCommon.Get_InfoInspectVacOn(2)){ // Top1 마지막 피치 이동시 뒤에 있는 스테이지도 동시 어라인 진입 
-							g_objCommon.Move_Position(AX_INSPECT_STAGE2_X, 1);
+							&& g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0) && g_objCommon.Get_InfoInspectVacOn(2))
+						{ 
+							// Top1 마지막 피치 이동시 뒤에 있는 스테이지도 동시 어라인 진입 
+							g_objCommon.Move_Position(AX_INSPECT_STAGE2_X, 1);							
 							m_nInspect2Case = 2; m_tInspect2Loop.Set_LoopTime(9000);
 						}
-						
 						m_tInspect1Loop.Takt_Start(nTaktZone, 16);
 						m_tInspect1Loop.Takt_End(nTaktZone,16);
-
-					} else {
+					} 
+					else 
+					{
 						nIs1ScanNo++;
 					}
-				} else { m_tInspect1Loop.Set_LoopTime(10000); return TRUE; }
+				} 
+				else
+				{ 
+					m_tInspect1Loop.Set_LoopTime(10000); return TRUE;
+				}
 			}
 		}
 		break;
@@ -4868,10 +4858,9 @@ BOOL CSequenceMain::Inspection1_Run()
 				g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE1_X, dIs1PosX);
 				nIs1ScanNo = 0;
 								
-				m_nInspect1Case = 25; m_tInspect1Loop.Set_LoopTime(10000);
-
 				m_tInspect1Loop.Takt_Start(nTaktZone, 17);
 				m_tInspect1Loop.Takt_End(nTaktZone,17);
+				m_nInspect1Case = 25; m_tInspect1Loop.Set_LoopTime(10000);				
 			}
 		}
 		return TRUE;
@@ -4881,18 +4870,22 @@ BOOL CSequenceMain::Inspection1_Run()
 			g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE1_X, dIs1PosX) &&
 			g_objCommon.Check_Position(AX_VISION_TOP2_Z, 0) && g_objCommon.Check_Position(AX_TOP2_SHIFT_Y, 0))
 		{
-			
-			g_objLogFile.VisionTakt_Start(TOP2);	// Top2 FPCB Scan Start
-			if (m_pEquipData->bUseInspectTop2) {
+			if (m_pEquipData->bUseInspectTop2)
+			{
 				Set_InspectJigNo(2, nIs1ScanNo, nI1JNo1, nI1JNo2, nI1JNo3, nI1JNo4);
 				g_objInspector.Set_LoadComplete(INSPECTOR_PC3, "T2", gLot.sLotID[gData.nPNoInspect[0]-1], gData.nPNoInspect[0], 
 					gData.nTNoInspect[0][nI1JNo1-1], gData.nTNoInspect[0][nI1JNo2-1], 0, 0,
 					gData.nCNoInspect[0][nI1JNo1-1], gData.nCNoInspect[0][nI1JNo2-1], 0, 0);
 
-				m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(30000);
 				m_tInspect1Loop.Takt_Start(nTaktZone, 19);
 				m_tInspect1Loop.Takt_End(nTaktZone,19);
-			} else {
+				m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(30000);
+				
+			} 
+			else 
+			{
+				m_tInspect1Loop.Takt_Start(nTaktZone, 19);
+				m_tInspect1Loop.Takt_End(nTaktZone,19);
 				m_nInspect1Case = 25; m_tInspect1Loop.Set_LoopTime(10000); 
 			}
 			nIs1ScanNo++;
@@ -4907,11 +4900,11 @@ BOOL CSequenceMain::Inspection1_Run()
 
 	case 21:	// Top2 Z Focus Move
 		if (g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z)) {
-			m_strLog.Format("MCC,(07) Inspection1, T2 Z Focus Start");
-			g_objLogFile.Save_MCCLog(m_strLog);
+			
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP2_Z, m_dTop2Z);
-			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(5000);
 			m_tInspect1Loop.Takt_Start(nTaktZone, 21);
+			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(5000);
+		
 			
 		}
 		break;
@@ -4924,37 +4917,39 @@ BOOL CSequenceMain::Inspection1_Run()
 			g_objLogFile.Save_FocusAxisLog(AX_VISION_TOP2_Z, strLog);
 
 			g_objInspector.Set_MoveComplete(INSPECTOR_PC3, "T2");
-			m_nInspect1Case = 20; m_tInspect1Loop.Set_LoopTime(30000);	// 90초
 
 			m_tInspect1Loop.Takt_End(nTaktZone,21);
 			m_tInspect1Loop.Takt_Start(nTaktZone, 22);
 			m_tInspect1Loop.Takt_End(nTaktZone,22);
+			m_nInspect1Case = 20; m_tInspect1Loop.Set_LoopTime(30000);	// 90초		
 		}
 		break;
 
 	case 23:	// Top2 Shift X, Y Move
-		if (g_objAJinAXL.Is_Done(AX_INSPECT_STAGE1_X) && g_objAJinAXL.Is_Done(AX_TOP2_SHIFT_Y)) {
-			//g_objLogFile.VisionTakt_Save(AUTO_INSPECTION1, 23, TOP2);	// Top2 FPCB Scan End
-			m_strLog.Format("MCC,(07) Inspection1, Top2 Shift X, Y Move");
-			g_objLogFile.Save_MCCLog(m_strLog);
+		if (g_objAJinAXL.Is_Done(AX_INSPECT_STAGE1_X) && g_objAJinAXL.Is_Done(AX_TOP2_SHIFT_Y)) 
+		{
 			dIs1PosX = dIs1PosX + m_pEquipData->dInspectTop2ShiftX;
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP2_Z, m_dTop2Z);
 			g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE1_X, dIs1PosX);
 			g_objCommon.Move_Position(AX_TOP2_SHIFT_Y, 1);
-			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(5000);
+
 			m_tInspect1Loop.Takt_Start(nTaktZone, 23);
+
+			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(5000);
 			
 		}
 		break;
 	case 24:	// Send Move Complete
 		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE1_X, dIs1PosX) && g_objCommon.Check_Position(AX_TOP2_SHIFT_Y, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z)) {
 			
-			g_objLogFile.VisionTakt_Start(TOP2);	// Top2 Lens/Barrel/Sidefill Scan Start
+			
 			g_objInspector.Set_SMoveComplete(INSPECTOR_PC3, "T2");
-			m_nInspect1Case = 20; m_tInspect1Loop.Set_LoopTime(30000);	// 90초
+
 			m_tInspect1Loop.Takt_End(nTaktZone,23);
 			m_tInspect1Loop.Takt_Start(nTaktZone, 24);
 			m_tInspect1Loop.Takt_End(nTaktZone,24);
+			m_nInspect1Case = 20; m_tInspect1Loop.Set_LoopTime(30000);	// 90초
+			
 		}
 		break;
 
@@ -4975,11 +4970,15 @@ BOOL CSequenceMain::Inspection1_Run()
 
 				m_tInspect1Loop.Takt_Start(nTaktZone, 25);
 				m_tInspect1Loop.Takt_End(nTaktZone,25);
-			} else {	// 첫번째 스캔이후 앞의 스테이지는 다운상태 이거나 로드 위치에 있어야한다.
+			} 
+			else
+			{	
+				// 첫번째 스캔이후 앞의 스테이지는 다운상태 이거나 로드 위치에 있어야한다.
 				if (nIs1ScanNo == 0 || (!m_pDX05->iInspectStage3Up && m_pDX05->iInspectStage3Down && !m_pDX05->iInspectStage3Fwd && m_pDX05->iInspectStage3Bwd) ||
 					(g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 0) || g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 1, 5.0) || g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 5))) {
 					
-					if (Select_Top2ScanPos(AUTO_INSPECTION1, nIs1ScanNo)) {
+					if (Select_Top2ScanPos(AUTO_INSPECTION1, nIs1ScanNo)) 
+					{
 						dIs1PosX = m_pMoveData->dInspectStage1X[3] + nIs1ScanNo * m_pEquipData->dInspectPitchX;
 
 						g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE1_X, dIs1PosX);			
@@ -4990,10 +4989,14 @@ BOOL CSequenceMain::Inspection1_Run()
 						m_tInspect1Loop.Takt_Start(nTaktZone, 25);
 						m_tInspect1Loop.Takt_End(nTaktZone,25);
 
-					} else {
+					} 
+					else 
+					{
 						nIs1ScanNo++;
 					}
-				} else { m_tInspect1Loop.Set_LoopTime(10000); return TRUE; }
+				} 
+				else
+				{ m_tInspect1Loop.Set_LoopTime(10000); return TRUE; }
 			}
 		}
 		break;
@@ -5017,53 +5020,57 @@ BOOL CSequenceMain::Inspection1_Run()
 				
 				m_pDY05->oInspectStage1Up = FALSE;	m_pDY05->oInspectStage1Down = TRUE;
 				g_objAJinAXL.Write_Output(5);
-				m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);
-
 				m_tInspect1Loop.Takt_Start(nTaktZone, 31);
-				
+				m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);								
 			}
 		}
 		return TRUE;
 	case 32:	// Stage Down Check
-		if (!m_pDX05->iInspectStage1Up && m_pDX05->iInspectStage1Down) {
-			
-			m_nInspect1Case = 50; m_tInspect1Loop.Set_LoopTime(10000);
+		if (!m_pDX05->iInspectStage1Up && m_pDX05->iInspectStage1Down) 
+		{			
 			m_tInspect1Loop.Takt_End(nTaktZone,31);
 			m_tInspect1Loop.Takt_Start(nTaktZone, 32);
 			m_tInspect1Loop.Takt_End(nTaktZone,32);
+			m_nInspect1Case = 50; m_tInspect1Loop.Set_LoopTime(10000);		
 		}
 		break;
 
 	case 50:	// Wait 회피 위치, Stage가 모두 Up 상태면 진행.
 		if ((m_nInspect2Case >= 0 && m_nInspect2Case <= 31 && m_pDX05->iInspectStage2Up && !m_pDX05->iInspectStage2Down) &&
-			(m_nInspect3Case >= 0 && m_nInspect3Case <= 31 && m_pDX05->iInspectStage3Up && !m_pDX05->iInspectStage3Down)) {
+			(m_nInspect3Case >= 0 && m_nInspect3Case <= 31 && m_pDX05->iInspectStage3Up && !m_pDX05->iInspectStage3Down)) 
+		{			
+			m_tInspect1Loop.Takt_Start(nTaktZone, 50);
+			m_tInspect1Loop.Takt_End(nTaktZone,50);
 			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);
 		}
 		return TRUE;
 
 	case 51:	// Move to Load Position
-		if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 4)) {
-			
+		if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 4)) 
+		{			
 			g_objCommon.Move_Position(AX_INSPECT_STAGE1_X, 0);
-			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);
 			m_tInspect1Loop.Takt_Start(nTaktZone, 51);
-			
+			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);			
 		}
 		break;
 	case 52:	// Position Check
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 0)) {
 			
-			m_nInspect1Case = 70; m_tInspect1Loop.Set_LoopTime(10000);
-
 			m_tInspect1Loop.Takt_End(nTaktZone,51);
+			m_tInspect1Loop.Takt_Start(nTaktZone, 52);
+			m_nInspect1Case = 70; m_tInspect1Loop.Set_LoopTime(10000);
+			
 		}
 		break;
 
 	case 70:	// Wait 회피 위치, Top1 Position 부터 진행한다.
-		if (m_nInspect3Case < 80 && m_nInspect3Case > 7 && !g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 0)) {
+		if (m_nInspect3Case < 80 && m_nInspect3Case > 7 && !g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 0))
+		{
 			double dCurPos = g_objAJinAXL.Get_Position(AX_INSPECT_STAGE3_X);
 			double dT1Pos = m_pMoveData->dInspectStage3X[2];	//T1 Pos
-			if (dCurPos >= dT1Pos) {	//위치 확인
+			if (dCurPos >= dT1Pos)
+			{	//위치 확인
+				m_tInspect1Loop.Takt_End(nTaktZone,52);
 				m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);
 			}
 		}
@@ -5170,15 +5177,18 @@ BOOL CSequenceMain::Inspection2_Run()
 				double dUnPos = m_pMoveData->dInspectStage1X[4];	//Unload Pos
 				if ((dCurPos >= dT1_4thPos && dCurPos <= dUnPos)|| bInspStart) {	//위치 확인
 					if (g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 0) && g_objCommon.Get_InfoInspectVacOn(2) &&
-						m_pDX05->iInspectStage2Up && !m_pDX05->iInspectStage2Down && m_pDX05->iInspectStage2Fwd && !m_pDX05->iInspectStage2Bwd && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0)) {
+						m_pDX05->iInspectStage2Up && !m_pDX05->iInspectStage2Down && m_pDX05->iInspectStage2Fwd 
+						&& !m_pDX05->iInspectStage2Bwd && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0)) 
+					{
 						m_dwInspect2 = GetTickCount();
-					
+						g_objCommon.Move_Position(AX_INSPECT_STAGE2_X, 1);
+						
 						m_tInspect2Loop.Takt_Start(nTaktZone, 1, TRUE);
 						m_tInspect2Loop.Takt_End(nTaktZone,1);
-
-						g_objCommon.Move_Position(AX_INSPECT_STAGE2_X, 1);
 						m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(9000);
-					} else {
+					} 
+					else
+					{
 						break;
 					}
 				} 
@@ -5192,12 +5202,12 @@ BOOL CSequenceMain::Inspection2_Run()
 			g_objCommon.Check_Position(AX_MODULE_ALIGN_Y, 0) &&
 			g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0) &&
 			m_pDX06->iCmAlignMasterOpen && !m_pDX06->iCmAlignMasterClose &&
-			m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose) {
-			
+			m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose) 
+		{
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 1);
-			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(5000); 
-			m_tInspect2Loop.Takt_Start(nTaktZone, 2);
 
+			m_tInspect2Loop.Takt_Start(nTaktZone, 2);
+			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(5000);
 		}
 		break;
 	case 3:		// CM Align Master/
@@ -5214,32 +5224,24 @@ BOOL CSequenceMain::Inspection2_Run()
 		}
 		break;
 	case 9: //Slave Close
-		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose){
-			if (!bTaktSave2) {
-				bTaktSave2 = TRUE; 
-				m_tInspect2Loop.Takt_End(nTaktZone,3); 
-				m_tInspect2Loop.Takt_Start(nTaktZone,9); 
-			}
-
+		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose)
+		{		
 			//g_objCommon.Set_InspectVacOff(2, 0);	// Vac Off
 			//if(!m_tInspect2Loop.Waiting_Time(400)) break;
 
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect2Case = 4; m_tInspect2Loop.Set_LoopTime(10000);
-			bTaktSave2 = FALSE;
+			
+			m_tInspect2Loop.Takt_End(nTaktZone,3); 
+			m_tInspect2Loop.Takt_Start(nTaktZone,9); 
 		}
 		break;
 	case 4:		// CM Align Slave Open
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
 			!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose &&
-			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose) {
-				if (!bTaktSave2) {
-					bTaktSave2 = TRUE; 
-					m_tInspect2Loop.Takt_End(nTaktZone,9); 
-					m_tInspect2Loop.Takt_Start(nTaktZone,4); 
-				}
-
+			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose)
+		{
 			g_objCommon.Set_InfoInspectVacOn(2, 1);	// Vac On
 
 			// io WRITE를 동시에 하면 씹힐수 있어서 딜레이 추가
@@ -5248,7 +5250,9 @@ BOOL CSequenceMain::Inspection2_Run()
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;			
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect2Case = 5; m_tInspect2Loop.Set_LoopTime(5000); 
-			bTaktSave2 = FALSE;
+
+			m_tInspect2Loop.Takt_End(nTaktZone,9); 
+			m_tInspect2Loop.Takt_Start(nTaktZone,4); 		
 		}
 		break;
 	case 5:
@@ -5258,30 +5262,32 @@ BOOL CSequenceMain::Inspection2_Run()
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect2Case = 6; m_tInspect2Loop.Set_LoopTime(5000); 
+			m_tInspect2Loop.Takt_End(nTaktZone,4); 
+			m_tInspect2Loop.Takt_Start(nTaktZone,5); 		
+
 		}
 		break;
 	case 6:		// Align Z Axis Move to Ready Up Position
 		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Y, 0) && g_objCommon.Get_InfoInspectVacOn(2) &&
 			m_pDX06->iCmAlignMasterOpen && !m_pDX06->iCmAlignMasterClose &&
-			m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose) {
-				if (!bTaktSave2) {
-					bTaktSave2 = TRUE;
-					m_tInspect2Loop.Takt_End(nTaktZone,5);
-					m_tInspect2Loop.Takt_Start(nTaktZone, 6);
-				}
+			m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose) 
+		{			
 			//if(!m_tInspect2Loop.Waiting_Time(100)) break;
-
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 0);
 			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(10000); 
-			bTaktSave2 = FALSE;
+			m_tInspect2Loop.Takt_End(nTaktZone,5);
+			m_tInspect2Loop.Takt_Start(nTaktZone, 6);			
 		}
 		break;
 	case 7:		// 안전확인 & Move to Top1 Position	// Mirror 실린더 확인
 		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0) && g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 0) && g_objCommon.Get_InfoInspectVacOn(2)) {
 			
-			if (1) {	// Mirror 확인 안한다.
+			if (1)
+			{	
+				// Mirror 확인 안한다.
 				// 다운 상태이거나 Top2, Unload 위치에 있으면 이동
-				if (!m_pDX05->iInspectStage1Up && m_pDX05->iInspectStage1Down) {
+				if (!m_pDX05->iInspectStage1Up && m_pDX05->iInspectStage1Down) 
+				{
 				
 					dIs2PosX = m_pMoveData->dInspectStage2X[2];
 					g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE2_X, dIs2PosX);
@@ -5293,7 +5299,10 @@ BOOL CSequenceMain::Inspection2_Run()
 					m_tInspect2Loop.Takt_Start(nTaktZone, 7);
 					m_tInspect2Loop.Takt_End(nTaktZone,7);
 
-				} else if (m_nInspect1Case > 17 && m_nInspect1Case < 50) {	// Top2 ~ Unload 위치에 있을때
+				} 
+				else if (m_nInspect1Case > 17 && m_nInspect1Case < 50) 
+				{	
+					// Top2 ~ Unload 위치에 있을때
 					double dCurPos = g_objAJinAXL.Get_Position(AX_INSPECT_STAGE1_X);
 					double dT2Pos = m_pMoveData->dInspectStage1X[2] + m_pEquipData->dInspectPitchX * 4 + 1;	// R04A/B T1 Pos + Inspection Stage Pitch * 4 + 1
 					double dUnPos = m_pMoveData->dInspectStage1X[4];	//Unload Pos
@@ -5307,16 +5316,20 @@ BOOL CSequenceMain::Inspection2_Run()
 						m_tInspect2Loop.Takt_End(nTaktZone,6);
 						m_tInspect2Loop.Takt_Start(nTaktZone, 7);
 						m_tInspect2Loop.Takt_End(nTaktZone,7);
-					} else { m_tInspect2Loop.Set_LoopTime(10000); return TRUE; }
+					} 
+					else
+					{ m_tInspect2Loop.Set_LoopTime(10000); return TRUE; }
 
-				} else { m_tInspect2Loop.Set_LoopTime(10000); return TRUE; }
+				}
+				else
+				{ m_tInspect2Loop.Set_LoopTime(10000); return TRUE; }
 			}
 		}
 		break;
 	case 8:		// Send Load Complete
 		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE2_X, dIs2PosX) && g_objCommon.Check_Position(AX_VISION_TOP1_Z, 0) && g_objCommon.Get_InfoInspectVacOn(2)) {
 			
-			g_objLogFile.VisionTakt_Start(TOP1);	// Top1 Scan Start
+			
 			if (m_pEquipData->bUseInspectTop1) {
 				if (gData.bTop1MirrorErr[1]) {
 					nIs2ScanNo--; gData.bTop1MirrorErr[1] = FALSE; 
@@ -5331,8 +5344,12 @@ BOOL CSequenceMain::Inspection2_Run()
 				m_nInspect2Case = 10; m_tInspect2Loop.Set_LoopTime(90000);
 				m_tInspect2Loop.Takt_Start(nTaktZone, 8);
 				m_tInspect2Loop.Takt_End(nTaktZone,8);
-			} else {
+			} 
+			else 
+			{
 				m_nInspect2Case = 15; m_tInspect2Loop.Set_LoopTime(5000);
+				m_tInspect2Loop.Takt_Start(nTaktZone, 8);
+				m_tInspect2Loop.Takt_End(nTaktZone,8);
 			}
 			nIs2ScanNo++;
 		}
@@ -5345,9 +5362,8 @@ BOOL CSequenceMain::Inspection2_Run()
 		break;
 
 	case 11:	// Top1 Z Focus Move
-		if (g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) {
-			m_strLog.Format("MCC,(07) Inspection2, T1 Z Focus Move Start");
-			g_objLogFile.Save_MCCLog(m_strLog);
+		if (g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) 
+		{			
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP1_Z, m_dTop1Z);
 			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(5000);
 			m_tInspect2Loop.Takt_Start(nTaktZone, 11);
@@ -5370,10 +5386,9 @@ BOOL CSequenceMain::Inspection2_Run()
 		break;
 
 	case 13:	// Top1 Mirror Z Move
-		if (g_objAJinAXL.Is_Done(AX_TOP1_MIRROR_Z) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) {
-			//g_objLogFile.VisionTakt_Save(AUTO_INSPECTION2, 21, TOP1);	// Top1 Module Position Inspect Complete
-			m_strLog.Format("MCC,(07) Inspection2, T1 Mirror Z Move Start");
-			g_objLogFile.Save_MCCLog(m_strLog);
+		if (g_objAJinAXL.Is_Done(AX_TOP1_MIRROR_Z) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) 
+		{
+			
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP1_Z, m_dTop1Z);
 			g_objCommon.Move_Position(AX_TOP1_MIRROR_Z, 1);
 			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(5000);
@@ -5384,8 +5399,7 @@ BOOL CSequenceMain::Inspection2_Run()
 		if (g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) 
 		{
 			g_objLogFile.Save_PositionLog(gData.nPNoInspect[1],gData.nTNoInspect[1][0], -1, AX_TOP1_MIRROR_Z, TOP1_MIRROR_Z_WorkDown);
-			
-			g_objLogFile.VisionTakt_Start(TOP1);	// Top1 Mirror Down 이후 Scan
+						
 			g_objInspector.Set_SMoveComplete(INSPECTOR_PC2, "T1");
 			m_nInspect2Case = 10; m_tInspect2Loop.Set_LoopTime(90000);	// 90초
 
@@ -5406,14 +5420,13 @@ BOOL CSequenceMain::Inspection2_Run()
 		break;
 	case 16:	// 다음 검사 위치 피치 이동
 		if (g_objAJinAXL.Is_Done(AX_INSPECT_STAGE2_X) && g_objCommon.Check_Position(AX_VISION_TOP1_Z, 0) && g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 0)) {
-			if (!bTaktSave2) { bTaktSave2 = TRUE;  }	// Move to Top1 Position
-
+		
 			if (gData.bReload[2]) {
 				nIs2ScanNo--; gData.bReload[2] = FALSE;
 			}
 			if (nIs2ScanNo > gData.nScanCnt) {	// 모델별로 피치이동 횟수가 다르다.
 				nIs2ScanNo = 0;
-				bTaktSave2 = FALSE;
+				
 				m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(10000);
 
 				m_tInspect2Loop.Takt_Start(nTaktZone, 16);
@@ -5438,27 +5451,35 @@ BOOL CSequenceMain::Inspection2_Run()
 						m_tInspect3Loop.Set_LoopTime(15000);//뒤에 따라오는 스테이지 알람 대기시간 초기화 
 
 						if(nIs2ScanNo == 3 && m_nInspect3Case == 1 && g_objAJinAXL.Is_Done(AX_INSPECT_STAGE3_X)
-							&& g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0) && g_objCommon.Get_InfoInspectVacOn(3)){ // Top1 마지막 피치 이동시 뒤에 있는 스테이지도 동시 어라인 진입 
+							&& g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0) && g_objCommon.Get_InfoInspectVacOn(3))
+						{ 
+							// Top1 마지막 피치 이동시 뒤에 있는 스테이지도 동시 어라인 진입 
 							g_objCommon.Move_Position(AX_INSPECT_STAGE3_X, 1);
 							m_nInspect3Case = 2; m_tInspect3Loop.Set_LoopTime(9000);
 						}
-
 						m_tInspect2Loop.Takt_Start(nTaktZone, 16);
 						m_tInspect2Loop.Takt_End(nTaktZone,16);
-					} else {
+					} 
+					else
+					{
 						nIs2ScanNo++;
 					}
-				} else { m_tInspect2Loop.Set_LoopTime(10000); return TRUE; }
+				} 
+				else
+				{
+					m_tInspect2Loop.Set_LoopTime(10000); 
+					return TRUE;
+				}
 			}
 		}
 		break;
 	case 17:	// 안전확인, Move to Top2 Position
-		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE2_X, dIs2PosX)) {
-			
+		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE2_X, dIs2PosX))
+		{			
 			// 다운 상태, Load, Unload 위치일때 진행
 			if ((!m_pDX05->iInspectStage1Up && m_pDX05->iInspectStage1Down) ||
-				g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 0) || g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 4)) {
-				
+				g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 0) || g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 4))
+			{				
 				dIs2PosX = m_pMoveData->dInspectStage2X[3];
 				g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE2_X, dIs2PosX);
 				nIs2ScanNo = 0;
@@ -5475,9 +5496,7 @@ BOOL CSequenceMain::Inspection2_Run()
 		if (g_objCommon.Get_InfoInspectVacOn(2) &&
 			g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE2_X, dIs2PosX) &&
 			g_objCommon.Check_Position(AX_VISION_TOP2_Z, 0) && g_objCommon.Check_Position(AX_TOP2_SHIFT_Y, 0))
-		{
-			
-			g_objLogFile.VisionTakt_Start(TOP2);	// Top2 FPCB Scan Start
+		{			
 			if (m_pEquipData->bUseInspectTop2) {
 				Set_InspectJigNo(2, nIs2ScanNo, nI2JNo1, nI2JNo2, nI2JNo3, nI2JNo4);
 				g_objInspector.Set_LoadComplete(INSPECTOR_PC3, "T2", gLot.sLotID[gData.nPNoInspect[1]-1], gData.nPNoInspect[1], 
@@ -5489,6 +5508,8 @@ BOOL CSequenceMain::Inspection2_Run()
 				m_tInspect2Loop.Takt_End(nTaktZone,19);
 			} else {
 				m_nInspect2Case = 25; m_tInspect2Loop.Set_LoopTime(10000); 
+				m_tInspect2Loop.Takt_Start(nTaktZone, 19);
+				m_tInspect2Loop.Takt_End(nTaktZone,19);
 			}
 			nIs2ScanNo++;
 		}
@@ -5502,8 +5523,7 @@ BOOL CSequenceMain::Inspection2_Run()
 
 	case 21:	// Top2 Z Focus Move
 		if (g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z)) {
-			m_strLog.Format("MCC,(07) Inspection2, T2 Z Focus Start");
-			g_objLogFile.Save_MCCLog(m_strLog);
+			
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP2_Z, m_dTop2Z);
 			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(5000);
 			m_tInspect2Loop.Takt_Start(nTaktZone, 21);
@@ -5527,9 +5547,7 @@ BOOL CSequenceMain::Inspection2_Run()
 
 	case 23:	// Top2 Shift X, Y Move
 		if (g_objAJinAXL.Is_Done(AX_INSPECT_STAGE2_X) && g_objAJinAXL.Is_Done(AX_TOP2_SHIFT_Y) && g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z)) {
-			//g_objLogFile.VisionTakt_Save(AUTO_INSPECTION2, 23, TOP2);	// Top2 FPCB Scan End
-			m_strLog.Format("MCC,(07) Inspection2, Top2 Shift X, Y Move");
-			g_objLogFile.Save_MCCLog(m_strLog);
+			
 
 			dIs2PosX = dIs2PosX + m_pEquipData->dInspectTop2ShiftX;
 
@@ -5541,9 +5559,8 @@ BOOL CSequenceMain::Inspection2_Run()
 		}
 		break;
 	case 24:	// Send Move Complete
-		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE2_X, dIs2PosX) && g_objCommon.Check_Position(AX_TOP2_SHIFT_Y, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z)) {
-			
-			g_objLogFile.VisionTakt_Start(TOP2);	// Top2 Lens/Barrel/Sidefill Scan Start
+		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE2_X, dIs2PosX) && g_objCommon.Check_Position(AX_TOP2_SHIFT_Y, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z))
+		{						
 			g_objInspector.Set_SMoveComplete(INSPECTOR_PC3, "T2");
 			m_nInspect2Case = 20; m_tInspect2Loop.Set_LoopTime(90000);	// 90초
 			m_tInspect2Loop.Takt_End(nTaktZone,23);
@@ -5576,7 +5593,8 @@ BOOL CSequenceMain::Inspection2_Run()
 				if (nIs2ScanNo == 0 || (!m_pDX05->iInspectStage1Up && m_pDX05->iInspectStage1Down) ||
 					(g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 0) || g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 1, 5.0) || g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 5))) {
 					
-					if (Select_Top2ScanPos(AUTO_INSPECTION2, nIs2ScanNo)) {
+					if (Select_Top2ScanPos(AUTO_INSPECTION2, nIs2ScanNo)) 
+					{
 						dIs2PosX = m_pMoveData->dInspectStage2X[3] + nIs2ScanNo * m_pEquipData->dInspectPitchX;
 
 						g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE2_X, dIs2PosX);			
@@ -5586,7 +5604,9 @@ BOOL CSequenceMain::Inspection2_Run()
 
 						m_tInspect2Loop.Takt_Start(nTaktZone, 25);
 						m_tInspect2Loop.Takt_End(nTaktZone,25);
-					} else {
+					} 
+					else 
+					{
 						nIs2ScanNo++;
 					}
 				} else { m_tInspect2Loop.Set_LoopTime(10000); return TRUE; }
@@ -5594,7 +5614,8 @@ BOOL CSequenceMain::Inspection2_Run()
 		}
 		break;
 	case 26:	// Unload Position Check
-		if (g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 4)) {
+		if (g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 4))
+		{
 			m_tInspect2Loop.Takt_Start(nTaktZone, 26);
 			m_tInspect2Loop.Takt_End(nTaktZone,26);
 
@@ -5649,6 +5670,7 @@ BOOL CSequenceMain::Inspection2_Run()
 			
 			m_nInspect2Case = 70; m_tInspect2Loop.Set_LoopTime(10000);
 			m_tInspect2Loop.Takt_End(nTaktZone,51);
+			m_tInspect2Loop.Takt_Start(nTaktZone,52);
 		}
 		break;
 
@@ -5658,6 +5680,7 @@ BOOL CSequenceMain::Inspection2_Run()
 			double dT1Pos = m_pMoveData->dInspectStage1X[2];	//T1 Pos
 			if (dCurPos >= dT1Pos) {	//위치 확인
 				m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(10000);
+				m_tInspect2Loop.Takt_End(nTaktZone,52);
 			}
 		}
 		return TRUE;
@@ -5804,30 +5827,23 @@ BOOL CSequenceMain::Inspection3_Run()
 		}
 		break;
 	case 9: //Slave Close
-		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose){
-			if (!bTaktSave3) {
-				bTaktSave3 = TRUE; 
-				m_tInspect3Loop.Takt_End(nTaktZone,3); 
-				m_tInspect3Loop.Takt_Start(nTaktZone,9); 
-			}
+		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose)
+		{		
 			//g_objCommon.Set_InspectVacOff(3, 0);	// Vac Off
 			//if(!m_tInspect3Loop.Waiting_Time(400)) break;
-
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect3Case = 4; m_tInspect3Loop.Set_LoopTime(5000);
-			bTaktSave3 = FALSE;
+
+			m_tInspect3Loop.Takt_End(nTaktZone,3); 
+			m_tInspect3Loop.Takt_Start(nTaktZone,9); 			
 		}
 		break;
 	case 4:		// CM Align Slave Open
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
 			!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose &&
-			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose) {
-				if (!bTaktSave3) {
-					bTaktSave3 = TRUE; 
-					m_tInspect3Loop.Takt_End(nTaktZone,9); 
-					m_tInspect3Loop.Takt_Start(nTaktZone,4); 
-				}
+			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose) 
+		{				
 			g_objCommon.Set_InfoInspectVacOn(3, 1);	// Vac On
 
 			// io WRITE를 동시에 하면 씹힐수 있어서 딜레이 추가
@@ -5836,8 +5852,11 @@ BOOL CSequenceMain::Inspection3_Run()
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;
 			//m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect3Case = 5; m_tInspect3Loop.Set_LoopTime(5000); 
-			bTaktSave3 = FALSE;
+			m_nInspect3Case = 5; m_tInspect3Loop.Set_LoopTime(5000);
+			
+			m_tInspect3Loop.Takt_End(nTaktZone,9); 
+			m_tInspect3Loop.Takt_Start(nTaktZone,4); 
+			
 		}
 		break;
 	case 5:
@@ -5847,45 +5866,47 @@ BOOL CSequenceMain::Inspection3_Run()
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect3Case = 6; m_tInspect3Loop.Set_LoopTime(5000); 
+			m_tInspect3Loop.Takt_End(nTaktZone,4); 
+			m_tInspect3Loop.Takt_Start(nTaktZone,5); 
 		}
 		break;
 	case 6:		// Align Z Axis Move to Ready Up Position
 		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Y, 0) &&
 			m_pDX06->iCmAlignMasterOpen && !m_pDX06->iCmAlignMasterClose &&
-			m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose) {
-				if (!bTaktSave3) {
-					bTaktSave3 = TRUE;
-					m_tInspect3Loop.Takt_End(nTaktZone,5);
-					m_tInspect3Loop.Takt_Start(nTaktZone, 6);
-				}
-
+			m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose) 
+		{
 			//if(!m_tInspect3Loop.Waiting_Time(100)) break;
-
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 0);
 			m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(10000); 
-			bTaktSave3 = FALSE;
+
+			m_tInspect3Loop.Takt_End(nTaktZone,5);
+			m_tInspect3Loop.Takt_Start(nTaktZone, 6);
+			
 		}
 		break;
 	case 7:		// 안전확인 & Move to Top1 Position	// Mirror 실린더 확인
 		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0) && g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 0) && g_objCommon.Get_InfoInspectVacOn(3)) {
-			if (!bTaktSave3) { bTaktSave3 = TRUE;  }
-			if (1) {	// Mirror 확인 안한다.
+			
+			if (1) 
+			{	
+				// Mirror 확인 안한다.
 				// 다운 상태이거나 Unload 위치에 있으면 이동
-				if (!m_pDX05->iInspectStage2Up && m_pDX05->iInspectStage2Down && !m_pDX05->iInspectStage2Fwd && m_pDX05->iInspectStage2Bwd) {	// 다운 상태
-					
+				if (!m_pDX05->iInspectStage2Up && m_pDX05->iInspectStage2Down && !m_pDX05->iInspectStage2Fwd && m_pDX05->iInspectStage2Bwd) 
+				{	
+					// 다운 상태					
 					dIs3PosX = m_pMoveData->dInspectStage3X[2];
 					g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE3_X, dIs3PosX);
 					nIs3ScanNo = 0;
-					bTaktSave3 = FALSE;
-					//MCC
-					m_strLog.Format("Inspect stage 3 Top1 Scan Start");
-					g_objLogFile.Save_MCCLog(m_strLog);
+									
 					m_nInspect3Case = 16; m_tInspect3Loop.Set_LoopTime(10000);
 					m_tInspect3Loop.Takt_End(nTaktZone,6);
 					m_tInspect3Loop.Takt_Start(nTaktZone, 7);
 					m_tInspect3Loop.Takt_End(nTaktZone,7);
 
-				} else if (m_nInspect2Case > 17 && m_nInspect2Case < 50) {	// Top2 ~ Unload 위치에 있을때
+				} 
+				else if (m_nInspect2Case > 17 && m_nInspect2Case < 50) 
+				{	
+					// Top2 ~ Unload 위치에 있을때
 					double dCurPos = g_objAJinAXL.Get_Position(AX_INSPECT_STAGE2_X);
 					double dT2Pos = m_pMoveData->dInspectStage2X[2] + m_pEquipData->dInspectPitchX * 4 + 1;	// R04A/B T1 Pos + Inspection Stage Pitch * 4 + 1
 					double dUnPos = m_pMoveData->dInspectStage2X[4];	//Unload Pos
@@ -5895,25 +5916,33 @@ BOOL CSequenceMain::Inspection3_Run()
 						g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE3_X, dIs3PosX);
 						nIs3ScanNo = 0;
 						bTaktSave3 = FALSE;
-						//MCC
-						m_strLog.Format("Inspect stage 3 Top1 Scan Start");
-						g_objLogFile.Save_MCCLog(m_strLog);
+					
 						m_nInspect3Case = 16; m_tInspect3Loop.Set_LoopTime(10000);
 						m_tInspect3Loop.Takt_End(nTaktZone,6);
 						m_tInspect3Loop.Takt_Start(nTaktZone, 7);
 						m_tInspect3Loop.Takt_End(nTaktZone,7);
-					} else { m_tInspect3Loop.Set_LoopTime(10000); return TRUE; }
+					} 
+					else 
+					{ 
+						m_tInspect3Loop.Set_LoopTime(10000); return TRUE; 
+					}
 
-				} else { m_tInspect3Loop.Set_LoopTime(10000); return TRUE; }
+				} 
+				else
+				{ 
+					m_tInspect3Loop.Set_LoopTime(10000); return TRUE; 
+				}
 			}
 		}
 		break;
 	case 8:		// Send Load Complete
 		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE3_X, dIs3PosX) && g_objCommon.Check_Position(AX_VISION_TOP1_Z, 0) && g_objCommon.Get_InfoInspectVacOn(3)) {
 			
-			g_objLogFile.VisionTakt_Start(TOP1);	// Top1 Scan Start
-			if (m_pEquipData->bUseInspectTop1) {
-				if (gData.bTop1MirrorErr[2]) {
+		
+			if (m_pEquipData->bUseInspectTop1) 
+			{
+				if (gData.bTop1MirrorErr[2])
+				{
 					nIs3ScanNo--; gData.bTop1MirrorErr[2] = FALSE; 
 					g_objCommon.Show_Error(gData.nTop1MirrorErrNo);
 					return FALSE;
@@ -5926,23 +5955,27 @@ BOOL CSequenceMain::Inspection3_Run()
 				m_nInspect3Case = 10; m_tInspect3Loop.Set_LoopTime(90000);
 				m_tInspect3Loop.Takt_Start(nTaktZone, 8);
 				m_tInspect3Loop.Takt_End(nTaktZone,8);
-			} else {
+			} 
+			else
+			{
 				m_nInspect3Case = 15; m_tInspect3Loop.Set_LoopTime(5000);
+				m_tInspect3Loop.Takt_Start(nTaktZone, 8);
+				m_tInspect3Loop.Takt_End(nTaktZone,8);
 			}
 			nIs3ScanNo++;
 		}
 		break;
 
 	case 10:	// Wait for Top1 inspection(30sec)
-		if (!m_pEquipData->bUseInspectTop1) {
+		if (!m_pEquipData->bUseInspectTop1) 
+		{
 			m_nInspect3Case = 15; m_tInspect3Loop.Set_LoopTime(5000);
 		}
 		break;
 
 	case 11:	// Top1 Z Focus Move
-		if (g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) {
-			m_strLog.Format("MCC,(07) Inspection3, T1 Z Focus Move Start");
-			g_objLogFile.Save_MCCLog(m_strLog);
+		if (g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) 
+		{			
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP1_Z, m_dTop1Z);
 			m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(5000);
 			m_tInspect3Loop.Takt_Start(nTaktZone, 11);
@@ -5966,9 +5999,7 @@ BOOL CSequenceMain::Inspection3_Run()
 
 	case 13:	// Top1 Mirror Z Move
 		if (g_objAJinAXL.Is_Done(AX_TOP1_MIRROR_Z) && g_objAJinAXL.Is_Done(AX_VISION_TOP1_Z)) {
-			//g_objLogFile.VisionTakt_Save(AUTO_INSPECTION3, 21, TOP1);	// Top1 Module Position Inspect Complete
-			m_strLog.Format("MCC,(07) Inspection3, T1 Mirror Z Move Start");
-			g_objLogFile.Save_MCCLog(m_strLog);
+			
 
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP1_Z, m_dTop1Z);
 			g_objCommon.Move_Position(AX_TOP1_MIRROR_Z, 1);
@@ -5981,7 +6012,7 @@ BOOL CSequenceMain::Inspection3_Run()
 		{
 			g_objLogFile.Save_PositionLog(gData.nPNoInspect[2],gData.nTNoInspect[2][0], -1, AX_TOP1_MIRROR_Z, TOP1_MIRROR_Z_WorkDown);
 			
-			g_objLogFile.VisionTakt_Start(TOP1);	// Top1 Mirror Down 이후 Scan
+			
 			g_objInspector.Set_SMoveComplete(INSPECTOR_PC2, "T1");
 			m_nInspect3Case = 10; m_tInspect3Loop.Set_LoopTime(90000);	// 90초
 
@@ -6002,9 +6033,7 @@ BOOL CSequenceMain::Inspection3_Run()
 		break;
 	case 16:	// 다음 검사 위치 피치 이동
 		if (g_objAJinAXL.Is_Done(AX_INSPECT_STAGE3_X) && g_objCommon.Check_Position(AX_VISION_TOP1_Z, 0) && g_objCommon.Check_Position(AX_TOP1_MIRROR_Z, 0))
-		{
-			if (!bTaktSave3) { bTaktSave3 = TRUE;  }	// Move to Top1 Position
-
+		{			
 			if (gData.bReload[2]) {
 				nIs3ScanNo--; gData.bReload[2] = FALSE;
 			}
@@ -6015,7 +6044,9 @@ BOOL CSequenceMain::Inspection3_Run()
 				m_tInspect3Loop.Takt_Start(nTaktZone, 16);
 				m_tInspect3Loop.Takt_End(nTaktZone,16);
 
-			} else {
+			} 
+			else 
+			{
 				double dCurPos = g_objAJinAXL.Get_Position(AX_INSPECT_STAGE2_X);
 				double dT2Pos = m_pMoveData->dInspectStage2X[3];// + m_pEquipData->dInspectPitchX * 2;	// R04A/B T2 Pos + Inspection Stage Pitch * 4
 				double dUnPos = m_pMoveData->dInspectStage2X[4];	//Unload Pos
@@ -6028,8 +6059,8 @@ BOOL CSequenceMain::Inspection3_Run()
 				// 첫번째 스캔이후는 앞의 스테이지가 Unload 위치거나 Down 상태일때 진행가능.
 				if (g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 4) || (dCurPos >= dT2Pos && dCurPos <= dUnPos) ||
 					(!m_pDX05->iInspectStage2Up && m_pDX05->iInspectStage2Down && !m_pDX05->iInspectStage2Fwd && m_pDX05->iInspectStage2Bwd)) {
-					if (Select_Top1ScanPos(AUTO_INSPECTION3, nIs3ScanNo)) {
-						
+					if (Select_Top1ScanPos(AUTO_INSPECTION3, nIs3ScanNo)) 
+					{						
 						dIs3PosX = m_pMoveData->dInspectStage3X[2] + nIs3ScanNo * m_pEquipData->dInspectPitchX;
 						g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE3_X, dIs3PosX);
 						m_nInspect3Case = 8; m_tInspect3Loop.Set_LoopTime(10000);
@@ -6042,19 +6073,27 @@ BOOL CSequenceMain::Inspection3_Run()
 						}
 						m_tInspect3Loop.Takt_Start(nTaktZone, 16);
 						m_tInspect3Loop.Takt_End(nTaktZone,16);
-					} else {
+					} 
+					else
+					{
 						nIs3ScanNo++;
 					}
-				} else { m_tInspect3Loop.Set_LoopTime(10000); return TRUE;}
+				} 
+				else 
+				{ 
+					m_tInspect3Loop.Set_LoopTime(10000); 
+					return TRUE;
+				}
 			}
 		}
 		break;
 	case 17:	// 안전확인, Move to Top2 Position
-		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE3_X, dIs3PosX)) {
+		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE3_X, dIs3PosX))
+		{
 			// 다운 상태, Load, Unload 위치일때 진행
 			if ((!m_pDX05->iInspectStage2Up && m_pDX05->iInspectStage2Down && !m_pDX05->iInspectStage2Fwd && m_pDX05->iInspectStage2Bwd) ||
-				g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 0) || g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 4)) {
-				
+				g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 0) || g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 4)) 
+			{				
 				dIs3PosX = m_pMoveData->dInspectStage3X[3];
 				g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE3_X, dIs3PosX);
 				nIs3ScanNo = 0;
@@ -6070,10 +6109,9 @@ BOOL CSequenceMain::Inspection3_Run()
 		if (g_objCommon.Get_InfoInspectVacOn(3) &&
 			g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE3_X, dIs3PosX) &&
 			g_objCommon.Check_Position(AX_VISION_TOP2_Z, 0) && g_objCommon.Check_Position(AX_TOP2_SHIFT_Y, 0))
-		{
-			
-			g_objLogFile.VisionTakt_Start(TOP2);	// Top2 FPCB Scan Start
-			if (m_pEquipData->bUseInspectTop2) {
+		{			
+			if (m_pEquipData->bUseInspectTop2) 
+			{
 				Set_InspectJigNo(2, nIs3ScanNo, nI3JNo1, nI3JNo2, nI3JNo3, nI3JNo4);
 				g_objInspector.Set_LoadComplete(INSPECTOR_PC3, "T2", gLot.sLotID[gData.nPNoInspect[2]-1], gData.nPNoInspect[2], 
 					gData.nTNoInspect[2][nI3JNo1-1], gData.nTNoInspect[2][nI3JNo2-1], 0, 0,
@@ -6082,8 +6120,12 @@ BOOL CSequenceMain::Inspection3_Run()
 				m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(180000); 
 				m_tInspect3Loop.Takt_Start(nTaktZone, 19);
 				m_tInspect3Loop.Takt_End(nTaktZone,19);
-			} else {
+			} 
+			else
+			{
 				m_nInspect3Case = 25; m_tInspect3Loop.Set_LoopTime(10000); 
+				m_tInspect3Loop.Takt_Start(nTaktZone, 19);
+				m_tInspect3Loop.Takt_End(nTaktZone,19);
 			}
 			nIs3ScanNo++;
 		}
@@ -6097,8 +6139,7 @@ BOOL CSequenceMain::Inspection3_Run()
 
 	case 21:	// Top2 Z Focus Move
 		if (g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z)) {
-			m_strLog.Format("MCC,(07) Inspection3, T2 Z Focus Start");
-			g_objLogFile.Save_MCCLog(m_strLog);
+		
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP2_Z, m_dTop2Z);
 			m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(5000);
 			m_tInspect3Loop.Takt_Start(nTaktZone, 21);
@@ -6122,9 +6163,7 @@ BOOL CSequenceMain::Inspection3_Run()
 
 	case 23:	// Top2 Shift X, Y Move
 		if (g_objAJinAXL.Is_Done(AX_INSPECT_STAGE3_X) && g_objAJinAXL.Is_Done(AX_TOP2_SHIFT_Y) && g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z)) {
-			//g_objLogFile.VisionTakt_Save(AUTO_INSPECTION3, 23, TOP2);	// Top2 FPCB Scan End
-			m_strLog.Format("MCC,(07) Inspection3, Top2 Shift X, Y Move Start");
-			g_objLogFile.Save_MCCLog(m_strLog);
+			
 			dIs3PosX = dIs3PosX + m_pEquipData->dInspectTop2ShiftX;
 
 			g_objAJinAXL.Move_Absolute(AX_VISION_TOP2_Z, m_dTop2Z);
@@ -6135,9 +6174,9 @@ BOOL CSequenceMain::Inspection3_Run()
 		}
 		break;
 	case 24:	// Send Move Complete
-		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE3_X, dIs3PosX) && g_objCommon.Check_Position(AX_TOP2_SHIFT_Y, 1) && g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z)) {
-			
-			g_objLogFile.VisionTakt_Start(TOP2);	// Top2 Lens/Barrel/Sidefill Scan Start
+		if (g_objAJinAXL.Is_MoveDone(AX_INSPECT_STAGE3_X, dIs3PosX) && g_objCommon.Check_Position(AX_TOP2_SHIFT_Y, 1) 
+			&& g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z)) 
+		{			
 			g_objInspector.Set_SMoveComplete(INSPECTOR_PC3, "T2");
 			m_nInspect3Case = 20; m_tInspect3Loop.Set_LoopTime(90000);	// 90초
 			m_tInspect3Loop.Takt_End(nTaktZone,23);
@@ -6153,8 +6192,9 @@ BOOL CSequenceMain::Inspection3_Run()
 			g_objAJinAXL.Is_Done(AX_VISION_TOP2_Z) && g_objAJinAXL.Is_Done(AX_TOP2_SHIFT_Y)) {
 			if (gData.bReload[3]) { nIs3ScanNo--; gData.bReload[3] = FALSE; }
 
-			if (nIs3ScanNo > gData.nBtmPickQt-1) {	// 모델별로 피치이동 횟수가 다르다.
-				
+			if (nIs3ScanNo > gData.nBtmPickQt-1) 
+			{
+				// 모델별로 피치이동 횟수가 다르다.				
 				nIs3ScanNo = 0;
 				bTaktSave3 = FALSE;
 				g_objCommon.Move_Position(AX_VISION_TOP2_Z, 0);	// Ready Up
@@ -6165,11 +6205,15 @@ BOOL CSequenceMain::Inspection3_Run()
 				m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(10000);
 				m_tInspect3Loop.Takt_Start(nTaktZone, 25);
 				m_tInspect3Loop.Takt_End(nTaktZone,25);
-			} else {	// 첫번째 스캔이후 앞의 스테이지는 다운상태 이거나 로드 위치에 있어야한다.
+			} 
+			else 
+			{	
+				// 첫번째 스캔이후 앞의 스테이지는 다운상태 이거나 로드 위치에 있어야한다.
 				if (nIs3ScanNo == 0 || (!m_pDX05->iInspectStage2Up && m_pDX05->iInspectStage2Down && !m_pDX05->iInspectStage2Fwd && m_pDX05->iInspectStage2Bwd) ||
 					(g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 0) || g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 1, 5.0) || g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 5))) {
 					
-					if (Select_Top2ScanPos(AUTO_INSPECTION3, nIs3ScanNo)) {
+					if (Select_Top2ScanPos(AUTO_INSPECTION3, nIs3ScanNo)) 
+					{
 						dIs3PosX = m_pMoveData->dInspectStage3X[3] + nIs3ScanNo * m_pEquipData->dInspectPitchX;
 
 						g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE3_X, dIs3PosX);			
@@ -6178,15 +6222,23 @@ BOOL CSequenceMain::Inspection3_Run()
 						m_nInspect3Case = 19; m_tInspect3Loop.Set_LoopTime(10000);
 						m_tInspect3Loop.Takt_Start(nTaktZone, 25);
 						m_tInspect3Loop.Takt_End(nTaktZone,25);
-					} else {
+					} 
+					else
+					{
 						nIs3ScanNo++;
 					}
-				} else { m_tInspect3Loop.Set_LoopTime(10000); return TRUE; }
+				} 
+				else
+				{ 
+					m_tInspect3Loop.Set_LoopTime(10000); 
+					return TRUE;
+				}
 			}
 		}
 		break;
 	case 26:	// Unload Position Check
-		if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 4)) {
+		if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 4)) 
+		{
 			m_tInspect3Loop.Takt_Start(nTaktZone, 26);
 			m_tInspect3Loop.Takt_End(nTaktZone,26);
 
@@ -6241,6 +6293,7 @@ BOOL CSequenceMain::Inspection3_Run()
 			
 			m_nInspect3Case = 70; m_tInspect3Loop.Set_LoopTime(10000);
 			m_tInspect3Loop.Takt_End(nTaktZone,51);
+			m_tInspect3Loop.Takt_Start(nTaktZone, 52);
 		}
 		break;
 
@@ -6250,6 +6303,7 @@ BOOL CSequenceMain::Inspection3_Run()
 			double dT1Pos = m_pMoveData->dInspectStage2X[2];	//T1 Pos
 			if (dCurPos >= dT1Pos) {	//위치 확인
 				m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(10000);
+				m_tInspect3Loop.Takt_End(nTaktZone,52);
 			}
 		}
 		return TRUE;
@@ -6392,11 +6446,7 @@ BOOL CSequenceMain::Btm2Picker_Run()
 
 			m_tBtm2PickLoop.Takt_End(nTaktZone, 2);
 			m_tBtm2PickLoop.Takt_Start(nTaktZone, 3);
-
-			//MCC
-			m_strLog.Format("Btm2 Picker Get Modules, Inspect Stage No:%d", nB2pInspStageNo);
-			g_objLogFile.Save_MCCLog(m_strLog);
-
+			
 			g_objCommon.Set_InfoBtm2Close();
 			m_nBtm2PickCase++; m_tBtm2PickLoop.Set_LoopTime(10000);
 		}
@@ -6472,9 +6522,7 @@ BOOL CSequenceMain::Btm2Picker_Run()
 			m_tBtm2PickLoop.Takt_Start(nTaktZone, 9);
 			m_tBtm2PickLoop.Takt_End(nTaktZone, 9);
 			if (m_pEquipData->bUseInspectBtm2)
-			{				
-				g_objLogFile.VisionTakt_Start(BTM2);	// Scan Start
-
+			{	
 				Set_InspectJigNo(3, nB2pScanNo, nB2JNo1, nB2JNo2, nB2JNo3, nB2JNo4);
 				g_objInspector.Set_LoadComplete(INSPECTOR_PC4, "B2", gLot.sLotID[gData.nPNoBtm2Pick-1], gData.nPNoBtm2Pick, 
 					gData.nTNoBtm2Pick[nB2JNo1-1], gData.nTNoBtm2Pick[nB2JNo2-1], 0, 0,
@@ -6499,8 +6547,7 @@ BOOL CSequenceMain::Btm2Picker_Run()
 
 	case 11:	// Btm2 Z Position Move
 		if (g_objAJinAXL.Is_Done(AX_BTM2_PICKER_Z)) {
-			m_strLog.Format("MCC,(10) Btm2Picker, Btm2 Z Focus Move Start(Scan End)");
-			g_objLogFile.Save_MCCLog(m_strLog);
+		
 			g_objAJinAXL.Move_Absolute(AX_BTM2_PICKER_Z, m_dBtm2Z);
 			m_nBtm2PickCase++; m_tBtm2PickLoop.Set_LoopTime(5000);
 		
@@ -7256,9 +7303,6 @@ BOOL CSequenceMain::SortPicker1_Run()
 					
 					if (!Select_BufferTrayUpPos(nSp1WorkBuff, nSp1TrayPosX, nSp1TrayPosY)) nSp1TrayPosX = 0;	// Good Tray 교체중...
 
-					m_strLog.Format("MCC,(13) SortPicker1, X & buffer Y Move Start");
-					g_objLogFile.Save_MCCLog(m_strLog);
-
 					nSp1Base = 0; dSp1X = m_pMoveData->dSortPicker1X[nSp1WorkBuff-1];
 					g_objAJinAXL.Move_Absolute(AX_SORT_PICKER1_X, dSp1X);
 
@@ -7357,11 +7401,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 			g_dlgWork.PostMessage(UM_UPDATE_TRAY_INFO, 3, nSp1WorkBuff-1);
 
 			g_objCommon.Set_InfoSortPicker1Close();
-
-			//MCC
-			m_strLog.Format("Sort Picker 1 Pick Complete, BuffNo : %d", nSp1WorkBuff);
-			g_objLogFile.Save_MCCLog(m_strLog);
-
+			
 			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(10000);
 			m_tSortPick1Loop.Takt_End(nTaktZone, 2);
 			m_tSortPick1Loop.Takt_Start(nTaktZone, 3);
@@ -8514,12 +8554,8 @@ BOOL CSequenceMain::SortPicker2_Run()
 				if (Check_SortPickerEmpty(2)) {
 					m_dwSortPick2 = GetTickCount();
 					
-
 					if (!Select_BufferTrayUpPos(nSp2WorkBuff, nSp2TrayPosX, nSp2TrayPosY)) nSp2TrayPosX = 0;	// Good Tray 교체중...
-
-					m_strLog.Format("MCC,(13) SortPicker2, X & buffer Y Move Start");
-					g_objLogFile.Save_MCCLog(m_strLog);
-
+									
 					nSp2Base = 0; dSp2X = m_pMoveData->dSortPicker2X[nSp2WorkBuff-1];
 					g_objAJinAXL.Move_Absolute(AX_SORT_PICKER2_X, dSp2X);
 
@@ -10636,8 +10672,7 @@ BOOL CSequenceMain::EmptyTrayX_Run()
 				return TRUE;
 			} 
 			else 
-			{
-				m_strLog.Format("Empty Picker X, 10");g_objLogFile.Save_MCCLog(m_strLog);
+			{				
 				m_nEmptyTrayXCase++; m_tEmptyTrayXLoop.Set_LoopTime(5000);
 			}
 		}
@@ -10662,13 +10697,13 @@ BOOL CSequenceMain::EmptyTrayX_Run()
 			gData.dEmptyPortZDownOffset = dCurPos;
 			double dReadyPos = m_pMoveData->dEmptyPortZ[1];
 			if (dReadyPos < dCurPos) {
-				m_strLog.Format("Empty Picker X, 13-1");g_objLogFile.Save_MCCLog(m_strLog);
+				
 				g_objAJinAXL.Move_Absolute(AX_EMPTY_PORT_Z, gData.dEmptyPortZDownOffset, 0.5);	// Down Offset Move
 				m_nEmptyTrayXCase++; m_tEmptyTrayXLoop.Set_LoopTime(10000);
 			} 
 			else 
 			{
-				m_strLog.Format("Empty Picker X, 13-2");g_objLogFile.Save_MCCLog(m_strLog);
+				
 				m_nEmptyTrayElCase = 30;	// Full Alarm 처리
 				m_tEmptyTrayXLoop.Set_LoopTime(10000);
 			}
@@ -10677,7 +10712,7 @@ BOOL CSequenceMain::EmptyTrayX_Run()
 	case 14:	// Empty Tray Down
 		if (g_objAJinAXL.Is_MoveDone(AX_EMPTY_PORT_Z, gData.dEmptyPortZDownOffset) && g_objCommon.Check_Position(AX_EMPTY_TRANS1_X, 1)) 
 		{
-			m_strLog.Format("Empty Picker X, 14-1");g_objLogFile.Save_MCCLog(m_strLog);
+			
 			m_tEmptyTrayXLoop.Takt_Start(nTaktZone, 6);
 			gData.dEmptyPortZDownOffset = 0.0;
 			g_objCommon.Set_EmptyTrayXDown();
@@ -10685,8 +10720,7 @@ BOOL CSequenceMain::EmptyTrayX_Run()
 		} 
 		else if (g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && !g_objAJinAXL.Is_MoveDone(AX_EMPTY_PORT_Z, gData.dEmptyPortZDownOffset)) 
 		{
-			if (!m_tEmptyTrayXLoop.Waiting_Time(100)) break;
-			m_strLog.Format("Empty Picker X, 14-2");g_objLogFile.Save_MCCLog(m_strLog);
+			if (!m_tEmptyTrayXLoop.Waiting_Time(100)) break;			
 			g_objAJinAXL.Move_Absolute(AX_EMPTY_PORT_Z, gData.dEmptyPortZDownOffset, 0.5);	// Down Offset Move
 		}
 		break;
@@ -10718,16 +10752,16 @@ BOOL CSequenceMain::EmptyTrayX_Run()
 		if (g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && g_objCommon.Get_EmptyTrayXUp() && !m_pDX13->iEmptyTrans1Exist) {
 			if (m_nEmptyTrayElCase == 10) {
 				m_tEmptyTrayXLoop.Takt_End(nTaktZone, 8,0);
-				m_strLog.Format("Empty Picker X, 18");g_objLogFile.Save_MCCLog(m_strLog);
+				
 
 				if (m_pDX01->iEmptyPortTopCheck)
 				{
-					m_strLog.Format("Empty Picker X, 18-1");g_objLogFile.Save_MCCLog(m_strLog);
+					
 					m_nEmptyTrayElCase = 5;	// Slow Down
 				}
 				else
 				{
-					m_strLog.Format("Empty Picker X, 18-2");g_objLogFile.Save_MCCLog(m_strLog);
+					
 					m_nEmptyTrayElCase = 2;	// Slow Up
 				}
 
@@ -10784,22 +10818,22 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 			gData.bEmptyFull = FALSE;
 			if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 0))
 			{
-				m_strLog.Format("Empty Port Z, 1-1");g_objLogFile.Save_MCCLog(m_strLog);
+				
 				m_nEmptyTrayElCase = 20;
 			}
 			else if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 1))
 			{
-				m_strLog.Format("Empty Port Z, 1-2");g_objLogFile.Save_MCCLog(m_strLog);
+				
 				m_nEmptyTrayElCase = 21;
 			}
 			else if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.5) && !m_pDX01->iEmptyPortTopCheck && !m_pDX01->iEmptyPortExist)
 			{
-				m_strLog.Format("Empty Port Z, 1-3");g_objLogFile.Save_MCCLog(m_strLog);
+				
 				m_nEmptyTrayElCase++;
 			}
 			else 
 			{ 
-				m_strLog.Format("Empty Port Z, 1-4");g_objLogFile.Save_MCCLog(m_strLog);
+				
 				g_objCommon.Move_Position(AX_EMPTY_PORT_Z, 0);
 				m_nEmptyTrayElCase = 20;
 			}
@@ -10812,8 +10846,7 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 		dEmpty_Z = g_objAJinAXL.Get_Position(AX_EMPTY_PORT_Z);	
 		if (!m_pDX01->iEmptyPortTopCheck)
 		{
-			m_strLog.Format("Empty Port Z, 2-1");g_objLogFile.Save_MCCLog(m_strLog);
-
+			
 			if (m_dwEmptyTrayEl == 0) m_dwEmptyTrayEl = GetTickCount();
 			m_tEmptyTrayElLoop.Takt_Start(nTaktZone, 1, TRUE);
 			g_objAJinAXL.Move_Relative(AX_EMPTY_PORT_Z, 2.0, 0.25);	// 2mm씩 올려준다.
@@ -10821,14 +10854,14 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 		} 
 		else if(dEmpty_Z > gData.dEmptyPort_Z_Limit && g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z)) // if over limit ---> ready down 
 		{
-			m_strLog.Format("Empty Port Z, 2-2");g_objLogFile.Save_MCCLog(m_strLog);
+			
 			//g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			g_objCommon.Move_Position(AX_EMPTY_PORT_Z, 0);
 			m_nEmptyTrayElCase = 20; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		else if (m_pDX01->iEmptyPortTopCheck || g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.5)) 
 		{
-			m_strLog.Format("Empty Port Z, 2-3");g_objLogFile.Save_MCCLog(m_strLog);
+			
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
@@ -10837,20 +10870,20 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 		dEmpty_Z = g_objAJinAXL.Get_Position(AX_EMPTY_PORT_Z);		
 		if (m_pDX01->iEmptyPortTopCheck || g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.5))
 		{
-			m_strLog.Format("Empty Port Z, 3-1");g_objLogFile.Save_MCCLog(m_strLog);
+			
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		else if(dEmpty_Z > gData.dEmptyPort_Z_Limit && g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z)) // if over limit ---> ready down 
 		{
-			m_strLog.Format("Empty Port Z, 3-2");g_objLogFile.Save_MCCLog(m_strLog);
+			
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);
 			g_objCommon.Move_Position(AX_EMPTY_PORT_Z, 0);
 			m_nEmptyTrayElCase = 20; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		else if (!m_pDX01->iEmptyPortTopCheck && g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && !g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 2, 1.0)) 
 		{
-			m_strLog.Format("Empty Port Z, 3-3");g_objLogFile.Save_MCCLog(m_strLog);
+			
 			m_nEmptyTrayElCase = 2; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		break;
@@ -10871,16 +10904,14 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 	// 2. Slow Down
 	case 5:		// Buffer Z Slow Down
 		if (m_pDX01->iEmptyPortTopCheck)
-		{
-			m_strLog.Format("Empty Port Z, 5-1");g_objLogFile.Save_MCCLog(m_strLog);
+		{			
 			if (m_dwEmptyTrayEl == 0) m_dwEmptyTrayEl = GetTickCount();
 			m_tEmptyTrayElLoop.Takt_Start(nTaktZone, 2);
 			g_objAJinAXL.Move_Absolute(AX_EMPTY_PORT_Z, m_pMoveData->dEmptyPortZ[1], 0.25);	//Ready Position
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(10000);	// 10초
 		} 
 		else
-		{
-			m_strLog.Format("Empty Port Z, 5-2");g_objLogFile.Save_MCCLog(m_strLog);
+		{			
 			gData.bEmptyZTopCheckRepeat = FALSE;
 			m_nEmptyTrayElCase = 10; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
@@ -10899,12 +10930,12 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 
 			m_tEmptyTrayElLoop.Takt_End(nTaktZone, 2,0);
 			m_nEmptyTrayElCase = 2; m_tEmptyTrayElLoop.Set_LoopTime(5000);
-			m_strLog.Format("Empty Port Z, 7-1");g_objLogFile.Save_MCCLog(m_strLog);
+			
 		} 
 
 		else if (g_objAJinAXL.Is_Done(AX_EMPTY_PORT_Z) && m_pDX01->iEmptyPortTopCheck) 
 		{
-			m_strLog.Format("Empty Port Z, 7-2");g_objLogFile.Save_MCCLog(m_strLog);
+			
 			m_nEmptyTrayElCase = 5; m_tEmptyTrayElLoop.Set_LoopTime(5000);
 		}
 		break;
@@ -10914,29 +10945,25 @@ BOOL CSequenceMain::EmptyTrayElevator_Run()
 
 	case 20:	// Move to Ready Position
 		if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 0)) 
-		{
-			m_strLog.Format("Empty Port Z, 20");g_objLogFile.Save_MCCLog(m_strLog);
+		{			
 			g_objCommon.Move_Position(AX_EMPTY_PORT_Z, 1);
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(10000);
 		}
 		break;
 	case 21:	// Position Check
 		if (g_objCommon.Check_Position(AX_EMPTY_PORT_Z, 1)) 
-		{
-			m_strLog.Format("Empty Port Z, 21");g_objLogFile.Save_MCCLog(m_strLog);
+		{			
 			m_dwEmptyTrayEl = GetTickCount();
 			m_nEmptyTrayElCase++; m_tEmptyTrayElLoop.Set_LoopTime(10000);
 		}
 		break;
 	case 22:	// 트레이가 있어야하고 탑체크 감지 안되어 있어야한다.
 		if (!m_pDX01->iEmptyPortTopCheck && m_pDX01->iEmptyPortSlideClose) 
-		{
-			m_strLog.Format("Empty Port Z, 22-1");g_objLogFile.Save_MCCLog(m_strLog);
+		{			
 			m_nEmptyTrayElCase = 2; m_tEmptyTrayElLoop.Set_LoopTime(20000);	// 20초
 		} 
 		else if (m_pDX01->iEmptyPortTopCheck) 
-		{
-			m_strLog.Format("Empty Port Z, 22-2");g_objLogFile.Save_MCCLog(m_strLog);
+		{			
 			m_nEmptyTrayElCase = 25; m_tEmptyTrayElLoop.Set_LoopTime(10000);
 		}
 		break;
@@ -11065,12 +11092,12 @@ BOOL CSequenceMain::EmptyTrayY_Run()
 
 			if (m_pDX01->iEmptyPortTopCheck)
 			{
-				m_strLog.Format("Empty Picker Y, 5-1");g_objLogFile.Save_MCCLog(m_strLog);
+				
 				m_nEmptyTrayElCase = 5;	// Slow Down
 			}
 			else
 			{
-				m_strLog.Format("Empty Picker Y, 5-2");g_objLogFile.Save_MCCLog(m_strLog);
+				
 				m_nEmptyTrayElCase = 2;	// Slow Up
 			}
 
@@ -11087,13 +11114,11 @@ BOOL CSequenceMain::EmptyTrayY_Run()
 
 				if (dCurPos > m_pMoveData->dEmptyPortZ[2] + 0.5) 
 				{
-					m_strLog.Format("Empty Picker Y, 6-1");g_objLogFile.Save_MCCLog(m_strLog);
 					g_objCommon.Move_Position(AX_EMPTY_PORT_Z, 0);
 					m_nEmptyTrayYCase++; m_tEmptyTrayYLoop.Set_LoopTime(10000);
 				} 
 				else 
-				{
-					m_strLog.Format("Empty Picker Y, 6-2");g_objLogFile.Save_MCCLog(m_strLog);
+				{					
 					gData.dEmptyPortZUpOffset = dCurPos + m_pMoveData->dEmptyTrans2Y[2];	// 현재 위치 + Up Offset
 					if (gData.dEmptyPortZUpOffset > dLimitPos) gData.dEmptyPortZUpOffset = dLimitPos;
 					g_objAJinAXL.Move_Absolute(AX_EMPTY_PORT_Z, gData.dEmptyPortZUpOffset, 0.5);	// Offset Move
@@ -11112,8 +11137,7 @@ BOOL CSequenceMain::EmptyTrayY_Run()
 	case 10:	// Empty Tray Down
 		if (g_objAJinAXL.Is_MoveDone(AX_EMPTY_PORT_Z, gData.dEmptyPortZUpOffset) && g_objCommon.Check_Position(AX_EMPTY_TRANS2_Y, 1)) 
 		{
-			m_tEmptyTrayYLoop.Takt_Start(nTaktZone, 2);
-			m_strLog.Format("Empty Picker Y, 10-1-1");g_objLogFile.Save_MCCLog(m_strLog);
+			m_tEmptyTrayYLoop.Takt_Start(nTaktZone, 2);			
 			gData.dEmptyPortZUpOffset = 0.0;
 			g_objCommon.Set_EmptyTrayYDown();
 			m_nEmptyTrayYCase++; m_tEmptyTrayYLoop.Set_LoopTime(5000);
@@ -11129,12 +11153,12 @@ BOOL CSequenceMain::EmptyTrayY_Run()
 			{
 				if (m_pDX01->iEmptyPortTopCheck)
 				{
-					m_strLog.Format("Empty Picker Y, 10-2-1");g_objLogFile.Save_MCCLog(m_strLog);
+					
 					m_nEmptyTrayElCase = 5;	// Slow Down
 				}
 				else
 				{
-					m_strLog.Format("Empty Picker Y, 10-2-2");g_objLogFile.Save_MCCLog(m_strLog);
+					
 					m_nEmptyTrayElCase = 2;	// Slow Up
 				}
 
@@ -11174,12 +11198,11 @@ BOOL CSequenceMain::EmptyTrayY_Run()
 
 				if (m_pDX01->iEmptyPortTopCheck)
 				{
-					m_strLog.Format("Empty Picker Y, 14-1");g_objLogFile.Save_MCCLog(m_strLog);
+					
 					m_nEmptyTrayElCase = 5;	// Slow Down
 				}
 				else
-				{
-					m_strLog.Format("Empty Picker Y, 14-2");g_objLogFile.Save_MCCLog(m_strLog);
+				{					
 					m_nEmptyTrayElCase = 2;	// Slow Up
 				}
 				m_nEmptyTrayYCase++; m_tEmptyTrayYLoop.Set_LoopTime(15000);
@@ -11258,7 +11281,7 @@ BOOL CSequenceMain::EmptyTrayY_Run()
 	case 25:
 		if (!m_pDX13->iEmptyTrans2Exist && g_objCommon.Get_EmptyTrayYUp()) {
 			m_tEmptyTrayYLoop.Takt_End(nTaktZone, 8);
-			m_strLog.Format("Empty Trans Y, %d", GetTickCount() - m_dwEmptyTrayY);
+		
 			g_objLogFile.Save_TestLog(m_strLog);
 			m_nEmptyTrayYCase = 1; m_tEmptyTrayYLoop.Set_LoopTime(5000);
 		}

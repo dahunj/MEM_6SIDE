@@ -1244,72 +1244,6 @@ void CLogFile::Save_AverageCycle(int nPNo)
 	}
 }
 
-void CLogFile::VisionTakt_Start(int nVision)
-{
-	if (nVision == BTM1)		gData.dwBtm1ScanTime = GetTickCount();
-	else if (nVision == TOP1)	gData.dwTop1ScanTime = GetTickCount();
-	else if (nVision == TOP2)	gData.dwTop2ScanTime = GetTickCount();
-	else if (nVision == BTM2)	gData.dwBtm2ScanTime = GetTickCount();
-}
-
-void CLogFile::VisionTakt_Save(int nFun, int nId, int nVision)
-{
-	int nFunNo = nFun + 1;	// Auto 시퀀스 넘버와 MCC 시퀀스 번호가 1차이 난다.
-	CString strFun, strLog, strMsg;
-	switch (nFunNo) {
-	case 6:		// Btm1Picker
-		strFun = "Btm1Picker";
-		switch (nId) {
-		case 21: strMsg = "Bottom1 Vision Stiffener Scan Complete"; break;
-		case 22: strMsg = "Bottom1 Vision Connector Stiffener Scan Complete"; break;
-		}
-		break;
-	case 7:		// Inspection1
-		strFun = "Inspection1";
-		switch (nId) {
-		case  21: strMsg = "Top1 Module Position Inspection Complete"; break;
-		case  22: strMsg = "Top1 Scan Complete"; break;
-		case  23: strMsg = "Top2 FPCB Scan Complete"; break;
-		case  24: strMsg = "Top2 Lens/Barrel/Sidefill Scan Complete"; break;
-		}
-		break;
-	case 8:		// Inspection2
-		strFun = "Inspection2";
-		switch (nId) {
-		case  21: strMsg = "Top1 Module Position Inspection Complete"; break;
-		case  22: strMsg = "Top1 Scan Complete"; break;
-		case  23: strMsg = "Top2 FPCB Scan Complete"; break;
-		case  24: strMsg = "Top2 Lens/Barrel/Sidefill Scan Complete"; break;
-		}
-		break;
-	case 9:		// Inspection3
-		strFun = "Inspection3";
-		switch (nId) {
-		case  21: strMsg = "Top1 Module Position Inspection Complete"; break;
-		case  22: strMsg = "Top1 Scan Complete"; break;
-		case  23: strMsg = "Top2 FPCB Scan Complete"; break;
-		case  24: strMsg = "Top2 Lens/Barrel/Sidefill Scan Complete"; break;
-		}
-		break;
-	case 10:	// Btm2Picker
-		strFun = "Btm2Picker";
-		switch (nId) {
-		case 21: strMsg = "Bottom2 Vision Scan Complete"; break;
-		}
-		break;
-	default:
-		break;
-	}
-
-	double dTime = 0.0;
-	if (nVision == BTM1) dTime = (GetTickCount() - gData.dwBtm1ScanTime) / 1000.0;
-	if (nVision == TOP1) dTime = (GetTickCount() - gData.dwTop1ScanTime) / 1000.0;
-	if (nVision == TOP2) dTime = (GetTickCount() - gData.dwTop2ScanTime) / 1000.0;
-	if (nVision == BTM2) dTime = (GetTickCount() - gData.dwBtm2ScanTime) / 1000.0;
-
-	strLog.Format("MCC,(%02d) %s,(%02d) %s,%0.3lf", nFunNo, strFun, nId, strMsg, dTime);
-	g_objLogFile.Save_HandlerLog(strLog);
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Log 표준화 230202
@@ -1392,47 +1326,6 @@ void CLogFile::Save_EfficiencyLog(int nZone, CString sStatus, int nCode, CString
 }
 
 
-
-void CLogFile::Save_MCCLog(CString sLog, int nPNo)
-{
-	g_csMCCLog.Lock();
-
-	CString strPath = gData.sLogPath + "\\MCC";
-	CString strPath2 = "D:\\EVMS\\TP\\Log";
-
-	Create_Folder(strPath);
-	//Create_Folder(strPath2);
-
-
-	SYSTEMTIME time;
-	GetLocalTime(&time);
-
-	
-
-	CString strFile, strFile2, strSave;
-	strFile.Format("%s\\%s_%04d%02d%02d%02d_MCC.txt", strPath, gData.sLotID[nPNo], time.wYear, time.wMonth, time.wDay, time.wHour);
-	//strFile2.Format("%s\\%s_%04d%02d%02d%02d_MCC.csv", strPath2, gData.sLotID[nPNo], time.wYear, time.wMonth, time.wDay, time.wHour);
-
-
-	CFile file;
-	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
-		try {
-			file.SeekToEnd();
-
-			strSave.Format("[%02d:%02d:%02d.%03d], %s\r\n", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds, sLog);
-
-			file.Write(strSave, strSave.GetLength());
-			file.Close();
-
-		} catch (CFileException *pEx) {
-			pEx->Delete();
-		}
-	}
-	//CopyFile(strFile, strFile2, FALSE);
-
-	g_csMCCLog.Unlock();
-
-}
 
 
 
@@ -1891,7 +1784,8 @@ void CLogFile::Get_ZoneMsg(int nZone, int nCase, CString &sZone, CString &sMsg)
 		case 31: sMsg = "Safety Check, Stage Down"; break;
 		case 32: sMsg = "Stage Down Check and Wait Start[S]"; break;
 		case 51: sMsg = "Move to Load Position"; break;
-		case 71: sMsg = "Stage Up"; break;
+		case 52: sMsg = "Front Stage Top1 Move Done(Interlock)"; break;
+		case 71: sMsg = "Stage Up Done"; break;
 
 		}
 		break;
@@ -1924,6 +1818,7 @@ void CLogFile::Get_ZoneMsg(int nZone, int nCase, CString &sZone, CString &sMsg)
 		case 31: sMsg = "Safety Check, Stage Down"; break;
 		case 32: sMsg = "Stage Down Check and Wait Start[S]"; break;
 		case 51: sMsg = "Move to Load Position"; break;
+		case 52: sMsg = "Front Stage Top1 Move Done(Interlock)"; break;
 		case 71: sMsg = "Stage Up"; break;
 		}
 		break;
@@ -1956,6 +1851,7 @@ void CLogFile::Get_ZoneMsg(int nZone, int nCase, CString &sZone, CString &sMsg)
 		case 31: sMsg = "Safety Check, Stage Down"; break;
 		case 32: sMsg = "Stage Down Check and Wait Start[S]"; break;
 		case 51: sMsg = "Move to Load Position"; break;
+		case 52: sMsg = "Front Stage Top1 Move Done(Interlock)"; break;
 		case 71: sMsg = "Stage Up"; break;
 		}
 		break;

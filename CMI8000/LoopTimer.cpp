@@ -66,8 +66,7 @@ void CLoopTimer::Takt_Start(int nZone, int nCase, BOOL bFirst)
 	CString strZone, strMsg;
 
 	g_objLogFile.Get_ZoneMsg(nZone, nCase, strZone, strMsg);
-
-
+	
 
 	//if (bFirst) g_objLogFile.Save_StdMotionLog("Y", nZone, nCase, 1, strZone, strMsg);
 	g_objLogFile.Save_StdMotionLog("X", nZone, nCase, 1, strZone, strMsg);
