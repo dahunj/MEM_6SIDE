@@ -4188,6 +4188,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			g_objAJinAXL.Move_Absolute(AX_BTM1_PICKER_X, dB1ScanpX);
 
 			m_tBtm1PickLoop.Takt_Start(nTaktZone, 36);
+			m_tBtm1PickLoop.Takt_End(nTaktZone, 36, "3D Scan Start Position Move");
 			
 			m_nBtm1PickCase = 41; m_tBtm1PickLoop.Set_LoopTime(5000);	
 		}
@@ -4202,6 +4203,9 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			g_objCommon.Move_Position(AX_BTM1_PICKER_Z, 5);	// Btm1 Ready Up
 			dB1ScanpX = m_pMoveData->dBtm1PickerX[6]; //3D Scan Ready position (Start position)
 			g_objAJinAXL.Move_Absolute(AX_BTM1_PICKER_X, dB1ScanpX);
+
+			m_tBtm1PickLoop.Takt_Start(nTaktZone, 40);
+			m_tBtm1PickLoop.Takt_End(nTaktZone, 40, "3D Scan Start Position Move");
 			m_nBtm1PickCase = 41; m_tBtm1PickLoop.Set_LoopTime(5000);
 		}
 		break;
@@ -4214,10 +4218,6 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			int nBtmX = 4 * nB1pRow;
 			g_objLogFile.Save_PositionLog(gData.nPNoBtm1Pick, gData.nTNoBtm1Pick[nBtmX], -1, AX_BTM1_PICKER_Z, BTM1_PICKER_Z_BTM13D);
 						
-			m_tBtm1PickLoop.Takt_End(nTaktZone, 36, "3D Scan Start Position Move Done");
-
-			
-			
 			//Load Complete 			
 			if (m_pEquipData->bUseInspectBtm13D) 
 			{				
@@ -4254,7 +4254,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			  g_objCommon.Check_Position(AX_BTM1_PICKER_P1, 0) && g_objCommon.Check_Position(AX_BTM1_PICKER_P2, 0)) 
 		{
 				  
-			m_tBtm1PickLoop.Takt_Start(nTaktZone, 45);
+			
 			//Start Trigger with Setting Speed
 			dB1ScanpX = m_pMoveData->dBtm1PickerX[7];
 			if(m_pEquipData->bUsePMTrigger){
@@ -4266,7 +4266,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 						
 
 			m_tBtm1PickLoop.Takt_Start(nTaktZone, 45);
-		
+			m_tBtm1PickLoop.Takt_End(nTaktZone, 45, "Btm1 X 3D Scan Move Done");
 			m_nBtm1PickCase = 47; 
 			m_tBtm1PickLoop.Set_LoopTime(15000);
 		}
@@ -4289,13 +4289,15 @@ BOOL CSequenceMain::Btm1Picker_Run()
 				m_nBtm1PickCase = 41;
 				break;
 			}
-			m_tBtm1PickLoop.Takt_End(nTaktZone, 45, "Btm1 X 3D Scan Move Done");
-			m_tBtm1PickLoop.Takt_Start(nTaktZone, 47);
+			
+			
 			
 			
 			g_objCommon.Move_Position(AX_BTM1_PICKER_P1, 1);	// Inspection Position
 			g_objCommon.Move_Position(AX_BTM1_PICKER_P2, 1);	// Inspection Position
 			g_objCommon.Move_Position(AX_BTM1_PICKER_X, 5);
+
+			m_tBtm1PickLoop.Takt_Start(nTaktZone, 47);
 			m_nBtm1PickCase = 21; m_tBtm1PickLoop.Set_LoopTime(5000);
 		}
 		break;
@@ -4311,7 +4313,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 				nErrRetry = 0;	//Retry Clear
 
 				m_tBtm1PickLoop.Takt_End(nTaktZone, 47, "Btm1 X&P1&P2 Move Done to Inspect Position");
-				m_tBtm1PickLoop.Takt_Start(nTaktZone, 22);
+				m_tBtm1PickLoop.Takt_Start(nTaktZone, 21);
 				m_nBtm1PickCase = 22; m_tBtm1PickLoop.Set_LoopTime(5000);
 			} 
 			else {
