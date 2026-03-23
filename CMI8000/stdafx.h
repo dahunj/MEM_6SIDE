@@ -315,9 +315,10 @@ typedef struct {
 	BOOL	bSortPickCompletelyLotEnd;
 
 	BOOL	bPullForce;
+	BOOL	bPullForceEnd;
 
-	int		nTrayCntNG[4]; // 0  1
-						   // 2  3
+	int		nTrayCntNG[2][4];			//port 1,2 ±¸ºÐ		// 0  1
+															// 2  3
  	
 } GLOVAL_DATA;
 
@@ -431,11 +432,13 @@ extern GLOVAL_ALM	gAlm;
 extern GLOVAL_UPH	gUph;
 extern GLOVAL_MES	gMes;
 
+enum PORTNO
+{
+	PORT1 = 0,
+	PORT2 = 1,
+};
 
-const int PORT1 = 0;
-const int PORT2 = 1;
-
-const int Btm1PickerZ_Ready = 0;
+#define BTM1_PICKER_Z_Ready 0
 #define BTM1_PICKER_Z_TrayDown 1
 #define BTM1_PICKER_Z_BTM1SPDown 2
 #define	BTM1_PICKER_Z_Inspect 3

@@ -131,6 +131,7 @@ void CLogFile::Save_HandlerLog(CString sLog)
 	CString strFile, strSave;
 	strFile.Format("%s\\%04d%02d%02d_Handler.txt", strPath, time.wYear, time.wMonth, time.wDay);
 
+	
 	CFile file;
 	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
 		try {
@@ -232,7 +233,7 @@ void CLogFile::Save_JobListLog(CString sLog, BOOL bMode)
 	//Run Time : EndTime - Start Time - Stop Time :  비가동 시간이 제외 되기 때문에 (Start to End 보다는 시간이 짧음)
 	//
 	
-	sTitle.Format("Time,lotNum,Start_Time,End_Time,Run_Time,Unload_Time,Tact(S-E),Tact(RunTime),Tact(Unload_Time),Alarm_Count,Stop_Time,Efficiency(RunTime), Efficiency(Unload),Tray_Count,CM_Count,Good_Count,NG_Count,NG1_Count,NG2_Count,NG3_Count,NG4_Count,MESNG_Count\r\n");
+	sTitle.Format("Time,LotNum,Start_Time,End_Time,Run_Time,Unload_Time,Tact(S-E),Tact(RunTime),Tact(Unload_Time),UPH(S-E),UPH(RunTime),UPH(Unload_Time),Alarm_Count,Stop_Time,Efficiency(RunTime), Efficiency(Unload),Tray_Count,CM_Count,Good_Count,NG_Count,NG1_Count,NG2_Count,NG3_Count,NG4_Count,MESNG_Count\r\n");
 	strFile.Format("%s\\%04d%02d%02d_JobList.txt", strPath, time.wYear, time.wMonth, time.wDay);
 
 	CFile file;
@@ -266,7 +267,7 @@ void CLogFile::Save_LotResult(int nPNo, CString sLog)
 	Create_Folder(strPath1);
 	Create_Folder(strPath2);
 
-	CTime tNow = CTime::GetCurrentTime();
+	/*CTime tNow = CTime::GetCurrentTime();
 	CTime tLog = tNow - CTimeSpan(7 * 60 * 60);
 
 	strPath3.Format("%s\\SPC\\%04d\\%02d\\%02d", gData.sLogPath, tLog.GetYear(), tLog.GetMonth(), tLog.GetDay());
@@ -280,26 +281,26 @@ void CLogFile::Save_LotResult(int nPNo, CString sLog)
 	CFile file;
 	if (!file.Open(strFile1, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
 
-	strTitle.Format("날짜,Lot Start,Lot End,Term,호기,Lot ID,투입수,양품수,불량수,불량률,1차외관(N1),2차외관(N2),MES(M)\r\n");
+	strTitle.Format("Lot Start,Lot End,Term,호기,투입수,양품수,불량수,불량률,1차외관(N1),2차외관(N2),MES(M)\r\n");
+*/
+	//try {
+	//	file.SeekToEnd();
 
-	try {
-		file.SeekToEnd();
+	//	if (file.GetLength() < 1) file.Write(strTitle, strTitle.GetLength());
 
-		if (file.GetLength() < 1) file.Write(strTitle, strTitle.GetLength());
+	//	strDate.Format("%02d/%02d", tNow.GetMonth(), tNow.GetDay());
+	//	strSave.Format("%s\r\n", sLog);
 
-		strDate.Format("%02d/%02d", tNow.GetMonth(), tNow.GetDay());
+	//	file.Write(strSave, strSave.GetLength());
+	//	file.Close();
 
-		strSave.Format("%s,%s\r\n", strDate, sLog);
+	//	//CopyFile(strFile1, strFile2, FALSE);	// Backup
+	//	//CopyFile(strFile1, strFile3, FALSE);	// SPC
 
-		file.Write(strSave, strSave.GetLength());
-		file.Close();
-
-		//CopyFile(strFile1, strFile2, FALSE);	// Backup
-		CopyFile(strFile1, strFile3, FALSE);	// SPC
-
-	} catch (CFileException *pEx) {
-		pEx->Delete();
-	}
+	//} catch (CFileException *pEx) {
+	//	pEx->Delete();
+	//}
+	g_objLogFile.Save_ECMLog(5,sLog);
 }
 
 void CLogFile::Save_MesAgentLog(CString sLog)
@@ -413,14 +414,14 @@ void CLogFile::Save_PCLog(int nPNo, CString sLog)
 	CFile file;
 	if (!file.Open(strFile1, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
 
-	strTitle.Format("Time,Station,LotID,ModuleConfig,CPU,RAM,HardDisk\r\n");
+	strTitle.Format("Time,Station,LotNum,ModuleConfig,CPU,RAM,HardDisk,Barcode\r\n");
 	
 	try {
 		file.SeekToEnd();
 
 		if (file.GetLength() < 1) file.Write(strTitle, strTitle.GetLength());
 
-		strTime.Format("%04d-%02d-%02d %02d:%02d:%02d:%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+		strTime.Format("'%04d-%02d-%02d %02d:%02d:%02d.%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 
 		char szPcName[MAX_COMPUTERNAME_LENGTH + 1];
 		DWORD dwNameSize = MAX_COMPUTERNAME_LENGTH + 1;
@@ -463,14 +464,14 @@ void CLogFile::Save_LotTime(int nPNo, CString sLog)
 	CFile file;
 	if (!file.Open(strFile1, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
 		
-	strTitle.Format("Time,Station,Machine,Version,LotID,TrayNo,CmNo,Barcode,Picker Number,AG,B1SP,T1,T2,B2,B1AG,B13D,CODE,Result\r\n");
+	strTitle.Format("Time,Station,Machine,Version,LotNum,TrayNo,CmNo,Barcode,Picker Number,AG,B1SP,T1,T2,B2,B1AG,B13D,CODE,Result\r\n");
 
 	try {
 		file.SeekToEnd();
 
 		if (file.GetLength() < 1) file.Write(strTitle, strTitle.GetLength());
 
-		strTime.Format("%04d-%02d-%02d %02d:%02d:%02d:%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+		strTime.Format("'%04d-%02d-%02d %02d:%02d:%02d.%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 
 		char szPcName[MAX_COMPUTERNAME_LENGTH + 1];
 		DWORD dwNameSize = MAX_COMPUTERNAME_LENGTH + 1;
@@ -511,6 +512,8 @@ void CLogFile::Save_LotError(CString sLog, int nPNo)
 		if (nNo < 0) nNo = 0;
 	}
 
+	//if( gData.sLotID[nNo] == "" ||  gData.sLotID[nNo] == "LOT_ID") return;
+
 	CString strFile1, strFile2, strFile3, strTitle, strDateTime, strPcName, strSave;
 	strFile1.Format("%s\\%s_%04d%02d%02d%02d_AVIError.csv", strPath1, gData.sLotID[nNo], time.wYear, time.wMonth, time.wDay, time.wHour);
 	strFile2.Format("%s\\%s_%04d%02d%02d%02d_AVIError.csv", strPath2, gData.sLotID[nNo], time.wYear, time.wMonth, time.wDay, time.wHour);
@@ -519,14 +522,14 @@ void CLogFile::Save_LotError(CString sLog, int nPNo)
 	CFile file;
 	if (!file.Open(strFile1, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
 
-	strTitle.Format("Time,Station,Model,Version,LotNum,Event,Error Code,event,ActionTime\r\n");
+	strTitle.Format("Time,Station,Model,Version,LotNum,Event,Error Code,event,ActionTime,Barcode\r\n");
 
 	try {
 		file.SeekToEnd();
 
 		if (file.GetLength() < 1) file.Write(strTitle, strTitle.GetLength());
 
-		strDateTime.Format("%04d-%02d-%02d %02d:%02d:%02d:%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+		strDateTime.Format("'%04d-%02d-%02d %02d:%02d:%02d.%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 
 		char szPcName[MAX_COMPUTERNAME_LENGTH + 1];
 		DWORD dwNameSize = MAX_COMPUTERNAME_LENGTH + 1;
@@ -545,7 +548,9 @@ void CLogFile::Save_LotError(CString sLog, int nPNo)
 	}
 }
 
-void CLogFile::Save_ECMLog(int nType, CString strLog)	//nType:1[Alarm], 2[Joblist] 3[Inspect]
+//nType:1[Alarm], 2[Joblist] 3[Inspect] 4[Handler] 5[Lot_Result]
+
+void CLogFile::Save_ECMLog(int nType, CString strLog)	
 {
 	g_csECMLog.Lock();
 
@@ -557,38 +562,47 @@ void CLogFile::Save_ECMLog(int nType, CString strLog)	//nType:1[Alarm], 2[Joblis
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
-	strTime.Format("%04d-%02d-%02d %02d:%02d:%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+	strTime.Format("'%04d-%02d-%02d %02d:%02d:%02d.%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 
 	int nNo = gData.nULPNo-1;
 	if (nNo < 0) nNo = gData.nLPNo-1;
 	if (nNo < 0) nNo = 0;
 
-	if (nType == 1) sTitle.Format("Time,Station,Type,lotNum,Error Code,Error,Start_Time,End_Time,Lead_Time\r\n");
-	if (nType == 2) sTitle.Format("Time,Station,Type,lotNum,Start_Time,End_Time,Run_Time,Unload_Time,Tact(S-E),Tact(RunTime),Tact(Unload_Time),Alarm_Count,Stop_Time,Efficiency(RunTime), Efficiency(Unload),Tray_Count,CM_Count,Good_Count,NG_Count,N1_Count,N2_Count,N3_Count,N4_Count,MESNG_Count\r\n");
-	if (nType == 3) sTitle.Format("Time,Station,Type,lotNum,Load_Pick,Inspect,Barcode,NG_Pick,Good_Pick,Trans_Pick\r\n");
-	if (nType == 4) sTitle.Format("Time,Station,Type\r\n");
+	if (nType == 1) sTitle.Format("Time,Station,Type,LotNum,Error Code,Error,Start_Time,End_Time,Lead_Time,Barcode\r\n");
+	if (nType == 2) sTitle.Format("Time,Station,Type,LotNum,Start_Time,End_Time,Run_Time,Unload_Time,Tact(S-E),Tact(RunTime),Tact(Unload_Time),UPH(S-E),UPH(RunTime),UPH(Unload_Time),Alarm_Count,Stop_Time,Efficiency(RunTime), Efficiency(Unload),Tray_Count,CM_Count,Good_Count,NG_Count,N1_Count,N2_Count,N3_Count,N4_Count,MESNG_Count,Barcode\r\n");
+	if (nType == 3) sTitle.Format("Time,Station,Type,LotNum,Load_Pick,Inspect,Barcode,NG_Pick,Good_Pick,Trans_Pick\r\n");
+	if (nType == 4) sTitle.Format("Time,Station,Type,LotNum,Barcode\r\n");
+	if (nType == 5) sTitle.Format("Time,Station,Type,Lot Start,Lot End,Term,호기,투입수,양품수,불량수,불량률,1차외관(N1),2차외관(N2),MES(M),Barcode\r\n");
 	
 
 	if (nType == 1) strFile.Format("%s%s_%04d%02d%02d%02d_Alarm.csv", strPath, gAlm.sLotID, time.wYear, time.wMonth, time.wDay, time.wHour);
 	if (nType == 2) strFile.Format("%s%s_%04d%02d%02d%02d_JobList.csv", strPath, gLot.sLotID[nNo], time.wYear, time.wMonth, time.wDay, time.wHour);
 	if (nType == 3) strFile.Format("%s%s_%04d%02d%02d%02d_Inspector.csv", strPath, gLot.sLotID[nNo], time.wYear, time.wMonth, time.wDay, time.wHour);
 	if (nType == 4) strFile.Format("%s%s_%04d%02d%02d%02d_Handler.csv", strPath, gLot.sLotID[nNo], time.wYear, time.wMonth, time.wDay, time.wHour);
+	if (nType == 5) strFile.Format("%s%s_%04d%02d%02d%02d_LotResult.csv", strPath, gLot.sLotID[nNo], time.wYear, time.wMonth, time.wDay, time.wHour);
 
+	//if( gData.sLotID[nNo] == "" ||  gData.sLotID[nNo] == "LOT_ID") return;
 
 	CFile file;
 	if (!file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
 
-	try {
+	try 
+	{
 		file.SeekToEnd();
 
 		if (file.GetLength() < 1) file.Write(sTitle, sTitle.GetLength());
 
-		strSave.Format("%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe, strLog);
-
+		if(nType == 4) strSave.Format("%s,%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe, gData.sLotID[nNo], strLog, "");
+		else
+		{
+			strSave.Format("%s,%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe, strLog, "");
+		}
 		file.Write(strSave, strSave.GetLength());
 		file.Close();
 
-	} catch (CFileException *pEx) {
+	}
+	catch (CFileException *pEx)
+	{
 		pEx->Delete();
 	}
 
@@ -762,10 +776,13 @@ void CLogFile::Save_ECMOutTray(CString sLog, int nTrayCount, int nPosX, int nPos
 	int nCx = nCmNo - 1;
 	if (nPx < 0 || nPx > 1 || nTx < 0 || nTx > 29 || nCx < 0 || nCx > 39) return;
 
+	CString strPath, strFile, strTitle, strSave, strJudge, strTime;
+
 	SYSTEMTIME time;
 	GetLocalTime(&time);
+	strTime.Format("'%04d-%02d-%02d %02d:%02d:%02d.%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 
-	CString strPath, strFile, strTitle, strSave, strJudge;
+	
 	strPath = "D:\\EVMS\\TP\\Log";
 	Create_Folder(strPath);
 
@@ -777,8 +794,9 @@ void CLogFile::Save_ECMOutTray(CString sLog, int nTrayCount, int nPosX, int nPos
 	//검사결과 (0:Empty, 1:Good, 2:Normal, 4:N1, 5:N2, 6:N3, 7:BS, 8:N4)
 	int nJudge = gData.nInspectInfo[nPx][nTx][nCx];
 	strJudge = (nJudge == 1 ? "G" : (nJudge == 2 ? "N" : (nJudge == 4 ? "N1" : (nJudge == 5 ? "N2" : (nJudge == 6 ? "N3" : (nJudge == 7 ? "B" : (nJudge == 8 ? "N4" : " ")))))));
-	strSave.Format("%d,%d,%s,%d,%d,%s\r\n", nTrayCount, nPos, gMes.sBarID[nPx][nTx][nCx], nTrayNo, nCmNo, strJudge);
-	strTitle.Format("Count,Position,Barcode,LoadTray,LoadPos,Judge\r\n");
+	
+	strSave.Format("%s,%s,%s,%d,%d,%s,%d,%d,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe,nTrayCount, nPos, gMes.sBarID[nPx][nTx][nCx], nTrayNo, nCmNo, strJudge,"");
+	strTitle.Format("Time,Station,Type,LotNum,Count,Position,Barcode,LoadTray,LoadPos,Judge,Barcode\r\n");
 
 	CFile file;
 	if (!file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
@@ -794,6 +812,7 @@ void CLogFile::Save_ECMOutTray(CString sLog, int nTrayCount, int nPosX, int nPos
 	} catch (CFileException *pEx) {
 		pEx->Delete();
 	}
+	
 }
 
 void CLogFile::Save_CmTrackingLog(CString strOut, int nTrayCount, int nPosX, int nPosY, int nPortNo, int nTrayNo, int nCmNo)
@@ -841,17 +860,17 @@ void CLogFile::Save_CmTrackingLog(CString strOut, int nTrayCount, int nPosX, int
 		nSortPickJig	= gData.nCmJigNo[nPx][nTx][nCx][SORT_JIG_NO];
 
 		if (strOut == "GOOD") {
-			strSave.Format("%04d-%02d-%02d %02d:%02d:%02d,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", 
+			strSave.Format("'%04d-%02d-%02d %02d:%02d:%02d.%03d,%s,%s,%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", 
 				time.wYear, time.wMonth, time.wDay,
-				time.wHour, time.wMinute, time.wSecond, gMes.sBarID[nPx][nTx][nCx], strJudge, nPortNo, nTrayNo, nCmNo, 
+				time.wHour, time.wMinute, time.wSecond,time.wMilliseconds,gData.sComName, gData.sRecipe,gLot.sLotID[nPortNo-1], gMes.sBarID[nPx][nTx][nCx], strJudge, nPortNo, nTrayNo, nCmNo, 
 				nAStageNo, nBtm1Pick, nIStageNo, nIStageJig, Btm2Pick, nBStageNo, nBStagePocket, nSortPickNo, nSortPickJig,
 				0, 0, 0, nTrayCount, nPosY+1, nPosX+1);
 		} else {
-			strSave.Format("%04d-%02d-%02d %02d:%02d:%02d,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", 
+			strSave.Format("'%04d-%02d-%02d %02d:%02d:%02d.%03d,%s,%s,%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", 
 				time.wYear, time.wMonth, time.wDay,
-				time.wHour, time.wMinute, time.wSecond, gMes.sBarID[nPx][nTx][nCx], strJudge, nPortNo, nTrayNo, nCmNo, 
+				time.wHour, time.wMinute, time.wSecond,time.wMilliseconds, gData.sComName, gData.sRecipe,gLot.sLotID[nPortNo-1], gMes.sBarID[nPx][nTx][nCx], strJudge, nPortNo, nTrayNo, nCmNo, 
 				nAStageNo, nBtm1Pick, nIStageNo, nIStageJig, Btm2Pick, nBStageNo, nBStagePocket, nSortPickNo, nSortPickJig,
-				nTrayCount+1, nPosY+1, nPosX+1, 0, 0, 0);
+				nTrayCount, nPosY+1, nPosX+1, 0, 0, 0);
 		}
 		file.Write(strSave, strSave.GetLength());
 		file.Close();
@@ -883,7 +902,7 @@ void CLogFile::Save_ECMTracking(CString sLog, int nTrayCount, int nPosX, int nPo
 
 	int nPos = nPosY * gData.nTrayX + nPosX + 1; 
 
-	strTitle.Format("Time,Barcode,Judge,Port No,Tray No,CM No,Angle Stage,BTM1 Picker,Insp Stage,Insp Jig,BTM2 Picker,Buffer Stage,Buffer Pocket,Sort Picker,Sort Picker Jig,NG Tray,NG Y,NG X,Good Tray,Good Y,Good X\r\n");
+	strTitle.Format("Time,Station,Type,LotNum,Barcode,Judge,Port No,Tray No,CM No,Angle Stage,BTM1 Picker,Insp Stage,Insp Jig,BTM2 Picker,Buffer Stage,Buffer Pocket,Sort Picker,Sort Picker Jig,NG Tray,NG Y,NG X,Good Tray,Good Y,Good X\r\n");
 
 	CFile file;
 	if (!file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
@@ -1223,72 +1242,6 @@ void CLogFile::Save_AverageCycle(int nPNo)
 	}
 }
 
-void CLogFile::VisionTakt_Start(int nVision)
-{
-	if (nVision == BTM1)		gData.dwBtm1ScanTime = GetTickCount();
-	else if (nVision == TOP1)	gData.dwTop1ScanTime = GetTickCount();
-	else if (nVision == TOP2)	gData.dwTop2ScanTime = GetTickCount();
-	else if (nVision == BTM2)	gData.dwBtm2ScanTime = GetTickCount();
-}
-
-void CLogFile::VisionTakt_Save(int nFun, int nId, int nVision)
-{
-	int nFunNo = nFun + 1;	// Auto 시퀀스 넘버와 MCC 시퀀스 번호가 1차이 난다.
-	CString strFun, strLog, strMsg;
-	switch (nFunNo) {
-	case 6:		// Btm1Picker
-		strFun = "Btm1Picker";
-		switch (nId) {
-		case 21: strMsg = "Bottom1 Vision Stiffener Scan Complete"; break;
-		case 22: strMsg = "Bottom1 Vision Connector Stiffener Scan Complete"; break;
-		}
-		break;
-	case 7:		// Inspection1
-		strFun = "Inspection1";
-		switch (nId) {
-		case  21: strMsg = "Top1 Module Position Inspection Complete"; break;
-		case  22: strMsg = "Top1 Scan Complete"; break;
-		case  23: strMsg = "Top2 FPCB Scan Complete"; break;
-		case  24: strMsg = "Top2 Lens/Barrel/Sidefill Scan Complete"; break;
-		}
-		break;
-	case 8:		// Inspection2
-		strFun = "Inspection2";
-		switch (nId) {
-		case  21: strMsg = "Top1 Module Position Inspection Complete"; break;
-		case  22: strMsg = "Top1 Scan Complete"; break;
-		case  23: strMsg = "Top2 FPCB Scan Complete"; break;
-		case  24: strMsg = "Top2 Lens/Barrel/Sidefill Scan Complete"; break;
-		}
-		break;
-	case 9:		// Inspection3
-		strFun = "Inspection3";
-		switch (nId) {
-		case  21: strMsg = "Top1 Module Position Inspection Complete"; break;
-		case  22: strMsg = "Top1 Scan Complete"; break;
-		case  23: strMsg = "Top2 FPCB Scan Complete"; break;
-		case  24: strMsg = "Top2 Lens/Barrel/Sidefill Scan Complete"; break;
-		}
-		break;
-	case 10:	// Btm2Picker
-		strFun = "Btm2Picker";
-		switch (nId) {
-		case 21: strMsg = "Bottom2 Vision Scan Complete"; break;
-		}
-		break;
-	default:
-		break;
-	}
-
-	double dTime = 0.0;
-	if (nVision == BTM1) dTime = (GetTickCount() - gData.dwBtm1ScanTime) / 1000.0;
-	if (nVision == TOP1) dTime = (GetTickCount() - gData.dwTop1ScanTime) / 1000.0;
-	if (nVision == TOP2) dTime = (GetTickCount() - gData.dwTop2ScanTime) / 1000.0;
-	if (nVision == BTM2) dTime = (GetTickCount() - gData.dwBtm2ScanTime) / 1000.0;
-
-	strLog.Format("MCC,(%02d) %s,(%02d) %s,%0.3lf", nFunNo, strFun, nId, strMsg, dTime);
-	g_objLogFile.Save_HandlerLog(strLog);
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Log 표준화 230202
@@ -1371,47 +1324,6 @@ void CLogFile::Save_EfficiencyLog(int nZone, CString sStatus, int nCode, CString
 }
 
 
-
-void CLogFile::Save_MCCLog(CString sLog, int nPNo)
-{
-	g_csMCCLog.Lock();
-
-	CString strPath = gData.sLogPath + "\\MCC";
-	CString strPath2 = "D:\\EVMS\\TP\\Log";
-
-	Create_Folder(strPath);
-	//Create_Folder(strPath2);
-
-
-	SYSTEMTIME time;
-	GetLocalTime(&time);
-
-	
-
-	CString strFile, strFile2, strSave;
-	strFile.Format("%s\\%s_%04d%02d%02d%02d_MCC.txt", strPath, gData.sLotID[nPNo], time.wYear, time.wMonth, time.wDay, time.wHour);
-	//strFile2.Format("%s\\%s_%04d%02d%02d%02d_MCC.csv", strPath2, gData.sLotID[nPNo], time.wYear, time.wMonth, time.wDay, time.wHour);
-
-
-	CFile file;
-	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
-		try {
-			file.SeekToEnd();
-
-			strSave.Format("[%02d:%02d:%02d.%03d], %s\r\n", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds, sLog);
-
-			file.Write(strSave, strSave.GetLength());
-			file.Close();
-
-		} catch (CFileException *pEx) {
-			pEx->Delete();
-		}
-	}
-	//CopyFile(strFile, strFile2, FALSE);
-
-	g_csMCCLog.Unlock();
-
-}
 
 
 
@@ -1517,7 +1429,7 @@ void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nM
 	}
 	else if(nAxis == AX_BTM1_PICKER_Z)
 	{
-		if(nMoveIdx == 0) sPosName = "Btm1PickerZ_Ready";
+		if(nMoveIdx == 0) sPosName = "BTM1_PICKER_Z_Ready";
 		if(nMoveIdx == 1) sPosName = "BTM1_PICKER_Z_Tray Down";
 		if(nMoveIdx == 2) sPosName = "BTM1_PICKER_Z_BTM1 SP Down";
 		if(nMoveIdx == 3) sPosName = "BTM1_PICKER_Z_Inspect";
@@ -1651,10 +1563,8 @@ void CLogFile::Save_DoorInterlock(int nPNo, CString sLog, BOOL bfirst)
 
 	CFile file;
 	if (!file.Open(strFile1, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
-	
-
-	
-	strTitle.Format("Time,Station,lotNum,barcode,SWVersion,State,site,Line,Machine,operator, result, Interlock, Interlock off Time, Interlock Coverage, Door I/L 1, Door I/L 2, Door I/L 3, Door I/L 4, Door I/L 5, Door I/L 6, Door I/L 7, Door I/L 8, Door I/L 9, Door I/L 10,Door I/L 11, Door I/L 12, Door I/L 13, Door I/L 14, Door I/L 15, Door I/L 16,Door I/L 17, Door I/L 18, Door I/L 19, Door I/L 20\r\n");
+			
+	strTitle.Format("Time,Station,LotNum,Barcode,SWVersion,State,site,Line,Machine,operator, result, Interlock, Interlock off Time, Interlock Coverage, Door I/L 1, Door I/L 2, Door I/L 3, Door I/L 4, Door I/L 5, Door I/L 6, Door I/L 7, Door I/L 8, Door I/L 9, Door I/L 10,Door I/L 11, Door I/L 12, Door I/L 13, Door I/L 14, Door I/L 15, Door I/L 16,Door I/L 17, Door I/L 18, Door I/L 19, Door I/L 20\r\n");
 
 	try {
 		file.SeekToEnd();
@@ -1663,8 +1573,7 @@ void CLogFile::Save_DoorInterlock(int nPNo, CString sLog, BOOL bfirst)
 
 		if(bfirst) strTime.Format("%04d-%02d-%02d %02d:%02d:%02d:%03d", time.wYear, time.wMonth, time.wDay, time.wHour, 0, 0, 0);
 		else strTime.Format("%04d-%02d-%02d %02d:%02d:%02d:%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
-
-		
+				
 		char szPcName[MAX_COMPUTERNAME_LENGTH + 1];
 		DWORD dwNameSize = MAX_COMPUTERNAME_LENGTH + 1;
 		GetComputerName(szPcName, &dwNameSize);
@@ -1870,7 +1779,8 @@ void CLogFile::Get_ZoneMsg(int nZone, int nCase, CString &sZone, CString &sMsg)
 		case 31: sMsg = "Safety Check, Stage Down"; break;
 		case 32: sMsg = "Stage Down Check and Wait Start[S]"; break;
 		case 51: sMsg = "Move to Load Position"; break;
-		case 71: sMsg = "Stage Up"; break;
+		case 52: sMsg = "Front Stage Top1 Move Done(Interlock)"; break;
+		case 71: sMsg = "Stage Up Done"; break;
 
 		}
 		break;
@@ -1903,6 +1813,7 @@ void CLogFile::Get_ZoneMsg(int nZone, int nCase, CString &sZone, CString &sMsg)
 		case 31: sMsg = "Safety Check, Stage Down"; break;
 		case 32: sMsg = "Stage Down Check and Wait Start[S]"; break;
 		case 51: sMsg = "Move to Load Position"; break;
+		case 52: sMsg = "Front Stage Top1 Move Done(Interlock)"; break;
 		case 71: sMsg = "Stage Up"; break;
 		}
 		break;
@@ -1935,6 +1846,7 @@ void CLogFile::Get_ZoneMsg(int nZone, int nCase, CString &sZone, CString &sMsg)
 		case 31: sMsg = "Safety Check, Stage Down"; break;
 		case 32: sMsg = "Stage Down Check and Wait Start[S]"; break;
 		case 51: sMsg = "Move to Load Position"; break;
+		case 52: sMsg = "Front Stage Top1 Move Done(Interlock)"; break;
 		case 71: sMsg = "Stage Up"; break;
 		}
 		break;

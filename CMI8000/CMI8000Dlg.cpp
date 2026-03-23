@@ -1076,7 +1076,7 @@ void CCMI8000Dlg::Set_LotErrorLog(CString sEvent, int nErrCode, CString sMessage
 	m_dwEquipProcTime = GetTickCount();
 
 	m_strEquipEvent.Format("%s,%04d,%s", sEvent, nErrCode, sMessage);
-	strLog.Format("%s,%s,%s,%s,%s", strModel, MAIN_VERSION, gData.sLotID[nNo], m_strEquipEvent, strAction);
+	strLog.Format("%s,%s,%s,%s,%s,%s", strModel, MAIN_VERSION, gData.sLotID[nNo], m_strEquipEvent, strAction,"");
 	g_objLogFile.Save_LotError(strLog, nPNo);
 }
 

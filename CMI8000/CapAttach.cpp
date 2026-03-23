@@ -143,6 +143,9 @@ LRESULT CCapAttach::OnUdpReceive(WPARAM wLocalPort, LPARAM lParam)
 		else if (strCmd == "NOTIFY") {
 			if (strOp == "ALARM") Get_NotifyCmAlignAlarm();
 		}
+		else if (strCmd == "PULLFORCE") {
+			if (strOp == "END") Get_PullForceEnd();
+		}
 	}
 
 	return 1;
@@ -197,6 +200,12 @@ void CCapAttach::Get_ApdReply(CString sCapForceAvg)
 void CCapAttach::Get_NotifyCmAlignAlarm()
 {
 	gData.bCapVisionAlarm = TRUE;
+}
+
+void CCapAttach::Get_PullForceEnd()
+{
+	gData.bPullForceEnd = TRUE;
+	//gData.bPullForce = FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////

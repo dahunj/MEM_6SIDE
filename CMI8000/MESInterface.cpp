@@ -431,15 +431,19 @@ void CMESInterface::Set_Status(int nState)	//1:Run, 2:Stop, 3:Idle
 
 	CString strState = (nState == 1 ? "RUN" : (nState == 2 ? "STOP" : "IDLE"));
 	CFile file;
-	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
-		try {
+	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite))
+	{
+		try 
+		{
 			file.SeekToEnd();
 			strSave.Format("[%04d/%02d/%02d %02d:%02d:%02d],StateChange,UNITID=1000,WorkMode=%s\r\n",
 				time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, strState);
 			file.Write(strSave, strSave.GetLength());
 			file.Close();
 
-		} catch (CFileException *pEx) {
+		}
+		catch (CFileException *pEx)
+		{
 			pEx->Delete();
 		}
 	}
@@ -473,7 +477,7 @@ void CMESInterface::Set_Status(int nState)	//1:Run, 2:Stop, 3:Idle
 void CMESInterface::Set_Alarm(int nType, int nAlarmID, CString sText )	//1:발생, 2:해제
 {
 	if (!m_bMESUse) return;
-
+	
 	g_csMesLog.Lock();
 
 	SYSTEMTIME time;
@@ -655,7 +659,10 @@ void CMESInterface::Set_LotCancel(CString sLotID, int nCount, CString sOperID)
 
 void CMESInterface::Set_LotEnd(CString sLotID, int nCount, CString sOperID, int nOKCount, int nNGCount, int nPNo)
 {
+
+#if defined AJIN_BOARD_USE
  	if (!m_bMESUse) return;
+#endif
 
 	g_csMesLog.Lock();
 

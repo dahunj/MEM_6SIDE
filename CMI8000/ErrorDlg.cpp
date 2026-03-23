@@ -296,9 +296,7 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 		SetTimer(0, 100, NULL);
 
-	} 
-	else
-	{
+	} else {
 		KillTimer(0);
 
 		for (int i = 0; i < 14; i++) m_stcErrPos[i].Set_Color(RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00));

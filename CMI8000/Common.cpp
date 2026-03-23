@@ -100,12 +100,46 @@ void CCommon::Save_MotionPos()
 	}
 
 	DX_DATA_09 *pDX09 = g_objAJinAXL.Get_pDX09();
+
+
+	g_objCommon.uSleep(100);
+	BOOL bStatusDone = FALSE;
+	BOOL bError = FALSE;
+	DWORD dwStartTick = 0, dwEndTick = 0;
+
+	dwStartTick = GetTickCount();
+
+	while(!bStatusDone )
+	{
+		dwEndTick = GetTickCount();
+		if(GetTickCount() - dwStartTick > 5000)
+		{
+			bError = TRUE;
+			break;
+		}
+
+		bStatusDone = TRUE;
+		if(pDX09->iBufferStage1Up == FALSE && pDX09->iBufferStage1Down == FALSE)
+		{
+			bStatusDone = FALSE;
+		}
+		if(pDX09->iBufferStage2Up == FALSE && pDX09->iBufferStage2Down == FALSE)
+		{
+			bStatusDone = FALSE;
+		}
+		if(bStatusDone) break;
+	}
+	
+
 	gAlm.bBufferUpStatus[0] = pDX09->iBufferStage1Up;
 	gAlm.bBufferUpStatus[1] = pDX09->iBufferStage2Up;
 	gAlm.bBufferDownStatus[0] = pDX09->iBufferStage1Down;
 	gAlm.bBufferDownStatus[1] = pDX09->iBufferStage2Down;
 	
-	if (nCount == 0) return;
+	
+
+
+	if (nCount == 0 && !bError) return;
 
 	uSleep(1000);
 	nCount = 0;
@@ -115,7 +149,7 @@ void CCommon::Save_MotionPos()
 			else nCount++;
 		}
 	}
-	if (nCount == 0) return;
+	if (nCount == 0  && !bError) return;
 
 	uSleep(3000);
 	for(int i=0; i<AXIS_COUNT; i++) {
@@ -123,6 +157,9 @@ void CCommon::Save_MotionPos()
 			if(g_objAJinAXL.Is_Done(i)) gAlm.dMotionPos[i] = g_objAJinAXL.Get_Position(i);
 		}
 	}
+
+	if(bError) g_objCommon.Show_Error(7000);
+
 }
 
 int CCommon::Check_MotionPos()
@@ -3617,92 +3654,25 @@ void CCommon::Get_RAMSize(CString &strRAM)
 
 void CCommon::Get_CPUInfo(CString& strCPU)
 {
-	HRESULT hres;
+	SYSTEM_INFO sysInfo;
+	GetSystemInfo(&sysInfo);
 
-	// Initialize COM
-	hres = CoInitializeEx(0, COINIT_MULTITHREADED);
-	if (FAILED(hres)) {
-		//std::cout << "Failed to initialize COM library." << std::endl;
-		return;
-	}
-
-	// Set general COM security levels
-	hres = CoInitializeSecurity(
-		NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL);
-	if (FAILED(hres)) {
-		//std::cout << "Failed to initialize security." << std::endl;
-		CoUninitialize();
-		return;
-	}
-
-	// Obtain the WMI locator
-	IWbemLocator *pLoc = NULL;
-	hres = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER, IID_IWbemLocator, (LPVOID*)&pLoc);
-	if (FAILED(hres)) {
-		//std::cout << "Failed to create IWbemLocator object." << std::endl;
-		CoUninitialize();
-		return;
-	}
-
-	// Connect to WMI
-	IWbemServices *pSvc = NULL;
-	hres = pLoc->ConnectServer(
-		_bstr_t(L"ROOT\\CIMV2"), NULL, NULL, 0, NULL, 0, 0, &pSvc);
-	if (FAILED(hres)) {
-		//std::cout << "Failed to connect to WMI." << std::endl;
-		pLoc->Release();
-		CoUninitialize();
-		return;
-	}
-
-	// Set security levels on the proxy
-	hres = CoSetProxyBlanket(
-		pSvc, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL, RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
-	if (FAILED(hres)) {
-		//std::cout << "Failed to set proxy blanket." << std::endl;
-		pSvc->Release();
-		pLoc->Release();
-		CoUninitialize();
-		return;
-	}
-
-	// Query for CPU information
-	IEnumWbemClassObject* pEnumerator = NULL;
-	hres = pSvc->ExecQuery(
-		bstr_t("WQL"),
-		bstr_t("SELECT * FROM Win32_Processor"),
-		WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
-		NULL, &pEnumerator);
-	if (FAILED(hres)) {
-		//std::cout << "Query for CPU information failed." << std::endl;
-		pSvc->Release();
-		pLoc->Release();
-		CoUninitialize();
-		return;
-	}
-
-	// Retrieve the data
-	IWbemClassObject *pClassObject;
-	ULONG uReturn = 0;
-	while (pEnumerator) {
-		hres = pEnumerator->Next(WBEM_INFINITE, 1, &pClassObject, &uReturn);
-		if (0 == uReturn) {
-			break;
+	HKEY hKey;	
+	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0"), 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+	{
+		char buffer[256];
+		DWORD bufferSize = sizeof(buffer);
+		if (RegQueryValueEx(hKey, _T("ProcessorNameString"), NULL, NULL, (LPBYTE)buffer, &bufferSize) == ERROR_SUCCESS)
+		{
+			strCPU = (CString)buffer;
 		}
-
-		VARIANT vtProp;
-		pClassObject->Get(L"Name", 0, &vtProp, 0, 0);
-		strCPU = vtProp.bstrVal;
-		//std::wcout << "CPU Name : " << vtProp.bstrVal << std::endl;
-		VariantClear(&vtProp);
-
-		pClassObject->Release();
+		RegCloseKey(hKey);
 	}
 
-	// Cleanup
-	pSvc->Release();
-	pLoc->Release();
-	CoUninitialize();
-
+	switch (sysInfo.wProcessorArchitecture) {
+	case PROCESSOR_ARCHITECTURE_AMD64: strCPU += " x64";  break;
+	case PROCESSOR_ARCHITECTURE_INTEL: strCPU += " x86"; break;
+	default:  strCPU += " Unknown"; break;
+	}   
 
 }

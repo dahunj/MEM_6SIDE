@@ -34,6 +34,7 @@ private:
 	void Get_TrayUnload();
 	void Get_ApdReply(CString sCapForceAvg);
 	void Get_NotifyCmAlignAlarm();
+	void Get_PullForceEnd();
 
 	void Send_Command(CString strSend);
 

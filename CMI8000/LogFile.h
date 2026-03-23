@@ -33,7 +33,7 @@ public:
 	void Save_UnloadingTime(int nSNo, int nPNo);
 	void Save_MachineStopLog(CString sLog);
 	void Save_PickerLog(CString sLog);
-	void Save_MCCLog(CString sLog, int nPNo);
+	
 	void Save_MCCLog(CString sLog);
 	void Save_MotionLog(CString sLog);
 
@@ -44,10 +44,7 @@ public:
 	void Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nMoveIdx);
 
 	void Save_AverageCycle(int nPNo);
-
-	void VisionTakt_Start(int nVision);
-	void VisionTakt_Save(int nFun, int nId, int nVision);
-
+	
 	void Save_DailyLot(CString sLog);
 
 	void Save_OutTray(CString strOut, int nTrayCount, int nPosX, int nPosY, int nPortNo, int nTrayNo, int nCmNo);

@@ -304,7 +304,6 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			if (gData.nLPNo > 0)  nNo = gData.nLPNo;
 
 		} else { nNo = 1;}
-
 		g_objMES.Set_Status(1);
 		g_objLogFile.Save_HandlerLog("[Work Mode] START S/W push");
 		m_rdoWorkStart.SetCheck(TRUE);
@@ -319,7 +318,6 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			if (gData.nLPNo > 0)  nNo = gData.nLPNo;
 
 		} else { nNo = 1;}
-
 		g_objMES.Set_Status(2);
 		g_objLogFile.Save_HandlerLog("[Work Mode] STOP S/W push");
 		MachineStopLog("STOP_BUTTON_PUSH");
@@ -508,14 +506,15 @@ void CWorkDlg::OnBnClickedNgClear(UINT nID)
 		g_objSequenceMain.Init_NgTray(nIndex);
 		if (nIndex == 0)
 		{
-			gData.nTrayCntNG[0]++;
-			gData.nTrayCntNG[2]++;
+			gData.nTrayCntNG[gData.nPNoNgTray-1][2] += 2;
+			gData.nTrayCntNG[gData.nPNoNgTray-1][0] = gData.nTrayCntNG[gData.nPNoNgTray-1][2] + 1;
 			g_objSequenceMain.Init_NgTray(2);	// NG 1 Clear 할 때 NG3도 Clear 한다.
 		}
 		if (nIndex == 1)
 		{
-			gData.nTrayCntNG[1]++;
-			gData.nTrayCntNG[3]++;
+			gData.nTrayCntNG[gData.nPNoNgTray-1][3] += 2;
+			gData.nTrayCntNG[gData.nPNoNgTray-1][1] = gData.nTrayCntNG[gData.nPNoNgTray-1][3] + 1;
+			
 			g_objSequenceMain.Init_NgTray(3);	// NG 1 Clear 할 때 NG3도 Clear 한다.
 		}
 	}	
@@ -776,18 +775,17 @@ BOOL CWorkDlg::Work_Start()
 		g_objCommon.Show_MsgBox(1, strTemp);
 		m_rdoWorkStop.SetCheck(TRUE);
 		return FALSE;
-	}
-
-	//buffer stage 이전 상태 기억 및 체크 
-
-	else if((gAlm.bBufferUpStatus[0] != pDX09->iBufferStage1Up) || (gAlm.bBufferUpStatus[1] != pDX09->iBufferStage2Up)
+	}	
+	else if(((gAlm.bBufferUpStatus[0] != pDX09->iBufferStage1Up) || (gAlm.bBufferUpStatus[1] != pDX09->iBufferStage2Up)
 		|| (gAlm.bBufferDownStatus[0] != pDX09->iBufferStage1Down) || (gAlm.bBufferDownStatus[1] != pDX09->iBufferStage2Down))
+		&& gAlm.dMotionChkPos > 0)
 	{
-		strTemp.Format("Buffer Stage 상태 체크 하세요 1Up :%d, 1Down:%d, 2Up:%d, 2Down:%d", gAlm.bBufferUpStatus[0],gAlm.bBufferDownStatus[0],gAlm.bBufferUpStatus[1],gAlm.bBufferDownStatus[1] );
+		//buffer stage 이전 상태 기억 및 체크 
+		strTemp.Format("Buffer Stage 상태 체크 하세요 1-Up :%d, 1-Down:%d, 2-Up:%d, 2-Down:%d", gAlm.bBufferUpStatus[0],gAlm.bBufferDownStatus[0],gAlm.bBufferUpStatus[1],gAlm.bBufferDownStatus[1] );
 		g_objLogFile.Save_HandlerLog(strTemp);
 
 		g_objCommon.Show_MsgBox(1, strTemp);
-
+		return FALSE;
 	}
 
 
@@ -864,8 +862,6 @@ BOOL CWorkDlg::Work_Start()
 	}
 
 	g_objSequenceMain.Set_ClearRunData(1);	// 시점 변경 (LotEnd->LotStart)
-	
-
 	gData.bFirstLotStart = TRUE;
 
 	m_stcLotId[0].GetWindowText(strTemp);		// Lot ID
@@ -1079,14 +1075,15 @@ void CWorkDlg::Check_Lamp()
 				{
 					if (gData.InfoNgTray[0][gData.nTrayY-1][gData.nTrayX-1] > 0) //N123
 					{ 
-						gData.nTrayCntNG[0]++;
-						gData.nTrayCntNG[2]++;
+						gData.nTrayCntNG[gData.nPNoNgTray-1][2] += 2;
+						gData.nTrayCntNG[gData.nPNoNgTray-1][0] = gData.nTrayCntNG[gData.nPNoNgTray-1][2] + 1;
 						g_objSequenceMain.Init_NgTray(0); g_objSequenceMain.Init_NgTray(2); 
 					}	
 					if (gData.InfoNgTray[1][gData.nTrayY-1][gData.nTrayX-1] > 0) // N4
 					{ 
-						gData.nTrayCntNG[1]++;
-						gData.nTrayCntNG[3]++;
+						gData.nTrayCntNG[gData.nPNoNgTray-1][3] += 2;
+						gData.nTrayCntNG[gData.nPNoNgTray-1][1] = gData.nTrayCntNG[gData.nPNoNgTray-1][3] + 1;
+					
 						g_objSequenceMain.Init_NgTray(1); g_objSequenceMain.Init_NgTray(3); 
 					}	
 					//if (gData.InfoNgTray[3][gData.nTrayY-1][gData.nTrayX-1] > 0) 
@@ -1916,8 +1913,10 @@ void CWorkDlg::OnBnClickedButton9()
 
 void CWorkDlg::OnBnClickedChkPullforce()
 {
-	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
 
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+	
 	CIniFileCS INI(gData.sEnvPath + "\\EquipData.ini");
 	if (!INI.Check_File()) { AfxMessageBox("EquipData.ini File Not Found!!!"); return; }
 
@@ -1925,21 +1924,25 @@ void CWorkDlg::OnBnClickedChkPullforce()
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
-
 	
 	gData.bPullForce = m_chkPullForce.GetCheck();
 
 	if(gData.bPullForce )
 	{
+		gData.bPullForceEnd = FALSE;
 		m_toast.ShowToast("Pull Force Mode", 120,0);
 
 		pEquipData->bUseInlineMode = TRUE;
 		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
 		INI.Set_Bool("OPTION", "MES_USE", FALSE);
 		m_chkMesUse.SetCheck(FALSE);
+		m_chkMesUse.EnableWindow(FALSE);
+		pEquipData->bUseMES = FALSE;
+		g_objMES.Set_MESUse(FALSE);		
+
 		g_objCapAttach.Set_VisionAlarmOff();
 
-		strTemp.Format("%04d%02d%02d%02d:%02d",time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute);
+		strTemp.Format("%04d%02d%02d%02d_%02d",time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute);
 		m_stcLotId[0].SetWindowText(strTemp);
 
 		pEquipData->bUseVisionAlign = TRUE;
@@ -1958,16 +1961,25 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		INI.Set_Bool("OPTION", "INSPECT_TOP_2", TRUE);
 		pEquipData->bUseInspectBtm2 = TRUE;
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
-		g_dlgSetup.m_pSetupEquipDlg->Cancel_EquipData();
+		g_objDataManager.Read_EquipData();
+		
+		m_stcCmCount[1].EnableWindow(FALSE);
+		pMainDlg->Enable_ModeButton(FALSE);
+		pMainDlg->m_btnMainOperator.EnableWindow(FALSE);		
+
 	}
 	else
 	{
+		gData.bPullForceEnd = TRUE;
 		m_toast.ShowWindow(SW_HIDE);
 
 		pEquipData->bUseInlineMode = TRUE;
 		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
 		INI.Set_Bool("OPTION", "MES_USE", TRUE);
 		m_chkMesUse.SetCheck(TRUE);
+		m_chkMesUse.EnableWindow(TRUE);
+		pEquipData->bUseMES = TRUE;
+		g_objMES.Set_MESUse(TRUE);
 
 		g_objCapAttach.Set_VisionAlarmOn();
 		m_stcLotId[0].SetWindowText("");
@@ -1990,7 +2002,11 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		pEquipData->bUseInspectBtm2 = TRUE;
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
 
-		g_dlgSetup.m_pSetupEquipDlg->Cancel_EquipData();
+		g_objDataManager.Read_EquipData();
+
+		m_stcCmCount[1].EnableWindow(TRUE);
+		pMainDlg->Enable_ModeButton(TRUE);
+		pMainDlg->m_btnMainOperator.EnableWindow(TRUE);
 	}
 }
 

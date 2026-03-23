@@ -22,8 +22,8 @@ public:
 	BOOL Delay_LoopTime(DWORD msec);
 	BOOL Waiting_Time(DWORD msec);
 
-	void Takt_Start(int nZone, int nCase, BOOL bFirst=FALSE);
-	void Takt_End(int nZone, int nCase, BOOL bLast=FALSE);
+	void Takt_Start(int nZone, int nCase, BOOL bFirst = FALSE);
+	void Takt_End(int nZone, int nCase, CString sLog = "");
 };
 
 ///////////////////////////////////////////////////////////////////////////////
