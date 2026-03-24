@@ -1427,7 +1427,8 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		m_strLog.Format("Currrent Tick sort1: %lu", dwTick);
 		g_objLogFile.Save_TestLog(m_strLog);
 		if (m_pEquipData->bUseInspectSkip || ((dwTick - gData.dwSkipTime_Sort1) > m_pEquipData->nDelayAdd[4]) ) 
-		{	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
+		{	
+			// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 			gData.nInspectInfo[nPx][nTx][nCx] = 4;
 			gMes.sJudge[nPx][nTx][nCx] = "N1";
 			strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
@@ -4032,10 +4033,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 		{
 			m_nBtm1PickCase = 15; m_tBtm1PickLoop.Set_LoopTime(5000);
 		}
-		break;
-
-	
-
+		break;		
 	case 15:		
 		if(!g_objCommon.Get_Btm1PickerDown(0))
 		{
@@ -4252,9 +4250,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 	case 45:
 		if ( g_objCommon.Check_Position(AX_BTM1_PICKER_X, 6)  && g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 5) &&
 			  g_objCommon.Check_Position(AX_BTM1_PICKER_P1, 0) && g_objCommon.Check_Position(AX_BTM1_PICKER_P2, 0)) 
-		{
-				  
-			
+		{			
 			//Start Trigger with Setting Speed
 			dB1ScanpX = m_pMoveData->dBtm1PickerX[7];
 			if(m_pEquipData->bUsePMTrigger){
@@ -4270,8 +4266,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			m_nBtm1PickCase = 47; 
 			m_tBtm1PickLoop.Set_LoopTime(15000);
 		}
-		break;
-		
+		break;		
 	case 47:		
 		if ((g_objAJinAXL.Is_Done(AX_BTM1_PICKER_Z) && g_objAJinAXL.Is_MoveDone(AX_BTM1_PICKER_X, dB1ScanpX))
 			|| !m_pEquipData->bUseInspectBtm13D)
