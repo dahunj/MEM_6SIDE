@@ -209,6 +209,11 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 			g_objSequenceMain.Set_MainRunCase(AUTO_EMPTY_TRAY_Y, 5);
 		}
 
+		if(m_nErrNo == 7000)
+		{			
+			strErrPick.Format("= 1-up : %d, 1-Down : %d, 2-up : %d, 2-Down : %d", gAlm.bBufferUpStatus[0], gAlm.bBufferDownStatus[0], gAlm.bBufferUpStatus[1], gAlm.bBufferDownStatus[1]);
+		}
+
 // 		if (m_nErrNo == 9001) {
 // 			strErrPick.Format("#==> Start LotID(%s) ÃÑ¼ö·®(%d)#==> MES LotID(%s) ÃÑ¼ö·®(%d) Recipe(%s) Model(%s)", gData.sLotID[nNo], gData.nCmUseCount[nNo], gMes.sHostLotID, gMes.nHostCount, gMes.sHostRecipe, gMes.sHostModel);
 // 		}

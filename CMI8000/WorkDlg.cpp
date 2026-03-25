@@ -1892,10 +1892,8 @@ void CWorkDlg::OnBnClickedBtnLaserGetdata()
 
 void CWorkDlg::OnBnClickedButton7()
 {
+	g_objCommon.Show_Error(7000);
 	
-	
-
-	gData.dwSkipTime_Sort1 = GetTickCount();
 }
 
 
