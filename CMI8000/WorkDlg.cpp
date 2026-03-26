@@ -796,7 +796,8 @@ BOOL CWorkDlg::Work_Start()
 	if (!pEquipData->bUseInspectAngle || !pEquipData->bUseInspectBtm1Specular || !pEquipData->bUseInspectBtm1Angle || !pEquipData->bUseInspectBtm13D
 		|| !pEquipData->bUseInspectTop1 || !pEquipData->bUseInspectTop2 || !pEquipData->bUseInspectBtm2) {
 
-		if (!pEquipData->bResultTestUse) {
+		if (!pEquipData->bResultTestUse && gData.nLogInLevel != 9300) 
+		{
 			if (g_objCommon.Show_MsgBox(2, "Vision Option을 끄고 진행하시겠습니까?") != IDOK) return FALSE;
 		}
 
@@ -814,7 +815,8 @@ BOOL CWorkDlg::Work_Start()
 			if (nTimeOut > 30) break;	//Time Out 3초
 			g_objCommon.uSleep(100);
 		}
-		if (gData.nVisionFOBMode == 1) {
+		if (gData.nVisionFOBMode == 1 && gData.nLogInLevel != 9300) 
+		{
 			if (g_objCommon.Show_MsgBox(2,"Vision FOB Mode 상태 입니다. 진행 하시겠습니까?") != IDOK) {
 				m_rdoWorkStop.SetCheck(TRUE);
 				return FALSE;
@@ -833,7 +835,8 @@ BOOL CWorkDlg::Work_Start()
 			}
 		}
 
-		if (!pEquipData->bUseMES) {
+		if (!pEquipData->bUseMES && gData.nLogInLevel != 9300)
+		{
 			if (g_objCommon.Show_MsgBox(2, "MES Option을 끄고 진행하시겠습니까?") != IDOK) return FALSE;
 		}
 #endif

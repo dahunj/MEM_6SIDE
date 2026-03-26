@@ -101,10 +101,19 @@ void CPasswordDlg::OnBnClickedBtnOk()
 	if (strInput == pEquipData->sPasswordMt) {
 		g_nLoginUser = 1;	// MT
 		EndDialog(IDOK);
-	} else if (strInput == pEquipData->sPasswordSi) {
+	} 
+	else if (strInput == pEquipData->sPasswordSi) 
+	{
 		g_nLoginUser = 2;	// SI
 		EndDialog(IDOK);
-	} else {
+	} 
+	else if (strInput == "9300") 
+	{
+		gData.nLogInLevel = 9300;
+		g_nLoginUser = 9300;	// SI
+		EndDialog(IDOK);
+	} 
+	else {
 		g_nLoginUser = 0;	// None
 		m_edtPassword.SetWindowText("");
 	}

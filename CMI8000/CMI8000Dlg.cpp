@@ -120,6 +120,8 @@ BOOL CCMI8000Dlg::OnInitDialog()
 
 	
 	m_dwSetTimer = 0;
+
+	gData.nLogInLevel = 0;
 	
 
 	g_objCommon.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
