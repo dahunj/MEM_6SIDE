@@ -109,11 +109,12 @@ void CCommon::Save_MotionPos()
 
 	dwStartTick = GetTickCount();
 
-	while(!bStatusDone )
+	while( !bStatusDone )
 	{
 		dwEndTick = GetTickCount();
-		if(GetTickCount() - dwStartTick > 5000)
+		if(GetTickCount() - dwStartTick > 3000)
 		{
+			g_objLogFile.Save_HandlerLog("[Handler - Save_MotionPos], Buffer Stage TimeOut");
 			bError = TRUE;
 			break;
 		}
@@ -121,24 +122,25 @@ void CCommon::Save_MotionPos()
 		bStatusDone = TRUE;
 		if(pDX09->iBufferStage1Up == FALSE && pDX09->iBufferStage1Down == FALSE)
 		{
-			bStatusDone = FALSE;
+			bStatusDone = FALSE;		
 		}
 		if(pDX09->iBufferStage2Up == FALSE && pDX09->iBufferStage2Down == FALSE)
 		{
-			bStatusDone = FALSE;
+			bStatusDone = FALSE;			
 		}
-		if(bStatusDone) break;
-	}
-	
+		if(bStatusDone)
+		{
+			g_objLogFile.Save_HandlerLog("[Handler - Save_MotionPos], Buffer Stage Done");
+			break;
+		}
+	}	
 
 	gAlm.bBufferUpStatus[0] = pDX09->iBufferStage1Up;
 	gAlm.bBufferUpStatus[1] = pDX09->iBufferStage2Up;
 	gAlm.bBufferDownStatus[0] = pDX09->iBufferStage1Down;
 	gAlm.bBufferDownStatus[1] = pDX09->iBufferStage2Down;
+	g_objLogFile.Save_HandlerLog("[Handler - Save_MotionPos], Buffer Stage Saved");
 	
-	
-
-
 	if (nCount == 0 && !bError) return;
 
 	uSleep(1000);
@@ -151,7 +153,7 @@ void CCommon::Save_MotionPos()
 	}
 	if (nCount == 0  && !bError) return;
 
-	uSleep(3000);
+	uSleep(1500);
 	for(int i=0; i<AXIS_COUNT; i++) {
 		if (gAlm.dMotionPos[i] < -10.0) {
 			if(g_objAJinAXL.Is_Done(i)) gAlm.dMotionPos[i] = g_objAJinAXL.Get_Position(i);

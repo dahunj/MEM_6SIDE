@@ -6881,7 +6881,7 @@ BOOL CSequenceMain::BufferTray1_Run()
 
 		} else if (!m_pDX09->iBufferStage1Rotate && m_pDX09->iBufferStage1Normal &&
 			m_pDX09->iBufferStage1Up && g_objCommon.Check_Position(AX_BUFFER_STAGE1_Y, 0)) {
-			m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(5000);
+			m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(10000);
 			m_tBuffTray1Loop.Takt_Start(nTaktZone, 0);
 			m_tBuffTray1Loop.Takt_End(nTaktZone, 0);
 		}
@@ -6889,7 +6889,7 @@ BOOL CSequenceMain::BufferTray1_Run()
 	case 2:		// Tray Check
 		if (TRUE) {
 			m_dwBuffTray1 = GetTickCount();
-			m_nBuffTray1Case = 10; m_tBuffTray1Loop.Set_LoopTime(5000);
+			m_nBuffTray1Case = 10; m_tBuffTray1Loop.Set_LoopTime(10000);
 		}
 		break;
 
@@ -6906,19 +6906,19 @@ BOOL CSequenceMain::BufferTray1_Run()
 				m_tBuffTray1Loop.Takt_Start(nTaktZone, 11);
 				if (m_nSortPick1Case != 0 && m_nSortPick2Case == 0) g_objCommon.Move_Position(AX_BUFFER_STAGE1_Y, 3);
 				else												g_objCommon.Move_Position(AX_BUFFER_STAGE1_Y, 2);
-				m_nBuffTray1Case = 15; m_tBuffTray1Loop.Set_LoopTime(5000);
+				m_nBuffTray1Case = 15; m_tBuffTray1Loop.Set_LoopTime(10000);
 			}
 
 		} else {
 			if (m_nBuffTray2Case == 20) {
-				m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(5000);
+				m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(10000);
 			}
 		}
 		break;
 	case 12:	// Move to Sort Unload Wait Position
 		if (g_objAJinAXL.Is_Done(AX_BUFFER_STAGE1_Y)) {
 			g_objCommon.Move_Position(AX_BUFFER_STAGE1_Y, 5);
-			m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(5000);
+			m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(10000);
 			m_tBuffTray1Loop.Takt_Start(nTaktZone, 12);
 		}
 		break;
@@ -6933,12 +6933,12 @@ BOOL CSequenceMain::BufferTray1_Run()
 					
 					if (m_nSortPick1Case != 0 && m_nSortPick2Case == 0) g_objCommon.Move_Position(AX_BUFFER_STAGE1_Y, 3);
 					else												g_objCommon.Move_Position(AX_BUFFER_STAGE1_Y, 2);
-					m_nBuffTray1Case = 15; m_tBuffTray1Loop.Set_LoopTime(5000);
+					m_nBuffTray1Case = 15; m_tBuffTray1Loop.Set_LoopTime(10000);
 				} 
 
 			} else {
 				if (m_nBuffTray2Case == 20) { 
-					m_tBuffTray1Loop.Set_LoopTime(5000); return TRUE;
+					m_tBuffTray1Loop.Set_LoopTime(10000); return TRUE;
 				}
 			}
 		}
@@ -6966,7 +6966,7 @@ BOOL CSequenceMain::BufferTray1_Run()
 				m_tBuffTray1Loop.Takt_Start(nTaktZone, 2);
 				m_pDY09->oBufferStage1Up = FALSE; m_pDY09->oBufferStage1Down = TRUE;
 				g_objAJinAXL.Write_Output(9);
-				m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(5000);
+				m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(10000);
 				m_tBuffTray1Loop.Takt_Start(nTaktZone, 20);
 				m_tBuffTray1Loop.Takt_End(nTaktZone, 20);
 				m_tBuffTray1Loop.Takt_Start(nTaktZone, 21);
@@ -6978,7 +6978,7 @@ BOOL CSequenceMain::BufferTray1_Run()
 			!m_pDX09->iBufferStage1Rotate && m_pDX09->iBufferStage1Normal)
 		{
 			m_tBuffTray1Loop.Takt_End(nTaktZone, 21);
-			m_nBuffTray1Case = 50; m_tBuffTray1Loop.Set_LoopTime(5000);
+			m_nBuffTray1Case = 50; m_tBuffTray1Loop.Set_LoopTime(10000);
 		}
 		break;
 
@@ -6992,7 +6992,7 @@ BOOL CSequenceMain::BufferTray1_Run()
 
 			m_tBuffTray1Loop.Takt_Start(nTaktZone, 3);
 			g_objCommon.Move_Position(AX_BUFFER_STAGE1_Y, 0);
-			m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(5000);
+			m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(10000);
 			m_tBuffTray1Loop.Takt_Start(nTaktZone, 50);
 			m_tBuffTray1Loop.Takt_End(nTaktZone, 50);
 			m_tBuffTray1Loop.Takt_Start(nTaktZone, 51);
@@ -7011,10 +7011,10 @@ BOOL CSequenceMain::BufferTray1_Run()
 				if (dDiff > TRAY_WIDTH) {	// Buffer Stage2 Y Position Check
 					m_pDY09->oBufferStage1Up = TRUE; m_pDY09->oBufferStage1Down = FALSE;
 					g_objAJinAXL.Write_Output(9);
-					m_nBuffTray1Case = 60; m_tBuffTray1Loop.Set_LoopTime(5000);
+					m_nBuffTray1Case = 60; m_tBuffTray1Loop.Set_LoopTime(10000);
 				}
 			} else if (m_nBuffTray2Case == 0 && m_bUnloadLotEnd) {
-				m_nBuffTray1Case = 80; m_tBuffTray1Loop.Set_LoopTime(5000);	// 饶贸府
+				m_nBuffTray1Case = 80; m_tBuffTray1Loop.Set_LoopTime(10000);	// 饶贸府
 			}
 		}
 		return TRUE;
@@ -7024,8 +7024,8 @@ BOOL CSequenceMain::BufferTray1_Run()
 			m_tBuffTray1Loop.Takt_End(nTaktZone, 60);
 			m_strLog.Format("Buffer Stage1, %d", GetTickCount() - m_dwBuffTray1);
 			g_objLogFile.Save_TestLog(m_strLog);
-			if (m_bUnloadLotEnd) { m_nBuffTray1Case = 0; m_tBuffTray1Loop.Set_LoopTime(5000); }
-			else				 { m_nBuffTray1Case = 1; m_tBuffTray1Loop.Set_LoopTime(5000); }
+			if (m_bUnloadLotEnd) { m_nBuffTray1Case = 0; m_tBuffTray1Loop.Set_LoopTime(10000); }
+			else				 { m_nBuffTray1Case = 1; m_tBuffTray1Loop.Set_LoopTime(10000); }
 		}
 		break;
 
@@ -7036,13 +7036,13 @@ BOOL CSequenceMain::BufferTray1_Run()
 
 				g_objCommon.Move_Position(AX_BUFFER_STAGE1_Y, 2);
 			}
-			m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(5000);
+			m_nBuffTray1Case++; m_tBuffTray1Loop.Set_LoopTime(10000);
 		}
 		break;
 	case 81:
 		if (g_objCommon.Check_Position(AX_BUFFER_STAGE1_Y, 2)) {
 			g_objAJinAXL.Write_Output(9);
-			m_nBuffTray1Case = 50; m_tBuffTray1Loop.Set_LoopTime(5000);
+			m_nBuffTray1Case = 50; m_tBuffTray1Loop.Set_LoopTime(10000);
 		}
 		break;
 	}
@@ -7071,7 +7071,7 @@ BOOL CSequenceMain::BufferTray2_Run()
 
 		} else if (!m_pDX09->iBufferStage2Rotate &&  m_pDX09->iBufferStage2Normal &&
 			g_objCommon.Check_Position(AX_BUFFER_STAGE2_Y, 0)) {
-			m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(5000);
+			m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(10000);
 			m_tBuffTray2Loop.Takt_Start(nTaktZone, 0);
 			m_tBuffTray2Loop.Takt_End(nTaktZone, 0);
 		}
@@ -7079,12 +7079,12 @@ BOOL CSequenceMain::BufferTray2_Run()
 	case 2:		// Tray Check
 		if (1) {
 			m_dwBuffTray2 = GetTickCount();
-			m_nBuffTray2Case = 10; m_tBuffTray2Loop.Set_LoopTime(5000);
+			m_nBuffTray2Case = 10; m_tBuffTray2Loop.Set_LoopTime(10000);
 		}
 		break;
 
 	case 10:	// Wait for Module Loading
-		if (m_bUnloadLotEnd && Check_BufferEmpty(2)) { m_nBuffTray2Case = 0; m_tBuffTray2Loop.Set_LoopTime(5000); }
+		if (m_bUnloadLotEnd && Check_BufferEmpty(2)) { m_nBuffTray2Case = 0; m_tBuffTray2Loop.Set_LoopTime(10000); }
 		return TRUE;
 
 	case 11:	// Y Axis Move to Sort Picker Position
@@ -7095,19 +7095,19 @@ BOOL CSequenceMain::BufferTray2_Run()
 				m_tBuffTray2Loop.Takt_Start(nTaktZone, 11);
 				if (m_nSortPick1Case != 0 && m_nSortPick2Case == 0) g_objCommon.Move_Position(AX_BUFFER_STAGE2_Y, 3);
 				else												g_objCommon.Move_Position(AX_BUFFER_STAGE2_Y, 2);
-				m_nBuffTray2Case = 15; m_tBuffTray2Loop.Set_LoopTime(5000);
+				m_nBuffTray2Case = 15; m_tBuffTray2Loop.Set_LoopTime(10000);
 			}
 
 		} else {
 			if (m_nBuffTray1Case == 20) {
-				m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(5000);
+				m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(10000);
 			}
 		}
 		break;
 	case 12:	// Move to Sort Unload Wait Position
 		if (g_objAJinAXL.Is_Done(AX_BUFFER_STAGE2_Y)) {
 			g_objCommon.Move_Position(AX_BUFFER_STAGE2_Y, 5);
-			m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(5000);
+			m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(10000);
 			m_tBuffTray2Loop.Takt_Start(nTaktZone, 12);
 		}
 		break;
@@ -7121,12 +7121,12 @@ BOOL CSequenceMain::BufferTray2_Run()
 					m_tBuffTray2Loop.Takt_Start(nTaktZone, 13);
 					if (m_nSortPick1Case != 0 && m_nSortPick2Case == 0) g_objCommon.Move_Position(AX_BUFFER_STAGE2_Y, 3);
 					else												g_objCommon.Move_Position(AX_BUFFER_STAGE2_Y, 2);
-					m_nBuffTray2Case = 15; m_tBuffTray2Loop.Set_LoopTime(5000);
+					m_nBuffTray2Case = 15; m_tBuffTray2Loop.Set_LoopTime(10000);
 				} 
 
 			} else {
 				if (m_nBuffTray1Case == 20) { 
-					m_tBuffTray2Loop.Set_LoopTime(5000); return TRUE;
+					m_tBuffTray2Loop.Set_LoopTime(10000); return TRUE;
 				}
 			}
 		}
@@ -7154,7 +7154,7 @@ BOOL CSequenceMain::BufferTray2_Run()
 				m_tBuffTray2Loop.Takt_Start(nTaktZone, 2);
 				m_pDY09->oBufferStage2Up = FALSE; m_pDY09->oBufferStage2Down = TRUE;
 				g_objAJinAXL.Write_Output(9);
-				m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(5000);
+				m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(10000);
 				m_tBuffTray2Loop.Takt_Start(nTaktZone, 20);
 				m_tBuffTray2Loop.Takt_End(nTaktZone, 20);
 				m_tBuffTray2Loop.Takt_Start(nTaktZone, 21);
@@ -7166,12 +7166,12 @@ BOOL CSequenceMain::BufferTray2_Run()
 			!m_pDX09->iBufferStage2Rotate &&  m_pDX09->iBufferStage2Normal)
 		{
 			m_tBuffTray2Loop.Takt_End(nTaktZone, 21);
-			m_nBuffTray2Case = 50; m_tBuffTray2Loop.Set_LoopTime(5000);
+			m_nBuffTray2Case = 50; m_tBuffTray2Loop.Set_LoopTime(10000);
 		}
 		break;
 
 	case 50:	// Wait
-		if (m_nBuffTray1Case > 2) { m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(5000); }
+		if (m_nBuffTray1Case > 2) { m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(10000); }
 		return TRUE;
 
 	case 51:	// Y Axis Move to Module Loading Position
@@ -7179,7 +7179,7 @@ BOOL CSequenceMain::BufferTray2_Run()
 			!m_pDX09->iBufferStage2Rotate && m_pDX09->iBufferStage2Normal) {	// Inter lock
 
 			g_objCommon.Move_Position(AX_BUFFER_STAGE2_Y, 0);
-			m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(5000);
+			m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(10000);
 			m_tBuffTray2Loop.Takt_Start(nTaktZone, 50);
 			m_tBuffTray2Loop.Takt_End(nTaktZone, 50);
 			m_tBuffTray2Loop.Takt_Start(nTaktZone, 51);
@@ -7198,10 +7198,10 @@ BOOL CSequenceMain::BufferTray2_Run()
 				if (dDiff > TRAY_WIDTH) {	// Buffer Stage Y Position Check
 					m_pDY09->oBufferStage2Up = TRUE; m_pDY09->oBufferStage2Down = FALSE;
 					g_objAJinAXL.Write_Output(9);
-					m_nBuffTray2Case = 60; m_tBuffTray2Loop.Set_LoopTime(5000);
+					m_nBuffTray2Case = 60; m_tBuffTray2Loop.Set_LoopTime(10000);
 				}
 			} else if (m_nBuffTray1Case == 0 && m_bUnloadLotEnd) {
-				m_nBuffTray2Case = 80; m_tBuffTray2Loop.Set_LoopTime(5000);	// 饶贸府
+				m_nBuffTray2Case = 80; m_tBuffTray2Loop.Set_LoopTime(10000);	// 饶贸府
 			}
 		}
 		return TRUE;
@@ -7211,8 +7211,8 @@ BOOL CSequenceMain::BufferTray2_Run()
 			m_tBuffTray2Loop.Takt_End(nTaktZone, 60);
 			m_strLog.Format("Buffer Stage2, %d", GetTickCount() - m_dwBuffTray2);
 			g_objLogFile.Save_TestLog(m_strLog);
-			if (m_bUnloadLotEnd) { m_nBuffTray2Case = 0; m_tBuffTray2Loop.Set_LoopTime(5000); }
-			else				 { m_nBuffTray2Case = 1; m_tBuffTray2Loop.Set_LoopTime(5000); }
+			if (m_bUnloadLotEnd) { m_nBuffTray2Case = 0; m_tBuffTray2Loop.Set_LoopTime(10000); }
+			else				 { m_nBuffTray2Case = 1; m_tBuffTray2Loop.Set_LoopTime(10000); }
 		}
 		break;
 
@@ -7223,13 +7223,13 @@ BOOL CSequenceMain::BufferTray2_Run()
 
 				g_objCommon.Move_Position(AX_BUFFER_STAGE2_Y, 2);
 			}
-			m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(5000);
+			m_nBuffTray2Case++; m_tBuffTray2Loop.Set_LoopTime(10000);
 		}
 		break;
 	case 81:
 		if (g_objCommon.Check_Position(AX_BUFFER_STAGE2_Y, 2)) {
 			g_objAJinAXL.Write_Output(9);
-			m_nBuffTray2Case = 50; m_tBuffTray2Loop.Set_LoopTime(5000);
+			m_nBuffTray2Case = 50; m_tBuffTray2Loop.Set_LoopTime(10000);
 		}
 		break;
 	}
