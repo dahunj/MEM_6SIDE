@@ -98,12 +98,15 @@ void CPasswordDlg::OnBnClickedBtnOk()
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 
 	m_edtPassword.GetWindowText(strInput);
-	if (strInput == pEquipData->sPasswordMt) {
+	if (strInput == pEquipData->sPasswordMt)
+	{
+		gData.nLogInLevel = 0;
 		g_nLoginUser = 1;	// MT
 		EndDialog(IDOK);
 	} 
 	else if (strInput == pEquipData->sPasswordSi) 
 	{
+		gData.nLogInLevel = 0;
 		g_nLoginUser = 2;	// SI
 		EndDialog(IDOK);
 	} 
@@ -113,7 +116,9 @@ void CPasswordDlg::OnBnClickedBtnOk()
 		g_nLoginUser = 9300;	// SI
 		EndDialog(IDOK);
 	} 
-	else {
+	else 
+	{
+		gData.nLogInLevel = 0;
 		g_nLoginUser = 0;	// None
 		m_edtPassword.SetWindowText("");
 	}
