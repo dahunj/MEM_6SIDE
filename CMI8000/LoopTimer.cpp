@@ -72,7 +72,7 @@ void CLoopTimer::Takt_Start(int nZone, int nCase, BOOL bFirst)
 	g_objLogFile.Save_StdMotionLog("X", nZone, nCase, 1, strZone, strMsg);
 }
 
-void CLoopTimer::Takt_End(int nZone, int nCase, CString sLog)
+void CLoopTimer::Takt_End(int nZone, int nCase, const CString& sLog)
 {
 	CString strLog, strZone, strMsg;
 
