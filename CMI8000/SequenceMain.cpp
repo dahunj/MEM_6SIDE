@@ -3746,8 +3746,8 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			g_objCommon.Check_Position(AX_BTM1_PICKER_P1, 0) && g_objCommon.Check_Position(AX_BTM1_PICKER_P2, 0))
 		{
 			if (m_nAngleTray1Case != 20 && m_nAngleTray2Case != 20) break;	// ÀÎÅÍ¶ô
-			if(bAngleGo1){	m_nAngleTray1Case = 21;	bAngleGo1 = FALSE; }
-			if(bAngleGo2){	m_nAngleTray2Case = 21;	bAngleGo2 = FALSE;}
+			if(bAngleGo1) { m_nAngleTray1Case = 21;	bAngleGo1 = FALSE; }
+			if(bAngleGo2) { m_nAngleTray2Case = 21;	bAngleGo2 = FALSE;}
 
 			if(m_nAngleTray1Case >= 21)
 			{
