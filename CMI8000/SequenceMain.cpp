@@ -1609,7 +1609,9 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 		strLog.Format("ResultTest_Use : %d,%d,%d",nInfo, nTx+1, nCx+1);
 		g_objLogFile.Save_TestLog(strLog);
 
-	} else {
+	} 
+	else
+	{
 		if (gData.bCycleStop && !Get_VisionInspectUse()) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	//Good
 		else if (Get_VisionInspectUse())  nInfo = gData.nInspectInfo[nPx][nTx][nCx];
 
