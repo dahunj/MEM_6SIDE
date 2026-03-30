@@ -408,12 +408,15 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 		Set_ReloadComplete(INSPECTOR_PC2, sPc);
 		
 		if (pEquipData->bUseVisionAlign && (sPc == "ALIGN" || sPc == "PC2")) 
-		{	// Align
+		{	
+			// Align
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_ANGLE);
 			if (nCase == 5) g_objSequenceMain.Set_MainRunCase(AUTO_VISION_ANGLE, 4);
 		}
 
-		if (pEquipData->bUseInspectAngle && !gData.bScanDone[0] && (sPc == "AG"|| sPc == "PC2")) {	// Angle
+		if (pEquipData->bUseInspectAngle && !gData.bScanDone[0] && (sPc == "AG"|| sPc == "PC2")) 
+		{	
+			// Angle
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_ANGLE);
 			if (nCase == 15 && nCase < 19) g_objSequenceMain.Set_MainRunCase(AUTO_VISION_ANGLE, 13);
 		}

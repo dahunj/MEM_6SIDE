@@ -120,6 +120,8 @@ BOOL CCMI8000Dlg::OnInitDialog()
 
 	
 	m_dwSetTimer = 0;
+
+	gData.nLogInLevel = 0;
 	
 
 	g_objCommon.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
@@ -291,7 +293,7 @@ void CCMI8000Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	g_dlgWork.PostMessage(UM_MODEL_CHANGE, NULL, NULL);
 
 	m_dwEquipProcTime = GetTickCount();
-	if(gData.sLotID[0] != "" && gData.sLotID[0] != "LOT_ID") Set_LotErrorLog("PROGRAM BEGIN", 900, "Program Begin");
+	Set_LotErrorLog("PROGRAM BEGIN", 900, "Program Begin");
 	g_dlgWork.MachineStopLog("PROGRAM_BEGIN");
 
 	DX_DATA_09 *pDX09 = g_objAJinAXL.Get_pDX09();

@@ -307,7 +307,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 		g_objMES.Set_Status(1);
 		g_objLogFile.Save_HandlerLog("[Work Mode] START S/W push");
 		m_rdoWorkStart.SetCheck(TRUE);
-		if(gData.sLotID[nNo] != "" && gData.sLotID[nNo] != "LOT_ID") pMainDlg->Set_LotErrorLog("START", 903, "Start");
+		pMainDlg->Set_LotErrorLog("START", 903, "Start");
 		g_objLogFile.Save_EfficiencyLog(1, "Run", 903, "Run Start");
 		SetTimer(0, 100, NULL); return;
 
@@ -322,7 +322,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 		g_objLogFile.Save_HandlerLog("[Work Mode] STOP S/W push");
 		MachineStopLog("STOP_BUTTON_PUSH");
 		m_rdoWorkStop.SetCheck(TRUE);
-		//pMainDlg->Set_LotErrorLog("STOP", 904, "Stop");
+		pMainDlg->Set_LotErrorLog("STOP", 904, "Stop");
 		g_objLogFile.Save_EfficiencyLog(1, "Stop", 904, "Stop Button Push");
 		SetTimer(0, 100, NULL); return;
 	}
@@ -796,7 +796,8 @@ BOOL CWorkDlg::Work_Start()
 	if (!pEquipData->bUseInspectAngle || !pEquipData->bUseInspectBtm1Specular || !pEquipData->bUseInspectBtm1Angle || !pEquipData->bUseInspectBtm13D
 		|| !pEquipData->bUseInspectTop1 || !pEquipData->bUseInspectTop2 || !pEquipData->bUseInspectBtm2) {
 
-		if (!pEquipData->bResultTestUse) {
+		if (!pEquipData->bResultTestUse && gData.nLogInLevel != 9300) 
+		{
 			if (g_objCommon.Show_MsgBox(2, "Vision Option을 끄고 진행하시겠습니까?") != IDOK) return FALSE;
 		}
 
@@ -814,7 +815,8 @@ BOOL CWorkDlg::Work_Start()
 			if (nTimeOut > 30) break;	//Time Out 3초
 			g_objCommon.uSleep(100);
 		}
-		if (gData.nVisionFOBMode == 1) {
+		if (gData.nVisionFOBMode == 1 && gData.nLogInLevel != 9300) 
+		{
 			if (g_objCommon.Show_MsgBox(2,"Vision FOB Mode 상태 입니다. 진행 하시겠습니까?") != IDOK) {
 				m_rdoWorkStop.SetCheck(TRUE);
 				return FALSE;
@@ -833,7 +835,8 @@ BOOL CWorkDlg::Work_Start()
 			}
 		}
 
-		if (!pEquipData->bUseMES) {
+		if (!pEquipData->bUseMES && gData.nLogInLevel != 9300)
+		{
 			if (g_objCommon.Show_MsgBox(2, "MES Option을 끄고 진행하시겠습니까?") != IDOK) return FALSE;
 		}
 #endif

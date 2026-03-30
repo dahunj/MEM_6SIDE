@@ -55,7 +55,7 @@ void CLogFile::Create_Folder(CString sPath)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CLogFile::Save_AlarmLog(CString sLog)
+void CLogFile::Save_AlarmLog(const CString& sLog)
 {
 	g_csAlarmLog.Lock();
 
@@ -86,7 +86,7 @@ void CLogFile::Save_AlarmLog(CString sLog)
 	g_csAlarmLog.Unlock();
 }
 
-void CLogFile::Save_AlarmResetLog(CString sLog)
+void CLogFile::Save_AlarmResetLog(const CString& sLog)
 {
 	g_csAlarmResetLog.Lock();
 
@@ -117,7 +117,7 @@ void CLogFile::Save_AlarmResetLog(CString sLog)
 	g_csAlarmResetLog.Unlock();
 }
 
-void CLogFile::Save_HandlerLog(CString sLog)
+void CLogFile::Save_HandlerLog(const CString& sLog)
 {
 	g_csHandlerLog.Lock();
 
@@ -148,12 +148,10 @@ void CLogFile::Save_HandlerLog(CString sLog)
 	}
 	g_csHandlerLog.Unlock();
 
-	if(gData.sLotID[0] != "" && gData.sLotID[0] != "LOT_ID")
-			
 	Save_ECMLog(4, sLog);
 }
 
-void CLogFile::Save_SaveRunTimeLog(CString sLog)
+void CLogFile::Save_SaveRunTimeLog(const CString& sLog)
 {
 	g_csRunTimeLog.Lock();
 
@@ -184,7 +182,7 @@ void CLogFile::Save_SaveRunTimeLog(CString sLog)
 	g_csRunTimeLog.Unlock();
 }
 
-void CLogFile::Save_InspectorLog(CString sLog)
+void CLogFile::Save_InspectorLog(const CString& sLog)
 {
 	g_csInspectorLog.Lock();
 
@@ -215,7 +213,7 @@ void CLogFile::Save_InspectorLog(CString sLog)
 	g_csInspectorLog.Unlock();
 }
 
-void CLogFile::Save_JobListLog(CString sLog, BOOL bMode)
+void CLogFile::Save_JobListLog(const CString& sLog, BOOL bMode)
 {
 	g_csJobListLog.Lock();
 
@@ -260,7 +258,7 @@ void CLogFile::Save_JobListLog(CString sLog, BOOL bMode)
 	if (bMode == TRUE) Save_ECMLog(2, sLog);
 }
 
-void CLogFile::Save_LotResult(int nPNo, CString sLog)
+void CLogFile::Save_LotResult(int nPNo,const CString& sLog)
 {
 	CString strPath1 = "D:\\EVMS\\TP\\Log";
 	CString strPath2 = "D:\\EVMS\\TP\\Backup";
@@ -305,7 +303,7 @@ void CLogFile::Save_LotResult(int nPNo, CString sLog)
 	g_objLogFile.Save_ECMLog(5,sLog);
 }
 
-void CLogFile::Save_MesAgentLog(CString sLog)
+void CLogFile::Save_MesAgentLog(const CString& sLog)
 {
 	g_csMesAgentLog.Lock();
 
@@ -336,7 +334,7 @@ void CLogFile::Save_MesAgentLog(CString sLog)
 	g_csMesAgentLog.Unlock();
 }
 
-void CLogFile::Save_DispatcherLog(CString sLog)
+void CLogFile::Save_DispatcherLog(const CString& sLog)
 {
 	g_csDispatcherLog.Lock();
 
@@ -367,7 +365,7 @@ void CLogFile::Save_DispatcherLog(CString sLog)
 	g_csDispatcherLog.Unlock();
 }
 
-void CLogFile::Save_CapAttachLog(CString sLog)
+void CLogFile::Save_CapAttachLog(const CString& sLog)
 {
 	g_csCapAttachLog.Lock();
 
@@ -398,7 +396,7 @@ void CLogFile::Save_CapAttachLog(CString sLog)
 	g_csCapAttachLog.Unlock();
 }
 
-void CLogFile::Save_PCLog(int nPNo, CString sLog)
+void CLogFile::Save_PCLog(int nPNo, const CString& sLog)
 {
 	CString strPath1 = "D:\\EVMS\\TP\\Log";
 	CString strPath2 = "D:\\EVMS\\TP\\Backup";
@@ -443,7 +441,7 @@ void CLogFile::Save_PCLog(int nPNo, CString sLog)
 
 }
 
-void CLogFile::Save_LotTime(int nPNo, CString sLog)
+void CLogFile::Save_LotTime(int nPNo,const CString& sLog)
 {
 	CString strPath1 = "D:\\EVMS\\TP\\Log";
 	CString strPath2 = "D:\\EVMS\\TP\\Backup";
@@ -492,7 +490,7 @@ void CLogFile::Save_LotTime(int nPNo, CString sLog)
 	}
 }
 
-void CLogFile::Save_LotError(CString sLog, int nPNo)
+void CLogFile::Save_LotError(const CString& sLog, int nPNo)
 {
 	CString strPath1 = "D:\\EVMS\\TP\\Log";
 	CString strPath2 = "D:\\EVMS\\TP\\Backup";
@@ -552,7 +550,7 @@ void CLogFile::Save_LotError(CString sLog, int nPNo)
 
 //nType:1[Alarm], 2[Joblist] 3[Inspect] 4[Handler] 5[Lot_Result]
 
-void CLogFile::Save_ECMLog(int nType, CString strLog)	
+void CLogFile::Save_ECMLog(int nType, const CString& strLog)	
 {
 	g_csECMLog.Lock();
 
@@ -611,7 +609,7 @@ void CLogFile::Save_ECMLog(int nType, CString strLog)
 	g_csECMLog.Unlock();
 }
 
-void CLogFile::Save_DailyLot(CString sLog)
+void CLogFile::Save_DailyLot(const CString& sLog)
 {
 	g_csDailyLotLog.Lock();
 
@@ -650,7 +648,7 @@ void CLogFile::Save_DailyLot(CString sLog)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CLogFile::Save_TestLog(CString sLog)
+void CLogFile::Save_TestLog(const CString& sLog)
 {
 	SYSTEMTIME time;
 	GetLocalTime(&time);
@@ -725,7 +723,7 @@ void CLogFile::Save_LotLog(int nPNo)
 	}
 }
 
-void CLogFile::Save_OutTray(CString strOut, int nTrayCount, int nPosX, int nPosY, int nPortNo, int nTrayNo, int nCmNo)
+void CLogFile::Save_OutTray(const CString& strOut, int nTrayCount, int nPosX, int nPosY, int nPortNo, int nTrayNo, int nCmNo)
 {
 	int nPx = nPortNo - 1;
 	int nTx = nTrayNo - 1;
@@ -771,7 +769,7 @@ void CLogFile::Save_OutTray(CString strOut, int nTrayCount, int nPosX, int nPosY
 	Save_ECMOutTray(strSave, nTrayCount, nPosX, nPosY, nPortNo, nTrayNo, nCmNo);
 }
 
-void CLogFile::Save_ECMOutTray(CString sLog, int nTrayCount, int nPosX, int nPosY, int nPortNo, int nTrayNo, int nCmNo)
+void CLogFile::Save_ECMOutTray(const CString& sLog, int nTrayCount, int nPosX, int nPosY, int nPortNo, int nTrayNo, int nCmNo)
 {
 	int nPx = nPortNo - 1;
 	int nTx = nTrayNo - 1;
@@ -817,7 +815,7 @@ void CLogFile::Save_ECMOutTray(CString sLog, int nTrayCount, int nPosX, int nPos
 	
 }
 
-void CLogFile::Save_CmTrackingLog(CString strOut, int nTrayCount, int nPosX, int nPosY, int nPortNo, int nTrayNo, int nCmNo)
+void CLogFile::Save_CmTrackingLog(const CString& strOut, int nTrayCount, int nPosX, int nPosY, int nPortNo, int nTrayNo, int nCmNo)
 {
 	g_csCmTrackingLog.Lock();
 
@@ -885,7 +883,7 @@ void CLogFile::Save_CmTrackingLog(CString strOut, int nTrayCount, int nPosX, int
 	g_csCmTrackingLog.Unlock();
 }
 
-void CLogFile::Save_ECMTracking(CString sLog, int nTrayCount, int nPosX, int nPosY, int nPortNo, int nTrayNo, int nCmNo)
+void CLogFile::Save_ECMTracking(const CString& sLog, int nTrayCount, int nPosX, int nPosY, int nPortNo, int nTrayNo, int nCmNo)
 {
 	int nPx = nPortNo - 1;
 	int nTx = nTrayNo - 1;
@@ -922,7 +920,7 @@ void CLogFile::Save_ECMTracking(CString sLog, int nTrayCount, int nPosX, int nPo
 	}
 }
 
-void CLogFile::Save_OperatingRatio(CString sLog)	// 가동률 작업 중
+void CLogFile::Save_OperatingRatio(const CString& sLog)	// 가동률 작업 중
 {
 	CString strPath = gData.sLogPath + "\\OperatingRatio";
 
@@ -959,7 +957,7 @@ void CLogFile::Save_OperatingRatio(CString sLog)	// 가동률 작업 중
 	}
 }
 
-void CLogFile::Save_FocusAxisLog(int Axis, CString sLog)
+void CLogFile::Save_FocusAxisLog(int Axis, const CString& sLog)
 {
 	CString strPath = gData.sLogPath + "\\FocusAxis";
 
@@ -997,7 +995,7 @@ void CLogFile::Save_FocusAxisLog(int Axis, CString sLog)
 	}
 }
 
-void CLogFile::Save_RosWaitLog(int nPNo, CString sLog)
+void CLogFile::Save_RosWaitLog(int nPNo, const CString& sLog)
 {
 	g_csRosWaitLog.Lock();
 
@@ -1035,7 +1033,7 @@ void CLogFile::Save_RosWaitLog(int nPNo, CString sLog)
 	g_csRosWaitLog.Unlock();
 }
 
-void CLogFile::Save_InspectWaitLog(int nPNo, CString sLog)
+void CLogFile::Save_InspectWaitLog(int nPNo, const CString& sLog)
 {
 	g_csInspectWaitLog.Lock();
 
@@ -1144,7 +1142,7 @@ void CLogFile::Save_UnloadingTime(int nSNo, int nPNo)
 	}
 }
 
-void CLogFile::Save_MachineStopLog(CString sLog)
+void CLogFile::Save_MachineStopLog(const CString& sLog)
 {
 	g_csMachineStopLog.Lock();
 
@@ -1179,7 +1177,7 @@ void CLogFile::Save_MachineStopLog(CString sLog)
 	g_csMachineStopLog.Unlock();
 }
 
-void CLogFile::Save_PickerLog(CString sLog)
+void CLogFile::Save_PickerLog(const CString& sLog)
 {
 	SYSTEMTIME time;
 	GetLocalTime(&time);
@@ -1329,7 +1327,7 @@ void CLogFile::Save_EfficiencyLog(int nZone, CString sStatus, int nCode, CString
 
 
 
-void CLogFile::Save_MCCLog(CString sLog)
+void CLogFile::Save_MCCLog(const CString& sLog)
 {
 	g_csMCCLog.Lock();
 
@@ -1363,7 +1361,7 @@ void CLogFile::Save_MCCLog(CString sLog)
 
 
 
-void CLogFile::Save_MotionLog(CString sLog)
+void CLogFile::Save_MotionLog(const CString& sLog)
 {
 	g_csMotionLog.Lock();
 
@@ -1542,7 +1540,7 @@ void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nM
 
 
 
-void CLogFile::Save_DoorInterlock(int nPNo, CString sLog, BOOL bfirst)
+void CLogFile::Save_DoorInterlock(int nPNo, const CString& sLog, BOOL bfirst)
 {
 	CString strPath1 = "D:\\EVMS\\TP\\Log";
 	CString strPath2 = "D:\\EVMS\\TP\\Backup";
@@ -1562,9 +1560,6 @@ void CLogFile::Save_DoorInterlock(int nPNo, CString sLog, BOOL bfirst)
 	strFile1.Format("%s\\GSY827ADOOR1_%04d%02d%02d%02d_InterlockResult.csv", strPath1, time.wYear, time.wMonth, time.wDay,time.wHour);
 	strFile2.Format("%s\\GSY827ADOOR1_%04d%02d%02d%02d_InterlockResult.csv", strPath2, time.wYear, time.wMonth, time.wDay, time.wHour);
 	strFile3.Format("%s\\GSY827ADOOR1_InterlockResult.csv", strPath3);
-
-
-	if( gData.sLotID[nPNo] == "" ||  gData.sLotID[nPNo] == "LOT_ID") return;
 
 	CFile file;
 	if (!file.Open(strFile1, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;

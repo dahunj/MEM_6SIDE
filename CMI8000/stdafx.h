@@ -319,7 +319,7 @@ typedef struct {
 
 	int		nTrayCntNG[2][4];			//port 1,2 ±¸ºÐ		// 0  1
 															// 2  3
- 	
+ 	int		nLogInLevel;
 } GLOVAL_DATA;
 
 typedef struct {
