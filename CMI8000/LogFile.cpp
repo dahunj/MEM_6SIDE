@@ -1540,7 +1540,7 @@ void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nM
 
 
 
-void CLogFile::Save_DoorInterlock(int nPNo, const CString& sLog, BOOL bfirst)
+void CLogFile::Save_DoorInterlock(int nPNo, const CString& sLog, BOOL bfirst)//
 {
 	CString strPath1 = "D:\\EVMS\\TP\\Log";
 	CString strPath2 = "D:\\EVMS\\TP\\Backup";
