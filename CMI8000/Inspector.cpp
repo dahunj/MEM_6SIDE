@@ -374,7 +374,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 
 	if (nInspector == INSPECTOR_PC1) 
 	{			
-		//if (sPc != "PC1") return;
+		if (sPc != "PC1" && sPc != "B1" && sPc != "B1AG" && sPc != "B13D") return;
 		Set_ReloadComplete(INSPECTOR_PC1, sPc);
 		
 		if (pEquipData->bUseInspectBtm1Specular && (sPc == "B1" || sPc == "PC1")) 
@@ -416,7 +416,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 
 	} else if (nInspector == INSPECTOR_PC2) // Top1
 	{	
-		//if (sPc != "PC2") return;
+		if (sPc != "PC2" && sPc != "ALIGN" && sPc != "AG" && sPc != "T1") return;
 		Set_ReloadComplete(INSPECTOR_PC2, sPc);
 		
 		if (pEquipData->bUseVisionAlign && (sPc == "ALIGN" || sPc == "PC2")) 
