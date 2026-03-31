@@ -4229,14 +4229,12 @@ BOOL CSequenceMain::Btm1Picker_Run()
 					gData.nCNoBtm1Pick[nB1INo1-1], gData.nCNoBtm1Pick[nB1INo2-1], gData.nCNoBtm1Pick[nB1INo3-1], gData.nCNoBtm1Pick[nB1INo4-1],
 					gData.nCNoBtm1Pick[nB1INo5-1], gData.nCNoBtm1Pick[nB1INo6-1], gData.nCNoBtm1Pick[nB1INo7-1], gData.nCNoBtm1Pick[nB1INo8-1]);
 				
-				m_tBtm1PickLoop.Takt_Start(nTaktZone, 41);
-				m_tBtm1PickLoop.Takt_End(nTaktZone, 41, "3D Scan Load Complete[S]");
+				
 				m_nBtm1PickCase = 42; m_tBtm1PickLoop.Set_LoopTime(30000);
 			} 
 			else
 			{
-				m_tBtm1PickLoop.Takt_Start(nTaktZone, 41);
-				m_tBtm1PickLoop.Takt_End(nTaktZone, 41, "3D Scan Skip");
+				
 				m_nBtm1PickCase = 47; m_tBtm1PickLoop.Set_LoopTime(5000);
 			}
 		}
@@ -4255,16 +4253,13 @@ BOOL CSequenceMain::Btm1Picker_Run()
 		{			
 			//Start Trigger with Setting Speed
 			dB1ScanpX = m_pMoveData->dBtm1PickerX[7];
-			if(m_pEquipData->bUsePMTrigger){
+			/*if(m_pEquipData->bUsePMTrigger){
 				g_objAJinAXL.SetEncoderActPos(AX_PM_TRIGGER, 0);
 				g_objAJinAXL.Start_Trigger(AX_PM_TRIGGER,  m_pEquipData->dTriggerStart, m_pEquipData->dTriggerEnd, 
 				m_pEquipData->dTriggerPeriod, (m_pEquipData->dTriggerPeriod/2) );
-			}
+			}*/
 			g_objAJinAXL.Move_Absolute_Vel(AX_BTM1_PICKER_X, dB1ScanpX, m_pEquipData->dTriggerVel);
-						
-
-			m_tBtm1PickLoop.Takt_Start(nTaktZone, 45);
-			m_tBtm1PickLoop.Takt_End(nTaktZone, 45, "Btm1 X 3D Scan Move Done");
+								
 			m_nBtm1PickCase = 47; 
 			m_tBtm1PickLoop.Set_LoopTime(15000);
 		}
@@ -4285,16 +4280,13 @@ BOOL CSequenceMain::Btm1Picker_Run()
 				gData.bReload[6] = FALSE;
 				m_nBtm1PickCase = 41;
 				break;
-			}
-			
-			
-			
+			}			
 			
 			g_objCommon.Move_Position(AX_BTM1_PICKER_P1, 1);	// Inspection Position
 			g_objCommon.Move_Position(AX_BTM1_PICKER_P2, 1);	// Inspection Position
 			g_objCommon.Move_Position(AX_BTM1_PICKER_X, 5);
 
-			m_tBtm1PickLoop.Takt_Start(nTaktZone, 47);
+			
 			m_nBtm1PickCase = 21; m_tBtm1PickLoop.Set_LoopTime(5000);
 		}
 		break;
@@ -4303,17 +4295,18 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			&& g_objCommon.Check_Position(AX_BTM1_PICKER_P1, 1)
 			&& g_objCommon.Check_Position(AX_BTM1_PICKER_P2, 1)){
 			
-			if (m_nInspect1Case == 0 || m_nInspect2Case == 0 || m_nInspect3Case == 0) {
+			if (m_nInspect1Case == 0 || m_nInspect2Case == 0 || m_nInspect3Case == 0)
+			{
 				if (m_nInspect1Case == 0) nB1pInspStageNo = 1;
 				if (m_nInspect2Case == 0) nB1pInspStageNo = 2;
 				if (m_nInspect3Case == 0) nB1pInspStageNo = 3;
 				nErrRetry = 0;	//Retry Clear
-
-				m_tBtm1PickLoop.Takt_End(nTaktZone, 47, "Btm1 X&P1&P2 Move Done to Inspect Position");
+							
 				m_tBtm1PickLoop.Takt_Start(nTaktZone, 21);
 				m_nBtm1PickCase = 22; m_tBtm1PickLoop.Set_LoopTime(5000);
 			} 
-			else {
+			else 
+			{
 				m_tBtm1PickLoop.Set_LoopTime(5000); return TRUE; 
 			}	// 앞공정이 밀려있어서 Stage가 없으면 대기.
 		}

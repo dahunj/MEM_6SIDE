@@ -187,14 +187,17 @@ void CLogFile::Save_InspectorLog(const CString& sLog)
 	g_csInspectorLog.Lock();
 
 	CString strPath = gData.sLogPath + "\\Inspector";
+	CString strPath2 = "D:\\Dump\\Inspector";
 
 	Create_Folder(strPath);
+	Create_Folder(strPath2);
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 
-	CString strFile, strSave;
+	CString strFile,strFile2, strSave;
 	strFile.Format("%s\\%04d%02d%02d_Inspector.txt", strPath, time.wYear, time.wMonth, time.wDay);
+	strFile2.Format("%s\\%04d%02d%02d_Inspector.txt", strPath2, time.wYear, time.wMonth, time.wDay);
 
 	CFile file;
 	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
@@ -206,10 +209,30 @@ void CLogFile::Save_InspectorLog(const CString& sLog)
 			file.Write(strSave, strSave.GetLength());
 			file.Close();
 
-		} catch (CFileException *pEx) {
+		}
+		catch (CFileException *pEx)
+		{
 			pEx->Delete();
 		}
 	}
+
+	CFile file2;
+	if (file2.Open(strFile2, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
+		try {
+			file2.SeekToEnd();
+
+			strSave.Format("[%02d:%02d:%02d.%03d],%s\r\n", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds, sLog);
+
+			file2.Write(strSave, strSave.GetLength());
+			file2.Close();
+
+		}
+		catch (CFileException *pEx)
+		{
+			pEx->Delete();
+		}
+	}
+
 	g_csInspectorLog.Unlock();
 }
 
@@ -1332,14 +1355,17 @@ void CLogFile::Save_MCCLog(const CString& sLog)
 	g_csMCCLog.Lock();
 
 	CString strPath = gData.sLogPath + "\\MCC";
+	CString strPath2 = "D:\\Dump\\MCC";
 
 	Create_Folder(strPath);
+	Create_Folder(strPath2);
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 
-	CString strFile, strSave;
+	CString strFile,strFile2, strSave;
 	strFile.Format("%s\\%04d%02d%02d_MCC.txt", strPath, time.wYear, time.wMonth, time.wDay);
+	strFile2.Format("%s\\%04d%02d%02d_MCC.txt", strPath2, time.wYear, time.wMonth, time.wDay);
 
 	CFile file;
 	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
@@ -1355,8 +1381,25 @@ void CLogFile::Save_MCCLog(const CString& sLog)
 			pEx->Delete();
 		}
 	}
-	g_csMCCLog.Unlock();
 
+	CFile file2;
+	if (file2.Open(strFile2, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
+		try {
+			file2.SeekToEnd();
+
+			strSave.Format("[%02d:%02d:%02d.%03d],%s\r\n", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds, sLog);
+
+			file2.Write(strSave, strSave.GetLength());
+			file2.Close();
+
+		}
+		catch (CFileException *pEx)
+		{
+			pEx->Delete();
+		}
+	}
+
+	g_csMCCLog.Unlock();
 }
 
 
