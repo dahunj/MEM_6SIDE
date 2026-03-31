@@ -374,25 +374,37 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 
 	if (nInspector == INSPECTOR_PC1) 
 	{			
-		if (sPc != "PC1") return;
+		if (sPc != "PC1" && sPc != "B1" && sPc != "B1AG" && sPc != "B13D") return;
 		Set_ReloadComplete(INSPECTOR_PC1, sPc);
 		
-		if (pEquipData->bUseInspectBtm1Specular && !gData.bScanDone[1]) {	// Btm1_SP
-			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_BTM1);
-			if (nCase >= 10 && nCase < 15) { gData.bReload[1] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_VISION_BTM1, 15); }
+		if (pEquipData->bUseInspectBtm1Specular && (sPc == "B1" || sPc == "PC1")) 
+		{
+			if (pEquipData->bUseInspectBtm1Specular && !gData.bScanDone[1]) {	// Btm1_SP
+				int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_BTM1);
+				if (nCase >= 10 && nCase < 15) { gData.bReload[1] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_VISION_BTM1, 15); }
+			}
 		}
 
-		if (pEquipData->bUseInspectBtm1Angle && !gData.bScanDone[5]) {	// Btm1_AG
-			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_BTM1);
-			if (nCase >= 30 && nCase < 35) { gData.bReload[5] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_VISION_BTM1, 35); }
+		if (pEquipData->bUseInspectBtm1Angle && (sPc == "B1AG" || sPc == "PC1")) 
+		{
+			if (pEquipData->bUseInspectBtm1Angle && !gData.bScanDone[5]) {	// Btm1_AG
+				int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_BTM1);
+				if (nCase >= 30 && nCase < 35) { gData.bReload[5] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_VISION_BTM1, 35); }
+			}
 		}
 
-		if (pEquipData->bUseInspectBtm13D && !gData.bScanDone[6]) {	// Btm1_3D
-			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_BTM1);
-			if (nCase >= 42 && nCase < 46) { gData.bReload[6] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_VISION_BTM1, 40); }
+		if (pEquipData->bUseInspectBtm13D && (sPc == "B13D" || sPc == "PC1")) 
+		{
+			if (pEquipData->bUseInspectBtm13D && !gData.bScanDone[6])
+			{	
+				// Btm1_3D
+				int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_VISION_BTM1);
+				if (nCase >= 42 && nCase < 46) { gData.bReload[6] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_VISION_BTM1, 40); }
+			}
 		}
+		
 
-		int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER1);
+	/*	int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER1);
 		if (nCase == 6) {
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(1, gData.nPNoSortPick[0], gData.nTNoSortPick[0][i], gData.nCNoSortPick[0][i]); }
 		}
@@ -400,11 +412,11 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 		nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER2);
 		if (nCase == 6) {
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(1, gData.nPNoSortPick[1], gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i]); }
-		}		
+		}		*/
 
 	} else if (nInspector == INSPECTOR_PC2) // Top1
 	{	
-		//if (sPc != "PC2") return;
+		if (sPc != "PC2" && sPc != "ALIGN" && sPc != "AG" && sPc != "T1") return;
 		Set_ReloadComplete(INSPECTOR_PC2, sPc);
 		
 		if (pEquipData->bUseVisionAlign && (sPc == "ALIGN" || sPc == "PC2")) 
@@ -433,7 +445,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 			if (nCase >= 10 && nCase < 15) { gData.bReload[2] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_INSPECTION3, 15); }
 		}
 
-		int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER1);
+	/*	int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER1);
 		if (nCase == 6) {
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(2, gData.nPNoSortPick[0], gData.nTNoSortPick[0][i], gData.nCNoSortPick[0][i]); }
 		}
@@ -441,7 +453,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 		nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER2);
 		if (nCase == 6) {
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(2, gData.nPNoSortPick[1], gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i]); }
-		}
+		}*/
 
 	} else if (nInspector == INSPECTOR_PC3) {	// Top2
 		if (sPc != "PC3") return;
@@ -458,7 +470,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 			if (nCase >= 20 && nCase < 25) { gData.bReload[3] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_INSPECTION3, 25); }
 		}
 
-		int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER1);
+	/*	int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER1);
 		if (nCase == 6) {
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(3, gData.nPNoSortPick[0], gData.nTNoSortPick[0][i], gData.nCNoSortPick[0][i]); }
 		}
@@ -466,7 +478,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 		nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER2);
 		if (nCase == 6) {
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(3, gData.nPNoSortPick[1], gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i]); }
-		}
+		}*/
 
 	} else if (nInspector == INSPECTOR_PC4) {	// BTM2
 		if (sPc != "PC4") return;
@@ -477,7 +489,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 			if (nCase >= 10 && nCase < 14) { gData.bReload[4] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_VISION_BTM2, 15); }
 		}
 
-		int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER1);
+	/*	int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER1);
 		if (nCase == 6) {
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(4, gData.nPNoSortPick[0], gData.nTNoSortPick[0][i], gData.nCNoSortPick[0][i]); }
 		}
@@ -485,7 +497,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 		nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER2);
 		if (nCase == 6) {
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(4, gData.nPNoSortPick[1], gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i]); }
-		}
+		}*/
 	}
 }
 
