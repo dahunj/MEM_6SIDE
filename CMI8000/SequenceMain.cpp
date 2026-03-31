@@ -2037,7 +2037,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	g_objLogFile.Save_JobListLog(m_strLog, TRUE);
 
 	// UPH & »ý»ê·®
-	gUph.dTaktTime = gLot.dTackTime_Unload;
+	gUph.dTaktTime = gLot.dTactTime_RunTime;
 
 	if (time.wHour >= 7 && time.wHour < 19) gUph.nCmCount[0] += gLot.nCmCount[nPx];
 	else gUph.nCmCount[1] += gLot.nCmCount[nPx];
