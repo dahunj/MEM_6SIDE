@@ -23,7 +23,7 @@ public:
 	BOOL Waiting_Time(DWORD msec);
 
 	void Takt_Start(int nZone, int nCase, BOOL bFirst = FALSE);
-	void Takt_End(int nZone, int nCase, const CString& sLog = "", BOOL bLast = FALSE);
+	void Takt_End(int nZone, int nCase, BOOL bLast = FALSE);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
