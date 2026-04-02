@@ -139,6 +139,18 @@ public:
 	void SaveLog_DoorInterlock(CString resultCode, CString doorLockUse);
 	
 	afx_msg void OnStnClickedStcDoorlockTime();
+	afx_msg void OnBnClickedChkUseVisionAlign();
+	afx_msg void OnBnClickedChkUseInspectAngle();
+	afx_msg void OnBnClickedChkUseInspectBtm1Sp();
+	afx_msg void OnBnClickedChkUseInspectBtm1Ag();
+	afx_msg void OnBnClickedChkUseInspectBtm13d();
+	afx_msg void OnBnClickedChkUseInspectTop1();
+	afx_msg void OnBnClickedChkUseInspectTop2();
+	afx_msg void OnBnClickedChkUseInspectBtm2();
+	afx_msg void OnBnClickedChkUseInline();
+	afx_msg void OnBnClickedChkUseBtm2();
+	afx_msg void OnBnClickedRdoDoorLock0();
+	afx_msg void OnBnClickedRdoDoorLock1();
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1810,9 +1810,7 @@ void CWorkDlg::OnBnClickedButton5()
 }
 
 void CWorkDlg::OnBnClickedButton6()
-{
-	
-	
+{	
 	DY_DATA_12 *pDY12 = g_objAJinAXL.Get_pDY12();
 	DY_DATA_15 *pDY15 = g_objAJinAXL.Get_pDY15();
 
@@ -1869,9 +1867,6 @@ void CWorkDlg::FakeLoadPortSensor()
 	if (nTemp2 > 1 || nTemp2 < 2400) pDX00->iLoadPort2Bottom = TRUE;
 
 }
-
-
-
 
 void CWorkDlg::OnBnClickedBtnPortzInit()
 {

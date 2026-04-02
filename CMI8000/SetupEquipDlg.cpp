@@ -139,6 +139,18 @@ BEGIN_MESSAGE_MAP(CSetupEquipDlg, CDialogEx)
 	ON_STN_CLICKED(IDC_STC_JIG_NG_CNT, &CSetupEquipDlg::OnStnClickedStcJigNgCnt)
 	
 	ON_STN_CLICKED(IDC_STC_DOORLOCK_TIME, &CSetupEquipDlg::OnStnClickedStcDoorlockTime)
+	ON_BN_CLICKED(IDC_CHK_USE_VISION_ALIGN, &CSetupEquipDlg::OnBnClickedChkUseVisionAlign)
+	ON_BN_CLICKED(IDC_CHK_USE_INSPECT_ANGLE, &CSetupEquipDlg::OnBnClickedChkUseInspectAngle)
+	ON_BN_CLICKED(IDC_CHK_USE_INSPECT_BTM_1_SP, &CSetupEquipDlg::OnBnClickedChkUseInspectBtm1Sp)
+	ON_BN_CLICKED(IDC_CHK_USE_INSPECT_BTM_1_AG, &CSetupEquipDlg::OnBnClickedChkUseInspectBtm1Ag)
+	ON_BN_CLICKED(IDC_CHK_USE_INSPECT_BTM_1_3D, &CSetupEquipDlg::OnBnClickedChkUseInspectBtm13d)
+	ON_BN_CLICKED(IDC_CHK_USE_INSPECT_TOP_1, &CSetupEquipDlg::OnBnClickedChkUseInspectTop1)
+	ON_BN_CLICKED(IDC_CHK_USE_INSPECT_TOP_2, &CSetupEquipDlg::OnBnClickedChkUseInspectTop2)
+	ON_BN_CLICKED(IDC_CHK_USE_INSPECT_BTM_2, &CSetupEquipDlg::OnBnClickedChkUseInspectBtm2)
+	ON_BN_CLICKED(IDC_CHK_USE_INLINE, &CSetupEquipDlg::OnBnClickedChkUseInline)
+	ON_BN_CLICKED(IDC_CHK_USE_BTM2, &CSetupEquipDlg::OnBnClickedChkUseBtm2)
+	ON_BN_CLICKED(IDC_RDO_DOOR_LOCK_0, &CSetupEquipDlg::OnBnClickedRdoDoorLock0)
+	ON_BN_CLICKED(IDC_RDO_DOOR_LOCK_1, &CSetupEquipDlg::OnBnClickedRdoDoorLock1)
 END_MESSAGE_MAP()
 
 // CSetupEquipDlg 메시지 처리기입니다.
@@ -934,4 +946,88 @@ void CSetupEquipDlg::OnStnClickedStcDoorlockTime()
 	}
 
 	m_stcDoorLockTime.SetWindowText(strNew);
+}
+
+
+void CSetupEquipDlg::OnBnClickedChkUseVisionAlign()
+{
+	m_strLog.Format("Vision Align Checked : %d", m_chkUseVisionAlign.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedChkUseInspectAngle()
+{
+	m_strLog.Format("Angle Vision Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedChkUseInspectBtm1Sp()
+{
+	m_strLog.Format("Btm1SP Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedChkUseInspectBtm1Ag()
+{
+	m_strLog.Format("Btm1AG Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedChkUseInspectBtm13d()
+{
+	m_strLog.Format("Btm13D Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedChkUseInspectTop1()
+{
+	m_strLog.Format("Top1Vision Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedChkUseInspectTop2()
+{
+	m_strLog.Format("Top2Vision Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedChkUseInspectBtm2()
+{
+	m_strLog.Format("Btm2Vision Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedChkUseInline()
+{
+	m_strLog.Format("UseInline Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedChkUseBtm2()
+{
+	m_strLog.Format("PickUpOption Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedRdoDoorLock0()
+{
+	m_strLog.Format("DoorLockNotUse Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnBnClickedRdoDoorLock1()
+{
+	m_strLog.Format("DoorLockUse Checked : %d", m_chkUseInspectAngle.GetCheck());
+	g_objLogFile.Save_HandlerLog(m_strLog);
 }
