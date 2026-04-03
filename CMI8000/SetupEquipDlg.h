@@ -48,6 +48,8 @@ public:
 	CCheckCS	m_chkUsePMTrigger;
 	CCheckCS    m_chkUse2ndAVI;
 
+	CCheckCS	m_chkUseDryRun;
+
 	CStaticCS	m_stcTrayData[4];
 	CStaticCS	m_stcInspectData[8];
 	CStaticCS	m_stcNgBufferData[1];
@@ -151,6 +153,8 @@ public:
 	afx_msg void OnBnClickedChkUseBtm2();
 	afx_msg void OnBnClickedRdoDoorLock0();
 	afx_msg void OnBnClickedRdoDoorLock1();
+
+	afx_msg void OnBnClickedChkUseDryRun();
 };
 
 ///////////////////////////////////////////////////////////////////////////////

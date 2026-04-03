@@ -41,6 +41,7 @@ void CDataManager::Reset_EquipData()
 	m_EquipData.bUseMES = FALSE;
 	m_EquipData.bUseApdAlarm = FALSE;
 	m_EquipData.bUsePMTrigger = FALSE;
+	m_EquipData.bUseDryRun = FALSE;
 
 	m_EquipData.bUseBtm2PickUpDown = FALSE;
 	m_EquipData.bUseRosSkip = FALSE;
@@ -149,6 +150,9 @@ BOOL CDataManager::Read_EquipData()
 	if (!INI.Check_File()) { AfxMessageBox("EquipData.ini File Not Found!!!"); return FALSE; }
 	CString strKey;
 
+	m_EquipData.bUseDryRun = INI.Get_Bool("OPTION", "DRY_RUN", FALSE);
+	gData.bUseDryRun = m_EquipData.bUseDryRun ;
+
 	m_EquipData.sEquipName = INI.Get_String("EQUIPMENT", "NAME", "");
 	m_EquipData.nLotBarcodePort = INI.Get_Integer("EQUIPMENT", "LOT_BARCODE", 1);
 	m_EquipData.nScreenOff = INI.Get_Integer("EQUIPMENT", "SCREEN_OFF", 0);
@@ -159,34 +163,38 @@ BOOL CDataManager::Read_EquipData()
 	gAlm.dMotionChkPos		= INI.Get_Double("EQUIPMENT", "MOTION_CHECK", 0.0);
 	gData.nDoorLockTime = INI.Get_Integer("EQUIPMENT", "DOOR_LOCK_TIME", 10000);
 
-
-#ifdef DRY_RUN_TEST
-	m_EquipData.bUseVisionAlign = FALSE;
-	m_EquipData.bUseInspectAngle = FALSE;
-	m_EquipData.bUseInspectBtm1Specular = FALSE;
-	m_EquipData.bUseInspectBtm1Angle = FALSE;
-	m_EquipData.bUseInspectBtm13D = FALSE;
-	m_EquipData.bUseInspectTop1 = FALSE;
-	m_EquipData.bUseInspectTop2 = FALSE;
-	m_EquipData.bUseInspectBtm2 = FALSE;
-	m_EquipData.bUseDispatcher = FALSE;
-	m_EquipData.bUseApdAlarm = FALSE;
-	m_EquipData.bUseMES = FALSE;
-#else
-	m_EquipData.bUseVisionAlign = INI.Get_Bool("OPTION", "VISION_ALIGN", FALSE);
-	m_EquipData.bUseInspectAngle = INI.Get_Bool("OPTION", "INSPECT_ANGLE", FALSE);
-	m_EquipData.bUseInspectBtm1Specular = INI.Get_Bool("OPTION", "INSPECT_BTM_1_SP", FALSE);
-	m_EquipData.bUseInspectBtm1Angle = INI.Get_Bool("OPTION", "INSPECT_BTM_1_AG", FALSE);
-	m_EquipData.bUseInspectBtm13D = INI.Get_Bool("OPTION", "INSPECT_BTM_1_3D", FALSE);
-	m_EquipData.bUseInspectTop1 = INI.Get_Bool("OPTION", "INSPECT_TOP_1", FALSE);
-	m_EquipData.bUseInspectTop2 = INI.Get_Bool("OPTION", "INSPECT_TOP_2", FALSE);
-	m_EquipData.bUseInspectBtm2 = INI.Get_Bool("OPTION", "INSPECT_BTM_2", FALSE);
-	m_EquipData.bUseDispatcher = INI.Get_Bool("OPTION", "DISPATCHER", FALSE);
-	m_EquipData.bUseInlineMode = INI.Get_Bool("OPTION", "INLINE_MODE", FALSE);
-	m_EquipData.bUseApdAlarm = INI.Get_Bool("OPTION", "MES_APD", FALSE);
-	m_EquipData.bUseMES = INI.Get_Bool("OPTION", "MES_USE", FALSE);
-	m_EquipData.bUsePMTrigger = INI.Get_Bool("OPTION", "PM_TRIGGER", FALSE);
-#endif
+	if(gData.bUseDryRun)
+	{
+		m_EquipData.bUseVisionAlign = FALSE;
+		m_EquipData.bUseInspectAngle = FALSE;
+		m_EquipData.bUseInspectBtm1Specular = FALSE;
+		m_EquipData.bUseInspectBtm1Angle = FALSE;
+		m_EquipData.bUseInspectBtm13D = FALSE;
+		m_EquipData.bUseInspectTop1 = FALSE;
+		m_EquipData.bUseInspectTop2 = FALSE;
+		m_EquipData.bUseInspectBtm2 = FALSE;
+		m_EquipData.bUseDispatcher = FALSE;
+		m_EquipData.bUseApdAlarm = FALSE;
+		m_EquipData.bUseMES = FALSE;
+	}
+	else
+	{
+		m_EquipData.bUseVisionAlign = INI.Get_Bool("OPTION", "VISION_ALIGN", FALSE);
+		m_EquipData.bUseInspectAngle = INI.Get_Bool("OPTION", "INSPECT_ANGLE", FALSE);
+		m_EquipData.bUseInspectBtm1Specular = INI.Get_Bool("OPTION", "INSPECT_BTM_1_SP", FALSE);
+		m_EquipData.bUseInspectBtm1Angle = INI.Get_Bool("OPTION", "INSPECT_BTM_1_AG", FALSE);
+		m_EquipData.bUseInspectBtm13D = INI.Get_Bool("OPTION", "INSPECT_BTM_1_3D", FALSE);
+		m_EquipData.bUseInspectTop1 = INI.Get_Bool("OPTION", "INSPECT_TOP_1", FALSE);
+		m_EquipData.bUseInspectTop2 = INI.Get_Bool("OPTION", "INSPECT_TOP_2", FALSE);
+		m_EquipData.bUseInspectBtm2 = INI.Get_Bool("OPTION", "INSPECT_BTM_2", FALSE);
+		m_EquipData.bUseDispatcher = INI.Get_Bool("OPTION", "DISPATCHER", FALSE);
+		m_EquipData.bUseInlineMode = INI.Get_Bool("OPTION", "INLINE_MODE", FALSE);
+		m_EquipData.bUseApdAlarm = INI.Get_Bool("OPTION", "MES_APD", FALSE);
+		m_EquipData.bUseMES = INI.Get_Bool("OPTION", "MES_USE", FALSE);
+		m_EquipData.bUsePMTrigger = INI.Get_Bool("OPTION", "PM_TRIGGER", FALSE);
+		
+	}
+	
 	m_EquipData.bUseBtm2PickUpDown = INI.Get_Bool("OPTION", "BTM2_PICK_UPDOWN", FALSE);
 
 	m_EquipData.bUseRosSkip = INI.Get_Bool("OPTION", "ROS_SKIP", FALSE);

@@ -357,41 +357,52 @@ void CCMI8000Dlg::OnTimer(UINT_PTR nIDEvent)
 void CCMI8000Dlg::OnBnClickedBtnMainOperator()
 {
 	int nMode = theApp.Get_MainMode();
-	if (nMode == MODE_OPERATOR) {
-#ifdef DRY_RUN_TEST
-		g_dlgSetup.Set_LoginUser(2);	// SI
-		Set_CurrentMode(MODE_WORK);
-#else
-		int nUser = 0;
-		if (g_objCommon.Show_Password(nUser) != IDOK) return;
-		g_dlgSetup.Set_LoginUser(nUser);
-		Set_CurrentMode(MODE_WORK);
-#endif
+	int nUser = 0;
+	if (nMode == MODE_OPERATOR) 
+	{
+
+		if(gData.bUseDryRun)
+		{
+			g_dlgSetup.Set_LoginUser(2);	// SI
+			Set_CurrentMode(MODE_WORK);
+		}
+		else
+		{
+			
+			if (g_objCommon.Show_Password(nUser) != IDOK) return;
+			g_dlgSetup.Set_LoginUser(nUser);
+			Set_CurrentMode(MODE_WORK);
+		}
 	}
 	else Set_CurrentMode(MODE_OPERATOR);
 }
 
 void CCMI8000Dlg::OnBnClickedRdoMainParam()
 {
-#ifdef DRY_RUN_TEST
-	g_dlgSetup.Set_LoginUser(2);	// SI
-	Set_CurrentMode(MODE_SETUP);
-#else
-	int nUser = 0;
-	if (g_objCommon.Show_Password(nUser) == IDOK) {
-		theApp.bParamMode = TRUE;
-		g_dlgSetup.Set_LoginUser(nUser);
-		Set_CurrentMode(MODE_PARAM);
-
-	} else {
-		int nMode = theApp.Get_MainMode();
-		if (nMode == MODE_WORK) m_rdoMainWork.SetCheck(TRUE);
-		if (nMode == MODE_MANUAL) m_rdoMainManual.SetCheck(TRUE);
-		if (nMode == MODE_SETUP) m_rdoMainSetup.SetCheck(TRUE);
-		if (nMode == MODE_PROHIBIT) m_rdoMainProhibit.SetCheck(TRUE);
-		if (nMode == MODE_PARAM) m_rdoMainParm.SetCheck(TRUE);
+	if(gData.bUseDryRun)
+	{
+		g_dlgSetup.Set_LoginUser(2);	// SI
+		Set_CurrentMode(MODE_SETUP);
 	}
-#endif
+	else
+	{
+		int nUser = 0;
+		if (g_objCommon.Show_Password(nUser) == IDOK) 
+		{
+			theApp.bParamMode = TRUE;
+			g_dlgSetup.Set_LoginUser(nUser);
+			Set_CurrentMode(MODE_PARAM);
+		} 
+		else 
+		{
+			int nMode = theApp.Get_MainMode();
+			if (nMode == MODE_WORK) m_rdoMainWork.SetCheck(TRUE);
+			if (nMode == MODE_MANUAL) m_rdoMainManual.SetCheck(TRUE);
+			if (nMode == MODE_SETUP) m_rdoMainSetup.SetCheck(TRUE);
+			if (nMode == MODE_PROHIBIT) m_rdoMainProhibit.SetCheck(TRUE);
+			if (nMode == MODE_PARAM) m_rdoMainParm.SetCheck(TRUE);
+		}
+	}
 }
 
 void CCMI8000Dlg::OnBnClickedRdoMainWork()
@@ -401,50 +412,55 @@ void CCMI8000Dlg::OnBnClickedRdoMainWork()
 
 void CCMI8000Dlg::OnBnClickedRdoMainManual()
 {
-#ifdef DRY_RUN_TEST
-	g_dlgSetup.Set_LoginUser(2);	// SI
-	Set_CurrentMode(MODE_SETUP);
-#else
 	int nUser = 0;
-	if (g_objCommon.Show_Password(nUser) == IDOK) {
-		theApp.bParamMode = FALSE;
-		g_dlgSetup.Set_LoginUser(nUser);
+	if(gData.bUseDryRun)
+	{
+		g_dlgSetup.Set_LoginUser(2);	// SI
 		Set_CurrentMode(MODE_MANUAL);
-
-	} else {
-		int nMode = theApp.Get_MainMode();
-		if (nMode == MODE_WORK) m_rdoMainWork.SetCheck(TRUE);
-		if (nMode == MODE_MANUAL) m_rdoMainManual.SetCheck(TRUE);
-		if (nMode == MODE_SETUP) m_rdoMainSetup.SetCheck(TRUE);
-		if (nMode == MODE_PROHIBIT) m_rdoMainProhibit.SetCheck(TRUE);
-		if (nMode == MODE_PARAM) m_rdoMainParm.SetCheck(TRUE);
 	}
-#endif
+	else
+	{
+		if (g_objCommon.Show_Password(nUser) == IDOK) {
+			theApp.bParamMode = FALSE;
+			g_dlgSetup.Set_LoginUser(nUser);
+			Set_CurrentMode(MODE_MANUAL);
 
+		} else {
+			int nMode = theApp.Get_MainMode();
+			if (nMode == MODE_WORK) m_rdoMainWork.SetCheck(TRUE);
+			if (nMode == MODE_MANUAL) m_rdoMainManual.SetCheck(TRUE);
+			if (nMode == MODE_SETUP) m_rdoMainSetup.SetCheck(TRUE);
+			if (nMode == MODE_PROHIBIT) m_rdoMainProhibit.SetCheck(TRUE);
+			if (nMode == MODE_PARAM) m_rdoMainParm.SetCheck(TRUE);
+		}
+	}
 	//Set_CurrentMode(MODE_MANUAL);
 }
 
 void CCMI8000Dlg::OnBnClickedRdoMainSetup()
 {
-#ifdef DRY_RUN_TEST
-	g_dlgSetup.Set_LoginUser(2);	// SI
-	Set_CurrentMode(MODE_SETUP);
-#else
-	int nUser = 0;
-	if (g_objCommon.Show_Password(nUser) == IDOK) {
-		theApp.bParamMode = FALSE;
-		g_dlgSetup.Set_LoginUser(nUser);
+	if(gData.bUseDryRun)
+	{
+		g_dlgSetup.Set_LoginUser(2);	// SI
 		Set_CurrentMode(MODE_SETUP);
-
-	} else {
-		int nMode = theApp.Get_MainMode();
-		if (nMode == MODE_WORK) m_rdoMainWork.SetCheck(TRUE);
-		if (nMode == MODE_MANUAL) m_rdoMainManual.SetCheck(TRUE);
-		if (nMode == MODE_SETUP) m_rdoMainSetup.SetCheck(TRUE);
-		if (nMode == MODE_PROHIBIT) m_rdoMainProhibit.SetCheck(TRUE);
-		if (nMode == MODE_PARAM) m_rdoMainParm.SetCheck(TRUE);
 	}
-#endif
+	else
+	{
+		int nUser = 0;
+		if (g_objCommon.Show_Password(nUser) == IDOK) {
+			theApp.bParamMode = FALSE;
+			g_dlgSetup.Set_LoginUser(nUser);
+			Set_CurrentMode(MODE_SETUP);
+
+		} else {
+			int nMode = theApp.Get_MainMode();
+			if (nMode == MODE_WORK) m_rdoMainWork.SetCheck(TRUE);
+			if (nMode == MODE_MANUAL) m_rdoMainManual.SetCheck(TRUE);
+			if (nMode == MODE_SETUP) m_rdoMainSetup.SetCheck(TRUE);
+			if (nMode == MODE_PROHIBIT) m_rdoMainProhibit.SetCheck(TRUE);
+			if (nMode == MODE_PARAM) m_rdoMainParm.SetCheck(TRUE);
+		}
+	}
 }
 
 void CCMI8000Dlg::OnBnClickedRdoMainProhibit()
@@ -545,9 +561,7 @@ void CCMI8000Dlg::Initial_Controls()
 	m_stcMainVer.Init_Ctrl("Segoe UI", 14, TRUE, RGB(0x00, 0x00, 0x00), RGB(0xE6, 0xE6, 0xE6));
 	for (int i = 0; i < 3; i++) m_stcMainTower[i].Init_Ctrl("Segoe UI", 14, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xFF, 0xFF));
 
-#ifdef DRY_RUN_TEST
-	m_stcMainEquip.Init_Ctrl("Segoe UI", 14, TRUE, RGB(0xFF, 0xFF, 0xFF), RGB(0xFF, 0x00, 0x00));
-#endif
+	
 #ifdef VISION_REPEAT
 	m_stcMainEquip.Init_Ctrl("Segoe UI", 14, TRUE, RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0xFF));
 #endif
@@ -715,22 +729,25 @@ void CCMI8000Dlg::Set_CurrentState(int nState)
 	// Buzzer
 	if (nState == STATE_ALARM || nState == STATE_ERROR) {
 		m_bBuzzerOn = TRUE;
-#ifndef DRY_RUN_TEST	// 시끄러워서 막음
-		EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-		if (gData.bEmptyFull) {
-			pDY14->oBuzzerBit0 = TRUE;	//pEquipData->bBuzzer[1][0];
-			pDY14->oBuzzerBit1 = TRUE;	//pEquipData->bBuzzer[1][1];
-			pDY14->oBuzzerBit2 = FALSE;	//pEquipData->bBuzzer[1][2];
-			pDY14->oBuzzerBit3 = FALSE;	//pEquipData->bBuzzer[1][3];
-			pDY14->oBuzzerBit4 = FALSE;	//pEquipData->bBuzzer[1][4];
-		} else {
-			pDY14->oBuzzerBit0 = pEquipData->bBuzzer[nState - STATE_ALARM][0];
-			pDY14->oBuzzerBit1 = pEquipData->bBuzzer[nState - STATE_ALARM][1];
-			pDY14->oBuzzerBit2 = pEquipData->bBuzzer[nState - STATE_ALARM][2];
-			pDY14->oBuzzerBit3 = pEquipData->bBuzzer[nState - STATE_ALARM][3];
-			pDY14->oBuzzerBit4 = pEquipData->bBuzzer[nState - STATE_ALARM][4];
+
+		if(!gData.bUseDryRun)
+		{
+			EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+			if (gData.bEmptyFull) {
+				pDY14->oBuzzerBit0 = TRUE;	//pEquipData->bBuzzer[1][0];
+				pDY14->oBuzzerBit1 = TRUE;	//pEquipData->bBuzzer[1][1];
+				pDY14->oBuzzerBit2 = FALSE;	//pEquipData->bBuzzer[1][2];
+				pDY14->oBuzzerBit3 = FALSE;	//pEquipData->bBuzzer[1][3];
+				pDY14->oBuzzerBit4 = FALSE;	//pEquipData->bBuzzer[1][4];
+			} else {
+				pDY14->oBuzzerBit0 = pEquipData->bBuzzer[nState - STATE_ALARM][0];
+				pDY14->oBuzzerBit1 = pEquipData->bBuzzer[nState - STATE_ALARM][1];
+				pDY14->oBuzzerBit2 = pEquipData->bBuzzer[nState - STATE_ALARM][2];
+				pDY14->oBuzzerBit3 = pEquipData->bBuzzer[nState - STATE_ALARM][3];
+				pDY14->oBuzzerBit4 = pEquipData->bBuzzer[nState - STATE_ALARM][4];
+			}
 		}
-#endif
+
 		// Buzzer Flicker
 		if (pEquipData->bBuzzer[nState - STATE_ALARM][5]) SetTimer(TIMER_BUZZER_FLKR, 500, NULL);
 	}
@@ -810,14 +827,17 @@ void CCMI8000Dlg::Set_BuzzerFlicker(BOOL bEnable)
 
 	} else {
 		m_bBuzzerOn = TRUE;
-#ifndef DRY_RUN_TEST	// 시끄러워서 막음
-		int nState = theApp.Get_MainState();
-		pDY14->oBuzzerBit0 = pEquipData->bBuzzer[nState-STATE_ALARM][0];
-		pDY14->oBuzzerBit1 = pEquipData->bBuzzer[nState-STATE_ALARM][1];
-		pDY14->oBuzzerBit2 = pEquipData->bBuzzer[nState-STATE_ALARM][2];
-		pDY14->oBuzzerBit3 = pEquipData->bBuzzer[nState-STATE_ALARM][3];
-		pDY14->oBuzzerBit4 = pEquipData->bBuzzer[nState-STATE_ALARM][4];
-#endif
+
+		if(!gData.bUseDryRun)
+		{
+			int nState = theApp.Get_MainState();
+			pDY14->oBuzzerBit0 = pEquipData->bBuzzer[nState-STATE_ALARM][0];
+			pDY14->oBuzzerBit1 = pEquipData->bBuzzer[nState-STATE_ALARM][1];
+			pDY14->oBuzzerBit2 = pEquipData->bBuzzer[nState-STATE_ALARM][2];
+			pDY14->oBuzzerBit3 = pEquipData->bBuzzer[nState-STATE_ALARM][3];
+			pDY14->oBuzzerBit4 = pEquipData->bBuzzer[nState-STATE_ALARM][4];
+		}
+
 	}
 	g_objAJinAXL.Write_Output(14);
 }

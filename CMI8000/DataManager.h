@@ -29,6 +29,7 @@ typedef struct tag_EQUIP_DATA {
 	BOOL	bUseApdAlarm;		// APD 결과 송수신 과정에서 MES와 문제가 생기면 조치할수 있게 옵션화
 	BOOL	bUsePMTrigger;
 	BOOL	bUse2ndAVI;
+	BOOL	bUseDryRun;
 	double	dTrayPitchX;
 	double	dTrayPitchY;
 	double	dInspectPitchX;

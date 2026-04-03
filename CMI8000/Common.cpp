@@ -489,12 +489,17 @@ BOOL CCommon::Check_MainEmgAir()
 
 BOOL CCommon::Check_MainDoor(BOOL bAuto)
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
-	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-	if (!pEquipData->bUseDoorLock) return TRUE;
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
+	else
+	{
+		EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+		if (!pEquipData->bUseDoorLock) return TRUE;
 
+	}
+	
 #ifdef AJIN_BOARD_USE
 	DX_DATA_15 *pDX15 = g_objAJinAXL.Get_pDX15();
 	BOOL bLoad1 = g_objSequenceMain.Get_LotLoadEnable(0);
@@ -529,9 +534,11 @@ BOOL CCommon::Check_MainDoor(BOOL bAuto)
 
 CString CCommon::Get_StateOfDoors()
 {
-#ifdef DRY_RUN_TEST
-	return "";
-#endif
+	if(gData.bUseDryRun)
+	{
+		return "";
+	}
+
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 	
 	CString strStates;
@@ -596,9 +603,11 @@ CString CCommon::Get_StateOfDoors()
 
 BOOL CCommon::Check_PortArea(BOOL bAuto)
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
+
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 	if (!pEquipData->bUseDoorLock) return TRUE;
 	if (!bAuto)	return TRUE;
@@ -1435,9 +1444,11 @@ void CCommon::Set_InspectVacOn(int nNo, int nSub)
 
 BOOL CCommon::Get_InspectVacOn(int nNo, int nSub)
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
+
 	DX_DATA_05 *pDX05 = g_objAJinAXL.Get_pDX05();
 	DX_DATA_06 *pDX06 = g_objAJinAXL.Get_pDX06();
 
@@ -1534,9 +1545,10 @@ void CCommon::Set_InspectVacOff(int nNo, int nSub)
 
 BOOL CCommon::Get_InspectVacOff(int nNo, int nSub)
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
 	DX_DATA_05 *pDX05 = g_objAJinAXL.Get_pDX05();
 	DX_DATA_06 *pDX06 = g_objAJinAXL.Get_pDX06();
 
@@ -2692,9 +2704,10 @@ BOOL CCommon::Get_GoodTray2MasterSlaveOut()
 
 void CCommon::Set_InfoBtm1PickerVacOn(int nPos, int nRow, int nNo, int nLine)
 {
-#ifdef DRY_RUN_TEST
-	return;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return;
+	}
 	DY_DATA_04 *pDY04 = g_objAJinAXL.Get_pDY04();
 	int *pInfo = NULL;
 
@@ -2734,9 +2747,10 @@ void CCommon::Set_InfoBtm1PickerVacOn(int nPos, int nRow, int nNo, int nLine)
 
 BOOL CCommon::Get_InfoBtm1PickerVacOn()
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
 	DX_DATA_03 *pDX03 = g_objAJinAXL.Get_pDX03();
 	DX_DATA_04 *pDX04 = g_objAJinAXL.Get_pDX04();
 	int *pInfo = gData.InfoBtm1Pick;
@@ -2755,9 +2769,10 @@ BOOL CCommon::Get_InfoBtm1PickerVacOn()
 
 BOOL CCommon::Check_Btm1PickerVacOn(int nSNo, int nLine, int nRow)
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
 
 #ifndef AJIN_BOARD_USE 
 	return TRUE;
@@ -2888,9 +2903,10 @@ void CCommon::Set_InfoBtm1PickerClose(int nPos, int nRow, int nNo, int nLine)
 
 BOOL CCommon::Get_InfoBtm1PickerClose()
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
 
 	DX_DATA_03 *pDX03 = g_objAJinAXL.Get_pDX03();
 	int *pInfo = gData.InfoBtm1Pick;
@@ -2910,9 +2926,10 @@ BOOL CCommon::Get_InfoBtm1PickerClose()
 // 2. Info Inspection I/O 함수
 void CCommon::Set_InfoInspectVacOn(int nNo, int nPos)
 {
-#ifdef DRY_RUN_TEST
-	return;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return;
+	}
 	DY_DATA_05 *pDY05 = g_objAJinAXL.Get_pDY05();
 	DY_DATA_06 *pDY06 = g_objAJinAXL.Get_pDY06();
 	//int *pInfo = gData.InfoInspect[nNo - 1];
@@ -2980,9 +2997,10 @@ void CCommon::Set_InfoInspectVacOn(int nNo, int nPos)
 
 BOOL CCommon::Get_InfoInspectVacOn(int nNo, int nPos)
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
 	DX_DATA_05 *pDX05 = g_objAJinAXL.Get_pDX05();
 	DX_DATA_06 *pDX06 = g_objAJinAXL.Get_pDX06();
 	int *pInfo = gData.InfoInspect[nNo - 1];
@@ -3024,9 +3042,10 @@ BOOL CCommon::Get_InfoInspectVacOn(int nNo, int nPos)
 
 void CCommon::Set_InfoBtm2VacOn()
 {
-#ifdef DRY_RUN_TEST
-	return;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return;
+	}
 	DY_DATA_08 *pDY08 = g_objAJinAXL.Get_pDY08();
 	int *pInfo = gData.InfoBtm2Pick;
 
@@ -3044,9 +3063,10 @@ void CCommon::Set_InfoBtm2VacOn()
 
 BOOL CCommon::Get_InfoBtm2VacOn()
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
 	DX_DATA_08 *pDX08 = g_objAJinAXL.Get_pDX08();
 	int *pInfo = gData.InfoBtm2Pick;
 
@@ -3107,9 +3127,10 @@ BOOL CCommon::Get_InfoBtm2Close()
 
 BOOL CCommon::Get_InfoBtm2Check()
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
 	DX_DATA_07 *pDX07 = g_objAJinAXL.Get_pDX07();
 	int *pInfo = gData.InfoBtm2Pick;
 
@@ -3183,9 +3204,10 @@ BOOL CCommon::Get_InfoSortPicker1Close()
 
 BOOL CCommon::Get_InfoSortPicker1Check()
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
 	DX_DATA_10 *pDX10 = g_objAJinAXL.Get_pDX10();
 	int *pInfo = gData.InfoSortPick[0];
 
@@ -3255,9 +3277,10 @@ BOOL CCommon::Get_InfoSortPicker2Close()
 
 BOOL CCommon::Get_InfoSortPicker2Check()
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
 	DX_DATA_11 *pDX11 = g_objAJinAXL.Get_pDX11();
 	int *pInfo = gData.InfoSortPick[1];
 
@@ -3273,9 +3296,10 @@ BOOL CCommon::Get_InfoSortPicker2Check()
 // Ng Buffer I/O 함수
 void CCommon::Set_NgBufferVacOff(int nNo)
 {
-#ifdef DRY_RUN_TEST
-	return;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return;
+	}
 	DY_DATA_10 *pDY10 = g_objAJinAXL.Get_pDY10();
 	DY_DATA_11 *pDY11 = g_objAJinAXL.Get_pDY11();
 
@@ -3300,9 +3324,10 @@ void CCommon::Set_NgBufferVacOff(int nNo)
 
 void CCommon::Set_InfoNgBufferVacOn(int nNo)
 {
-#ifdef DRY_RUN_TEST
-	return;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return;
+	}
 	DY_DATA_10 *pDY10 = g_objAJinAXL.Get_pDY10();
 	DY_DATA_11 *pDY11 = g_objAJinAXL.Get_pDY11();
 	int *pInfo = gData.InfoNgBuffer[nNo-1];
@@ -3330,9 +3355,10 @@ void CCommon::Set_InfoNgBufferVacOn(int nNo)
 
 BOOL CCommon::Get_InfoNgBufferVacOn(int nNo)
 {
-#ifdef DRY_RUN_TEST
-	return TRUE;
-#endif
+	if(gData.bUseDryRun)
+	{
+		return TRUE;
+	}
 	DX_DATA_10 *pDX10 = g_objAJinAXL.Get_pDX10();
 	DX_DATA_11 *pDX11 = g_objAJinAXL.Get_pDX11();
 	int *pInfo = gData.InfoNgBuffer[nNo-1];

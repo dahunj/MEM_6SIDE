@@ -1392,81 +1392,8 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 
 	if (((gData.byInspectDone[nPx][nTx][nCx] >> 7) & 1) == 1) return TRUE;	// 판정 완료 (2번 판정하지 않기 위해)
 
-#ifdef DRY_RUN_TEST
-	int nRand = g_objCommon.Get_Random(0, 99);
-	int nNg1 = m_pEquipData->nResultTestN1;
-	int nNg2 = m_pEquipData->nResultTestN2 + nNg1;
-	int nNg3 = m_pEquipData->nResultTestN3 + nNg2;
-	int nNg4 = m_pEquipData->nResultTestN4 + nNg3;
 
-	int nJudge = (nRand < nNg1 ? 4 : (nRand < nNg2 ? 5 : (nRand < nNg3 ? 6 : (nRand < nNg4 ? 8 : 1))));
-	nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
-	if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
-
-#else
-	CString strLog;
-	BOOL bDone = TRUE;
-	if (m_pEquipData->bUseInspectAngle && ((gData.byInspectDone[nPx][nTx][nCx] >> 0) & 1) == 0)
-		bDone = FALSE;	// return FALSE;	// Angle
-	if (m_pEquipData->bUseInspectBtm1Specular  && ((gData.byInspectDone[nPx][nTx][nCx] >> 1) & 1) == 0) 
-		bDone = FALSE;	// return FALSE;	// Btm1_SP
-	if (m_pEquipData->bUseInspectTop1  && ((gData.byInspectDone[nPx][nTx][nCx] >> 2) & 1) == 0) 
-		bDone = FALSE;	// return FALSE;	// Top1	
-	if (m_pEquipData->bUseInspectTop2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 3) & 1) == 0) 
-		bDone = FALSE;	// return FALSE;	// Top2
-	if (m_pEquipData->bUseInspectBtm2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 4) & 1) == 0)
-		bDone = FALSE;	// return FALSE;	// Btm2
-	if (m_pEquipData->bUseInspectBtm1Angle  && ((gData.byInspectDone[nPx][nTx][nCx] >> 5) & 1) == 0)
-		bDone = FALSE;	// return FALSE;	// Btm1_AG
-	if (m_pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) 
-		bDone = FALSE;	// return FALSE;	// Btm1_3D
-	
-	DWORD dwTick = GetTickCount();
-	if (!bDone) 
-	{		
-		m_strLog.Format("Currrent Tick sort1: %lu", dwTick);
-		g_objLogFile.Save_TestLog(m_strLog);
-		if (m_pEquipData->bUseInspectSkip || ((dwTick - gData.dwSkipTime_Sort1) > m_pEquipData->nDelayAdd[4]) ) 
-		{	
-			// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
-			gData.nInspectInfo[nPx][nTx][nCx] = 4;
-			gMes.sJudge[nPx][nTx][nCx] = "N1";
-			strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
-			g_objLogFile.Save_HandlerLog(strLog);
-		} 
-		else
-		{
-			return FALSE;
-		}
-	}
-
-	int nWaitTime = 0;
-	if		(nSortNo == 1)	nWaitTime = GetTickCount() - gData.nSp1Timer;
-	else if (nSortNo == 2)  nWaitTime = GetTickCount() - gData.nSp2Timer;
-	strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
-	g_objLogFile.Save_InspectWaitLog(nPx+1, strLog);
-
-
-	if (m_pEquipData->bUseDispatcher && !g_objDispatcher.Is_JudgeDone(nPx+1, nTx+1, nCx+1)) return FALSE;
-	
-	if (!gData.bRosDone[nPx][nTx][nCx]) {
-		if		(nSortNo == 1) nWaitTime = GetTickCount() - gData.nSp1Timer;
-		else if (nSortNo == 2) nWaitTime = GetTickCount() - gData.nSp2Timer;
-
-		strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
-		g_objLogFile.Save_RosWaitLog(nPx+1, strLog);
-		gData.bRosDone[nPx][nTx][nCx] = TRUE;
-	}
-
-	if(gData.bPullForce)
-	{
-		int nJudge = 1;
-		nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
-		if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
-		strLog.Format("PullForce : %d,%d,%d",nInfo, nTx+1, nCx+1);
-		g_objLogFile.Save_TestLog(strLog);
-	}
-	else if (m_pEquipData->bResultTestUse)
+	if(gData.bUseDryRun)
 	{
 		int nRand = g_objCommon.Get_Random(0, 99);
 		int nNg1 = m_pEquipData->nResultTestN1;
@@ -1477,33 +1404,111 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		int nJudge = (nRand < nNg1 ? 4 : (nRand < nNg2 ? 5 : (nRand < nNg3 ? 6 : (nRand < nNg4 ? 8 : 1))));
 		nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
 		if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
-		strLog.Format("ResultTest_Use : %d,%d,%d",nInfo, nTx+1, nCx+1);
-		g_objLogFile.Save_TestLog(strLog);
 
-	} 	
-	else 
-	{
-		if (gData.bCycleStop && !Get_VisionInspectUse()) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	//Good
-		else if (Get_VisionInspectUse())  nInfo = gData.nInspectInfo[nPx][nTx][nCx];
-
-		if (nInfo == 9) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;
 	}
-
-	for(int i = 0; i < gLot.nMatchingNgCount[nPx][0]; i++ )
+	else
 	{
-		if(gData.nPNoMESNG[i] == nPortNo && gData.nTNoMESNG[i] == nTrayNo && gData.nCmNoMESNG[i] == nCmNo)
+		CString strLog;
+		BOOL bDone = TRUE;
+		if (m_pEquipData->bUseInspectAngle && ((gData.byInspectDone[nPx][nTx][nCx] >> 0) & 1) == 0)
+			bDone = FALSE;	// return FALSE;	// Angle
+		if (m_pEquipData->bUseInspectBtm1Specular  && ((gData.byInspectDone[nPx][nTx][nCx] >> 1) & 1) == 0) 
+			bDone = FALSE;	// return FALSE;	// Btm1_SP
+		if (m_pEquipData->bUseInspectTop1  && ((gData.byInspectDone[nPx][nTx][nCx] >> 2) & 1) == 0) 
+			bDone = FALSE;	// return FALSE;	// Top1	
+		if (m_pEquipData->bUseInspectTop2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 3) & 1) == 0) 
+			bDone = FALSE;	// return FALSE;	// Top2
+		if (m_pEquipData->bUseInspectBtm2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 4) & 1) == 0)
+			bDone = FALSE;	// return FALSE;	// Btm2
+		if (m_pEquipData->bUseInspectBtm1Angle  && ((gData.byInspectDone[nPx][nTx][nCx] >> 5) & 1) == 0)
+			bDone = FALSE;	// return FALSE;	// Btm1_AG
+		if (m_pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) 
+			bDone = FALSE;	// return FALSE;	// Btm1_3D
+
+		DWORD dwTick = GetTickCount();
+		if (!bDone) 
+		{		
+			m_strLog.Format("Currrent Tick sort1: %lu", dwTick);
+			g_objLogFile.Save_TestLog(m_strLog);
+			if (m_pEquipData->bUseInspectSkip || ((dwTick - gData.dwSkipTime_Sort1) > m_pEquipData->nDelayAdd[4]) ) 
+			{	
+				// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
+				gData.nInspectInfo[nPx][nTx][nCx] = 4;
+				gMes.sJudge[nPx][nTx][nCx] = "N1";
+				strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
+				g_objLogFile.Save_HandlerLog(strLog);
+			} 
+			else
+			{
+				return FALSE;
+			}
+		}
+
+		int nWaitTime = 0;
+		if		(nSortNo == 1)	nWaitTime = GetTickCount() - gData.nSp1Timer;
+		else if (nSortNo == 2)  nWaitTime = GetTickCount() - gData.nSp2Timer;
+		strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
+		g_objLogFile.Save_InspectWaitLog(nPx+1, strLog);
+
+
+		if (m_pEquipData->bUseDispatcher && !g_objDispatcher.Is_JudgeDone(nPx+1, nTx+1, nCx+1)) return FALSE;
+
+		if (!gData.bRosDone[nPx][nTx][nCx]) {
+			if		(nSortNo == 1) nWaitTime = GetTickCount() - gData.nSp1Timer;
+			else if (nSortNo == 2) nWaitTime = GetTickCount() - gData.nSp2Timer;
+
+			strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
+			g_objLogFile.Save_RosWaitLog(nPx+1, strLog);
+			gData.bRosDone[nPx][nTx][nCx] = TRUE;
+		}
+
+		if(gData.bPullForce)
 		{
-			gData.nInspectInfo[nPx][nTx][nCx] = 4;
-			gMes.sJudge[nPx][nTx][nCx] = "N1";
+			int nJudge = 1;
+			nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
+			if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
+			strLog.Format("PullForce : %d,%d,%d",nInfo, nTx+1, nCx+1);
+			g_objLogFile.Save_TestLog(strLog);
+		}
+		else if (m_pEquipData->bResultTestUse)
+		{
+			int nRand = g_objCommon.Get_Random(0, 99);
+			int nNg1 = m_pEquipData->nResultTestN1;
+			int nNg2 = m_pEquipData->nResultTestN2 + nNg1;
+			int nNg3 = m_pEquipData->nResultTestN3 + nNg2;
+			int nNg4 = m_pEquipData->nResultTestN4 + nNg3;
 
-			nInfo = gData.nInspectInfo[nPx][nTx][nCx];		
+			int nJudge = (nRand < nNg1 ? 4 : (nRand < nNg2 ? 5 : (nRand < nNg3 ? 6 : (nRand < nNg4 ? 8 : 1))));
+			nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
+			if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
+			strLog.Format("ResultTest_Use : %d,%d,%d",nInfo, nTx+1, nCx+1);
+			g_objLogFile.Save_TestLog(strLog);
 
-			strLog.Format("MES NG, CM less than MES Count Info, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
-			g_objLogFile.Save_HandlerLog(strLog);
+		} 	
+		else 
+		{
+			if (gData.bCycleStop && !Get_VisionInspectUse()) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	//Good
+			else if (Get_VisionInspectUse())  nInfo = gData.nInspectInfo[nPx][nTx][nCx];
+
+			if (nInfo == 9) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;
+		}
+
+		for(int i = 0; i < gLot.nMatchingNgCount[nPx][0]; i++ )
+		{
+			if(gData.nPNoMESNG[i] == nPortNo && gData.nTNoMESNG[i] == nTrayNo && gData.nCmNoMESNG[i] == nCmNo)
+			{
+				gData.nInspectInfo[nPx][nTx][nCx] = 4;
+				gMes.sJudge[nPx][nTx][nCx] = "N1";
+
+				nInfo = gData.nInspectInfo[nPx][nTx][nCx];		
+
+				strLog.Format("MES NG, CM less than MES Count Info, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
+				g_objLogFile.Save_HandlerLog(strLog);
+			}
 		}
 	}
 
-#endif
+
 
 #ifdef VISION_REPEAT
 	nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	// 반복성 검증일때 모두 양품
@@ -1517,6 +1522,8 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 
 BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int &nInfo, int nSortNo)
 {
+	CString strLog;
+
 	if (nPortNo == 0 || nTrayNo == 0 || nCmNo == 0 || nInfo == 0) return TRUE;
 	int	nPx = nPortNo - 1;	// Port Index
 	int	nTx = nTrayNo - 1;	// Tray Index
@@ -1524,79 +1531,8 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 
 	if (((gData.byInspectDone[nPx][nTx][nCx] >> 7) & 1) == 1) return TRUE;	// 판정 완료 (2번 판정하지 않기 위해)
 
-#ifdef DRY_RUN_TEST
-	int nRand = g_objCommon.Get_Random(0, 99);
-	int nNg1 = m_pEquipData->nResultTestN1;
-	int nNg2 = m_pEquipData->nResultTestN2 + nNg1;
-	int nNg3 = m_pEquipData->nResultTestN3 + nNg2;
-	int nNg4 = m_pEquipData->nResultTestN4 + nNg3;
-
-	int nJudge = (nRand < nNg1 ? 4 : (nRand < nNg2 ? 5 : (nRand < nNg3 ? 6 : (nRand < nNg4 ? 8 : 1))));
-	nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
-	if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
-
-#else
-	CString strLog;
-	BOOL bDone = TRUE;
-	if (m_pEquipData->bUseInspectAngle && ((gData.byInspectDone[nPx][nTx][nCx] >> 0) & 1) == 0)
-		bDone = FALSE;	// return FALSE;	// Angle
-	if (m_pEquipData->bUseInspectBtm1Specular  && ((gData.byInspectDone[nPx][nTx][nCx] >> 1) & 1) == 0) 
-		bDone = FALSE;	// return FALSE;	// Btm1_SP
-	if (m_pEquipData->bUseInspectTop1  && ((gData.byInspectDone[nPx][nTx][nCx] >> 2) & 1) == 0) 
-		bDone = FALSE;	// return FALSE;	// Top1	
-	if (m_pEquipData->bUseInspectTop2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 3) & 1) == 0) 
-		bDone = FALSE;	// return FALSE;	// Top2
-	if (m_pEquipData->bUseInspectBtm2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 4) & 1) == 0)
-		bDone = FALSE;	// return FALSE;	// Btm2
-	if (m_pEquipData->bUseInspectBtm1Angle  && ((gData.byInspectDone[nPx][nTx][nCx] >> 5) & 1) == 0)
-		bDone = FALSE;	// return FALSE;	// Btm1_AG
-	//if (m_pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) 
-		//bDone = FALSE;	// return FALSE;	// Btm1_3D
-	
-	DWORD dwTick = GetTickCount();
-	
-	if (!bDone) 
+	if(gData.bUseDryRun)
 	{
-		m_strLog.Format("Currrent Tick sort 2: %lu", dwTick);
-		g_objLogFile.Save_TestLog(m_strLog);
-
-		if (m_pEquipData->bUseInspectSkip || ((dwTick - gData.dwSkipTime_Sort2)  > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
-			gData.nInspectInfo[nPx][nTx][nCx] = 4;
-			gMes.sJudge[nPx][nTx][nCx] = "N1";
-			strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
-			g_objLogFile.Save_HandlerLog(strLog);
-		} else {
-			return FALSE;
-		}
-	}
-
-	int nWaitTime = 0;
-	if		(nSortNo == 1)	nWaitTime = GetTickCount() - gData.nSp1Timer;
-	else if (nSortNo == 2)  nWaitTime = GetTickCount() - gData.nSp2Timer;
-	strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
-	g_objLogFile.Save_InspectWaitLog(nPx+1, strLog);
-
-
-	if (m_pEquipData->bUseDispatcher && !g_objDispatcher.Is_JudgeDone(nPx+1, nTx+1, nCx+1)) return FALSE;
-	
-	if (!gData.bRosDone[nPx][nTx][nCx]) {
-		if		(nSortNo == 1) nWaitTime = GetTickCount() - gData.nSp1Timer;
-		else if (nSortNo == 2) nWaitTime = GetTickCount() - gData.nSp2Timer;
-
-		strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
-		g_objLogFile.Save_RosWaitLog(nPx+1, strLog);
-		gData.bRosDone[nPx][nTx][nCx] = TRUE;
-	}
-
-	if(gData.bPullForce)
-	{
-		int nJudge = 1;
-		nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
-		if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
-		strLog.Format("PullForce : %d,%d,%d",nInfo, nTx+1, nCx+1);
-		g_objLogFile.Save_TestLog(strLog);
-	}
-	else if (m_pEquipData->bResultTestUse) {
 		int nRand = g_objCommon.Get_Random(0, 99);
 		int nNg1 = m_pEquipData->nResultTestN1;
 		int nNg2 = m_pEquipData->nResultTestN2 + nNg1;
@@ -1606,18 +1542,91 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 		int nJudge = (nRand < nNg1 ? 4 : (nRand < nNg2 ? 5 : (nRand < nNg3 ? 6 : (nRand < nNg4 ? 8 : 1))));
 		nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
 		if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
-		strLog.Format("ResultTest_Use : %d,%d,%d",nInfo, nTx+1, nCx+1);
-		g_objLogFile.Save_TestLog(strLog);
-
-	} 
+	}
 	else
 	{
-		if (gData.bCycleStop && !Get_VisionInspectUse()) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	//Good
-		else if (Get_VisionInspectUse())  nInfo = gData.nInspectInfo[nPx][nTx][nCx];
+		
+		BOOL bDone = TRUE;
+		if (m_pEquipData->bUseInspectAngle && ((gData.byInspectDone[nPx][nTx][nCx] >> 0) & 1) == 0)
+			bDone = FALSE;	// return FALSE;	// Angle
+		if (m_pEquipData->bUseInspectBtm1Specular  && ((gData.byInspectDone[nPx][nTx][nCx] >> 1) & 1) == 0) 
+			bDone = FALSE;	// return FALSE;	// Btm1_SP
+		if (m_pEquipData->bUseInspectTop1  && ((gData.byInspectDone[nPx][nTx][nCx] >> 2) & 1) == 0) 
+			bDone = FALSE;	// return FALSE;	// Top1	
+		if (m_pEquipData->bUseInspectTop2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 3) & 1) == 0) 
+			bDone = FALSE;	// return FALSE;	// Top2
+		if (m_pEquipData->bUseInspectBtm2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 4) & 1) == 0)
+			bDone = FALSE;	// return FALSE;	// Btm2
+		if (m_pEquipData->bUseInspectBtm1Angle  && ((gData.byInspectDone[nPx][nTx][nCx] >> 5) & 1) == 0)
+			bDone = FALSE;	// return FALSE;	// Btm1_AG
+		//if (m_pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) 
+		//bDone = FALSE;	// return FALSE;	// Btm1_3D
 
-		if (nInfo == 9) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;
+		DWORD dwTick = GetTickCount();
+
+		if (!bDone) 
+		{
+			m_strLog.Format("Currrent Tick sort 2: %lu", dwTick);
+			g_objLogFile.Save_TestLog(m_strLog);
+
+			if (m_pEquipData->bUseInspectSkip || ((dwTick - gData.dwSkipTime_Sort2)  > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
+				gData.nInspectInfo[nPx][nTx][nCx] = 4;
+				gMes.sJudge[nPx][nTx][nCx] = "N1";
+				strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
+				g_objLogFile.Save_HandlerLog(strLog);
+			} else {
+				return FALSE;
+			}
+		}
+
+		int nWaitTime = 0;
+		if		(nSortNo == 1)	nWaitTime = GetTickCount() - gData.nSp1Timer;
+		else if (nSortNo == 2)  nWaitTime = GetTickCount() - gData.nSp2Timer;
+		strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
+		g_objLogFile.Save_InspectWaitLog(nPx+1, strLog);
+
+
+		if (m_pEquipData->bUseDispatcher && !g_objDispatcher.Is_JudgeDone(nPx+1, nTx+1, nCx+1)) return FALSE;
+
+		if (!gData.bRosDone[nPx][nTx][nCx]) {
+			if		(nSortNo == 1) nWaitTime = GetTickCount() - gData.nSp1Timer;
+			else if (nSortNo == 2) nWaitTime = GetTickCount() - gData.nSp2Timer;
+
+			strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
+			g_objLogFile.Save_RosWaitLog(nPx+1, strLog);
+			gData.bRosDone[nPx][nTx][nCx] = TRUE;
+		}
+
+		if(gData.bPullForce)
+		{
+			int nJudge = 1;
+			nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
+			if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
+			strLog.Format("PullForce : %d,%d,%d",nInfo, nTx+1, nCx+1);
+			g_objLogFile.Save_TestLog(strLog);
+		}
+		else if (m_pEquipData->bResultTestUse) {
+			int nRand = g_objCommon.Get_Random(0, 99);
+			int nNg1 = m_pEquipData->nResultTestN1;
+			int nNg2 = m_pEquipData->nResultTestN2 + nNg1;
+			int nNg3 = m_pEquipData->nResultTestN3 + nNg2;
+			int nNg4 = m_pEquipData->nResultTestN4 + nNg3;
+
+			int nJudge = (nRand < nNg1 ? 4 : (nRand < nNg2 ? 5 : (nRand < nNg3 ? 6 : (nRand < nNg4 ? 8 : 1))));
+			nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
+			if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
+			strLog.Format("ResultTest_Use : %d,%d,%d",nInfo, nTx+1, nCx+1);
+			g_objLogFile.Save_TestLog(strLog);
+
+		} 
+		else
+		{
+			if (gData.bCycleStop && !Get_VisionInspectUse()) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	//Good
+			else if (Get_VisionInspectUse())  nInfo = gData.nInspectInfo[nPx][nTx][nCx];
+
+			if (nInfo == 9) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;
+		}
 	}
-#endif
 
 	for(int i = 0; i < gLot.nMatchingNgCount[nPx][0]; i++ )
 	{

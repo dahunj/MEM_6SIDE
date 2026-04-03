@@ -230,12 +230,14 @@ void CWorkDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		
 		m_pWorkInfoDlg->ShowWindow(SW_SHOW);
 
-#ifndef DRY_RUN_TEST
-		m_bmpEquipment.DeleteObject();
-		if (pEquipData->bUseDoorLock) m_bmpEquipment.LoadBitmap(IDB_EQUIP_WORK);
-		else m_bmpEquipment.LoadBitmap(IDB_EQUIP_DOOR);
-		m_imgEquipment.SetBitmap(m_bmpEquipment);
-#endif
+		if(!gData.bUseDryRun)
+		{
+			m_bmpEquipment.DeleteObject();
+			if (pEquipData->bUseDoorLock) m_bmpEquipment.LoadBitmap(IDB_EQUIP_WORK);
+			else m_bmpEquipment.LoadBitmap(IDB_EQUIP_DOOR);
+			m_imgEquipment.SetBitmap(m_bmpEquipment);
+		}
+
 
 		m_stcLotId[0].GetWindowText(strText);
 		if (strText.GetLength() < 1) {
@@ -792,24 +794,26 @@ BOOL CWorkDlg::Work_Start()
 
 	g_objInspector.Set_FOBRequest(INSPECTOR_ALL);	// 시작전 FOB 모드 확인
 
-#ifndef DRY_RUN_TEST
-	if (!pEquipData->bUseInspectAngle || !pEquipData->bUseInspectBtm1Specular || !pEquipData->bUseInspectBtm1Angle || !pEquipData->bUseInspectBtm13D
-		|| !pEquipData->bUseInspectTop1 || !pEquipData->bUseInspectTop2 || !pEquipData->bUseInspectBtm2) {
 
-		if (!pEquipData->bResultTestUse && gData.nLogInLevel != 9300) 
-		{
-			if (g_objCommon.Show_MsgBox(2, "Vision Option을 끄고 진행하시겠습니까?") != IDOK) return FALSE;
+	if(!gData.bUseDryRun)
+	{
+		if (!pEquipData->bUseInspectAngle || !pEquipData->bUseInspectBtm1Specular || !pEquipData->bUseInspectBtm1Angle || !pEquipData->bUseInspectBtm13D
+			|| !pEquipData->bUseInspectTop1 || !pEquipData->bUseInspectTop2 || !pEquipData->bUseInspectBtm2) {
+
+				if (!pEquipData->bResultTestUse && gData.nLogInLevel != 9300) 
+				{
+					if (g_objCommon.Show_MsgBox(2, "Vision Option을 끄고 진행하시겠습니까?") != IDOK) return FALSE;
+				}
+
+				if (gData.bCycleStop) {
+					if (!pEquipData->bUseInspectBtm1Specular || !pEquipData->bUseInspectBtm1Angle || !pEquipData->bUseInspectBtm13D) g_objInspector.Set_CycleStop(INSPECTOR_PC1);
+					if (!pEquipData->bUseInspectTop1 || !pEquipData->bUseInspectAngle) g_objInspector.Set_CycleStop(INSPECTOR_PC2);
+					if (!pEquipData->bUseInspectTop2) g_objInspector.Set_CycleStop(INSPECTOR_PC3);
+					if (!pEquipData->bUseInspectBtm2) g_objInspector.Set_CycleStop(INSPECTOR_PC4);
+				}
 		}
 
-		if (gData.bCycleStop) {
-			if (!pEquipData->bUseInspectBtm1Specular || !pEquipData->bUseInspectBtm1Angle || !pEquipData->bUseInspectBtm13D) g_objInspector.Set_CycleStop(INSPECTOR_PC1);
-			if (!pEquipData->bUseInspectTop1 || !pEquipData->bUseInspectAngle) g_objInspector.Set_CycleStop(INSPECTOR_PC2);
-			if (!pEquipData->bUseInspectTop2) g_objInspector.Set_CycleStop(INSPECTOR_PC3);
-			if (!pEquipData->bUseInspectBtm2) g_objInspector.Set_CycleStop(INSPECTOR_PC4);
-		}
-	}
-
-	int nTimeOut = 0;
+		int nTimeOut = 0;
 		while(gData.nVisionFOBMode == -1) {
 			nTimeOut++;
 			if (nTimeOut > 30) break;	//Time Out 3초
@@ -839,7 +843,7 @@ BOOL CWorkDlg::Work_Start()
 		{
 			if (g_objCommon.Show_MsgBox(2, "MES Option을 끄고 진행하시겠습니까?") != IDOK) return FALSE;
 		}
-#endif
+	}
 
 #ifndef AJIN_BOARD_USE
 		m_stcCmCount[0].GetWindowText(strTemp);	// CM 수량

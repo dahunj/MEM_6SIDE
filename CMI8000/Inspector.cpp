@@ -1450,17 +1450,21 @@ int CInspector::Get_VisionStatus(int nInspector)
 BOOL CInspector::Check_LotReady()
 {
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-#ifdef DRY_RUN_TEST
-	m_bLotReady1 = TRUE;
-	m_bLotReady2 = TRUE;
-	m_bLotReady3 = TRUE;
-	m_bLotReady4 = TRUE;
-#else
-	if (!pEquipData->bUseInspectBtm1Specular && !pEquipData->bUseInspectBtm1Angle && !pEquipData->bUseInspectBtm13D ) m_bLotReady1 = TRUE;
-	if (!pEquipData->bUseInspectTop1  && !pEquipData->bUseInspectAngle && !pEquipData->bUseVisionAlign) m_bLotReady2 = TRUE;
-	if (!pEquipData->bUseInspectTop2) m_bLotReady3 = TRUE;
-	if (!pEquipData->bUseInspectBtm2) m_bLotReady4 = TRUE;
-#endif
+
+	if(gData.bUseDryRun)
+	{
+		m_bLotReady1 = TRUE;
+		m_bLotReady2 = TRUE;
+		m_bLotReady3 = TRUE;
+		m_bLotReady4 = TRUE;
+	}
+	else
+	{
+		if (!pEquipData->bUseInspectBtm1Specular && !pEquipData->bUseInspectBtm1Angle && !pEquipData->bUseInspectBtm13D ) m_bLotReady1 = TRUE;
+		if (!pEquipData->bUseInspectTop1  && !pEquipData->bUseInspectAngle && !pEquipData->bUseVisionAlign) m_bLotReady2 = TRUE;
+		if (!pEquipData->bUseInspectTop2) m_bLotReady3 = TRUE;
+		if (!pEquipData->bUseInspectBtm2) m_bLotReady4 = TRUE;
+	}
 
 	return (m_bLotReady1 && m_bLotReady2 && m_bLotReady3 && m_bLotReady4);
 }
