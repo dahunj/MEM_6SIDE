@@ -244,6 +244,18 @@ BOOL CDataManager::Read_EquipData()
 	gData.nCmMaxCount = gData.nTrayX * gData.nTrayY;		// Tray 배열 (3X15)
 
 	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
+		
+	if(gData.bUseDryRun)
+	{
+		pMainDlg->m_stcMainEquip.Init_Ctrl("Segoe UI", 14, TRUE, RGB(0xFF, 0xFF, 0xFF), RGB(0xFF, 0x00, 0x00));
+		pMainDlg->m_stcMainEquip.Init_Ctrl("Segoe UI", 14, TRUE, RGB(0xFF, 0xFF, 0xFF), RGB(0xFF, 0x00, 0x00));		
+	}
+	else
+	{
+		pMainDlg->m_stcMainEquip.Init_Ctrl("Segoe UI", 14, TRUE, RGB(0x00, 0x00, 0x00), RGB(0xE6, 0xE6, 0xE6));
+		pMainDlg->m_stcMainEquip.Init_Ctrl("Segoe UI", 14, TRUE, RGB(0x00, 0x00, 0x00), RGB(0xE6, 0xE6, 0xE6));
+	}
+
 	pMainDlg->Display_EquipName();
 
 	// Log 표준화
