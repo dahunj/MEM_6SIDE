@@ -94,14 +94,14 @@ void CCommon::MakeFolder(CString sPath)	//"D:\\Run\\Log\\LotData\\YYYY\\MM\\DD\\
 void CCommon::Save_MotionPos()
 {
 	int nCount = 0;
-	for(int i=0; i<AXIS_COUNT; i++) {
+	for(int i=0; i<AXIS_COUNT; i++) 
+	{
 		if(g_objAJinAXL.Is_Done(i)) { gAlm.dMotionPos[i] = g_objAJinAXL.Get_Position(i); }
 		else						{ gAlm.dMotionPos[i] = -100.0; nCount++; }
 	}
 
 	DX_DATA_09 *pDX09 = g_objAJinAXL.Get_pDX09();
-
-
+	
 	g_objCommon.uSleep(100);
 	BOOL bStatusDone = FALSE;
 	BOOL bError = FALSE;

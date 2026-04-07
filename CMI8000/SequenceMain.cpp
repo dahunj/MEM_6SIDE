@@ -2248,7 +2248,7 @@ BOOL CSequenceMain::LoadTray_Run()
 			if (!Check_LoadTrayLoading(nLtWorkPort)) return TRUE;	// 같은 Port Lot을 동시에 검사하지 않는다.
 
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 1, TRUE);						
+							
 		}
 		break;
 	case 2:		// Tray X Move to Load Position
@@ -2277,8 +2277,7 @@ BOOL CSequenceMain::LoadTray_Run()
 			}
 		}	
 		m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
-		m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
-		m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
+		
 		break;
 	case 3:		// Check Position, Lot Start		
 		#ifndef AJIN_BOARD_USE
@@ -2303,8 +2302,7 @@ BOOL CSequenceMain::LoadTray_Run()
 			}			
 			m_dwLoadTray = GetTickCount();
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);	// 30000
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 2);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 3);
+			
 		} 
 		break;
 	case 4:		// Tray Z Move to Support Up Position (Load)
@@ -2318,8 +2316,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				}				
 				g_objCommon.Move_Position(AX_LOAD_STAGE_Z, 1);	// Support Up
 				m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(10000);
-				m_tLoadTrayLoop.Takt_End(nTaktZone, 3);
-				m_tLoadTrayLoop.Takt_Start(nTaktZone, 4);
+				
 			}
 		}
 		break;
@@ -2328,8 +2325,7 @@ BOOL CSequenceMain::LoadTray_Run()
 		{			
 			g_objCommon.Set_LoadPortSupportOut(nLtWorkPort);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 4);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 5);			
+				
 		}
 		break;
 	case 6:		// Tray Z Move to Support Down Position
@@ -2337,8 +2333,7 @@ BOOL CSequenceMain::LoadTray_Run()
 		{		
 			g_objCommon.Move_Position(AX_LOAD_STAGE_Z, 2);	// Support Down
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(10000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 5);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 6);
+		
 		}
 		break;
 	case 7:		// Port Support In
@@ -2346,16 +2341,14 @@ BOOL CSequenceMain::LoadTray_Run()
 		{			
 			g_objCommon.Set_LoadPortSupportIn(nLtWorkPort);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 6);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 7);
+			
 		}
 		break;
  	case 8:		// Tray Z Move to Ready Down Position
 		if (g_objCommon.Get_LoadPortSupportIn(nLtWorkPort)) 
 		{
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(10000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 7);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 8);
+			
 		}
 		break;
 	case 9:		// Tray Master In
@@ -2364,8 +2357,7 @@ BOOL CSequenceMain::LoadTray_Run()
 			m_pDY01->oLoadStageMasterIn = TRUE;
 			g_objAJinAXL.Write_Output(1);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 8);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 9);
+			
 		}
 		break;
 	case 10:	// Tray Slave In		
@@ -2374,8 +2366,7 @@ BOOL CSequenceMain::LoadTray_Run()
 			m_pDY01->oLoadStageSlaveIn = TRUE;
 			g_objAJinAXL.Write_Output(1);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 9);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 10);
+			
 		}
 		break;
 	case 11:	// Check Tray Master/Slave In
@@ -2385,8 +2376,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				
 			g_objCommon.Move_Position(AX_LOAD_STAGE_Z, 0);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 10);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 11);
+			
 		}
 		break;
 	case 12:	// Slave/Master Out
@@ -2402,8 +2392,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				g_objAJinAXL.Write_Output(1);
 				bAlignFirst = FALSE;
 				m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
-				m_tLoadTrayLoop.Takt_End(nTaktZone, 11);
-				m_tLoadTrayLoop.Takt_Start(nTaktZone, 12);
+				
 			}
 		}
 		break;
@@ -2420,8 +2409,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				g_objAJinAXL.Write_Output(1);
 				bAlignFirst = FALSE;
 				m_nLoadTrayCase = 15; m_tLoadTrayLoop.Set_LoopTime(5000);
-				m_tLoadTrayLoop.Takt_End(nTaktZone, 12);
-				m_tLoadTrayLoop.Takt_Start(nTaktZone, 13);
+				
 			}
 		}
 		break;
@@ -2431,8 +2419,7 @@ BOOL CSequenceMain::LoadTray_Run()
 		{			
 			g_objCommon.Move_Position(AX_LOAD_STAGE_X, 2);	// Unload
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(20000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 13);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 15);
+			
 		}
 		break;
 	case 16:	// Tray Z Move to Unload Up Position
@@ -2440,8 +2427,7 @@ BOOL CSequenceMain::LoadTray_Run()
 		{			
 			g_objCommon.Move_Position(AX_LOAD_STAGE_Z, 3);	// Unload Up
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(10000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 15);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 16);
+			
 		}
 		break;
 	case 17:	// Load Tray Count 증가 (Start)
@@ -2457,8 +2443,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				}
 				dwStartTick = GetTickCount();
 				m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);	// 30초 (Wait for Vision Ready)
-				m_tLoadTrayLoop.Takt_End(nTaktZone, 16);
-				m_tLoadTrayLoop.Takt_Start(nTaktZone, 17);
+				
 			} 
 			else
 			{
@@ -2471,8 +2456,7 @@ BOOL CSequenceMain::LoadTray_Run()
 		if (g_objInspector.Check_LotReady()) 
 		{
 			m_nLoadTrayCase = 20; m_tLoadTrayLoop.Set_LoopTime(5000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 17);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 18);
+			
 		}
 		else if(dwEndTick > 25000)
 		{
@@ -2498,16 +2482,14 @@ BOOL CSequenceMain::LoadTray_Run()
 			m_tLoadTrayLoop.Takt_Start(nTaktZone, 9);
 			g_objCommon.Move_Position(AX_LOAD_STAGE_Z, 0);	// Ready Down
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(10000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 18);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 21);
+			
 		}
 		break;
 	case 22:	// Port Check
 		if (g_objCommon.Check_Position(AX_LOAD_STAGE_Z, 0)) 
 		{			
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(20000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 21);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 22);
+			
 		}
 		break;
 	case 23:	// Tray X Move to Load Position
@@ -2516,8 +2498,7 @@ BOOL CSequenceMain::LoadTray_Run()
 			if (nLtWorkPort == 1) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 0);	// Port1
 			if (nLtWorkPort == 2) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 1);	// Port2
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(10000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 22);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 23);
+			
 		}
 		break;
 	case 24:	// Check End or Go
@@ -2547,9 +2528,7 @@ BOOL CSequenceMain::LoadTray_Run()
 			m_strLog.Format("LoadTray, %d", GetTickCount() - m_dwLoadTray);
 			g_objLogFile.Save_TestLog(m_strLog);
 
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 23);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 24); 
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 24, TRUE);
+			
 		}
 		break;
 
@@ -2633,7 +2612,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 				
 				g_objCommon.Set_LoadPickerDown();
 				m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-				m_tLoadPickLoop.Takt_Start(nTaktZone,1,TRUE);
+				
 			}
 		}
 		break;
@@ -2643,8 +2622,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 			m_pDY01->oLoadStageSlaveIn = FALSE;
 			g_objAJinAXL.Write_Output(1);
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_End(nTaktZone,1);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,2);
+		
 			
 		}
 		break;
@@ -2654,8 +2632,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 			m_pDY01->oLoadStageMasterIn = FALSE;
 			g_objAJinAXL.Write_Output(1);
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_End(nTaktZone,2);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,3);
+		
 		}
 		break;
 	case 4:		// Picker Master In
@@ -2664,8 +2641,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 			m_pDY01->oLoadPickerMasterIn = TRUE; m_pDY01->oLoadPickerMasterOut = FALSE;
 			g_objAJinAXL.Write_Output(1);
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_End(nTaktZone,3);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,4);
+		
 		}
 		break;
 	case 5:		// Picker Slave In
@@ -2674,8 +2650,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 			m_pDY01->oLoadPickerSlaveIn = TRUE; m_pDY01->oLoadPickerSlaveOut = FALSE;
 			g_objAJinAXL.Write_Output(1);
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_End(nTaktZone,4);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,5);
+		
 		}
 		break;
 	case 6:		// 정보전달. // Picker Z Cylinder Up
@@ -2688,8 +2663,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 
 
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_End(nTaktZone,5);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,6);
+			
 		}
 		break;
 	case 7:		// Tray Check
@@ -2699,9 +2673,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 			{				
 				if (m_nLoadTrayCase == 20) m_nLoadTrayCase = 21;
 				m_nLoadPickCase = 10; m_tLoadPickLoop.Set_LoopTime(10000);
-				m_tLoadPickLoop.Takt_End(nTaktZone,6);
-				m_tLoadPickLoop.Takt_Start(nTaktZone,7);
-				m_tLoadPickLoop.Takt_End(nTaktZone,7);
+		
 			}
 		}
 		break;
@@ -2713,8 +2685,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 			if (g_objCommon.Check_Position(AX_ANGLE_UNIT_X, 0) && g_objCommon.Check_Position(AX_ANGLE_UNIT_Y, 0) && g_objCommon.Check_Position(AX_ANGLE_UNIT_R, 0)) {	// Inter lock 간섭 있다.
 				m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
 				
-				m_tLoadPickLoop.Takt_Start(nTaktZone,10);
-				m_tLoadPickLoop.Takt_End(nTaktZone,10);
+				
 
 			}
 		}
@@ -2725,7 +2696,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 		{			
 			g_objCommon.Move_Position(AX_LOAD_PICKER_Y, 1);	// Angle Position
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,11);
+			
 			
 		}
 		break;
@@ -2736,8 +2707,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 				
 				g_objCommon.Set_LoadPickerDown();
 				m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-				m_tLoadPickLoop.Takt_End(nTaktZone,11);
-				m_tLoadPickLoop.Takt_Start(nTaktZone,12);
+			
 			}			
 		}
 		break;
@@ -2748,16 +2718,14 @@ BOOL CSequenceMain::LoadPicker_Run()
 			m_pDY01->oLoadPickerMasterIn = FALSE; m_pDY01->oLoadPickerMasterOut = TRUE;
 			g_objAJinAXL.Write_Output(1);
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_End(nTaktZone,12);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,13);
+			
 		}
 		break;
 	case 14:	// Picker Master Out
 		if (g_objCommon.Get_LoadPickerMasterSlaveOut()) 
 		{			
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_End(nTaktZone,13);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,14);
+			
 		}
 		break;
 	case 15:	// 정보전달, Picker Up
@@ -2769,8 +2737,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 			g_objCommon.Set_LoadPickerUp();
 					
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_End(nTaktZone,14);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,15);
+			
 		}
 		break;
 	case 16:	// Y Axis Move to Load Tray Position
@@ -2778,8 +2745,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 		{			
 			g_objCommon.Move_Position(AX_LOAD_PICKER_Y, 0);
 			m_nLoadPickCase++; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_End(nTaktZone,15);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,16);
+			
 		}
 		break;
 	case 17:	// Position Check
@@ -2788,9 +2754,7 @@ BOOL CSequenceMain::LoadPicker_Run()
 			m_strLog.Format("LoadTrayPick, %d", GetTickCount() - m_dwTrayPick);
 			g_objLogFile.Save_TestLog(m_strLog);
 			m_nLoadPickCase = 0; m_tLoadPickLoop.Set_LoopTime(10000);
-			m_tLoadPickLoop.Takt_End(nTaktZone,16);
-			m_tLoadPickLoop.Takt_Start(nTaktZone,17);
-			m_tLoadPickLoop.Takt_End(nTaktZone,17,TRUE);
+			
 		}
 		break;
 	}
@@ -2846,7 +2810,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 		
 		m_dwVisAngle = GetTickCount();
 		m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(5000);
-		m_tVisAngleLoop.Takt_Start(nTaktZone, 1);
+		
 		
 		break;
 	case 2:		// Slave In & Align Z Move to Down Position 
@@ -2854,8 +2818,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 		{
 			g_objCommon.Move_Position(AX_VISION_ALIGN_Z, 1);	// Align Grab Pos
 			m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(5000);
-			m_tVisAngleLoop.Takt_End(nTaktZone, 1);
-			m_tVisAngleLoop.Takt_Start(nTaktZone, 2);
+		
 		}
 		break;
 	case 3:		// Master/Slave Check 
@@ -2868,8 +2831,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 			if (m_pEquipData->bUseVisionAlign)	m_nVisAngleCase++;
 			else								m_nVisAngleCase = 8;
 			m_tVisAngleLoop.Set_LoopTime(5000);
-			m_tVisAngleLoop.Takt_End(nTaktZone, 2);
-			m_tVisAngleLoop.Takt_Start(nTaktZone, 3);
+			
 		}
 		break;
 	case 4:		// Align Load Complete
@@ -2893,8 +2855,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 			if (!m_pEquipData->bUseVisionAlign) { if (!m_tVisAngleLoop.Waiting_Time(80)) break; }	// Dealy Time
 			g_objCommon.Move_Position(AX_VISION_ALIGN_Z, 0);	// ready up
 			m_nVisAngleCase = 10; m_tVisAngleLoop.Set_LoopTime(30000);
-			m_tVisAngleLoop.Takt_End(nTaktZone, 3);
-			m_tVisAngleLoop.Takt_Start(nTaktZone, 8);
+		
 		}
 		break;
 
@@ -2906,8 +2867,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 				
 				g_objCommon.Move_Position(AX_VISION_ANGLE_Z, 0);
 				m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(5000);
-				m_tVisAngleLoop.Takt_End(nTaktZone, 8);
-				m_tVisAngleLoop.Takt_Start(nTaktZone, 10);
+			
 			}
 		}
 		break;
@@ -2920,8 +2880,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 			strLog.Format("%0.3lf,%0.3lf", dPos, dEnc);
 			g_objLogFile.Save_FocusAxisLog(AX_VISION_ANGLE_Z, strLog);
 			m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(5000);
-			m_tVisAngleLoop.Takt_End(nTaktZone, 10);
-			m_tVisAngleLoop.Takt_Start(nTaktZone, 11);
+		
 		}
 		break;
 	case 12:	// Move to Module Inspection Position
@@ -2940,8 +2899,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 
 		
 			m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(10000);
-			m_tVisAngleLoop.Takt_End(nTaktZone, 11);
-			m_tVisAngleLoop.Takt_Start(nTaktZone, 12);
+			
 		}
 		else
 		{	
@@ -2964,9 +2922,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 				int nCmNo = (gData.nTrayY - nAngleTrayYPos) * gData.nTrayX + nAngleTrayXPos;	// Tray 하단부터 모듈 적재한다.
 				g_objInspector.Set_LoadComplete(INSPECTOR_PC2, "AG", gLot.sLotID[gData.nPNoAnglePort[0]-1], gData.nPNoAnglePort[0], gData.nTNoAnglePort[0],0, 0, 0, nCmNo, 0, 0, 0);
 				m_nVisAngleCase = 15; m_tVisAngleLoop.Set_LoopTime(30000);
-				m_tVisAngleLoop.Takt_End(nTaktZone, 12 );
-				m_tVisAngleLoop.Takt_Start(nTaktZone, 13);
-				m_tVisAngleLoop.Takt_End(nTaktZone, 13 );
+				
 			}
 		}
 		break;
@@ -2981,9 +2937,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 		if (g_objAJinAXL.Is_Done(AX_VISION_ANGLE_Z))
 		{			
 			g_objAJinAXL.Move_Absolute(AX_VISION_ANGLE_Z, m_dAngleZ);
-			m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(5000);
-			m_tVisAngleLoop.Takt_Start(nTaktZone, 16);
-			
+			m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(5000);					
 		}
 		break;
 	case 17:	// Send Move Complete
@@ -2994,10 +2948,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 			strLog.Format("%0.3lf,%0.3lf", m_dAngleZ, dEnc);
 			g_objLogFile.Save_FocusAxisLog(AX_VISION_ANGLE_Z, strLog);
 			g_objInspector.Set_MoveComplete(INSPECTOR_PC2, "AG");
-			m_nVisAngleCase = 15; m_tVisAngleLoop.Set_LoopTime(30000);	// 30초
-			m_tVisAngleLoop.Takt_End(nTaktZone, 16);
-			m_tVisAngleLoop.Takt_Start(nTaktZone, 17);
-			m_tVisAngleLoop.Takt_End(nTaktZone, 17);
+			m_nVisAngleCase = 15; m_tVisAngleLoop.Set_LoopTime(30000);	// 30초		
 		}
 		break;
 
@@ -3023,8 +2974,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 		m_pDY02->oAnglePortSlaveIn = FALSE; m_pDY02->oAnglePortSlaveOut = TRUE; 
 		g_objAJinAXL.Write_Output(2);
 		m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(5000);
-		m_tVisAngleLoop.Takt_End(nTaktZone, 20);
-		m_tVisAngleLoop.Takt_Start(nTaktZone, 21);
+		
 		break;
 	case 22:	//Angle port Master Out
 		if (!m_pDX02->iAnglePortSlaveIn && m_pDX02->iAnglePortSlaveOut)
@@ -3032,8 +2982,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 			m_pDY02->oAnglePortMasterIn = FALSE; m_pDY02->oAnglePortMasterOut = TRUE; 
 			g_objAJinAXL.Write_Output(2);
 			m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(5000);
-			m_tVisAngleLoop.Takt_End(nTaktZone, 21);
-			m_tVisAngleLoop.Takt_Start(nTaktZone, 22);
+		
 		}
 		break;
 	case 23:	// Master/Slave Check 
@@ -3041,8 +2990,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 		{			
 			m_bAngleInspComplete = TRUE;	// 검사 완료.
 			m_nVisAngleCase++; m_tVisAngleLoop.Set_LoopTime(5000);
-			m_tVisAngleLoop.Takt_End(nTaktZone, 22);
-			m_tVisAngleLoop.Takt_Start(nTaktZone, 23);
+		
 		}
 		break;
 	case 24:	// Angle Unit Position Check
@@ -3053,7 +3001,7 @@ BOOL CSequenceMain::VisionAngle_Run()
 			m_strLog.Format("VisionAngle, %d", GetTickCount() - m_dwVisAngle);
 			g_objLogFile.Save_TestLog(m_strLog);
 			m_nVisAngleCase = 0; m_tVisAngleLoop.Set_LoopTime(5000);
-			m_tVisAngleLoop.Takt_End(nTaktZone, 23, TRUE);
+			
 			//m_tVisAngleLoop.Takt_Start(nTaktZone, 24, "", TRUE);
 		}
 		break;
@@ -3119,8 +3067,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 				m_dwAngleTray1 = GetTickCount();
 				g_objCommon.Move_Position(AX_ANGLE_STAGE1_Z, 1);
 				m_nAngleTray1Case = 3; m_tAngleTray1Loop.Set_LoopTime(5000);
-				m_tAngleTray1Loop.Takt_Start(nTaktZone, 1, TRUE);
-				m_tAngleTray1Loop.Takt_End(nTaktZone, 1);
+				
 			}
 			break;
 		}
@@ -3139,8 +3086,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 				m_dwAngleTray1 = GetTickCount();
 				g_objCommon.Move_Position(AX_ANGLE_STAGE1_Z, 1);
 				m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-				m_tAngleTray1Loop.Takt_Start(nTaktZone, 2);
-				m_tAngleTray1Loop.Takt_End(nTaktZone, 2);
+			
 			}
 			break;
 		}
@@ -3157,7 +3103,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 			m_pDY02->oAngleStage1AlignIn = TRUE;
 			g_objAJinAXL.Write_Output(2);
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 3);
+		
 			
 		}
 		break;
@@ -3166,8 +3112,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 			&&m_pDX02->iAngleStage1AlignIn && !m_pDX02->iAngleStage1AlignOut) 
 		{
 
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 3);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 4);
+			
 			
 			memmove(gData.InfoAngleTray[0], gData.InfoAnglePortTray, sizeof(int) * 8 * 5);
 			memset(gData.InfoAnglePortTray, 0x00, sizeof(int) * 8 * 5);
@@ -3187,22 +3132,20 @@ BOOL CSequenceMain::AngleTray1_Run()
 		{
 			g_objCommon.Set_AnglePortSupportIn();
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 4);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 5);
+			
 		}
 		break;
 	case 6:		// Support Check
 		if (g_objCommon.Get_AnglePortSupportIn())
 		{			
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 5);
+			
 		}
 	case 7:		// 안전 확인.
 		if (m_nAngleTray2Case >= 20) 
 		{	// Btm1 Picker CM Loading
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 7);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 7);
+			
 		}
 		return TRUE;
 	case 8:		// Y Axis Move to Ready Position
@@ -3210,7 +3153,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 		{			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE1_Y, 1); // Ready Position
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 8);
+		
 		}
 		break;
 	case 9:		// Z Axis Move to Pick Up Position
@@ -3219,8 +3162,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 			g_objCommon.Move_Position(AX_ANGLE_STAGE1_Z, 2);
 						
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 8);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 9);
+	
 			
 		}
 		break;
@@ -3241,7 +3183,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 			}			
 
 			m_nAngleTray1Case = 15; m_tAngleTray1Loop.Set_LoopTime(20000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 9);
+		
 		}
 		break;
 	case 15:	// Wait for Stage2
@@ -3249,8 +3191,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 		{	// Btm1 Picker CM Loading
 			if(m_bBtm1ModulePick) g_objCommon.Set_Btm1Picker2RowUp(); // Btm1 Picker Line 1이 마지막 열을 Pick 할때 뒤에 트레이가 미리 올때 Btm1 실린더가 내려와 있으면 부딪힌다. 
 			m_nAngleTray1Case++;m_tAngleTray1Loop.Set_LoopTime(20000);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 15);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 15);
+		
 			
 		}
 		m_tAngleTray1Loop.Set_LoopTime(5000);
@@ -3262,7 +3203,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 		if (g_objCommon.Check_Position(AX_ANGLE_STAGE1_Z, 2) ) 
 		{
 			if (!m_tAngleTray1Loop.Waiting_Time(100)) break;
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 16);
+			
 			if (m_bBtm1ModulePick) 
 			{
 				g_objCommon.Move_Position(AX_ANGLE_STAGE1_Y, 3); // Btm1 Picker L2 Position
@@ -3283,7 +3224,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 			
 			g_dlgWork.PostMessage(UM_UPDATE_TRAY_INFO, 2, 0);
 			m_nAngleTray1Case = 20; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 16);
+			
 		}
 		break;
 
@@ -3296,9 +3237,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 			dStage1Z = m_pMoveData->dAngleStage1Z[2] - 20.0;	// CM Pick Up Position - 20mm
 			g_objAJinAXL.Move_Absolute(AX_ANGLE_STAGE1_Z, dStage1Z);
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 20);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 20);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 21);
+			
 
 		}
 		return TRUE;
@@ -3306,7 +3245,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 		if (g_objAJinAXL.Is_MoveDone(AX_ANGLE_STAGE1_Z, dStage1Z)) 
 		{
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 21);
+		
 		}
 		break;
 
@@ -3317,9 +3256,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE1_Y, 4); // Unload Position
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 22);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 22);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 23);
+			
 		}
 		return TRUE;
 	case 24:	// Position Check & Z Axis Move To Tray Pick Up Position
@@ -3327,8 +3264,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 		{			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE1_Z, 4); // Tray Pick Up Position
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 23);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 24);
+			
 		}
 		break;
 	case 25:	// Position Check
@@ -3336,7 +3272,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 		{			
 			m_bBtm1ModulePick = FALSE;
 			m_nAngleTray1Case = 30; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 24);
+			
 		}
 		break;
 	case 30:	// Empty Tray Unload Working
@@ -3347,9 +3283,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 		{
 			g_objCommon.Move_Position(AX_ANGLE_STAGE1_Z, 2); // Picker Up Position 안전한 위치.
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(30000);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 30);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 30);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 31);
+			
 		}
 		break;
 	case 32:	//
@@ -3358,7 +3292,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 			m_strLog.Format("AngleStage1, %d", GetTickCount() - m_dwAngleTray1);
 			g_objLogFile.Save_TestLog(m_strLog);
 			m_nAngleTray1Case = 50; m_tAngleTray1Loop.Set_LoopTime(30000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 31);
+		
 		}
 		break;
 
@@ -3371,9 +3305,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 		{			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE1_Z, 0);
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(30000);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 50);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 50);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 51);
+			
 		}
 		break;
 	case 52:	// Check Down Position, Y Move to Load pos
@@ -3382,8 +3314,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 		{			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE1_Y, 0);
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(30000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 51);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 52);
+			
 		}
 		break;
 	case 53:	// Check Position
@@ -3392,9 +3323,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 			m_pDY02->oAngleStage1AlignIn = FALSE;	// Tray Align Out
 			g_objAJinAXL.Write_Output(2);
 			m_nAngleTray1Case = 0; m_tAngleTray1Loop.Set_LoopTime(5000);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 52);
-			m_tAngleTray1Loop.Takt_Start(nTaktZone, 53);
-			m_tAngleTray1Loop.Takt_End(nTaktZone, 53, TRUE);
+			
 		}
 		break;
 	}
@@ -3434,8 +3363,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 			{
 				g_objCommon.Move_Position(AX_ANGLE_STAGE2_Z, 5);	// Wait Position
 				m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-				m_tAngleTray2Loop.Takt_Start(nTaktZone, 1, TRUE);
-				m_tAngleTray2Loop.Takt_End(nTaktZone, 1);
+				
 			}
 			break;
 		} else if ((m_nVisAngleCase == 0 || m_nVisAngleCase == 24) && m_pDX02->iAnglePortExist && m_bAngleInspComplete) 
@@ -3446,8 +3374,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 				m_dwAngleTray2 = GetTickCount();
 				g_objCommon.Move_Position(AX_ANGLE_STAGE2_Z, 1);
 				m_nAngleTray2Case = 3; m_tAngleTray2Loop.Set_LoopTime(5000);
-				m_tAngleTray2Loop.Takt_Start(nTaktZone, 1, TRUE);
-				m_tAngleTray2Loop.Takt_End(nTaktZone, 1);
+				
 			}
 			break;
 		}
@@ -3467,8 +3394,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 				m_dwAngleTray2 = GetTickCount();
 				g_objCommon.Move_Position(AX_ANGLE_STAGE2_Z, 1);
 				m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-				m_tAngleTray2Loop.Takt_Start(nTaktZone, 2);
-				m_tAngleTray2Loop.Takt_End(nTaktZone, 2);
+				
 			}
 			break;
 		}
@@ -3485,15 +3411,14 @@ BOOL CSequenceMain::AngleTray2_Run()
 			m_pDY02->oAngleStage2AlignIn = TRUE;
 			g_objAJinAXL.Write_Output(2);
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 3);
+			
 		}
 		break;
 	case 4:		// 정보전달, Z Axis Move to Ready Down Position
 		if (g_objCommon.Get_AnglePortSupportOut() && m_pDX02->iAngleStage2Exist &&
 			m_pDX02->iAngleStage2AlignIn && !m_pDX02->iAngleStage2AlignOut) 
 		{			
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 3);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 4);
+			
 			memmove(gData.InfoAngleTray[1], gData.InfoAnglePortTray, sizeof(int) * 8 * 5);
 			memset(gData.InfoAnglePortTray, 0x00, sizeof(int) * 8 * 5);
 			gData.nPNoAngleTray[1] = gData.nPNoAnglePort[0]; gData.nPNoAnglePort[0] = 0;
@@ -3512,22 +3437,20 @@ BOOL CSequenceMain::AngleTray2_Run()
 		{			
 			g_objCommon.Set_AnglePortSupportIn();
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 4);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 5);
+		
 		}
 		break;
 	case 6:		// Support Check
 		if (g_objCommon.Get_AnglePortSupportIn()) 
 		{			
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 5);
+			
 		}
 	case 7:		// 안전 확인.
 		if (m_nAngleTray1Case >= 20) 
 		{	// Btm1 Picker CM Loading
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 7);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 7);
+			
 		}
 		return TRUE;
 	case 8:		// Y Axis Move to Ready Position
@@ -3535,7 +3458,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 		{			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE2_Y, 1); // Ready Position
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 8);
+			
 		}
 		break;
 	case 9:		// Z Axis Move to Pick Up Position
@@ -3543,8 +3466,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 		{			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE2_Z, 2);
 			m_nAngleTray2Case = 10; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 8 );
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 9);
+			
 		}
 		break;
 	case 10:
@@ -3563,7 +3485,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 				}
 			}
 			m_nAngleTray2Case = 15; m_tAngleTray2Loop.Set_LoopTime(20000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 9 );
+			
 		}
 		break;
 	case 15:	// Wait for Stage1
@@ -3571,8 +3493,6 @@ BOOL CSequenceMain::AngleTray2_Run()
 		{	// Btm1 Picker CM Loading
 			if(m_bBtm1ModulePick) g_objCommon.Set_Btm1Picker2RowUp();
 			m_nAngleTray2Case++;m_tAngleTray2Loop.Set_LoopTime(20000);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 15);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 15);
 		}
 		m_tAngleTray2Loop.Set_LoopTime(5000);
 		return TRUE;
@@ -3594,7 +3514,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 				g_objCommon.Move_Position(AX_ANGLE_STAGE2_Y, 2); // Btm1 Picker L1 Position
 			}
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 16);
+			
 		}
 		break;
 	case 17:	// Position Check
@@ -3604,8 +3524,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 			Init_AngleTray(1);
 			
 			g_dlgWork.PostMessage(UM_UPDATE_TRAY_INFO, 2, 1);
-			m_nAngleTray2Case = 20; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 16);
+			m_nAngleTray2Case = 20; m_tAngleTray2Loop.Set_LoopTime(5000);		
 		}
 		break;
 
@@ -3618,16 +3537,14 @@ BOOL CSequenceMain::AngleTray2_Run()
 			dStage2Z = m_pMoveData->dAngleStage2Z[2] - 20.0;	// CM Pick Up Position - 20mm
 			g_objAJinAXL.Move_Absolute(AX_ANGLE_STAGE2_Z, dStage2Z); 
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 20);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 20);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 21);
+			
 		}
 		return TRUE;
 	case 22:	// Down Check
 		if (g_objAJinAXL.Is_MoveDone(AX_ANGLE_STAGE2_Z, dStage2Z))
 		{
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 21);
+		
 		}
 		break;
 
@@ -3637,9 +3554,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 		{	// Inter lock			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE2_Y, 4); // Unload Position
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 22);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 22);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 23);
+			
 		}
 		return TRUE;
 	case 24:	// Position Check & Z Axis Move To Tray Pick Up Position
@@ -3647,8 +3562,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 		{
 			g_objCommon.Move_Position(AX_ANGLE_STAGE2_Z, 4); // Tray Pick Up Position
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 23);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 24);
+	
 		}
 		break;
 	case 25:	// Position Check
@@ -3656,7 +3570,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 		{
 			m_bBtm1ModulePick = FALSE;
 			m_nAngleTray2Case = 30; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 24);
+		
 		}
 		break;
 	case 30:	// Empty Tray Unload Working
@@ -3667,9 +3581,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 		{			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE2_Z, 2);
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(30000);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 30);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 30);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 31);
+			
 		}
 		break;
 	case 32:	//
@@ -3678,7 +3590,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 			m_strLog.Format("AngleStage2, %d", GetTickCount() - m_dwAngleTray2);
 			g_objLogFile.Save_TestLog(m_strLog);
 			m_nAngleTray2Case = 50; m_tAngleTray2Loop.Set_LoopTime(30000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 31);
+			
 		}
 		break;
 
@@ -3691,9 +3603,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 		{			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE2_Z, 0);
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(30000);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 50);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 50);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 51);
+			
 		}
 		break;
 	case 52:	// Check Down Position
@@ -3702,8 +3612,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 		{			
 			g_objCommon.Move_Position(AX_ANGLE_STAGE2_Y, 0);
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(30000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 51);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 52);
+			
 		}
 		break;
 	case 53:	// Check Position
@@ -3712,9 +3621,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 			m_pDY02->oAngleStage2AlignIn = FALSE;	// Tray Align Out
 			g_objAJinAXL.Write_Output(2);
 			m_nAngleTray2Case = 0; m_tAngleTray2Loop.Set_LoopTime(5000);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 52);
-			m_tAngleTray2Loop.Takt_Start(nTaktZone, 53);
-			m_tAngleTray2Loop.Takt_End(nTaktZone, 53, TRUE);
+			
 		}
 		break;
 	}
@@ -4512,8 +4419,7 @@ BOOL CSequenceMain::Inspection1_Run()
 					if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 0) && g_objCommon.Get_InfoInspectVacOn(1) &&
 						m_pDX05->iInspectStage1Up && !m_pDX05->iInspectStage1Down & g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0)) {
 						m_dwInspect1 = GetTickCount();
-						m_tInspect1Loop.Takt_Start(nTaktZone, 1, TRUE);
-						m_tInspect1Loop.Takt_End(nTaktZone,1);
+						
 						g_objCommon.Move_Position(AX_INSPECT_STAGE1_X, 1);
 						m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(9000);
 					} else {
@@ -4533,9 +4439,7 @@ BOOL CSequenceMain::Inspection1_Run()
 			m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose) {
 			
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 1);
-			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(5000); 
-
-			m_tInspect1Loop.Takt_Start(nTaktZone, 2);
+			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(5000);		
 			
 		}
 		break;
@@ -4546,24 +4450,18 @@ BOOL CSequenceMain::Inspection1_Run()
 			
 			m_pDY06->oCmAlignMasterOpen = FALSE; m_pDY06->oCmAlignMasterClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect1Case = 9; m_tInspect1Loop.Set_LoopTime(5000);
-
-			m_tInspect1Loop.Takt_End(nTaktZone,2);
-			m_tInspect1Loop.Takt_Start(nTaktZone, 3);
+			m_nInspect1Case = 9; m_tInspect1Loop.Set_LoopTime(5000);			
 		}
 		break;
 	case 9: //Slave Close
 		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose)
-		{
-		
+		{		
 			//g_objCommon.Set_InspectVacOff(1, 0);	// Vac Off
 			//if(!m_tInspect1Loop.Waiting_Time(400)) break;
 
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-
-			m_tInspect1Loop.Takt_End(nTaktZone,3); 
-			m_tInspect1Loop.Takt_Start(nTaktZone,9); 
+			
 			m_nInspect1Case = 4; m_tInspect1Loop.Set_LoopTime(10000);
 			bTaktSave1 = FALSE;
 		}
@@ -4581,9 +4479,7 @@ BOOL CSequenceMain::Inspection1_Run()
 
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
-
-			m_tInspect1Loop.Takt_End(nTaktZone,9); 
-			m_tInspect1Loop.Takt_Start(nTaktZone,4); 
+						 
 			m_nInspect1Case = 5; m_tInspect1Loop.Set_LoopTime(5000); 
 			bTaktSave1 = FALSE;
 		}
@@ -4594,9 +4490,7 @@ BOOL CSequenceMain::Inspection1_Run()
 			if (!m_tInspect1Loop.Waiting_Time(300)) return TRUE;
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
-
-			m_tInspect1Loop.Takt_End(nTaktZone,4); 
-			m_tInspect1Loop.Takt_Start(nTaktZone,5);
+						
 			m_nInspect1Case = 6; m_tInspect1Loop.Set_LoopTime(5000); 
 		}
 		break;
@@ -4606,9 +4500,7 @@ BOOL CSequenceMain::Inspection1_Run()
 			
 			//if(!m_tInspect1Loop.Waiting_Time(100)) break;
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 0);
-
-			m_tInspect1Loop.Takt_End(nTaktZone,5);
-			m_tInspect1Loop.Takt_Start(nTaktZone, 6);
+						
 			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000); 
 			bTaktSave1 = FALSE;
 		}
@@ -4624,9 +4516,7 @@ BOOL CSequenceMain::Inspection1_Run()
 					g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE1_X, dIs1PosX);
 					nIs1ScanNo = 0;
 					m_nInspect1Case = 16; m_tInspect1Loop.Set_LoopTime(10000);
-					m_tInspect1Loop.Takt_End(nTaktZone,6);
-					m_tInspect1Loop.Takt_Start(nTaktZone, 7);
-					m_tInspect1Loop.Takt_End(nTaktZone,7);
+				
 
 				} else if (m_nInspect3Case > 17 && m_nInspect3Case < 50) {	// Top2 ~ Unload 위치에 있을때
 					double dCurPos = g_objAJinAXL.Get_Position(AX_INSPECT_STAGE3_X);
@@ -4639,9 +4529,7 @@ BOOL CSequenceMain::Inspection1_Run()
 						nIs1ScanNo = 0;
 						bTaktSave1 = FALSE;
 						m_nInspect1Case = 16; m_tInspect1Loop.Set_LoopTime(10000);
-						m_tInspect1Loop.Takt_End(nTaktZone,6);
-						m_tInspect1Loop.Takt_Start(nTaktZone, 7);
-						m_tInspect1Loop.Takt_End(nTaktZone,7);
+						
 					} else { m_tInspect1Loop.Set_LoopTime(5000); return TRUE; }
 
 				} else { m_tInspect1Loop.Set_LoopTime(5000); return TRUE; }
@@ -4663,11 +4551,8 @@ BOOL CSequenceMain::Inspection1_Run()
 				g_objInspector.Set_LoadComplete(INSPECTOR_PC2, "T1", gLot.sLotID[gData.nPNoInspect[0]-1], gData.nPNoInspect[0],
 					gData.nTNoInspect[0][nI1JNo1-1], gData.nTNoInspect[0][nI1JNo2-1], 0, 0,
 					gData.nCNoInspect[0][nI1JNo1-1], gData.nCNoInspect[0][nI1JNo2-1], 0, 0);
-
-				
-				m_nInspect1Case = 10; m_tInspect1Loop.Set_LoopTime(30000);
-				
-
+								
+				m_nInspect1Case = 10; m_tInspect1Loop.Set_LoopTime(30000);				
 			} 
 			else
 			{
@@ -4951,10 +4836,7 @@ BOOL CSequenceMain::Inspection1_Run()
 		return TRUE;
 	case 32:	// Stage Down Check
 		if (!m_pDX05->iInspectStage1Up && m_pDX05->iInspectStage1Down) 
-		{			
-			m_tInspect1Loop.Takt_End(nTaktZone,31);
-			m_tInspect1Loop.Takt_Start(nTaktZone, 32);
-			m_tInspect1Loop.Takt_End(nTaktZone,32);
+		{				
 			m_nInspect1Case = 50; m_tInspect1Loop.Set_LoopTime(10000);		
 		}
 		break;
@@ -4962,9 +4844,8 @@ BOOL CSequenceMain::Inspection1_Run()
 	case 50:	// Wait 회피 위치, Stage가 모두 Up 상태면 진행.
 		if ((m_nInspect2Case >= 0 && m_nInspect2Case <= 31 && m_pDX05->iInspectStage2Up && !m_pDX05->iInspectStage2Down) &&
 			(m_nInspect3Case >= 0 && m_nInspect3Case <= 31 && m_pDX05->iInspectStage3Up && !m_pDX05->iInspectStage3Down)) 
-		{			
-			m_tInspect1Loop.Takt_Start(nTaktZone, 50);
-			m_tInspect1Loop.Takt_End(nTaktZone,50);
+		{		
+			
 			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);
 		}
 		return TRUE;
@@ -4973,15 +4854,13 @@ BOOL CSequenceMain::Inspection1_Run()
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 4)) 
 		{			
 			g_objCommon.Move_Position(AX_INSPECT_STAGE1_X, 0);
-			m_tInspect1Loop.Takt_Start(nTaktZone, 51);
+			
 			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);			
 		}
 		break;
 	case 52:	// Position Check
-		if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 0)) {
-			
-			m_tInspect1Loop.Takt_End(nTaktZone,51);
-			m_tInspect1Loop.Takt_Start(nTaktZone, 52);
+		if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 0)) 
+		{					
 			m_nInspect1Case = 70; m_tInspect1Loop.Set_LoopTime(10000);
 			
 		}
@@ -4994,7 +4873,7 @@ BOOL CSequenceMain::Inspection1_Run()
 			double dT1Pos = m_pMoveData->dInspectStage3X[2];	//T1 Pos
 			if (dCurPos >= dT1Pos)
 			{	//위치 확인
-				m_tInspect1Loop.Takt_End(nTaktZone,52);
+				
 				m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);
 			}
 		}
@@ -5006,7 +4885,7 @@ BOOL CSequenceMain::Inspection1_Run()
 			g_objAJinAXL.Write_Output(5);
 			m_nInspect1Case++; m_tInspect1Loop.Set_LoopTime(10000);
 
-			m_tInspect1Loop.Takt_Start(nTaktZone, 71);
+			
 		}
 		break;
 	case 72:	// Stage Up Check
@@ -5017,7 +4896,7 @@ BOOL CSequenceMain::Inspection1_Run()
 			m_strLog.Format("Inspection Stage1, %d", GetTickCount() - m_dwInspect1);
 			g_objLogFile.Save_TestLog(m_strLog);
 			m_nInspect1Case = 0; m_tInspect1Loop.Set_LoopTime(10000);
-			m_tInspect1Loop.Takt_End(nTaktZone,71,TRUE);
+			
 		}
 		break;
 
@@ -5106,9 +4985,7 @@ BOOL CSequenceMain::Inspection2_Run()
 					{
 						m_dwInspect2 = GetTickCount();
 						g_objCommon.Move_Position(AX_INSPECT_STAGE2_X, 1);
-						
-						m_tInspect2Loop.Takt_Start(nTaktZone, 1, TRUE);
-						m_tInspect2Loop.Takt_End(nTaktZone,1);
+												
 						m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(9000);
 					} 
 					else
@@ -5130,7 +5007,7 @@ BOOL CSequenceMain::Inspection2_Run()
 		{
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 1);
 
-			m_tInspect2Loop.Takt_Start(nTaktZone, 2);
+			
 			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(5000);
 		}
 		break;
@@ -5141,10 +5018,7 @@ BOOL CSequenceMain::Inspection2_Run()
 			
 			m_pDY06->oCmAlignMasterOpen = FALSE; m_pDY06->oCmAlignMasterClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect2Case = 9; m_tInspect2Loop.Set_LoopTime(5000);
-
-			m_tInspect2Loop.Takt_End(nTaktZone,2);
-			m_tInspect2Loop.Takt_Start(nTaktZone, 3);
+			m_nInspect2Case = 9; m_tInspect2Loop.Set_LoopTime(5000);					
 		}
 		break;
 	case 9: //Slave Close
@@ -5155,10 +5029,7 @@ BOOL CSequenceMain::Inspection2_Run()
 
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect2Case = 4; m_tInspect2Loop.Set_LoopTime(10000);
-			
-			m_tInspect2Loop.Takt_End(nTaktZone,3); 
-			m_tInspect2Loop.Takt_Start(nTaktZone,9); 
+			m_nInspect2Case = 4; m_tInspect2Loop.Set_LoopTime(10000);			 
 		}
 		break;
 	case 4:		// CM Align Slave Open
@@ -5173,10 +5044,7 @@ BOOL CSequenceMain::Inspection2_Run()
 
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;			
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect2Case = 5; m_tInspect2Loop.Set_LoopTime(5000); 
-
-			m_tInspect2Loop.Takt_End(nTaktZone,9); 
-			m_tInspect2Loop.Takt_Start(nTaktZone,4); 		
+			m_nInspect2Case = 5; m_tInspect2Loop.Set_LoopTime(5000);  		
 		}
 		break;
 	case 5:
@@ -5185,9 +5053,7 @@ BOOL CSequenceMain::Inspection2_Run()
 			if (!m_tInspect2Loop.Waiting_Time(300)) return TRUE;
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect2Case = 6; m_tInspect2Loop.Set_LoopTime(5000); 
-			m_tInspect2Loop.Takt_End(nTaktZone,4); 
-			m_tInspect2Loop.Takt_Start(nTaktZone,5); 		
+			m_nInspect2Case = 6; m_tInspect2Loop.Set_LoopTime(5000); 		
 
 		}
 		break;
@@ -5198,9 +5064,7 @@ BOOL CSequenceMain::Inspection2_Run()
 		{			
 			//if(!m_tInspect2Loop.Waiting_Time(100)) break;
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 0);
-			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(10000); 
-			m_tInspect2Loop.Takt_End(nTaktZone,5);
-			m_tInspect2Loop.Takt_Start(nTaktZone, 6);			
+			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(10000); 					
 		}
 		break;
 	case 7:		// 안전확인 & Move to Top1 Position	// Mirror 실린더 확인
@@ -5211,18 +5075,12 @@ BOOL CSequenceMain::Inspection2_Run()
 				// Mirror 확인 안한다.
 				// 다운 상태이거나 Top2, Unload 위치에 있으면 이동
 				if (!m_pDX05->iInspectStage1Up && m_pDX05->iInspectStage1Down) 
-				{
-				
+				{				
 					dIs2PosX = m_pMoveData->dInspectStage2X[2];
 					g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE2_X, dIs2PosX);
 					nIs2ScanNo = 0;
 					
 					m_nInspect2Case = 16; m_tInspect2Loop.Set_LoopTime(10000);
-
-					m_tInspect2Loop.Takt_End(nTaktZone,6);
-					m_tInspect2Loop.Takt_Start(nTaktZone, 7);
-					m_tInspect2Loop.Takt_End(nTaktZone,7);
-
 				} 
 				else if (m_nInspect1Case > 17 && m_nInspect1Case < 50) 
 				{	
@@ -5236,10 +5094,6 @@ BOOL CSequenceMain::Inspection2_Run()
 						g_objAJinAXL.Move_Absolute(AX_INSPECT_STAGE2_X, dIs2PosX);
 						nIs2ScanNo = 0;
 						m_nInspect2Case = 16; m_tInspect2Loop.Set_LoopTime(10000);
-
-						m_tInspect2Loop.Takt_End(nTaktZone,6);
-						m_tInspect2Loop.Takt_Start(nTaktZone, 7);
-						m_tInspect2Loop.Takt_End(nTaktZone,7);
 					} 
 					else
 					{ m_tInspect2Loop.Set_LoopTime(10000); return TRUE; }
@@ -5537,7 +5391,7 @@ BOOL CSequenceMain::Inspection2_Run()
 				m_pDY05->oInspectStage2Fwd = FALSE;	m_pDY05->oInspectStage2Bwd = TRUE;
 				g_objAJinAXL.Write_Output(5);
 				m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(10000);
-				m_tInspect2Loop.Takt_Start(nTaktZone, 31);
+				
 			}
 		}
 		return TRUE;
@@ -5545,9 +5399,7 @@ BOOL CSequenceMain::Inspection2_Run()
 		if (!m_pDX05->iInspectStage2Up && m_pDX05->iInspectStage2Down && !m_pDX05->iInspectStage2Fwd && m_pDX05->iInspectStage2Bwd) {
 			
 			m_nInspect2Case = 50; m_tInspect2Loop.Set_LoopTime(10000);
-			m_tInspect2Loop.Takt_End(nTaktZone,31);
-			m_tInspect2Loop.Takt_Start(nTaktZone, 32);
-			m_tInspect2Loop.Takt_End(nTaktZone,32);
+			
 		}
 		break;
 
@@ -5563,15 +5415,14 @@ BOOL CSequenceMain::Inspection2_Run()
 			
 			g_objCommon.Move_Position(AX_INSPECT_STAGE2_X, 0);
 			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(10000);
-			m_tInspect2Loop.Takt_Start(nTaktZone, 51);
+			
 		}
 		break;
 	case 52:	// Position Check
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 0)) {
 			
 			m_nInspect2Case = 70; m_tInspect2Loop.Set_LoopTime(10000);
-			m_tInspect2Loop.Takt_End(nTaktZone,51);
-			m_tInspect2Loop.Takt_Start(nTaktZone,52);
+			
 		}
 		break;
 
@@ -5581,7 +5432,7 @@ BOOL CSequenceMain::Inspection2_Run()
 			double dT1Pos = m_pMoveData->dInspectStage1X[2];	//T1 Pos
 			if (dCurPos >= dT1Pos) {	//위치 확인
 				m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(10000);
-				m_tInspect2Loop.Takt_End(nTaktZone,52, TRUE);
+				
 			}
 		}
 		return TRUE;
@@ -5592,7 +5443,7 @@ BOOL CSequenceMain::Inspection2_Run()
 			m_pDY05->oInspectStage2Fwd = TRUE;	m_pDY05->oInspectStage2Bwd = FALSE;
 			g_objAJinAXL.Write_Output(5);
 			m_nInspect2Case++; m_tInspect2Loop.Set_LoopTime(10000);
-			m_tInspect2Loop.Takt_Start(nTaktZone, 71);
+			
 		}
 		break;
 	case 72:	// Stage Up Check
@@ -5602,7 +5453,7 @@ BOOL CSequenceMain::Inspection2_Run()
 			m_strLog.Format("Inspection Stage2, %d", GetTickCount() - m_dwInspect2);
 			g_objLogFile.Save_TestLog(m_strLog);
 			m_nInspect2Case = 0; m_tInspect2Loop.Set_LoopTime(10000);
-			m_tInspect2Loop.Takt_End(nTaktZone,71);
+		
 		}
 		break;
 
@@ -5689,8 +5540,7 @@ BOOL CSequenceMain::Inspection3_Run()
 					if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 0) && g_objCommon.Get_InfoInspectVacOn(3) &&
 						m_pDX05->iInspectStage3Up && !m_pDX05->iInspectStage3Down && m_pDX05->iInspectStage3Fwd && !m_pDX05->iInspectStage3Bwd && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 0)) {
 						m_dwInspect3 = GetTickCount();
-						m_tInspect3Loop.Takt_Start(nTaktZone, 1, TRUE);
-						m_tInspect3Loop.Takt_End(nTaktZone,1);
+						
 						g_objCommon.Move_Position(AX_INSPECT_STAGE3_X, 1);
 						m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(9000);
 					} else {
@@ -5711,7 +5561,7 @@ BOOL CSequenceMain::Inspection3_Run()
 		
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 1);
 			m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(5000); 
-			m_tInspect3Loop.Takt_Start(nTaktZone, 2);
+			
 		}
 		break;
 	case 3:		// CM Align Master
@@ -5722,9 +5572,7 @@ BOOL CSequenceMain::Inspection3_Run()
 			m_pDY06->oCmAlignMasterOpen = FALSE; m_pDY06->oCmAlignMasterClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect3Case = 9; m_tInspect3Loop.Set_LoopTime(5000); 
-
-			m_tInspect3Loop.Takt_End(nTaktZone,2);
-			m_tInspect3Loop.Takt_Start(nTaktZone, 3);
+						
 		}
 		break;
 	case 9: //Slave Close
@@ -5736,8 +5584,7 @@ BOOL CSequenceMain::Inspection3_Run()
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect3Case = 4; m_tInspect3Loop.Set_LoopTime(5000);
 
-			m_tInspect3Loop.Takt_End(nTaktZone,3); 
-			m_tInspect3Loop.Takt_Start(nTaktZone,9); 			
+					
 		}
 		break;
 	case 4:		// CM Align Slave Open
@@ -5754,10 +5601,7 @@ BOOL CSequenceMain::Inspection3_Run()
 			//m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect3Case = 5; m_tInspect3Loop.Set_LoopTime(5000);
-			
-			m_tInspect3Loop.Takt_End(nTaktZone,9); 
-			m_tInspect3Loop.Takt_Start(nTaktZone,4); 
-			
+						
 		}
 		break;
 	case 5:
@@ -5767,8 +5611,7 @@ BOOL CSequenceMain::Inspection3_Run()
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect3Case = 6; m_tInspect3Loop.Set_LoopTime(5000); 
-			m_tInspect3Loop.Takt_End(nTaktZone,4); 
-			m_tInspect3Loop.Takt_Start(nTaktZone,5); 
+			
 		}
 		break;
 	case 6:		// Align Z Axis Move to Ready Up Position
@@ -5780,8 +5623,6 @@ BOOL CSequenceMain::Inspection3_Run()
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 0);
 			m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(10000); 
 
-			m_tInspect3Loop.Takt_End(nTaktZone,5);
-			m_tInspect3Loop.Takt_Start(nTaktZone, 6);
 			
 		}
 		break;
@@ -5800,10 +5641,7 @@ BOOL CSequenceMain::Inspection3_Run()
 					nIs3ScanNo = 0;
 									
 					m_nInspect3Case = 16; m_tInspect3Loop.Set_LoopTime(10000);
-					m_tInspect3Loop.Takt_End(nTaktZone,6);
-					m_tInspect3Loop.Takt_Start(nTaktZone, 7);
-					m_tInspect3Loop.Takt_End(nTaktZone,7);
-
+					
 				} 
 				else if (m_nInspect2Case > 17 && m_nInspect2Case < 50) 
 				{	
@@ -5818,10 +5656,7 @@ BOOL CSequenceMain::Inspection3_Run()
 						nIs3ScanNo = 0;
 						bTaktSave3 = FALSE;
 					
-						m_nInspect3Case = 16; m_tInspect3Loop.Set_LoopTime(10000);
-						m_tInspect3Loop.Takt_End(nTaktZone,6);
-						m_tInspect3Loop.Takt_Start(nTaktZone, 7);
-						m_tInspect3Loop.Takt_End(nTaktZone,7);
+						m_nInspect3Case = 16; m_tInspect3Loop.Set_LoopTime(10000);						
 					} 
 					else 
 					{ 
@@ -5987,8 +5822,7 @@ BOOL CSequenceMain::Inspection3_Run()
 				nIs3ScanNo = 0;
 				
 				m_nInspect3Case = 25; m_tInspect3Loop.Set_LoopTime(10000); 
-				m_tInspect3Loop.Takt_Start(nTaktZone, 17);
-				m_tInspect3Loop.Takt_End(nTaktZone,17);
+				
 			}
 		}
 		return TRUE;
@@ -6116,10 +5950,7 @@ BOOL CSequenceMain::Inspection3_Run()
 		break;
 	case 26:	// Unload Position Check
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 4)) 
-		{
-			m_tInspect3Loop.Takt_Start(nTaktZone, 26);
-			m_tInspect3Loop.Takt_End(nTaktZone,26);
-
+		{			
 			m_nInspect3Case = 30; m_tInspect3Loop.Set_LoopTime(10000);
 		}
 		break;
@@ -6131,13 +5962,13 @@ BOOL CSequenceMain::Inspection3_Run()
 		if (!g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 4)) {	// Unload 위치에 없으면 다운
 			double dCurPos = g_objAJinAXL.Get_Position(AX_INSPECT_STAGE2_X);
 			double dT2Pos = m_pMoveData->dInspectStage2X[3];	//T2 Pos
-			if (dCurPos <= dT2Pos) {	//위치 확인
+			if (dCurPos <= dT2Pos) 
+			{	//위치 확인
 				
 				m_pDY05->oInspectStage3Up = FALSE;	m_pDY05->oInspectStage3Down = TRUE;
 				m_pDY05->oInspectStage3Fwd = FALSE;	m_pDY05->oInspectStage3Bwd = TRUE;
 				g_objAJinAXL.Write_Output(5);
-				m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(10000);
-				m_tInspect3Loop.Takt_Start(nTaktZone, 31);
+				m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(10000);				
 			}
 		}
 		return TRUE;
@@ -6145,9 +5976,7 @@ BOOL CSequenceMain::Inspection3_Run()
 		if (!m_pDX05->iInspectStage3Up  && m_pDX05->iInspectStage3Down && !m_pDX05->iInspectStage3Fwd && m_pDX05->iInspectStage3Bwd) {
 			
 			m_nInspect3Case = 50; m_tInspect3Loop.Set_LoopTime(10000);
-			m_tInspect3Loop.Takt_End(nTaktZone,31);
-			m_tInspect3Loop.Takt_Start(nTaktZone, 32);
-			m_tInspect3Loop.Takt_End(nTaktZone,32);
+			
 		}
 		break;
 
@@ -6163,15 +5992,14 @@ BOOL CSequenceMain::Inspection3_Run()
 			
 			g_objCommon.Move_Position(AX_INSPECT_STAGE3_X, 0);
 			m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(10000);
-			m_tInspect3Loop.Takt_Start(nTaktZone, 51);
+			
 		}
 		break;
 	case 52:	// Position Check
-		if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 0)) {
+		if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 0))
+		{
 			
-			m_nInspect3Case = 70; m_tInspect3Loop.Set_LoopTime(10000);
-			m_tInspect3Loop.Takt_End(nTaktZone,51);
-			m_tInspect3Loop.Takt_Start(nTaktZone, 52);
+			m_nInspect3Case = 70; m_tInspect3Loop.Set_LoopTime(10000);		
 		}
 		break;
 
@@ -6179,9 +6007,10 @@ BOOL CSequenceMain::Inspection3_Run()
 		if (m_nInspect2Case < 80 && m_nInspect2Case > 7 && !g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 0)) {
 			double dCurPos = g_objAJinAXL.Get_Position(AX_INSPECT_STAGE2_X);
 			double dT1Pos = m_pMoveData->dInspectStage2X[2];	//T1 Pos
-			if (dCurPos >= dT1Pos) {	//위치 확인
+			if (dCurPos >= dT1Pos) 
+			{	//위치 확인
 				m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(10000);
-				m_tInspect3Loop.Takt_End(nTaktZone,52,TRUE);
+				
 			}
 		}
 		return TRUE;
@@ -6191,8 +6020,7 @@ BOOL CSequenceMain::Inspection3_Run()
 			m_pDY05->oInspectStage3Up = TRUE;	m_pDY05->oInspectStage3Down = FALSE;
 			m_pDY05->oInspectStage3Fwd = TRUE;	m_pDY05->oInspectStage3Bwd = FALSE;
 			g_objAJinAXL.Write_Output(5);
-			m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(10000);
-			m_tInspect3Loop.Takt_Start(nTaktZone, 71);
+			m_nInspect3Case++; m_tInspect3Loop.Set_LoopTime(10000);			
 		}
 		break;
 	case 72:	// Stage Up Check
@@ -6201,8 +6029,7 @@ BOOL CSequenceMain::Inspection3_Run()
 						
 			m_strLog.Format("Inspection Stage3, %d", GetTickCount() - m_dwInspect3);
 			g_objLogFile.Save_TestLog(m_strLog);
-			m_nInspect3Case = 0; m_tInspect3Loop.Set_LoopTime(10000);
-			m_tInspect3Loop.Takt_End(nTaktZone,71);
+			m_nInspect3Case = 0; m_tInspect3Loop.Set_LoopTime(10000);			
 		}
 		break;
 

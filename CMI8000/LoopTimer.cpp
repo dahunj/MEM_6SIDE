@@ -86,4 +86,20 @@ void CLoopTimer::Takt_End(int nZone, int nCase, BOOL bLast)
 	if (bLast) g_objLogFile.Save_StdMotionLog("Y", nZone, nCase, 0, strZone, strMsg);
 }
 
+void CLoopTimer::Takt_Save(int nZone, int nCase, int nValue, const CString &sType, const CString &sNote)
+{
+	CString strLog, strZone, strMsg;
+
+	g_objLogFile.Get_ZoneMsg(nZone, nCase, strZone, strMsg);	
+	 	
+	if(sNote != "") strMsg = sNote;
+
+	strLog.Format("MCC,(%02d) %s,(%02d) %s,%0.3lf",nZone, strZone, nCase, strMsg, (GetTickCount() - m_dwTakt) / 1000.0);
+	g_objLogFile.Save_MCCLog(strLog);
+
+	// Log «•¡ÿ»≠
+	g_objLogFile.Save_StdMotionLog(sType, nZone, nCase, nValue, strZone, strMsg);	
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////

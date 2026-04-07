@@ -24,6 +24,7 @@ public:
 
 	void Takt_Start(int nZone, int nCase, BOOL bFirst = FALSE);
 	void Takt_End(int nZone, int nCase, BOOL bLast = FALSE);
+	void Takt_Save(int nZone, int nCase, int nValue, const CString &sType, const CString &sNote);
 };
 
 ///////////////////////////////////////////////////////////////////////////////
