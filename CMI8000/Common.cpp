@@ -489,15 +489,19 @@ BOOL CCommon::Check_MainEmgAir()
 
 BOOL CCommon::Check_MainDoor(BOOL bAuto)
 {
+
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 	if(gData.bUseDryRun)
 	{
 		return TRUE;
 	}
 	else
 	{
-		EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-		if (!pEquipData->bUseDoorLock) return TRUE;
-
+		if (!pEquipData->bUseDoorLock && gData.nLogInLevel != 9300)
+		{
+			Show_Alarm("Please Use Door Interlock.");
+			return FALSE;
+		}
 	}
 	
 #ifdef AJIN_BOARD_USE
