@@ -100,13 +100,13 @@ void CPasswordDlg::OnBnClickedBtnOk()
 	m_edtPassword.GetWindowText(strInput);
 	if (strInput == pEquipData->sPasswordMt)
 	{
-		gData.nLogInLevel = 0;
+		gData.nLogInLevel = atoi(pEquipData->sPasswordMt);
 		g_nLoginUser = 1;	// MT
 		EndDialog(IDOK);
 	} 
 	else if (strInput == pEquipData->sPasswordSi) 
 	{
-		gData.nLogInLevel = 0;
+		gData.nLogInLevel = atoi(pEquipData->sPasswordSi);
 		g_nLoginUser = 2;	// SI
 		EndDialog(IDOK);
 	} 

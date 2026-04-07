@@ -300,6 +300,9 @@ public:
 	void Init_NgTray(int nIdx);
 	void Check_PNoNgTray(int nSortPickNo);
 
+	void Set_ThreadBeep();
+
+
 #ifdef VISION_REPEAT
 	void Set_StartIndexJig(int nJig) { m_nStartIndexJig = nJig; }
 #endif

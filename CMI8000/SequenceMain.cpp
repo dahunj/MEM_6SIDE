@@ -11399,3 +11399,13 @@ void CSequenceMain::Check_PNoNgTray(int nSortPickNo)
 		gData.nPNoNgTray = 2;
 	}
 }
+
+
+void CSequenceMain::Set_ThreadBeep()
+{
+	if (g_objSequenceMain.m_pThreadBeep == NULL && g_objSequenceMain.m_pThreadNgFullBeep == NULL) 
+	{
+		g_objSequenceMain.m_pThreadBeep = AfxBeginThread(Thread_Beep, (LPVOID)(2000));
+		gData.bLotEndBeep = FALSE;
+	}
+}

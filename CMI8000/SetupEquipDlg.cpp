@@ -189,6 +189,35 @@ void CSetupEquipDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 	Display_EquipData();
 
+	EQUIP_DATA *m_pEquipData = g_objDataManager.Get_pEquipData();
+
+	CIniFileCS INI(gData.sEnvPath + "\\EquipData.ini");
+	if (!INI.Check_File()) { AfxMessageBox("EquipData.ini File Not Found!!!"); return; }
+
+
+	int nTempSy = atoi(m_pEquipData->sPasswordSi);
+
+	if(gData.nLogInLevel == 9300)
+	{
+		m_lblDoorLock.ShowWindow(SW_SHOW);
+		m_rdoDoorLock[0].ShowWindow(SW_SHOW);
+		m_rdoDoorLock[1].ShowWindow(SW_SHOW);
+	}
+	else if(gData.nLogInLevel == nTempSy)
+	{
+		m_lblDoorLock.ShowWindow(SW_SHOW);
+		m_rdoDoorLock[0].ShowWindow(SW_SHOW);
+		m_rdoDoorLock[1].ShowWindow(SW_SHOW);
+	}
+	else
+	{		
+		m_pEquipData->bUseDoorLock = TRUE;
+		INI.Set_Bool("EQUIPMENT", "DOOR_LOCK", TRUE);
+		m_lblDoorLock.ShowWindow(SW_HIDE);
+		m_rdoDoorLock[0].ShowWindow(SW_HIDE);
+		m_rdoDoorLock[1].ShowWindow(SW_HIDE);
+	}
+
 	m_grpHidden.ShowWindow(SW_HIDE);
 	m_lblPasswordMt.ShowWindow(SW_HIDE);
 	m_stcPasswordMt.ShowWindow(SW_HIDE);

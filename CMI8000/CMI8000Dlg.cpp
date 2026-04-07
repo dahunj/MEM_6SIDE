@@ -162,6 +162,7 @@ BOOL CCMI8000Dlg::OnInitDialog()
 
 	SetTimer(TIMER_DATE_TIME, 500, NULL);
 	SetTimer(TIMER_DOOR_LOCK, 60000, NULL);
+	SetTimer(TIMER_DOOR_LOCK_UNUSE, 10000, NULL);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -307,7 +308,18 @@ void CCMI8000Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 void CCMI8000Dlg::OnTimer(UINT_PTR nIDEvent)
 {
-	switch (nIDEvent) {
+
+	switch (nIDEvent) 
+	{
+	case TIMER_DOOR_LOCK_UNUSE:
+		{
+			EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+			if(!pEquipData->bUseDoorLock)
+			{
+				g_objSequenceMain.Set_ThreadBeep();
+			}			
+		}		
+		break;
 	case TIMER_DOOR_LOCK:
 		Set_DoorLock();
 		break;

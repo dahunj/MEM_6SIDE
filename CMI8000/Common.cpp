@@ -491,6 +491,7 @@ BOOL CCommon::Check_MainDoor(BOOL bAuto)
 {
 
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+	int nTempSy = atoi(pEquipData->sPasswordSi); 
 	if(gData.bUseDryRun)
 	{
 		return TRUE;
@@ -501,7 +502,8 @@ BOOL CCommon::Check_MainDoor(BOOL bAuto)
 		{
 			Show_Alarm("Please Use Door Interlock.");
 			return FALSE;
-		}
+		}	
+		
 	}
 	
 #ifdef AJIN_BOARD_USE
