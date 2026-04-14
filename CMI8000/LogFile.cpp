@@ -818,8 +818,9 @@ void CLogFile::Save_ECMOutTray(const CString& sLog, int nTrayCount, int nPosX, i
 	int nJudge = gData.nInspectInfo[nPx][nTx][nCx];
 	strJudge = (nJudge == 1 ? "G" : (nJudge == 2 ? "N" : (nJudge == 4 ? "N1" : (nJudge == 5 ? "N2" : (nJudge == 6 ? "N3" : (nJudge == 7 ? "B" : (nJudge == 8 ? "N4" : " ")))))));
 	
-	strSave.Format("%s,%s,%s,%d,%d,%s,%d,%d,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe,nTrayCount, nPos, gMes.sBarID[nPx][nTx][nCx], nTrayNo, nCmNo, strJudge,"");
-	strTitle.Format("Time,Station,Type,LotNum,Count,Position,Barcode,LoadTray,LoadPos,Judge,Barcode\r\n");
+	strSave.Format("%s,%s,%s,%s,%d,%d,%s,%d,%d,%s\r\n", 
+		strTime, gData.sComName, gData.sRecipe, gLot.sLotID[nPortNo-1], nTrayCount, nPos, gMes.sBarID[nPx][nTx][nCx], nTrayNo, nCmNo, strJudge);
+	strTitle.Format("Time,Station,Type,LotNum,Count,Position,Barcode,LoadTray,LoadPos,Judge\r\n");
 
 	CFile file;
 	if (!file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
