@@ -545,7 +545,7 @@ void CLogFile::Save_LotError(const CString& sLog, int nPNo)
 	CFile file;
 	if (!file.Open(strFile1, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) return;
 
-	strTitle.Format("Time,Station,Model,Version,LotNum,Event,Error Code,event,ActionTime,Barcode\r\n");
+	strTitle.Format("Time,Station,Model,Version,LotNum,Event,Error Code,event,ActionTime\r\n");
 
 	try {
 		file.SeekToEnd();
@@ -592,9 +592,9 @@ void CLogFile::Save_ECMLog(int nType, const CString& strLog)
 	if (nNo < 0) nNo = 0;
 
 	if (nType == 1) sTitle.Format("Time,Station,Type,LotNum,Error Code,Error,Start_Time,End_Time,Lead_Time,Barcode\r\n");
-	if (nType == 2) sTitle.Format("Time,Station,Type,LotNum,Start_Time,End_Time,Run_Time,Unload_Time,Tact(S-E),Tact(RunTime),Tact(Unload_Time),UPH(S-E),UPH(RunTime),UPH(Unload_Time),Alarm_Count,Stop_Time,Efficiency(RunTime), Efficiency(Unload),Tray_Count,CM_Count,Good_Count,NG_Count,N1_Count,N2_Count,N3_Count,N4_Count,MESNG_Count,Barcode\r\n");
+	if (nType == 2) sTitle.Format("Time,Station,Type,LotNum,Start_Time,End_Time,Run_Time,Unload_Time,Tact(S-E),Tact(RunTime),Tact(Unload_Time),UPH(S-E),UPH(RunTime),UPH(Unload_Time),Alarm_Count,Stop_Time,Efficiency(RunTime), Efficiency(Unload),Tray_Count,CM_Count,Good_Count,NG_Count,N1_Count,N2_Count,N3_Count,N4_Count,MESNG_Count\r\n");
 	if (nType == 3) sTitle.Format("Time,Station,Type,LotNum,Load_Pick,Inspect,Barcode,NG_Pick,Good_Pick,Trans_Pick\r\n");
-	if (nType == 4) sTitle.Format("Time,Station,Type,LotNum,Barcode\r\n");
+	if (nType == 4) sTitle.Format("Time,Station,Type\r\n");
 	if (nType == 5) sTitle.Format("Time,Station,Type,Lot Start,Lot End,Term,호기,투입수,양품수,불량수,불량률,1차외관(N1),2차외관(N2),MES(M),Barcode\r\n");
 	
 
@@ -615,7 +615,8 @@ void CLogFile::Save_ECMLog(int nType, const CString& strLog)
 
 		if (file.GetLength() < 1) file.Write(sTitle, sTitle.GetLength());
 
-		if(nType == 4) strSave.Format("%s,%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe, gData.sLotID[nNo], strLog, "");
+		if(nType == 4) strSave.Format("%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe, strLog);
+		else if(nType == 2) strSave.Format("%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe, strLog);
 		else
 		{
 			strSave.Format("%s,%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe, strLog, "");
