@@ -1464,7 +1464,7 @@ void CLogFile::Save_PositionLog(int nPNo, int nTNo, int nCmNo, int nAxis, int nM
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 
 	CString sName = "";
-	g_objCommon.Get_PosName(nAxis, nMoveIdx, sName);
+	g_objLogFile.Get_PosName(nAxis, nMoveIdx, sName);
 	
 
 	CString sLog;
@@ -2073,6 +2073,72 @@ void CLogFile::Get_ZoneMsg(int nZone, int nCase, CString &sZone, CString &sMsg)
 		case 8: sMsg = "Cylinder Up"; break;
 		}
 		break;
+	}
+}
+
+
+void CLogFile::Get_PosName(int nAxis, int nMoveIdx, CString &sPosName)
+{
+	if(nAxis == AX_ANGLE_STAGE1_Z)
+	{
+		if(nMoveIdx == 2) sPosName = "ANGLE_STAGE1_Z_Picker Up";
+	}
+	else if(nAxis == AX_ANGLE_STAGE2_Z)
+	{
+		if(nMoveIdx == 2) sPosName = "ANGLE_STAGE2_Z_Picker Up";
+	}
+	else if(nAxis == AX_BTM1_PICKER_Z)
+	{
+		if(nMoveIdx == 0) sPosName = "BTM1_PICKER_Z_Ready";
+		if(nMoveIdx == 1) sPosName = "BTM1_PICKER_Z_Tray Down";
+		if(nMoveIdx == 2) sPosName = "BTM1_PICKER_Z_BTM1 SP Down";
+		if(nMoveIdx == 3) sPosName = "BTM1_PICKER_Z_Inspect";
+		if(nMoveIdx == 4) sPosName = "BTM1_PICKER_Z_BTM1 AG";
+		if(nMoveIdx == 5) sPosName = "BTM1_PICKER_Z_BTM1 3D";
+	}
+	else if(nAxis == AX_MODULE_ALIGN_Z)
+	{
+		if(nMoveIdx == 1) sPosName = "MODULE_ALIGN_Z_Stop Down";
+	}
+	else if(nAxis == AX_TOP1_MIRROR_Z)
+	{
+		if(nMoveIdx == 1) sPosName =  "TOP1_MIRROR_Z_Work Down";
+	}
+	else if(nAxis == AX_BTM2_PICKER_Z)
+	{
+		if(nMoveIdx == 1) sPosName = "BTM2_PICKER_Z_Inspect Down";
+		if(nMoveIdx == 2) sPosName = "BTM2_PICKER_Z_Btm2 Down";
+		if(nMoveIdx == 3) sPosName = "BTM2_PICKER_Z_Buffer Down";
+	}
+	else if(nAxis == AX_SORT_PICKER1_Z)
+	{
+		if(nMoveIdx == 0) sPosName = "SORT_PICKER1_Z_Ready";	
+		if(nMoveIdx == 1) sPosName = "SORT_PICKER1_Z_Buffer 1 Down";	
+		if(nMoveIdx == 2) sPosName = "SORT_PICKER1_Z_Good Down";	
+		if(nMoveIdx == 3) sPosName = "SORT_PICKER1_Z_NG Down";	
+		if(nMoveIdx == 4) sPosName = "SORT_PICKER1_Z_NG Buffer Down";	
+		if(nMoveIdx == 5) sPosName = "SORT_PICKER1_Z_Buffer 2 Down";
+	}
+	else if(nAxis == AX_SORT_PICKER2_Z)
+	{
+		if(nMoveIdx == 0) sPosName = "SORT_PICKER2_Z_Ready";	
+		if(nMoveIdx == 1) sPosName = "SORT_PICKER2_Z_Buffer 1 Down";	
+		if(nMoveIdx == 2) sPosName = "SORT_PICKER2_Z_Good Down";	
+		if(nMoveIdx == 3) sPosName = "SORT_PICKER2_Z_NG Down";	
+		if(nMoveIdx == 4) sPosName = "SORT_PICKER2_Z_NG Buffer Down";	
+		if(nMoveIdx == 5) sPosName = "SORT_PICKER2_Z_Buffer 2 Down";	
+
+	}
+	else if (nAxis == AX_GOOD_STAGE1_Z)
+	{
+		if(nMoveIdx == 1) sPosName = "Good Stage1_Z_Moving Up";
+		if(nMoveIdx == 3) sPosName = "Good Stage1_Z_Unload Up";
+
+	}
+	else if(nAxis == AX_GOOD_STAGE2_Z)
+	{
+		if(nMoveIdx == 1) sPosName = "Good Stage2_Z_Moving Up";
+		if(nMoveIdx == 3) sPosName = "Good Stage2_Z_Unload Up";
 	}
 }
 

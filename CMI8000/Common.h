@@ -324,7 +324,7 @@ public:
 
 	CString Get_JigErrMessage();
 
-	void	Get_PosName(int nAxis, int nMoveIdx, CString &sName);
+	
 };
 
 extern CCommon g_objCommon;

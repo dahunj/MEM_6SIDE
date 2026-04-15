@@ -56,6 +56,8 @@ public:
 	void Save_StdMotionLog(CString sType, int nZone, int nCase, int nValue, CString sZone, CString sMsg);
 	void Save_EfficiencyLog(int nCase, CString sStatus, int nCode, CString sNote);
 	void Get_ZoneMsg(int nZone, int nCase, CString &sZone, CString &sMsg);
+
+	void	Get_PosName(int nAxis, int nMoveIdx, CString &sName);
 };
 
 extern CLogFile g_objLogFile;
