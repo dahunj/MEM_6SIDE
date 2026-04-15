@@ -2015,3 +2015,70 @@ void CWorkDlg::Set_PullForce(BOOL bCheck)
 	if(!bCheck) m_chkPullForce.SetCheck(FALSE);
 	else m_chkPullForce.SetCheck(TRUE);
 }
+
+void CWorkDlg::Set_DryRun(BOOL bCheck)
+{
+	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
+
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+
+	CIniFileCS INI(gData.sEnvPath + "\\EquipData.ini");
+	if (!INI.Check_File()) { AfxMessageBox("EquipData.ini File Not Found!!!"); return; }
+
+	if(bCheck)
+	{
+		pEquipData->bUseInlineMode = FALSE;
+		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
+		INI.Set_Bool("OPTION", "MES_USE", FALSE);
+		m_chkMesUse.SetCheck(FALSE);
+		m_chkMesUse.EnableWindow(FALSE);
+		pEquipData->bUseMES = FALSE;
+		g_objMES.Set_MESUse(FALSE);
+
+		pEquipData->bUseVisionAlign = FALSE;
+		INI.Set_Bool("OPTION", "VISION_ALIGN", FALSE);
+		pEquipData->bUseInspectAngle = FALSE;
+		INI.Set_Bool("OPTION", "INSPECT_ANGLE", FALSE);
+		pEquipData->bUseInspectBtm1Specular = FALSE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_SP", FALSE);
+		pEquipData->bUseInspectBtm1Angle = FALSE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_AG", FALSE);
+		pEquipData->bUseInspectBtm13D = FALSE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_3D", FALSE);
+		pEquipData->bUseInspectTop1 = FALSE;
+		INI.Set_Bool("OPTION", "INSPECT_TOP_1", FALSE);
+		pEquipData->bUseInspectTop2 = FALSE;
+		INI.Set_Bool("OPTION", "INSPECT_TOP_2", FALSE);
+		pEquipData->bUseInspectBtm2 = FALSE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_2", FALSE);
+		
+	}
+	else
+	{
+		pEquipData->bUseInlineMode = TRUE;
+		INI.Set_Bool("OPTION", "INLINE_MODE", pEquipData->bUseInlineMode);
+		INI.Set_Bool("OPTION", "MES_USE", TRUE);
+		m_chkMesUse.SetCheck(TRUE);
+		m_chkMesUse.EnableWindow(TRUE);
+		pEquipData->bUseMES = TRUE;
+		g_objMES.Set_MESUse(TRUE);
+
+		pEquipData->bUseVisionAlign = TRUE;
+		INI.Set_Bool("OPTION", "VISION_ALIGN", TRUE);
+		pEquipData->bUseInspectAngle = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_ANGLE", TRUE);
+		pEquipData->bUseInspectBtm1Specular = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_SP", TRUE);
+		pEquipData->bUseInspectBtm1Angle = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_AG", TRUE);
+		pEquipData->bUseInspectBtm13D = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_1_3D", TRUE);
+		pEquipData->bUseInspectTop1 = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_TOP_1", TRUE);
+		pEquipData->bUseInspectTop2 = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_TOP_2", TRUE);
+		pEquipData->bUseInspectBtm2 = TRUE;
+		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
+	}
+	g_objDataManager.Read_EquipData();
+}

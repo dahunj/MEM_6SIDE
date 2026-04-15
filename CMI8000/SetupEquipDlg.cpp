@@ -1027,6 +1027,7 @@ void CSetupEquipDlg::OnBnClickedChkUseVisionAlign()
 
 void CSetupEquipDlg::OnBnClickedChkUseDryRun()
 {
+	g_dlgWork.Set_DryRun(m_chkUseDryRun.GetCheck());
 	m_strLog.Format("Dry Run Checked : %d", m_chkUseDryRun.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
 }
