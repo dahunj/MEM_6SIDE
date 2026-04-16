@@ -145,6 +145,7 @@ BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON7, &CWorkDlg::OnBnClickedButton7)
 	ON_BN_CLICKED(IDC_BUTTON9, &CWorkDlg::OnBnClickedButton9)
 	ON_BN_CLICKED(IDC_CHK_PULLFORCE, &CWorkDlg::OnBnClickedChkPullforce)
+	ON_BN_CLICKED(IDC_BTN_LIGHT, &CWorkDlg::OnBnClickedBtnLight)
 END_MESSAGE_MAP()
 
 // CWorkDlg 메시지 처리기입니다.
@@ -2081,4 +2082,9 @@ void CWorkDlg::Set_DryRun(BOOL bCheck)
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", TRUE);
 	}
 	g_objDataManager.Read_EquipData();
+}
+
+void CWorkDlg::OnBnClickedBtnLight()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }

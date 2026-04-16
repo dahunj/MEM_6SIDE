@@ -496,14 +496,18 @@ BOOL CCommon::Check_MainDoor(BOOL bAuto)
 	{
 		return TRUE;
 	}
-	else
+	else if(!pEquipData->bUseDoorLock && gData.nLogInLevel == nTempSy && theApp.Get_MainMode() == MODE_MANUAL)
 	{
-		if (!pEquipData->bUseDoorLock && gData.nLogInLevel != 9300)
-		{
-			Show_Alarm("Please Use Door Interlock.");
-			return FALSE;
-		}	
-		
+		return TRUE;
+	}
+	else if(!pEquipData->bUseDoorLock && gData.nLogInLevel == 9300 && theApp.Get_MainMode() == MODE_MANUAL)
+	{
+		return TRUE;
+	}
+	else if(!pEquipData->bUseDoorLock)
+	{		
+		Show_Alarm("Please Use Door Interlock.");
+		return FALSE;		
 	}
 	
 #ifdef AJIN_BOARD_USE

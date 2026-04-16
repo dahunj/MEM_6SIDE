@@ -175,6 +175,7 @@ public:
 	afx_msg void OnBnClickedChkPullforce();
 	void Set_PullForce(BOOL bCheck);
 	void Set_DryRun(BOOL bCheck);
+	afx_msg void OnBnClickedBtnLight();
 };
 
 extern CWorkDlg g_dlgWork;
