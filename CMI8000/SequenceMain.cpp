@@ -469,24 +469,28 @@ UINT CSequenceMain::Thread_MainRun(LPVOID lpVoid)
 
 BOOL CSequenceMain::Check_VisionHdd()
 {
-	if(g_objInspector.Get_HddStatus(1) == TRUE){
+	if(g_objInspector.Get_HddStatus(1) == TRUE)
+	{
 		g_objInspector.Set_HddStatus(1, FALSE);
-		g_objCommon.Show_Error(6301);
+		g_objCommon.Show_Error(6401);
 		return FALSE;
 	}
-	if(g_objInspector.Get_HddStatus(2) == TRUE){
+	if(g_objInspector.Get_HddStatus(2) == TRUE)
+	{
 		g_objInspector.Set_HddStatus(2, FALSE);
-		g_objCommon.Show_Error(6302);
+		g_objCommon.Show_Error(6402);
 		return FALSE;
 	}
-	if(g_objInspector.Get_HddStatus(3) == TRUE){
+	if(g_objInspector.Get_HddStatus(3) == TRUE)
+	{
 		g_objInspector.Set_HddStatus(3, FALSE);
-		g_objCommon.Show_Error(6303);
+		g_objCommon.Show_Error(6403);
 		return FALSE;
 	}
-	if(g_objInspector.Get_HddStatus(4) == TRUE){
+	if(g_objInspector.Get_HddStatus(4) == TRUE)
+	{
 		g_objInspector.Set_HddStatus(4, FALSE);
-		g_objCommon.Show_Error(6304);
+		g_objCommon.Show_Error(6404);
 		return FALSE;
 	}
 	return TRUE;

@@ -1029,7 +1029,9 @@ void CInspector::Get_ErrorRequest(int nInspector, CString sGbn, CString sLotId, 
 	int nMode = theApp.Get_MainMode();
 	if (nErrNo != 6120 && nErrNo != 6121 && (nMode == MODE_WORK || nMode == MODE_OPERATOR)) g_objCommon.Show_Error(nErrNo);
 
-	if (nErrNo == 6120 || nErrNo == 6121) {	// Mirror Z Axis Error
+	if (nErrNo == 6120 || nErrNo == 6121)
+	{
+		// Mirror Z Axis Error
 		gData.nTop1MirrorErrNo = nErrNo;
 		int nInsp1Case = g_objSequenceMain.Get_MainRunCase(AUTO_INSPECTION1);
 		int nInsp2Case = g_objSequenceMain.Get_MainRunCase(AUTO_INSPECTION2);
@@ -1038,11 +1040,12 @@ void CInspector::Get_ErrorRequest(int nInspector, CString sGbn, CString sLotId, 
 		if (nInsp2Case == 10) { gData.bTop1MirrorErr[1] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_INSPECTION2, 8);	}
 		if (nInsp3Case == 10) { gData.bTop1MirrorErr[2] = TRUE; g_objSequenceMain.Set_MainRunCase(AUTO_INSPECTION3, 8);	}
 	}
+
 	//HDD 용량 확인 후 85% 차면, 알람 번호에 맞는 플래그 True
-	if(nErrNo == 6301){m_bHddVision[0][1] = TRUE;}
-	if(nErrNo == 6302){m_bHddVision[1][1] = TRUE;}
-	if(nErrNo == 6303){m_bHddVision[2][1] = TRUE;}
-	if(nErrNo == 6304){m_bHddVision[3][1] = TRUE;}
+	if(nErrNo == 6401){m_bHddVision[0][1] = TRUE;}
+	if(nErrNo == 6402){m_bHddVision[1][1] = TRUE;}
+	if(nErrNo == 6403){m_bHddVision[2][1] = TRUE;}
+	if(nErrNo == 6404){m_bHddVision[3][1] = TRUE;}
 
 	//3D Scanner Grab Fail 알람
 	if(nErrNo == 6200){gData.b3DGrabFailErr = TRUE;}
