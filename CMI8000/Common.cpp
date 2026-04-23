@@ -463,6 +463,11 @@ int CCommon::Show_KeyPad(CString &sKey)
 
 int CCommon::Show_Password(int &nUser)
 {
+	if(gData.sOperID == "SY")
+	{
+		return IDOK;
+	}	
+
 	CPasswordDlg dlgPassword;
 	if (dlgPassword.DoModal() != IDOK) return IDCANCEL;
 
@@ -493,7 +498,12 @@ BOOL CCommon::Check_MainDoor(BOOL bAuto)
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 	int nTempSy = atoi(pEquipData->sPasswordSi); 
 	int nTempOp = atoi(pEquipData->sPasswordOP); 
-	if(gData.bUseDryRun)
+	
+	if(gData.sOperID == "SY")
+	{
+		return TRUE;
+	}	
+	else if(gData.bUseDryRun)
 	{
 		return TRUE;
 	}

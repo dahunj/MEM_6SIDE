@@ -129,6 +129,11 @@ void COperatorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 		m_stcOperOperId.SetWindowText(gData.sOperID);
 
+		if(gData.sOperID == "SY")
+		{
+			gData.nLogInLevel = 9300;
+		}
+
 		g_dlgWork.m_stcCmCount[nIdx].GetWindowText(strText);
 		m_stcOperCmCount.SetWindowText(strText);
 
@@ -179,6 +184,12 @@ void COperatorDlg::OnStnClickedStcOperOperId()
 
 	gData.sOperID = strKey;
 	m_stcOperOperId.SetWindowText(strKey);
+
+	if(gData.sOperID == "SY")
+	{
+		gData.nLogInLevel = 9300;
+	}
+
 
 	CString sLog;
 	int nNo = gData.nLPNo-1;
