@@ -2086,5 +2086,17 @@ void CWorkDlg::Set_DryRun(BOOL bCheck)
 
 void CWorkDlg::OnBnClickedBtnLight()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	static int nTemp = 0;
+	DY_DATA_15 *pDY15 = g_objAJinAXL.Get_pDY15();
+	if(nTemp == 0)
+	{
+		pDY15->oInsideLight = TRUE;
+		nTemp = 1;
+	}
+	else{
+		pDY15->oInsideLight = FALSE;
+		nTemp = 0;
+	}
+	g_objAJinAXL.Write_Output(15);
+
 }
