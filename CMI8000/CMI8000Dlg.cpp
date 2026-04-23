@@ -379,8 +379,7 @@ void CCMI8000Dlg::OnBnClickedBtnMainOperator()
 			Set_CurrentMode(MODE_WORK);
 		}
 		else
-		{
-			
+		{			
 			if (g_objCommon.Show_Password(nUser) != IDOK) return;
 			g_dlgSetup.Set_LoginUser(nUser);
 			Set_CurrentMode(MODE_WORK);

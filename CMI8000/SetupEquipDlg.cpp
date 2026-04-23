@@ -197,6 +197,7 @@ void CSetupEquipDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 	int nTempSy = atoi(m_pEquipData->sPasswordSi);
 
+	Set_Enable(TRUE);
 	if(gData.nLogInLevel == 9300)
 	{
 		m_lblDoorLock.ShowWindow(SW_SHOW);
@@ -211,6 +212,8 @@ void CSetupEquipDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	}
 	else
 	{		
+		Set_Enable(FALSE);
+
 		m_pEquipData->bUseDoorLock = TRUE;
 		INI.Set_Bool("EQUIPMENT", "DOOR_LOCK", TRUE);
 		m_lblDoorLock.ShowWindow(SW_HIDE);
@@ -239,6 +242,68 @@ void CSetupEquipDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		for (int i = 0; i < 4; i++) m_lblResultTest[i].ShowWindow(SW_HIDE);
 		for (int i = 0; i < 4; i++) m_edtResultTest[i].ShowWindow(SW_HIDE);
 	}
+}
+
+
+void CSetupEquipDlg::Set_Enable(BOOL bEnable)
+{
+	m_stcEquipName.EnableWindow(bEnable);
+	m_rdoModel[0].EnableWindow(bEnable);
+	m_rdoModel[1].EnableWindow(bEnable);
+	m_cboLotBarcodePort.EnableWindow(bEnable);
+	m_stcScreenOff.EnableWindow(bEnable);
+	m_stcNoWorkTime.EnableWindow(bEnable);
+	m_stcLogDate.EnableWindow(bEnable);
+	m_chkManualTaktTest.EnableWindow(bEnable);
+	m_stcMotionCheck.EnableWindow(bEnable);
+	m_stcDoorLockTime.EnableWindow(bEnable);
+	m_rdoDoorLock[0].EnableWindow(bEnable);
+	m_rdoDoorLock[1].EnableWindow(bEnable);
+
+	for(int i =0; i < 4; i++) m_stcTrayData[i].EnableWindow(bEnable);
+	for(int i =0; i < 8; i++) m_stcInspectData[i].EnableWindow(bEnable);
+	for(int i =0; i < 1; i++) m_stcNgBufferData[i].EnableWindow(bEnable);
+
+	for(int i =0; i < 4; i++) m_stcVacOffDelay[i].EnableWindow(bEnable);
+	for(int i =0; i < 4; i++) m_stcVacOffRepeat[i].EnableWindow(bEnable);
+	for(int i =0; i < 5; i++) m_stcDelayAdd[i].EnableWindow(bEnable);
+
+	m_ipaDispatcherIp.EnableWindow(bEnable);
+	m_ipaHandlerIp.EnableWindow(bEnable);
+
+	m_btnRosConnect.EnableWindow(bEnable);
+	m_btnRosDisconnect.EnableWindow(bEnable);
+	m_stcJudgeTimeOver.EnableWindow(bEnable);
+	m_chkJudgeSpecialNg.EnableWindow(bEnable);
+	m_ipaCapAttachIp.EnableWindow(bEnable);
+
+	m_btnCapConnect.EnableWindow(bEnable);
+	m_btnCapDisconnect.EnableWindow(bEnable);
+	for(int i =0; i < 6; i++) 
+	{
+		for(int j =0; j < 4; j++) 
+		{
+			m_chkTower[i][j].EnableWindow(bEnable);
+		}		
+	}
+	for(int i =0; i < 2; i++) 
+	{
+		for(int j =0; j < 6; j++) 
+		{
+			m_chkBuzzer[i][j].EnableWindow(bEnable);
+		}		
+	}
+	m_stcVisProgVer.EnableWindow(bEnable);
+	m_stcVisParaVer.EnableWindow(bEnable);
+	m_chkUseFocusLog.EnableWindow(bEnable);
+
+	m_stcTmrFocusLog.EnableWindow(bEnable);
+	m_stcJigNgRate.EnableWindow(bEnable);
+	m_stcJigNgCnt.EnableWindow(bEnable);
+	for(int i =0; i < 4; i++) m_stcTriggerData[i].EnableWindow(bEnable);
+
+
+
 }
 
 void CSetupEquipDlg::OnStnClickedStcEquipName()
@@ -434,13 +499,17 @@ void CSetupEquipDlg::OnStnClickedStcPasswordMt()
 
 void CSetupEquipDlg::OnStnClickedStcShowHidden()
 {
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+	int nOpPassword = atoi(pEquipData->sPasswordOP);
+
+
 	if (m_grpHidden.IsWindowVisible()) 
 	{
 		m_grpHidden.ShowWindow(SW_HIDE);
 		m_lblPasswordMt.ShowWindow(SW_HIDE);
 		m_stcPasswordMt.ShowWindow(SW_HIDE);
 		m_chkUseDryRun.ShowWindow(SW_HIDE);
-		if (g_dlgSetup.Get_LoginUser() != 2) return;
+		if (gData.nLogInLevel == nOpPassword) return;
 		m_lblPasswordSi.ShowWindow(SW_HIDE);
 		m_edtPasswordSi.ShowWindow(SW_HIDE);		
 	}
@@ -450,7 +519,7 @@ void CSetupEquipDlg::OnStnClickedStcShowHidden()
 		m_lblPasswordMt.ShowWindow(SW_SHOW);
 		m_stcPasswordMt.ShowWindow(SW_SHOW);
 		m_chkUseDryRun.ShowWindow(SW_SHOW);
-		if (g_dlgSetup.Get_LoginUser() != 2) return;
+		if (gData.nLogInLevel == nOpPassword) return;
 		m_lblPasswordSi.ShowWindow(SW_SHOW);
 		m_edtPasswordSi.ShowWindow(SW_SHOW);
 	}
@@ -708,7 +777,7 @@ void CSetupEquipDlg::Display_EquipData()
 	m_ipaCapAttachIp.SetWindowText(pEquipData->sCapAttachIp);
 	for (int i = 0; i < 6; i++) for (int j = 0; j < 4; j++) m_chkTower[i][j].SetCheck(pEquipData->bTower[i][j]);
 	for (int i = 0; i < 2; i++) for (int j = 0; j < 6; j++) m_chkBuzzer[i][j].SetCheck(pEquipData->bBuzzer[i][j]);
-	m_stcPasswordMt.SetWindowText(pEquipData->sPasswordMt);
+	m_stcPasswordMt.SetWindowText(pEquipData->sPasswordOP);
 	m_edtPasswordSi.SetWindowText(pEquipData->sPasswordSi);
 	m_chkResultTestUse.SetCheck(pEquipData->bResultTestUse);
 	strData.Format("%d", pEquipData->nResultTestN1); m_edtResultTest[0].SetWindowText(strData);

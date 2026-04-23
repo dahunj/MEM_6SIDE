@@ -492,22 +492,35 @@ BOOL CCommon::Check_MainDoor(BOOL bAuto)
 
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 	int nTempSy = atoi(pEquipData->sPasswordSi); 
+	int nTempOp = atoi(pEquipData->sPasswordOP); 
 	if(gData.bUseDryRun)
 	{
 		return TRUE;
 	}
-	else if(!pEquipData->bUseDoorLock && gData.nLogInLevel == nTempSy && theApp.Get_MainMode() == MODE_MANUAL)
+	else if (!pEquipData->bUseDoorLock && gData.nLogInLevel == nTempSy && theApp.Get_MainMode() == MODE_MANUAL)
 	{
 		return TRUE;
 	}
-	else if(!pEquipData->bUseDoorLock && gData.nLogInLevel == 9300 && theApp.Get_MainMode() == MODE_MANUAL)
+	else if (pEquipData->bUseDoorLock && gData.nLogInLevel == nTempSy && theApp.Get_MainMode() == MODE_MANUAL)
+	{
+		return TRUE;
+	}
+	else if (pEquipData->bUseDoorLock && gData.nLogInLevel == nTempOp && theApp.Get_MainMode() == MODE_MANUAL)
+	{
+		return TRUE;
+	}
+	else if (!pEquipData->bUseDoorLock && gData.nLogInLevel == 9300)
 	{
 		return TRUE;
 	}
 	else if(!pEquipData->bUseDoorLock)
-	{		
-		Show_Alarm("Please Use Door Interlock.");
-		return FALSE;		
+	{
+		
+		{
+			Show_Alarm("Please Use Door Interlock.");
+			return FALSE;
+		}	
+		
 	}
 	
 #ifdef AJIN_BOARD_USE

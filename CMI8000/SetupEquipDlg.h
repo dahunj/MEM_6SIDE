@@ -132,6 +132,7 @@ private:
 	void Disable_RosCtrl(BOOL bDisable);
 
 public:
+	void Set_Enable(BOOL bEnable);
 		
 	void Save_EquipData();
 	void Save_EquipDataForAllParam();

@@ -59,7 +59,7 @@ void CDataManager::Reset_EquipData()
 	for (int i = 0; i < 6; i++) for (int j = 0; j < 4; j++) m_EquipData.bTower[i][j] = FALSE;
 	for (int i = 0; i < 2; i++) for (int j = 0; j < 6; j++) m_EquipData.bBuzzer[i][j] = FALSE;
 
-	m_EquipData.sPasswordMt = "";
+	m_EquipData.sPasswordOP = "";
 	m_EquipData.sPasswordSi = "";
 
 	m_EquipData.bResultTestUse = FALSE;
@@ -226,7 +226,7 @@ BOOL CDataManager::Read_EquipData()
 	for (int i = 0; i < 6; i++) for (int j = 0; j < 4; j++) { strKey.Format("%d%d", i, j); m_EquipData.bTower[i][j] = INI.Get_Bool("TOWER", strKey, FALSE); }
 	for (int i = 0; i < 2; i++) for (int j = 0; j < 6; j++) { strKey.Format("%d%d", i, j); m_EquipData.bBuzzer[i][j] = INI.Get_Bool("BUZZER", strKey, FALSE); }
 
-	m_EquipData.sPasswordMt = INI.Get_String("HIDDEN", "PASSWORD_MT", "");
+	m_EquipData.sPasswordOP = INI.Get_String("HIDDEN", "PASSWORD_MT", "");
 	m_EquipData.sPasswordSi = INI.Get_String("HIDDEN", "PASSWORD_SI", "");
 
 	m_EquipData.nResultTestN1 = INI.Get_Integer("RESULT_TEST", "N1", 0);
