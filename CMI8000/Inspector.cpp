@@ -679,8 +679,8 @@ void CInspector::Get_InspectComplete(int nInspector, CString sGbn, CString sLotI
 	{ 
 		if (nPreInfo < 2 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 9; 
 		// ( gMes.sNGCode[nPx][nTx][nCx] == "MC") gData.nInspectInfo[nPx][nTx][nCx] = 9; 
-	}	// Good
-	else if (sJudge != "G")  
+	}	
+	else if (sJudge != "G")  // Good
 	{ 
 		if (nPreInfo < 2 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 2;  // Normal (20180831 유출 때문에 수정.)
 		//if ( gMes.sNGCode[nPx][nTx][nCx] == "MC") gData.nInspectInfo[nPx][nTx][nCx] = 9; 
