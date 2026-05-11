@@ -677,8 +677,7 @@ void CInspector::Get_InspectComplete(int nInspector, CString sGbn, CString sLotI
 	else if (sJudge == "N1") { if (nPreInfo < 4 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 4; }	// N1
 	else if (sJudge == "G")	 
 	{ 
-		if (nPreInfo < 2 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 9; 
-		if ( gMes.sNGCode[nPx][nTx][nCx] == "MC") gData.nInspectInfo[nPx][nTx][nCx] = 9; 
+		if (nPreInfo < 2 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 9;		
 	}	// Good
 	else if (sJudge != "G")  
 	{ 
