@@ -288,58 +288,12 @@ void CUdpManager::Set_InspectComplete(int nInspector, CString sGbn, CString sLot
 	nTNo = atoi(sTNo);
 	nCNo = atoi(sCNo);
 
-	if (sGbn == "B2")
+	
+	if (sGbn == "T1" )
 	{
-		if (nTNo == 1)
-		{
-			m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N2";
-			m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "BL_T_LECT";
-		}
-		else if (nTNo == 2)
-		{
-			m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N2";
-			m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "BL_T_CT";
-		}
-		else if (nTNo == 3)
-		{
-			m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N2";
-			m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "BL_T_CP";
-		}
-		else if (nTNo == 4)
-		{
-			m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N2";
-			m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "BL_T_LESHDOT";
-		}
-		else if (nTNo == 5)
-		{
-			m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N2";
-			m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "BL_T_Outerwhitedot";
-		}
-		else if (nTNo == 6)
-		{
-			m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N2";
-			m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "BL_T_SC";
-		}
-		else if (nTNo == 7)
-		{
-			m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N2";
-			m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "BL_T_Innerwhitedot";
-		}
-		else if (nTNo == 8)
-		{
-			m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N2";
-			m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "MO_T_DT";
-		}
-		else if (nTNo == 9)
-		{
-			m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N2";
-			m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "SS_S_DT";
-		}
-		else
-		{
-			m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N2";
-			m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "VS_T_NOEP";
-		}	
+		m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N1";
+		m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "RE";
+
 	}
 	else
 	{

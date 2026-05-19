@@ -144,12 +144,31 @@ void CMFCTestDlg::OnDestroy()
 
 void CMFCTestDlg::OnBnClickedButton1()
 {
-	gData.sPortNo = "1";
-	gData.sTNo = "1";
-	gData.sCNo = "3";
+	//gData.sPortNo = "1";
+	//gData.sTNo = "1";
+	//gData.sCNo = "3";
 
-	g_objUDPManager.m_sJudge[0][0][2] = "G";
-	g_objUDPManager.m_sCode[0][0][2] = "G";
+	//g_objUDPManager.m_sJudge[0][0][2] = "G";
+	//g_objUDPManager.m_sCode[0][0][2] = "G";
 
-	g_objUDPManager.Set_InspectComplete(3, "T2", "JJJJNNNN", "1", "1", "3");
+	////INSPECT,COMPLETE,T1,GGGGG,1,1,1,N1,RE
+	//g_objUDPManager.Set_InspectComplete(2, "T1", "GGGGG", "1", "1", "1");
+
+
+	CString strSendCmd;
+	strSendCmd.Format("INSPECT,COMPLETE,T1,GGGGG,1,1,1,G,G\r\n");
+	g_objUDPManager.Send_Command(2, strSendCmd);
+	Sleep(10);
+
+	/*strSendCmd.Format("INSPECT,COMPLETE,T1,GGGGG,1,1,2,G,G\r\n");
+	g_objUDPManager.Send_Command(2, strSendCmd);
+	Sleep(10);
+
+	strSendCmd.Format("INSPECT,COMPLETE,T1,GGGGG,1,1,3,G,G\r\n");
+	g_objUDPManager.Send_Command(2, strSendCmd);
+	Sleep(10);
+
+	strSendCmd.Format("INSPECT,COMPLETE,T1,GGGGG,1,1,4,G,G\r\n");
+	g_objUDPManager.Send_Command(2, strSendCmd);
+	Sleep(10);*/
 }
