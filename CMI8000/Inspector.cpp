@@ -624,12 +624,13 @@ void CInspector::Get_InspectComplete(int nInspector, CString sGbn, CString sLotI
 	if(nPx==1){
 		gData.cJudgeCode2[nTx][nCx][nV] = *(LPSTR)(LPCTSTR)sJudge;
 	}
-
-	
+		
 
 	if (sJudge != "G" && sNGCode.GetLength() < 2) sNGCode = "NON";	// Good 일때 NG Code는 Space(" ")
+		
 
-	if (sJudge == "N1" || sJudge == "N2" || sJudge == "N3" || sJudge == "N4") {
+	if (sJudge == "N1" || sJudge == "N2" || sJudge == "N3" || sJudge == "N4") 
+	{
 		gMes.sJudge[nPx][nTx][nCx] = sJudge;
 		gMes.sNGCode[nPx][nTx][nCx] = gData.sNGData[nPx][nTx][nCx][nV] = sNGCode;
 
@@ -669,6 +670,11 @@ void CInspector::Get_InspectComplete(int nInspector, CString sGbn, CString sLotI
 // 		if (nMode == MODE_WORK || nMode == MODE_OPERATOR) { g_objCommon.Show_Error(6103); return; }
 // 	}
 
+	if(sJudge == "G" && gData.sNGData[nPx][nTx][nCx][nV] == "RE")
+	{
+		gData.nInspectInfo[nPx][nTx][nCx] = 9;
+	}
+
 	// 우선순위 : N4(8) -> B(7) -> N3(6) -> N2(5) -> N1(4)
 	if		(sJudge == "N4") { if (nPreInfo < 8 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 8; }	// N4
 	else if	(sJudge == "B")  { if (nPreInfo < 7 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 7; }	// BS
@@ -676,9 +682,10 @@ void CInspector::Get_InspectComplete(int nInspector, CString sGbn, CString sLotI
 	else if	(sJudge == "N2") { if (nPreInfo < 5 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 5; }	// N2
 	else if (sJudge == "N1") { if (nPreInfo < 4 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 4; }	// N1
 	else if (sJudge != "G")  // Good
-	{ 
+	{ 		
 		if (nPreInfo < 2 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 2;  // Normal (20180831 유출 때문에 수정.)		
 	}	
+	
 
 	if (sJudge == "B") gLot.nBsNgCount[nPx]++;	// Normal (Barcode Shift도 8로 분류해서 색상다르게 1차로 빼준다.)
 
