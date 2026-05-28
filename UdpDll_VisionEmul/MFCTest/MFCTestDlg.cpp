@@ -188,7 +188,4 @@ void CMFCTestDlg::OnBnClickedButton2()
 	strSendCmd.Format("INSPECT,COMPLETE,T1,RELOADTEST,1,8,4,G,G");
 	g_objUDPManager.Send_Command(2, strSendCmd);
 	Sleep(10);*/
-
-	
-
 }

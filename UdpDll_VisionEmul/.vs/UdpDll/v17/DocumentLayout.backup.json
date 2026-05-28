@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\dahunjj\\Desktop\\2.Git\\LG_IT_CM_AVI_6SIDE\\UdpDll_VisionEmul\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{39D34B56-8167-EEA8-E6BD-D7A154E1AE86}|MFCTest\\MFCTest.vcxproj|C:\\Users\\dahunjj\\Desktop\\2.Git\\LG_IT_CM_AVI_6SIDE\\UdpDll_VisionEmul\\MFCTest\\MFCTestDlg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{39D34B56-8167-EEA8-E6BD-D7A154E1AE86}|MFCTest\\MFCTest.vcxproj|solutionrelative:MFCTest\\MFCTestDlg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{39D34B56-8167-EEA8-E6BD-D7A154E1AE86}|MFCTest\\MFCTest.vcxproj|C:\\Users\\dahunjj\\Desktop\\2.Git\\LG_IT_CM_AVI_6SIDE\\UdpDll_VisionEmul\\MFCTest\\CUdpManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{39D34B56-8167-EEA8-E6BD-D7A154E1AE86}|MFCTest\\MFCTest.vcxproj|solutionrelative:MFCTest\\CUdpManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39D34B56-8167-EEA8-E6BD-D7A154E1AE86}|MFCTest\\MFCTest.vcxproj|C:\\Users\\dahunjj\\Desktop\\2.Git\\LG_IT_CM_AVI_6SIDE\\UdpDll_VisionEmul\\MFCTest\\MFCTestDlg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{39D34B56-8167-EEA8-E6BD-D7A154E1AE86}|MFCTest\\MFCTest.vcxproj|solutionrelative:MFCTest\\MFCTestDlg.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{39D34B56-8167-EEA8-E6BD-D7A154E1AE86}|MFCTest\\MFCTest.vcxproj|C:\\Users\\dahunjj\\Desktop\\2.Git\\LG_IT_CM_AVI_6SIDE\\UdpDll_VisionEmul\\MFCTest\\MFCTest.rc||{177559E0-D141-11D0-92DF-00A0C9138C45}|,   b e g i n       % \u0086 2$  \u0022     ",
@@ -34,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 282,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
@@ -50,13 +50,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "CUdpManager.cpp",
               "DocumentMoniker": "C:\\Users\\dahunjj\\Desktop\\2.Git\\LG_IT_CM_AVI_6SIDE\\UdpDll_VisionEmul\\MFCTest\\CUdpManager.cpp",
               "RelativeDocumentMoniker": "MFCTest\\CUdpManager.cpp",
               "ToolTip": "C:\\Users\\dahunjj\\Desktop\\2.Git\\LG_IT_CM_AVI_6SIDE\\UdpDll_VisionEmul\\MFCTest\\CUdpManager.cpp",
               "RelativeToolTip": "MFCTest\\CUdpManager.cpp",
-              "ViewState": "AgIAALYAAAAAAAAAAAAvwMQAAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAAOkAAAAAAAAAAAAvwAYBAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-01-05T23:52:24.379Z",
               "EditorCaption": ""
@@ -83,18 +83,17 @@
               "RelativeToolTip": "MFCTest\\MFCTestDlg.h",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-08-19T06:23:11.997Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-19T06:23:11.997Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "MFCTestDlg.cpp",
               "DocumentMoniker": "C:\\Users\\dahunjj\\Desktop\\2.Git\\LG_IT_CM_AVI_6SIDE\\UdpDll_VisionEmul\\MFCTest\\MFCTestDlg.cpp",
               "RelativeDocumentMoniker": "MFCTest\\MFCTestDlg.cpp",
               "ToolTip": "C:\\Users\\dahunjj\\Desktop\\2.Git\\LG_IT_CM_AVI_6SIDE\\UdpDll_VisionEmul\\MFCTest\\MFCTestDlg.cpp",
               "RelativeToolTip": "MFCTest\\MFCTestDlg.cpp",
-              "ViewState": "AgIAAKkAAAAAAAAAAAAYwLMAAAA4AAAAAAAAAA==",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAYwLwAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-08-19T06:22:08.789Z",
               "EditorCaption": ""
@@ -108,8 +107,7 @@
               "ToolTip": "C:\\Users\\dahunjj\\Desktop\\2.Git\\LG_IT_CM_AVI_6SIDE\\UdpDll_VisionEmul\\MFCTest\\MFCTest.rc - IDD_MFCTEST_DIALOG - Dialog",
               "RelativeToolTip": "MFCTest\\MFCTest.rc - IDD_MFCTEST_DIALOG - Dialog",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2025-08-19T06:21:52.897Z",
-              "EditorCaption": " - IDD_MFCTEST_DIALOG - Dialog"
+              "WhenOpened": "2025-08-19T06:21:52.897Z"
             }
           ]
         }

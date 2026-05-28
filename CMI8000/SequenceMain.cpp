@@ -8542,6 +8542,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 			}
 			gData.bBuffStageMove = FALSE;
 			gData.nSp2Timer = GetTickCount();
+			gData.dwSkipTime_Sort2 = GetTickCount();
 			SYSTEMTIME time;
 			GetLocalTime(&time);
 			gData.sSortWaitStartTime[1].Format("%02d:%02d:%02d %03d", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
@@ -8549,7 +8550,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 
 			m_tSortPick2Loop.Takt_End(nTaktZone, 4);
 			m_tSortPick2Loop.Takt_Start(nTaktZone, 5);
-			gData.dwSkipTime_Sort2 = GetTickCount();
+			
 			m_strLog.Format("Skip Time Sort 2 : %lu", gData.dwSkipTime_Sort2);
 			g_objLogFile.Save_TestLog(m_strLog);
 		} 

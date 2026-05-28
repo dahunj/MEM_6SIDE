@@ -261,14 +261,14 @@ void CUdpManager::Get_LoadComplete(int nInspector, CString sGbn, CString sLotID,
 	Sleep(10);
 	if (nTNo4 != -1 && nCNo4 != -1) Set_ScanComplete(nInspector, sGbn, sLotID, nPortNo, sTNo4, sCNo4);
 	Sleep(10);
-	if (nTNo1 != -1 && nCNo1 != -1) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo1, sCNo1);
-	Sleep(10);
-	if (nTNo2 != -1 && nCNo2 != -1) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo2, sCNo2);
-	Sleep(10);
-	if (nTNo3 != -1 && nCNo3 != -1) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo3, sCNo3);
-	Sleep(10);
-	if (nTNo4 != -1 && nCNo4 != -1) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo4, sCNo4);
-	Sleep(10);
+	//if (nTNo1 != -1 && nCNo1 != -1) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo1, sCNo1);
+	//Sleep(10);
+	//if (nTNo2 != -1 && nCNo2 != -1) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo2, sCNo2);
+	//Sleep(10);
+	//if (nTNo3 != -1 && nCNo3 != -1) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo3, sCNo3);
+	//Sleep(10);
+	//if (nTNo4 != -1 && nCNo4 != -1) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo4, sCNo4);
+	//Sleep(10);
 
 }
 
