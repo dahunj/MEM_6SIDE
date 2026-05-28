@@ -305,9 +305,6 @@ void CUdpManager::Set_InspectComplete(int nInspector, CString sGbn, CString sLot
 	Send_Command(nInspector, strSendCmd);
 }
 
-
-
-
 void CUdpManager::Set_ConnectReply(int nInspector)
 {
 	CString	strSendCmd;
@@ -328,8 +325,6 @@ void CUdpManager::Set_LotReady(int nInspector, CString sLotID)
 	strSendCmd.Format("LOT,READY,%s,1,1928,2059,MEM", sLotID);
 	Send_Command(nInspector, strSendCmd);
 }
-
-
 
 void CUdpManager::OnTimer(UINT_PTR nIDEvent)
 {

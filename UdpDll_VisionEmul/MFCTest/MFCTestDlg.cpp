@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(CMFCTestDlg, CDialogEx)
 	//ON_MESSAGE(UM_UDP_RECEIVE, &CMFCTestDlg::OnUdpReceive)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCTestDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMFCTestDlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -171,4 +172,23 @@ void CMFCTestDlg::OnBnClickedButton1()
 	strSendCmd.Format("INSPECT,COMPLETE,T1,GGGGG,1,1,4,G,G\r\n");
 	g_objUDPManager.Send_Command(2, strSendCmd);
 	Sleep(10);*/
+}
+
+void CMFCTestDlg::OnBnClickedButton2()
+{
+	CString strSendCmd;
+	strSendCmd.Format("INSPECT,COMPLETE,T1,RELOADTEST,1,9,2,G,G");
+	g_objUDPManager.Send_Command(2, strSendCmd);
+	Sleep(10);
+
+	/*strSendCmd.Format("INSPECT,COMPLETE,T1,RELOADTEST,1,8,3,G,G");
+	g_objUDPManager.Send_Command(2, strSendCmd);
+	Sleep(10);
+
+	strSendCmd.Format("INSPECT,COMPLETE,T1,RELOADTEST,1,8,4,G,G");
+	g_objUDPManager.Send_Command(2, strSendCmd);
+	Sleep(10);*/
+
+	
+
 }

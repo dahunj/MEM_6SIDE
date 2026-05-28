@@ -40,4 +40,5 @@ protected:
 public:
     afx_msg void OnDestroy();
 	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButton2();
 };
