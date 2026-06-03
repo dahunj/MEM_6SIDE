@@ -404,7 +404,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 		}
 		
 
-	/*	int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER1);
+		int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER1);
 		if (nCase == 6) {
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(1, gData.nPNoSortPick[0], gData.nTNoSortPick[0][i], gData.nCNoSortPick[0][i]); }
 		}
@@ -412,7 +412,7 @@ void CInspector::Get_ReloadRequest(int nInspector, CString sPc, CString sVision)
 		nCase = g_objSequenceMain.Get_MainRunCase(AUTO_SORT_PICKER2);
 		if (nCase == 6) {
 			for (int i = 4; i >= 0; i--) { Set_InspectResult(1, gData.nPNoSortPick[1], gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i]); }
-		}		*/
+		}		
 
 	} else if (nInspector == INSPECTOR_PC2) // Top1
 	{	
@@ -663,17 +663,9 @@ void CInspector::Get_InspectComplete(int nInspector, CString sGbn, CString sLotI
 			gData.nJigNgCnt[nPx][7][nJigNo]++;
 		}
 	}
-
-	int nMode = theApp.Get_MainMode();
+		
 	int nPreInfo = gData.nInspectInfo[nPx][nTx][nCx];
-// 	if (nPreInfo == 0) {
-// 		if (nMode == MODE_WORK || nMode == MODE_OPERATOR) { g_objCommon.Show_Error(6103); return; }
-// 	}
-
-	if(sJudge == "G" && gData.sNGData[nPx][nTx][nCx][nV] == "RE")
-	{
-		gData.nInspectInfo[nPx][nTx][nCx] = 9;
-	}
+	
 
 	// 우선순위 : N4(8) -> B(7) -> N3(6) -> N2(5) -> N1(4)
 	if		(sJudge == "N4") { if (nPreInfo < 8 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 8; }	// N4
@@ -684,29 +676,16 @@ void CInspector::Get_InspectComplete(int nInspector, CString sGbn, CString sLotI
 	else if (sJudge != "G")  // Good
 	{ 		
 		if (nPreInfo < 2 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 2;  // Normal (20180831 유출 때문에 수정.)		
-	}	
-	
+	}
+	else if(sJudge == "G" && gData.sNGData[nPx][nTx][nCx][nV] == "RE")
+	{
+		gData.nInspectInfo[nPx][nTx][nCx] = 9;
+	}
 
 	if (sJudge == "B") gLot.nBsNgCount[nPx]++;	// Normal (Barcode Shift도 8로 분류해서 색상다르게 1차로 빼준다.)
 
 	gData.byInspectDone[nPx][nTx][nCx] |= (1 << nV);
-
-	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-	if (!pEquipData->bUseDispatcher) return;
-
-	if (pEquipData->bUseInspectAngle && ((gData.byInspectDone[nPx][nTx][nCx] >> 0) & 1) == 0) return;	// Angle
-	if (pEquipData->bUseInspectBtm1Specular  && ((gData.byInspectDone[nPx][nTx][nCx] >> 1) & 1) == 0) return;	// Btm1_Specular
-	if (pEquipData->bUseInspectTop1  && ((gData.byInspectDone[nPx][nTx][nCx] >> 2) & 1) == 0) return;	// Top1
-	if (pEquipData->bUseInspectTop2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 3) & 1) == 0) return;	// Top2
-	if (pEquipData->bUseInspectBtm2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 4) & 1) == 0) return;	// Btm2
-	if (pEquipData->bUseInspectBtm1Angle  && ((gData.byInspectDone[nPx][nTx][nCx] >> 5) & 1) == 0) return;	// Btm1_Angle
-	if (pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) return;	// Btm1_3D
-
-	if (gData.nInspectInfo[nPx][nTx][nCx] == 4 || gData.nInspectInfo[nPx][nTx][nCx] == 5) {
-		g_objDispatcher.Set_JudgeRequest(nPx+1, nTx+1, nCx+1);	// N1(4), N2(5)
-	} else {
-		g_objDispatcher.Set_JudgeDone(nPx+1, nTx+1, nCx+1);	// ROS 판정 완료
-	}
+		
 }
 
 void CInspector::Get_AMoveRequest(int nInspector, CString sGbn, CString sZ)
