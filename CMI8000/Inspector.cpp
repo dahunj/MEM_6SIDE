@@ -685,6 +685,10 @@ void CInspector::Get_InspectComplete(int nInspector, CString sGbn, CString sLotI
 		if (nPreInfo < 2 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 2;  // Normal (20180831 유출 때문에 수정.)
 		//if ( gMes.sNGCode[nPx][nTx][nCx] == "MC") gData.nInspectInfo[nPx][nTx][nCx] = 9; 
 	}	
+	else if(sJudge == "G" && gData.sNGData[nPx][nTx][nCx][nV] == "RE")
+	{
+		gData.nInspectInfo[nPx][nTx][nCx] = 9;
+	}
 
 	if (sJudge == "B") gLot.nBsNgCount[nPx]++;	// Normal (Barcode Shift도 8로 분류해서 색상다르게 1차로 빼준다.)
 

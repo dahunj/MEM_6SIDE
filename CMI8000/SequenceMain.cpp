@@ -7539,7 +7539,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 				}
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0],gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_NGDown );
 
-				g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
+				g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				//g_objMES.Set_Result(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 								
 				if(nSp1WorkNg == 0  || nSp1WorkNg == 2 )  sNgTray.Format("NG");
@@ -8807,7 +8807,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 				}
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1],gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_NGDown );
 				
-				g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
+				g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				
 				if(nSp2WorkNg == 0  || nSp2WorkNg == 2 )  sNgTray.Format("NG");
 				if(nSp2WorkNg == 1  || nSp2WorkNg == 3 )  sNgTray.Format("NG-N4");
@@ -8817,8 +8817,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 				g_objLogFile.Save_CmTrackingLog("NG", gData.nTrayCntNG[gData.nPNoSortPick[1]-1][nSp2WorkNg], nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 
 				Get_TactEach(gLot.sLotID[nSp2PNo-1], 2, nSp2StartNo+i, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
-
-
+				
 				gData.nTNoSortPick[1][nSp2StartNo+i] = gData.nCNoSortPick[1][nSp2StartNo+i] = 0;
 			}
 			gData.nULPNo = gData.nPNoNgTray = gData.nPNoSortPick[1];
