@@ -93,6 +93,8 @@ CSequenceMain::CSequenceMain()
 
 	gData.bPullForceEnd = TRUE;
 
+	gData.bPullForce = FALSE;
+
 }
 
 CSequenceMain::~CSequenceMain()

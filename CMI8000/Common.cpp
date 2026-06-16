@@ -463,8 +463,8 @@ int CCommon::Show_KeyPad(CString &sKey)
 
 int CCommon::Show_Password(int &nUser)
 {
-	if(gData.sOperID == "SY")
-	{
+	if(gData.sOperID == "SY/Synapse")
+	{		
 		return IDOK;
 	}	
 
@@ -499,8 +499,9 @@ BOOL CCommon::Check_MainDoor(BOOL bAuto)
 	int nTempSy = atoi(pEquipData->sPasswordSi); 
 	int nTempOp = atoi(pEquipData->sPasswordOP); 
 	
-	if(gData.sOperID == "SY")
+	if(gData.sOperID == "SY/Synapse")
 	{
+		
 		return TRUE;
 	}	
 	else if(gData.bUseDryRun)

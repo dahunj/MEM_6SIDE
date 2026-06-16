@@ -129,7 +129,7 @@ void COperatorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 		m_stcOperOperId.SetWindowText(gData.sOperID);
 
-		if(gData.sOperID == "SY")
+		if(gData.sOperID == "SY/Synapse")
 		{
 			gData.nLogInLevel = 9300;
 		}
@@ -183,9 +183,12 @@ void COperatorDlg::OnStnClickedStcOperOperId()
 	if (g_objCommon.Show_KeyPad(strKey) != IDOK) return;
 
 	gData.sOperID = strKey;
-	m_stcOperOperId.SetWindowText(strKey);
 
-	if(gData.sOperID == "SY")
+	if(gData.sOperID == "SY") gData.sOperID = "SY/Synapse";
+
+	m_stcOperOperId.SetWindowText(gData.sOperID);
+
+	if(gData.sOperID == "SY/Synapse")
 	{
 		gData.nLogInLevel = 9300;
 	}

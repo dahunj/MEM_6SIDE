@@ -239,7 +239,7 @@ void CWorkDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 			m_imgEquipment.SetBitmap(m_bmpEquipment);
 		}
 
-		if(gData.sOperID == "SY")
+		if(gData.sOperID == "SY/Synapse")
 		{
 			gData.nLogInLevel = 9300;
 		}
