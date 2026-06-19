@@ -8,7 +8,6 @@
 #include "LogFile.h"
 #include "DataManager.h"
 #include "Common.h"
-#include "MESInterface.h"
 
 #include "AJinDefine.h"
 
@@ -321,25 +320,13 @@ void CSetupMoveTab3Dlg::Save_MoveData()
 	for (int i = 0; i < 3; i++) { strKey.Format("%02d", i);	m_stcEmptyPortZ[i].GetWindowText(strData);		dData = atof(strData);	INI.Set_Double("44_EMPTY_PORT_Z", strKey, dData, "%0.3lf"); }
 	for (int i = 0; i < 3; i++) { strKey.Format("%02d", i);	m_stcEmptyTrans2Y[i].GetWindowText(strData);	dData = atof(strData);	INI.Set_Double("45_EMPTY_TRANS2_Y", strKey, dData, "%0.3lf"); }
 
-	for (int i = 0; i < 6; i++) {
-		strKey.Format("%02d", i);	m_stcSortPicker1Z[i].GetWindowText(strData);	dData = atof(strData);	INI.Set_Double("33_SORT_PICKER1_Z", strKey, dData, "%0.3lf");
-
-		// RMS 亲格 历厘
-		if (i == 1) g_objMES.Save_AviRmsData("Sort Picker1 Z Buffer1 Down Position", strData);
-		if (i == 2) g_objMES.Save_AviRmsData("Sort Picker1 Z Good Down Position", strData);
-		if (i == 3) g_objMES.Save_AviRmsData("Sort Picker1 Z NG Down Position", strData);
-		if (i == 4) g_objMES.Save_AviRmsData("Sort Picker1 Z NG Buffer Down Position", strData);
-		if (i == 5) g_objMES.Save_AviRmsData("Sort Picker1 Z Buffer2 Down Position", strData);
+	for (int i = 0; i < 6; i++) 
+	{
+		strKey.Format("%02d", i);	m_stcSortPicker1Z[i].GetWindowText(strData);	dData = atof(strData);	INI.Set_Double("33_SORT_PICKER1_Z", strKey, dData, "%0.3lf");		
 	}
-	for (int i = 0; i < 6; i++) {
-		strKey.Format("%02d", i);	m_stcSortPicker2Z[i].GetWindowText(strData);	dData = atof(strData);	INI.Set_Double("36_SORT_PICKER2_Z", strKey, dData, "%0.3lf");
-
-		// RMS 亲格 历厘
-		if (i == 1) g_objMES.Save_AviRmsData("Sort Picker2 Z Buffer1 Down Position", strData);
-		if (i == 2) g_objMES.Save_AviRmsData("Sort Picker2 Z Good Down Position", strData);
-		if (i == 3) g_objMES.Save_AviRmsData("Sort Picker2 Z NG Down Position", strData);
-		if (i == 4) g_objMES.Save_AviRmsData("Sort Picker2 Z NG Buffer Down Position", strData);
-		if (i == 5) g_objMES.Save_AviRmsData("Sort Picker2 Z Buffer2 Down Position", strData);
+	for (int i = 0; i < 6; i++) 
+	{
+		strKey.Format("%02d", i);	m_stcSortPicker2Z[i].GetWindowText(strData);	dData = atof(strData);	INI.Set_Double("36_SORT_PICKER2_Z", strKey, dData, "%0.3lf");			
 	}
 
 	g_objLogFile.Save_HandlerLog("[Setup - MoveTab Dialog 3] save");

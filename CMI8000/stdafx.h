@@ -95,6 +95,8 @@
 
 #define	VELOCITY_WEIGHT	 8
 
+#define MES_WAITTIME	10000
+
 ///////////////////////////////////////////////////////////////////////////////
 
 extern CString gsCurrentDir;	// 현재 프로젝트 폴더
@@ -414,11 +416,21 @@ typedef struct {
 	int		nLotStatus;				// 0:Stop, 1:Start Send, 2:Start Receive
 	DWORD	dwLotStartTime;			// Lot Start time
 
+	DWORD	dwMesTime;
+
+
 	// Host 전공정 Data
 	CString		sHostLotID;			//Host 수신 Lot ID
 	CString		sHostRecipe;		//Host 수신 Recipe ID
 	CString		sHostModel;			//Host 수신 Recipe ID
 	int			nHostCount;			//Host 수신 CM 총갯수
+
+	CString		sHostFailLotId; 
+	CString		sRTSTID;
+	CString		sLabelType;
+	CString		sHostFailCode ;
+	CString		sHostFailText ;
+
 	CString		sHostCancelCode;	//Host Cancel 수신 code
 	CString		sHostCancelText;	//Host Cancel 수신 내용
 

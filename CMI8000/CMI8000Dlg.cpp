@@ -26,7 +26,6 @@
 
 #include "Inspector.h"
 #include "BarcodeLot.h"
-#include "MESInterface.h"
 #include "Dispatcher.h"
 #include "CapAttach.h"
 #include "LaserComm.h"
@@ -265,7 +264,7 @@ void CCMI8000Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 	gData.sOperID = "";
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-	g_objMES.Initialize(pEquipData->bUseMES);
+	//g_objMES.Initialize(pEquipData->bUseMES);
 
 	if (!g_objBarcodeLot.Initialize()) { Exit_System(EXIT_SYSTEM_BARCODE); return; }
 

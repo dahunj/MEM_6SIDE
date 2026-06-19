@@ -4,7 +4,6 @@
 #include "AJinAXL.h"
 #include "CMI8000.h"
 #include <math.h>
-#include "MESInterface.h"
 #include "Common.h"
 #include "FifoTaskProcessor.h"
 
@@ -613,8 +612,7 @@ void CAJinAXL::Save_RmsMotionSpeed(int nAxis, double dSpeedM, double dAccel)
 	strSpeed.Format("%0.3lf", dSpeedM);
 	strAccel.Format("%0.3lf", dAccel);
 
-	strName.Format("%s Speed", strAxis); g_objMES.Save_AviRmsData(strName, strSpeed);
-	strName.Format("%s Accel", strAxis); g_objMES.Save_AviRmsData(strName, strAccel);
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////

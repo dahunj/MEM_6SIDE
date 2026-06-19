@@ -12,7 +12,6 @@
 #include "Dispatcher.h"
 #include "CapAttach.h"
 #include "BarcodeLot.h"
-#include "MESInterface.h"
 #include "SequenceInit.h"
 #include "SequenceMain.h"
 
@@ -312,7 +311,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			if (gData.nLPNo > 0)  nNo = gData.nLPNo;
 
 		} else { nNo = 1;}
-		g_objMES.Set_Status(1);
+		//g_objMES.Set_Status(1);
 		g_objLogFile.Save_HandlerLog("[Work Mode] START S/W push");
 		m_rdoWorkStart.SetCheck(TRUE);
 		pMainDlg->Set_LotErrorLog("START", 903, "Start");
@@ -326,7 +325,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			if (gData.nLPNo > 0)  nNo = gData.nLPNo;
 
 		} else { nNo = 1;}
-		g_objMES.Set_Status(2);
+		//g_objMES.Set_Status(2);
 		g_objLogFile.Save_HandlerLog("[Work Mode] STOP S/W push");
 		MachineStopLog("STOP_BUTTON_PUSH");
 		m_rdoWorkStop.SetCheck(TRUE);
@@ -388,26 +387,11 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 				if (gAlm.bBegin) Reset_AlarmLog();
 				pMainDlg->Set_CurrentState(STATE_RUN);
 
-				// 처음 시작할때만 MES 체크 해준다.
-// 				if (!g_objMES.m_bMESUse || g_objMES.m_nMESSequence == 3 || (!gData.bMesFirstLot && g_objMES.m_bMesErr) ) {	// 연속 랏 중 MES 알람 났을때
-				if (!g_objMES.m_bMESUse || g_objMES.m_nMESSequence == 3) {
-// 					if (gData.bMesFirstLot) gData.bMesRegistered[0] = TRUE;
-					g_objLogFile.Save_HandlerLog("[Work Mode] Main Thread Start");
-					g_objSequenceMain.Begin_MainRunThread();
-					g_objMES.Set_Status(1);
-				} else if (g_objMES.m_nMESSequence == 4) {
-					g_objCommon.Show_MsgBox(1, "MES 등록이 정상적으로 되지 않았습니다. 수동 착공해주시길 바랍니다.");
-					pMainDlg->Enable_ModeButton(TRUE);
-					SetTimer(0, 100, NULL); m_rdoWorkStop.SetCheck(TRUE); return;
-				} else if (g_objMES.m_nMESSequence == 0 && !gData.bMesFirstLot) {
-					gData.bMesFirstLot = TRUE;
-					g_objMES.Clear_APDResultVar();	// 모듈 결과 APD 관련 변수 초기화.
-					g_objMES.m_bMesStart = TRUE;
-					g_objMES.Set_JobReady(gData.sLotID[0], gData.nCmUseCount[0], gData.sOperID, 1); //무조건 1번 포트 먼저 
-					CString strLog;
-					strLog.Format("[Work Timer] Set_JobReady. (LotID:%s, CmCnt:%d, Port:0)", gData.sLotID[0], gData.nCmUseCount[0]);
-					g_objLogFile.Save_MesAgentLog(strLog);
-				}
+
+				//need to do MES Check 
+				g_objLogFile.Save_HandlerLog("[Work Mode] Main Thread Start");
+				g_objSequenceMain.Begin_MainRunThread();
+
 				pMainDlg->Set_EquipRunStart();
 				MachineStopLog("RUN_START");
 				
@@ -422,27 +406,16 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 		} 
 		else 
 		{				// Auto Running
-			// MES 통신 완료일 때 장비 구동하기 위해...
-			if (g_objMES.m_bMESUse && g_objMES.m_nMESSequence == 2) {
-				g_objMES.m_nMESSequence = 3;
-				if (!g_objSequenceMain.Is_MainThreadRun()) {
-// 					if (gData.bMesFirstLot) gData.bMesRegistered[0] = TRUE;
-					g_objLogFile.Save_HandlerLog("[Work Mode] Main Thread Start");
-					g_objSequenceMain.Begin_MainRunThread();
-					g_objMES.Set_Status(1);
-				}
+
+			if (!g_objSequenceMain.Is_MainThreadRun()) {
+				g_objLogFile.Save_HandlerLog("[Work Mode] Auto STOP");
+				pMainDlg->Set_CurrentState(STATE_STOP);
+
+
+				g_objCommon.Btm1BlowSunctionOnOff(FALSE);
+				g_objCommon.TopBlowSunctionOnOff(FALSE);
 			}
 
-			if (!g_objMES.m_bMESUse || g_objMES.m_nMESSequence == 3) {
-				if (!g_objSequenceMain.Is_MainThreadRun()) {
-					g_objLogFile.Save_HandlerLog("[Work Mode] Auto STOP");
-					pMainDlg->Set_CurrentState(STATE_STOP);
-					g_objMES.Set_Status(2);
-
-					g_objCommon.Btm1BlowSunctionOnOff(FALSE);
-					g_objCommon.TopBlowSunctionOnOff(FALSE);
-				}
-			}
 			if(pEquipData->bUseDoorLock) g_objCommon.Locking_MainDoor(TRUE, TRUE);
 			pMainDlg->Enable_ModeButton(FALSE);
 			g_objCommon.Check_PortArea(TRUE);
@@ -616,8 +589,8 @@ void CWorkDlg::OnBnClickedChkMesUse()
 		INI.Set_Bool("OPTION", "MES_USE", m_chkMesUse.GetCheck());
 		g_objDataManager.Read_EquipData();
 		m_ledEquipOption[7].Set_On(pEquipData->bUseMES);
-		g_objMES.Set_MESUse(pEquipData->bUseMES);
-// 		if (pEquipData->bUseMES) gData.bMesFirstLot = FALSE;
+		//g_objMES.Set_MESUse(pEquipData->bUseMES);
+
 	}
 	CString strLog;
 	strLog.Format("[Work Dialog] Check MES Use Click (%d).", (int)pEquipData->bUseMES);
@@ -631,7 +604,7 @@ void CWorkDlg::OnBnClickedBtnMesAbort()
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 	if (!pEquipData->bUseMES) { g_objCommon.Show_MsgBox(1, "You can't cancel the MES No_Use........."); return; }
 
-	g_objMES.Set_LotCancel(gData.sLotID[m_nPortIdx], gData.nCmUseCount[m_nPortIdx], gData.sOperID);
+//	g_objMES.Set_LotCancel(gData.sLotID[m_nPortIdx], gData.nCmUseCount[m_nPortIdx], gData.sOperID);
 // 	gData.bMesRegistered[m_nPortIdx] = FALSE;
 
 	CString strLog;
@@ -644,45 +617,7 @@ void CWorkDlg::OnBnClickedBtnMesAbort()
 
 void CWorkDlg::OnBnClickedBtnMesManual()
 {
-	if (m_rdoWorkStart.GetCheck()) { g_objCommon.Show_MsgBox(1, "장비 가동 중에는 등록 할수 없습니다........."); return; }
-
-	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-	if (!pEquipData->bUseMES) { g_objCommon.Show_MsgBox(1, "MES를 사용하지 않고 있습니다........."); return; }
-
-	CString strLog;
-// 	if (gData.bMesRegistered[m_nPortIdx]) {
-// 		strLog.Format("Port[%d]번 이미 MES 연결 하였습니다.\n다시 연결하려면 MES Cancel 버튼을 누른후 다시 시도하십시오.", m_nPortIdx+1);
-// 		g_objCommon.Show_MsgBox(1, strLog);
-// 		return;
-// 	}
-
-	if (m_bMesManual) { g_objCommon.Show_MsgBox(1, "MES 연결중 입니다........."); return; }
-	m_bMesManual = TRUE;
-
-	Get_LotInfo(m_nPortIdx+1);
-	g_objMES.m_bMesStart = TRUE;
-	g_objMES.Set_JobReady(gData.sLotID[m_nPortIdx], gData.nCmUseCount[m_nPortIdx], gData.sOperID, m_nPortIdx+1);
-
-	DWORD dwStart = GetTickCount();
-	while(1) {	
-// 		if (GetTickCount() - dwStart > 20000) { AfxMessageBox("[Time Over] MES 연결 실패 하였습니다. 확인하여주십시오."); break; }
-		if (GetTickCount() - dwStart > 20000) { AfxMessageBox("[Time Over] MES 연결 실패 하였습니다. MES Cancel 버튼을 누른후 다시 시도하십시오."); break; }
-		if (g_objMES.m_nMESSequence == 2 || g_objMES.m_nMESSequence == 4) break;
-		theApp.DoEvents();
-	}
-
-	if (g_objMES.m_nMESSequence == 2) {
-		strLog.Format("Lot[%s] MES 수동 착공 완료 하였습니다.", gData.sLotID[m_nPortIdx]);
-// 		gData.bMesRegistered[m_nPortIdx] = TRUE;
-		AfxMessageBox(strLog);
-		g_objMES.m_nMESSequence = 3;	// Run
-	} else if (g_objMES.m_nMESSequence == 4) {
-		AfxMessageBox("[MES Error] MES 연결 실패 하였습니다. MES Cancel 버튼을 누른후 다시 시도하십시오.");
-	}
-
-	m_bMesManual = FALSE;
-	strLog.Format("[Work Dialog] MES Manual Button Click. (LotID:%s, CmCnt:%d)", gData.sLotID[m_nPortIdx], gData.nCmUseCount[m_nPortIdx]);
-	g_objLogFile.Save_MesAgentLog(strLog);
+	
 }
 
 void CWorkDlg::OnBnClickedRdoWorkStart()
@@ -695,7 +630,7 @@ void CWorkDlg::OnBnClickedRdoWorkStart()
 
 void CWorkDlg::OnBnClickedRdoWorkStop()
 {
-	g_objMES.Set_Status(2);
+	//g_objMES.Set_Status(2);
 	g_objLogFile.Save_HandlerLog("[Work Mode] STOP button push");
 	MachineStopLog("STOP_BUTTON_PUSH");
 	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
@@ -822,25 +757,7 @@ BOOL CWorkDlg::Work_Start()
 			if (nTimeOut > 30) break;	//Time Out 3초
 			g_objCommon.uSleep(100);
 		}
-		if (gData.nVisionFOBMode == 1 && gData.nLogInLevel != 9300) 
-		{
-			if (g_objCommon.Show_MsgBox(2,"Vision FOB Mode 상태 입니다. 진행 하시겠습니까?") != IDOK) {
-				m_rdoWorkStop.SetCheck(TRUE);
-				return FALSE;
-			} else {
-				// FOB 모드일때 시작하면 MES 꺼주고 시작한다.
-				CIniFileCS INI(gData.sEnvPath + "\\EquipData.ini");
-				if (!INI.Check_File()) {
-					AfxMessageBox("EquipData.ini File Not Found!!!");
-					return FALSE;
-				}
-				INI.Set_Bool("OPTION", "MES_USE", FALSE);
-				g_objDataManager.Read_EquipData();
-				g_objMES.Set_MESUse(FALSE);				
-				m_chkMesUse.SetCheck(FALSE);
-				m_ledEquipOption[7].Set_On(FALSE);
-			}
-		}
+		
 
 		if (!pEquipData->bUseMES && gData.nLogInLevel != 9300)
 		{
@@ -1941,7 +1858,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		m_chkMesUse.SetCheck(FALSE);
 		m_chkMesUse.EnableWindow(FALSE);
 		pEquipData->bUseMES = FALSE;
-		g_objMES.Set_MESUse(FALSE);		
+		//g_objMES.Set_MESUse(FALSE);		
 
 		g_objCapAttach.Set_VisionAlarmOff();
 
@@ -1982,7 +1899,7 @@ void CWorkDlg::OnBnClickedChkPullforce()
 		m_chkMesUse.SetCheck(TRUE);
 		m_chkMesUse.EnableWindow(TRUE);
 		pEquipData->bUseMES = TRUE;
-		g_objMES.Set_MESUse(TRUE);
+		//g_objMES.Set_MESUse(TRUE);
 
 		g_objCapAttach.Set_VisionAlarmOn();
 		m_stcLotId[0].SetWindowText("");
@@ -2036,7 +1953,7 @@ void CWorkDlg::Set_DryRun(BOOL bCheck)
 		m_chkMesUse.SetCheck(FALSE);
 		m_chkMesUse.EnableWindow(FALSE);
 		pEquipData->bUseMES = FALSE;
-		g_objMES.Set_MESUse(FALSE);
+		//g_objMES.Set_MESUse(FALSE);
 
 		pEquipData->bUseVisionAlign = FALSE;
 		INI.Set_Bool("OPTION", "VISION_ALIGN", FALSE);
@@ -2064,7 +1981,7 @@ void CWorkDlg::Set_DryRun(BOOL bCheck)
 		m_chkMesUse.SetCheck(TRUE);
 		m_chkMesUse.EnableWindow(TRUE);
 		pEquipData->bUseMES = TRUE;
-		g_objMES.Set_MESUse(TRUE);
+		//g_objMES.Set_MESUse(TRUE);
 
 		pEquipData->bUseVisionAlign = TRUE;
 		INI.Set_Bool("OPTION", "VISION_ALIGN", TRUE);

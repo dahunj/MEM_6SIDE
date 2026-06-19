@@ -9,7 +9,7 @@
 #include "LogFile.h"
 #include "DataManager.h"
 #include "Common.h"
-#include "MESInterface.h"
+
 
 // CNoWorkDlg 대화 상자입니다.
 CNoWorkDlg g_dlgNoWork;
@@ -201,7 +201,7 @@ void CNoWorkDlg::Set_NoWorkReport(BOOL bSet)
 	CString eventTime;
 	eventTime.Format("%04d/%02d/%02d %02d:%02d:%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
 	
-	if(!bSet) g_objMES.Set_IDLEReasonReport(eventTime, m_strOpId, m_strNoWorkStart, eventTime,m_strCode );
+	//if(!bSet) g_objMES.Set_IDLEReasonReport(eventTime, m_strOpId, m_strNoWorkStart, eventTime,m_strCode );
 
 	
 }

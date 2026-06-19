@@ -8,7 +8,6 @@
 #include "LogFile.h"
 #include "Common.h"
 
-#include "MESInterface.h"
 #include "SequenceInit.h"
 #include "SequenceMain.h"
 #include "Dispatcher.h"
@@ -224,12 +223,12 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 // 			m_btnErrToManual.SetWindowText("Retry");
 // 		}
 
-		if(m_nErrNo > 990 && m_nErrNo < 995) {
+		/*if(m_nErrNo > 990 && m_nErrNo < 995) {
 			if(m_nErrNo == 991) strErrPick.Format("#==> User_LotID[%s]. User_Count[%d]", g_objMES.m_sOperLotID, g_objMES.m_nOperCount);
 			if(m_nErrNo == 992) strErrPick.Format("#==> MES_LotID[%s]. MES_Count[%d]. Code[%s]. Text[%s]", g_objMES.m_sMESLotID, g_objMES.m_nMESCount, g_objMES.m_sReasonCode, g_objMES.m_sReasonText);
 			if(m_nErrNo == 993) strErrPick.Format("#==> User_LotID[%s]. MES_LotID[%s]", g_objMES.m_sOperLotID, g_objMES.m_sMESLotID);
 			if(m_nErrNo == 994) strErrPick.Format("#==> User_Count[%d]. MES_Count[%d]", g_objMES.m_nOperCount, g_objMES.m_nMESCount);
-		}
+		}*/
 
 		if (m_nErrNo > 2 && m_nErrNo < 9) g_objSequenceInit.Set_InitComplete(FALSE);	// 3,4,5,6
 
@@ -266,7 +265,7 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		g_objLogFile.Save_HandlerLog(strLog);
 
 		
-		g_objMES.Set_Alarm(1, m_nErrNo, m_strErrMsg);
+		//g_objMES.Set_Alarm(1, m_nErrNo, m_strErrMsg);
 		Set_AlarmLog(m_nErrNo, m_strErrMsg);
 		g_objDispatcher.Set_StatusUpdate(2);
 
@@ -309,7 +308,7 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		pMainDlg->Set_BuzzerFlicker(FALSE);
 		if (g_objSequenceInit.Get_InitComplete()) pMainDlg->Set_CurrentState(STATE_STOP);
 		else pMainDlg->Set_CurrentState(STATE_NONE);
-		g_objMES.Set_Alarm(2, m_nErrNo, m_strErrMsg);
+		//g_objMES.Set_Alarm(2, m_nErrNo, m_strErrMsg);
 
 		g_objLogFile.Save_HandlerLog("[Error Mode] Close Error");
 

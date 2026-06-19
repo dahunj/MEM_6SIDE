@@ -5,7 +5,6 @@
 #include "DataManager.h"
 
 #include "Common.h"
-#include "MESInterface.h"
 #include "CMI8000Dlg.h"
 
 // CDataManager
@@ -377,14 +376,7 @@ BOOL CDataManager::Read_ModelData()
 	gData.nScanCnt = INI.Get_Integer("DATA", "SCAN_CNT", 3);
 	gData.nBtmPickQt = INI.Get_Integer("DATA", "BTM_PICK_QT", 4);
 	gData.nSortPickQt = INI.Get_Integer("DATA", "SORT_PICK_QT", 4);
-
-	// RMS 항목 저장
-	CString strData;
-	strData.Format("%d", gData.nTrayX);			g_objMES.Save_AviRmsData("TRAY_X", strData);
-	strData.Format("%d", gData.nTrayY);			g_objMES.Save_AviRmsData("TRAY_Y", strData);
-	strData.Format("%d", gData.nBtmPickQt * 2);	g_objMES.Save_AviRmsData("BTM_PICK_QT", strData);
-	strData.Format("%d", gData.nSortPickQt);	g_objMES.Save_AviRmsData("SORT_PICK_QT", strData);
-
+	
 	return TRUE;
 }
 

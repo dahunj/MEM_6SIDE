@@ -9,7 +9,6 @@
 #include "LogFile.h"
 #include "Common.h"
 #include "Inspector.h"
-#include "MESInterface.h"
 #include "Dispatcher.h"
 #include "CapAttach.h"
 #include "WorkDlg.h"
@@ -647,9 +646,8 @@ BOOL CSequenceMain::LotEnd_Run()
 
 	gMes.nLotStatus = 0;	
 	gData.bMesFirstLot = FALSE;
-	g_objMES.m_nMESSequence = 0;
-// 	g_objMES.m_bMesErr = FALSE;
-	g_objMES.m_bMesStart = FALSE;
+	//g_objMES.m_nMESSequence = 0;
+	//g_objMES.m_bMesStart = FALSE;
 	gData.nMesPortNo = 0;
 
 	gData.bFirstLotStart = FALSE;
@@ -676,7 +674,7 @@ BOOL CSequenceMain::LotEnd_Run()
 	g_objLogFile.Save_HandlerLog(strMsg);
 
 
-	g_objMES.Set_Status(3);
+	//g_objMES.Set_Status(3);
 	strMsg.Format("Lot End.");
 	g_objCommon.Show_Alarm(strMsg);	
 		
@@ -2004,7 +2002,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	
 	if (gData.bCycleStop == FALSE) {
 		if (gData.bAPDResultErr == FALSE) {	// APD 결과 항목들이 모두 OK이면 MES LotEnd 보고
-			g_objMES.Set_LotEnd(gLot.sLotID[nPx], gLot.nCmCount[nPx], gData.sOperID, gLot.nGoodCount[nPx], gLot.nNgCount[nPx], nPx);
+			//g_objMES.Set_LotEnd(gLot.sLotID[nPx], gLot.nCmCount[nPx], gData.sOperID, gLot.nGoodCount[nPx], gLot.nNgCount[nPx], nPx);
 		}
 	}
 
@@ -2268,19 +2266,20 @@ BOOL CSequenceMain::LoadTray_Run()
 		if (nLtWorkPort == 1 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 0)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 0);	// Port1
 		if (nLtWorkPort == 2 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 1);	// Port2
 
-		if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) {
-			if (g_objMES.m_bMESUse) {
-				if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
-				else
-				{	
-					// 연속 랏 관련하여 MES Lot Start 부분 수정.
-					g_objMES.m_bMesStart = TRUE;
-					g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
-					g_objMES.Set_JobReady(gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], gData.sOperID, nLtWorkPort);	//2020.9.16+
-					m_strLog.Format("[Sequence] Set_JobReady. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
-					g_objLogFile.Save_MesAgentLog(m_strLog);					
-				}
-			}
+		if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) 
+		{
+			//if (g_objMES.m_bMESUse) {
+			//	if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
+			//	else
+			//	{	
+			//		// 연속 랏 관련하여 MES Lot Start 부분 수정.
+			//		g_objMES.m_bMesStart = TRUE;
+			//		g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
+			//		g_objMES.Set_JobReady(gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], gData.sOperID, nLtWorkPort);	//2020.9.16+
+			//		m_strLog.Format("[Sequence] Set_JobReady. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
+			//		g_objLogFile.Save_MesAgentLog(m_strLog);					
+			//	}
+			//}
 		}	
 		m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
 		m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
@@ -2314,13 +2313,14 @@ BOOL CSequenceMain::LoadTray_Run()
 		} 
 		break;
 	case 4:		// Tray Z Move to Support Up Position (Load)
-		if (!g_objMES.m_bMESUse || g_objMES.m_nMESSequence == 3) {
-			if (g_objCommon.Get_LoadTrayMasterSlaveOut() && !m_pDX01->iLoadStageExist) {
-				
+		//if (!g_objMES.m_bMESUse || g_objMES.m_nMESSequence == 3) 
+		{
+			if (g_objCommon.Get_LoadTrayMasterSlaveOut() && !m_pDX01->iLoadStageExist)
+			{				
 				g_dlgWork.Enable_UserInput(nLtWorkPort, FALSE);
-				if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) {
-					Job_LotStart(nLtWorkPort);	
-				
+				if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) 
+				{
+					Job_LotStart(nLtWorkPort);					
 				}				
 				g_objCommon.Move_Position(AX_LOAD_STAGE_Z, 1);	// Support Up
 				m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(10000);
@@ -7541,7 +7541,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 				}
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0],gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_NGDown );
 
-				g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
+				//g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				//g_objMES.Set_Result(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 								
 				if(nSp1WorkNg == 0  || nSp1WorkNg == 2 )  sNgTray.Format("NG");
@@ -7614,8 +7614,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 						if (m_pEquipData->bUseApdAlarm) {	// 2023.05.11+
 							m_nSortPick1Case = 60; m_tSortPick1Loop.Set_LoopTime(10000); break;	// LotEnd Case
 						}
-
-						if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
+												
 						if(!m_tSortPick1Loop.Waiting_Time(300)) break;
 
 						if (!Check_GoodTrayEmpty() && (m_nGoodTray1Case == 20 || m_nGoodTray2Case == 20)) {
@@ -7875,7 +7874,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 				
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_GoodDown);
 								
-				g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], "OK", sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
+				//g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], "OK", sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				g_objLogFile.Save_OutTray("GOOD", gData.nGoodTrayCount, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("GOOD", gData.nGoodTrayCount, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 
@@ -7975,7 +7974,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 						m_tSortPick1Loop.Takt_End(nTaktZone, 28);
 					}
 
-					if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
+					
 					if(!m_tSortPick1Loop.Waiting_Time(300)) break;
 					if (!Check_GoodTrayEmpty() && (m_nGoodTray1Case == 20 || m_nGoodTray2Case == 20)) {
 						if (m_nGoodTray1Case == 20) nSp1WorkGood = 1;
@@ -8236,126 +8235,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 			m_tSortPick1Loop.Takt_Start(nTaktZone, 54);
 			m_tSortPick1Loop.Takt_End(nTaktZone, 54, TRUE);
 		}
-		break;
-
-	// APD 파일 저장, MES 보고 및 APD 결과파일 확인
-	case 60:	// APD 사용 유무 확인, Vision, Cap APD Data 요청
-		if (m_pEquipData->bUseApdAlarm) {
-			g_objInspector.Set_ApdRequest(INSPECTOR_PC1, "AG", nSp1PNo);
-			g_objInspector.Set_ApdRequest(INSPECTOR_PC1, "B1", nSp1PNo);
-			g_objInspector.Set_ApdRequest(INSPECTOR_PC2, "T1", nSp1PNo);
-			g_objInspector.Set_ApdRequest(INSPECTOR_PC3, "T2", nSp1PNo);
-			g_objInspector.Set_ApdRequest(INSPECTOR_PC4, "B2", nSp1PNo);
-			g_objCapAttach.Set_ApdRequest();
-			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(10000);
-
-		} else {
-			if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
-			gData.bAPDResultErr = FALSE;
-			m_nSortPick1Case = 63; m_tSortPick1Loop.Set_LoopTime(10000);
-		}
-		break;
-	case 61:	// 모든 APD 값이 들어오면 Data 기록 후 MES 보고
-		if (gData.bAviApdReceive[0] && gData.bAviApdReceive[1] && gData.bAviApdReceive[2] &&
-			gData.bAviApdReceive[3] && gData.bAviApdReceive[4] && (gData.dAssyLoadCellAvg + 0.1 > 0))
-		{
-			g_objMES.Clear_APDResult();	// APD 결과 폴더에 파일이 있다면 삭제.
-			g_objMES.Save_AviApdData(gData.sLotID[nSp1PNo-1], nSp1PNo, gData.sOperID);	// APD 파일 생성 및 MES 보고
-			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(5000);
-
-		} else if (!m_pEquipData->bUseApdAlarm) {
-			if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
-			gData.bAPDResultErr = FALSE;
-			m_nSortPick1Case = 63; m_tSortPick1Loop.Set_LoopTime(10000);
-		}
-		break;
-	case 62:	// 결과 파일 읽기 확인, LotEnd 전 나머지 모듈 검사 결과 APD 파일 저장.
-		if (g_objMES.Read_APDResult(gData.sLotID[nSp1PNo-1])) {			
-			if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
-			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(5000);
-
-		} else if (!m_pEquipData->bUseApdAlarm) {
-			if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
-			gData.bAPDResultErr = FALSE;
-			m_nSortPick1Case = 63; m_tSortPick1Loop.Set_LoopTime(10000);
-		}
-		break;		
-	case 63:	// 항목 결과에 따라 Lot End처리.
-		if (g_objCommon.Check_Position(AX_SORT_PICKER1_Z, 0) && g_objCommon.Check_Position(AX_SORT_PICKER1_P, 0)) {
-			if(!m_tSortPick1Loop.Waiting_Time(300)) break;	// 모듈 검사 결과 APD 파일 저장하고 일정시간 기다렸다가 Lot End 해줘야한다. 
-
-			if (!Check_GoodTrayEmpty() && (m_nGoodTray1Case == 20 || m_nGoodTray2Case == 20)) {
-				if (m_nGoodTray1Case == 20) nSp1WorkGood = 1;
-				if (m_nGoodTray2Case == 20) nSp1WorkGood = 2;
-
-				gData.sCLotID[nSp1WorkGood-1] = gData.sLotID[nSp1PNo-1];
-				gData.nCPortNo[nSp1WorkGood-1] = nSp1PNo;
-				gData.nCGoodTrayCount[nSp1WorkGood-1] = gData.nGoodStageTrayNo[nSp1WorkGood-1];	//gData.nGoodTrayCount;
-				gData.nLastTrayNo = gData.nGoodStageTrayNo[nSp1WorkGood-1];
-				gData.nCTrayCmCnt[nSp1WorkGood-1] = Get_GoodTrayCmCnt();
-			}
-			Job_LotEnd(nSp1PNo, nSp1WorkGood);
-			if (m_pThreadBeep == NULL && m_pThreadNgFullBeep == NULL) {
-				m_pThreadBeep = AfxBeginThread(Thread_Beep, (LPVOID)(2000));
-
-			} else {
-				gData.bLotEndBeep = TRUE;
-			}
-
-			gData.bContinueLotEnd = TRUE;
-			if (m_nNgTrayCase == 10) m_nNgTrayCase = 11; 
-			if (!Check_GoodTrayEmpty()) {
-				if (m_nGoodTray1Case == 20) { gData.bGoodTrayLotEnd[0] = TRUE; m_nGoodTray1Case = 21; }
-				if (m_nGoodTray2Case == 20) { gData.bGoodTrayLotEnd[1] = TRUE; m_nGoodTray2Case = 21; }
-			} else {
-				// 랏종료시점에 대기중인 트레이가 빈트레이면 다음랏 모듈을 받아야 하기 때문에 트레이넘버를 1로 바꿔준다.
-				if (m_nGoodTray1Case == 20) { gData.nGoodStageTrayNo[0] = 1; gData.nGoodTrayCount = 1; }
-				if (m_nGoodTray2Case == 20) { gData.nGoodStageTrayNo[1] = 1; gData.nGoodTrayCount = 1; }
-
-				// Inline Mode에서는 Unload 버튼을 사용하지 않는다.
-				if (!m_pEquipData->bUseInlineMode) {
-					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) 
-					{ 
-						gData.bGoodTrayWait = TRUE;
-					}
-					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) 
-					{ 
-						gData.bGoodTrayWait = TRUE;
-					}
-					if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) 
-					{ 
-						gData.bGoodTrayWait = TRUE;
-					}
-				}
-			}
-			if (!gData.bGoodTrayLotEnd[0] && m_nGoodTray1Case > 20 && m_nGoodTray1Case < 30) { gData.bGoodTrayLotEnd[0] = TRUE; }
-			if (!gData.bGoodTrayLotEnd[1] && m_nGoodTray2Case > 20 && m_nGoodTray2Case < 30) { gData.bGoodTrayLotEnd[1] = TRUE; }
-
-			/////
-			if (Check_UnloadLotEnd() && !m_bUnloadLotEnd) { m_bUnloadLotEnd = TRUE; }
-
-			m_strLog.Format("Sort Picker1, %d", GetTickCount() - m_dwSortPick1);
-			g_objLogFile.Save_TestLog(m_strLog);
-
-			CString strLog;
-			CString strMsg = "Sort picker1 move to NG unloading + good unloading";
-			dwSortPick1End = GetTickCount() - dwSortPick1Unload;
-			strLog.Format("MCC,(%02d) %s,(%02d) %s,%0.3lf", 13, "SortPicker1", 13, strMsg, dwSortPick1End / 1000.0);
-			g_objLogFile.Save_MCCLog(strLog);//g_objLogFile.Save_HandlerLog(strLog);
-
-			if (nSp1WorkBuff != 1 && nSp1WorkBuff != 2) nSp1WorkBuff = 1;	// Test
-			if (nSp1WorkBuff == 1) g_objCommon.Move_Position(AX_SORT_PICKER1_X, 0);	// Buffer1 Position
-			if (nSp1WorkBuff == 2) g_objCommon.Move_Position(AX_SORT_PICKER1_X, 1);	// Buffer2 Position
-
-			if (gData.bAPDResultErr) m_nSortPick1Case++;	// Alarm 처리. Machine Stop
-			else					 m_nSortPick1Case = 0;	// Lot End 완료.
-			m_tSortPick1Loop.Set_LoopTime(5000);
-		}
-		break;
-	case 64:	// 항목 결과중 NG 있으면 알람 처리
-		m_nSortPick1Case = 0;
-		g_objCommon.Show_Error(4364);
-		return FALSE;
+		break;	
 	}
 
 	// 13. (Error : 4300)
@@ -8809,7 +8689,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 				}
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1],gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_NGDown );
 				
-				g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
+				//g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				
 				if(nSp2WorkNg == 0  || nSp2WorkNg == 2 )  sNgTray.Format("NG");
 				if(nSp2WorkNg == 1  || nSp2WorkNg == 3 )  sNgTray.Format("NG-N4");
@@ -8885,8 +8765,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 						if (m_pEquipData->bUseApdAlarm) {	// 2023.05.11+
 							m_nSortPick2Case = 60; m_tSortPick2Loop.Set_LoopTime(10000); break;	// LotEnd Case
 						}
-
-						if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
+						
 						if(!m_tSortPick2Loop.Waiting_Time(300)) break;
 
 						if (!Check_GoodTrayEmpty() && (m_nGoodTray1Case == 20 || m_nGoodTray2Case == 20)) {
@@ -9152,7 +9031,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_GoodDown);
 				
-				g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], "OK", sInfo, gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
+				//g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], "OK", sInfo, gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
 				g_objLogFile.Save_OutTray("GOOD", gData.nGoodTrayCount, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("GOOD", gData.nGoodTrayCount, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 
@@ -9255,7 +9134,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 						m_tSortPick2Loop.Takt_End(nTaktZone, 28);
 					}
 
-					if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
+					
 					if(!m_tSortPick2Loop.Waiting_Time(300)) break;
 					if (!Check_GoodTrayEmpty() && (m_nGoodTray1Case == 20 || m_nGoodTray2Case == 20)) {
 						if (m_nGoodTray1Case == 20) nSp2WorkGood = 1;
@@ -9533,124 +9412,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 		}
 		break;
 
-	// APD 파일 저장, MES 보고 및 APD 결과파일 확인
-	case 60:	// APD 사용 유무 확인, Vision, Cap APD Data 요청
-		if (m_pEquipData->bUseApdAlarm) {
-			g_objInspector.Set_ApdRequest(INSPECTOR_PC1, "AG", nSp2PNo);
-			g_objInspector.Set_ApdRequest(INSPECTOR_PC1, "B1", nSp2PNo);
-			g_objInspector.Set_ApdRequest(INSPECTOR_PC2, "T1", nSp2PNo);
-			g_objInspector.Set_ApdRequest(INSPECTOR_PC3, "T2", nSp2PNo);
-			g_objInspector.Set_ApdRequest(INSPECTOR_PC4, "B2", nSp2PNo);
-			g_objCapAttach.Set_ApdRequest();
-			m_nSortPick2Case++; m_tSortPick2Loop.Set_LoopTime(10000);
-
-		} else {
-			if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
-			gData.bAPDResultErr = FALSE;
-			m_nSortPick2Case = 63; m_tSortPick2Loop.Set_LoopTime(10000);
-		}
-		break;
-	case 61:	// 모든 APD 값이 들어오면 Data 기록 후 MES 보고
-		if (gData.bAviApdReceive[0] && gData.bAviApdReceive[1] && gData.bAviApdReceive[2] &&
-			gData.bAviApdReceive[3] && gData.bAviApdReceive[4] && (gData.dAssyLoadCellAvg + 0.1 > 0))
-		{
-			g_objMES.Clear_APDResult();	// APD 결과 폴더에 파일이 있다면 삭제.
-			g_objMES.Save_AviApdData(gData.sLotID[nSp2PNo-1], nSp2PNo, gData.sOperID);	// APD 파일 생성 및 MES 보고
-			m_nSortPick2Case++; m_tSortPick2Loop.Set_LoopTime(5000);
-
-		} else if (!m_pEquipData->bUseApdAlarm) {
-			if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
-			gData.bAPDResultErr = FALSE;
-			m_nSortPick2Case = 63; m_tSortPick2Loop.Set_LoopTime(10000);
-		}
-		break;
-	case 62:	// 결과 파일 읽기 확인, LotEnd 전 나머지 모듈 검사 결과 APD 파일 저장.
-		if (g_objMES.Read_APDResult(gData.sLotID[nSp2PNo-1])) {			
-			if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
-			m_nSortPick2Case++; m_tSortPick2Loop.Set_LoopTime(5000);
-
-		} else if (!m_pEquipData->bUseApdAlarm) {
-			if (gData.bCycleStop == FALSE) g_objMES.LotEnd_WriteAPD();
-			gData.bAPDResultErr = FALSE;
-			m_nSortPick2Case = 63; m_tSortPick2Loop.Set_LoopTime(10000);
-		}
-		break;		
-	case 63:	// 항목 결과에 따라 Lot End처리.
-		if (g_objCommon.Check_Position(AX_SORT_PICKER2_Z, 0) && g_objCommon.Check_Position(AX_SORT_PICKER2_P, 0)) {
-			if(!m_tSortPick2Loop.Waiting_Time(300)) break;	// 모듈 검사 결과 APD 파일 저장하고 일정시간 기다렸다가 Lot End 해줘야한다. 
-
-			if (!Check_GoodTrayEmpty() && (m_nGoodTray1Case == 20 || m_nGoodTray2Case == 20)) {
-				if (m_nGoodTray1Case == 20) nSp2WorkGood = 1;
-				if (m_nGoodTray2Case == 20) nSp2WorkGood = 2;
-
-				gData.sCLotID[nSp2WorkGood-1] = gData.sLotID[nSp2PNo-1];
-				gData.nCPortNo[nSp2WorkGood-1] = nSp2PNo;
-				gData.nCGoodTrayCount[nSp2WorkGood-1] = gData.nGoodStageTrayNo[nSp2WorkGood-1];	//gData.nGoodTrayCount;
-				gData.nLastTrayNo = gData.nGoodStageTrayNo[nSp2WorkGood-1];
-				gData.nCTrayCmCnt[nSp2WorkGood-1] = Get_GoodTrayCmCnt();
-			}
-			Job_LotEnd(nSp2PNo, nSp2WorkGood);
-			if (m_pThreadBeep == NULL && m_pThreadNgFullBeep == NULL) {
-				m_pThreadBeep = AfxBeginThread(Thread_Beep, (LPVOID)(2000));
-
-			} else {
-				gData.bLotEndBeep = TRUE;
-			}
-
-			gData.bContinueLotEnd = TRUE;
-			if (m_nNgTrayCase == 10) m_nNgTrayCase = 11; 
-			if (!Check_GoodTrayEmpty()) {
-				if (m_nGoodTray1Case == 20) { gData.bGoodTrayLotEnd[0] = TRUE; m_nGoodTray1Case = 21; }
-				if (m_nGoodTray2Case == 20) { gData.bGoodTrayLotEnd[1] = TRUE; m_nGoodTray2Case = 21; }
-			} else {
-				// 랏종료시점에 대기중인 트레이가 빈트레이면 다음랏 모듈을 받아야 하기 때문에 트레이넘버를 1로 바꿔준다.
-				if (m_nGoodTray1Case == 20) { gData.nGoodStageTrayNo[0] = 1; gData.nGoodTrayCount = 1; }
-				if (m_nGoodTray2Case == 20) { gData.nGoodStageTrayNo[1] = 1; gData.nGoodTrayCount = 1; }
-
-				// Inline Mode에서는 Unload 버튼을 사용하지 않는다.
-				if (!m_pEquipData->bUseInlineMode) {
-					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case <= 20) 
-					{ 
-						gData.bGoodTrayWait = TRUE;
-					}
-					if (m_nGoodTray1Case <= 20 && m_nGoodTray2Case >  30) 
-					{ 
-						gData.bGoodTrayWait = TRUE;
-					}
-					if (m_nGoodTray1Case >  30 && m_nGoodTray2Case <= 20) 
-					{ 
-						gData.bGoodTrayWait = TRUE;
-					}
-				}
-			}
-			if (!gData.bGoodTrayLotEnd[0] && m_nGoodTray1Case > 20 && m_nGoodTray1Case < 30) { gData.bGoodTrayLotEnd[0] = TRUE; }
-			if (!gData.bGoodTrayLotEnd[1] && m_nGoodTray2Case > 20 && m_nGoodTray2Case < 30) { gData.bGoodTrayLotEnd[1] = TRUE; }
-
-			/////
-			if (Check_UnloadLotEnd() && !m_bUnloadLotEnd) { m_bUnloadLotEnd = TRUE; }
-
-			m_strLog.Format("Sort Picker2, %d", GetTickCount() - m_dwSortPick2);
-			g_objLogFile.Save_TestLog(m_strLog);
-
-			CString strLog;
-			CString strMsg = "Sort picker2 move to NG unloading + good unloading";
-			dwSortPick2End = GetTickCount() - dwSortPick2Unload;
-			strLog.Format("MCC,(%02d) %s,(%02d) %s,%0.3lf", 14, "SortPicker2", 13, strMsg, dwSortPick2End / 1000.0);
-			g_objLogFile.Save_HandlerLog(strLog);
-
-			if (nSp2WorkBuff != 1 && nSp2WorkBuff != 2) nSp2WorkBuff = 1;	// Test
-			if (nSp2WorkBuff == 1) g_objCommon.Move_Position(AX_SORT_PICKER2_X, 0);	// Buffer1 Position
-			if (nSp2WorkBuff == 2) g_objCommon.Move_Position(AX_SORT_PICKER2_X, 1);	// Buffer2 Position
-
-			if (gData.bAPDResultErr) m_nSortPick2Case++;	// Alarm 처리. Machine Stop
-			else					 m_nSortPick2Case = 0;	// Lot End 완료.
-			m_tSortPick2Loop.Set_LoopTime(5000);
-		}
-		break;
-	case 64:	// 항목 결과중 NG 있으면 알람 처리
-		m_nSortPick2Case = 0;
-		g_objCommon.Show_Error(4464);
-		return FALSE;
+	
 	}
 
 	// 14. (Error : 4400)

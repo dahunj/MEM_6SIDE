@@ -285,9 +285,6 @@
     <ClInclude Include="ManualBtm2Dlg.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MESInterface.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="CapAttach.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -310,6 +307,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ToastMsgDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MesAgent.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -455,9 +455,6 @@
     <ClCompile Include="ManualBtm2Dlg.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MESInterface.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CapAttach.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -480,6 +477,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ToastMsgDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MesAgent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

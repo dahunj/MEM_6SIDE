@@ -9,7 +9,6 @@
 #include "DataManager.h"
 
 #include "SequenceMain.h"
-#include "MESInterface.h"
 #include "Dispatcher.h"
 
 #define UDP_PC1_HOST_IP		"192.168.0.21"

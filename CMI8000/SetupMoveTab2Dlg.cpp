@@ -8,7 +8,6 @@
 #include "LogFile.h"
 #include "DataManager.h"
 #include "Common.h"
-#include "MESInterface.h"
 
 #include "AJinDefine.h"
 
@@ -350,12 +349,9 @@ void CSetupMoveTab2Dlg::Save_MoveData()
 	for (int i = 0; i < 6; i++) { strKey.Format("%02d", i);	m_stcBufferStage1Y[i].GetWindowText(strData);	dData = atof(strData);	INI.Set_Double("30_BUFFER_STAGE1_Y", strKey, dData, "%0.3lf"); }
 	for (int i = 0; i < 6; i++) { strKey.Format("%02d", i);	m_stcBufferStage2Y[i].GetWindowText(strData);	dData = atof(strData);	INI.Set_Double("31_BUFFER_STAGE2_Y", strKey, dData, "%0.3lf"); }
 
-	for (int i = 0; i < 4; i++) {
-		strKey.Format("%02d", i);	m_stcBtm2PickerZ[i].GetWindowText(strData);		dData = atof(strData);	INI.Set_Double("27_BTM2_PICKER_Z", strKey, dData, "%0.3lf");
-
-		// RMS 항목 저장
-		if (i == 1) g_objMES.Save_AviRmsData("BTM2 Picker Z Inspect Down Position", strData);
-		if (i == 3) g_objMES.Save_AviRmsData("BTM2 Picker Z Buffer Down Position", strData);
+	for (int i = 0; i < 4; i++) 
+	{
+		strKey.Format("%02d", i);	m_stcBtm2PickerZ[i].GetWindowText(strData);		dData = atof(strData);	INI.Set_Double("27_BTM2_PICKER_Z", strKey, dData, "%0.3lf");		
 	}
 
 	g_objLogFile.Save_HandlerLog("[Setup - MoveTab Dialog 2] save");

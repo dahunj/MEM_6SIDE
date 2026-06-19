@@ -8,7 +8,6 @@
 #include "LogFile.h"
 #include "Common.h"
 #include "SequenceMain.h"
-#include "MESInterface.h"
 #include "WorkDlg.h"
 
 const double ANGLE_STAGE_LENGTH = 250.0;	// Good Tray 1/2 간섭없는 간격
@@ -351,7 +350,7 @@ BOOL CSequenceInit::Initial_MainInit()
 		g_objSequenceMain.Set_ClearRunData(0);
 		if (gData.bCycleStop) g_dlgWork.PostMessage(UM_RESET_CYCLE_STOP, NULL, NULL);
 		//g_objMesAgent.Set_EquipState(1);	// 1:Idle, 2:Run, 3:Down
-		g_objMES.Initialize(m_pEquipData->bUseMES);
+		//g_objMES.Initialize(m_pEquipData->bUseMES);
 
 		gMes.nLotStatus = 0;
 

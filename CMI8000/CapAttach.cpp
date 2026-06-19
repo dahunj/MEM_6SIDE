@@ -7,7 +7,7 @@
 #include "LogFile.h"
 #include "Common.h"
 #include "SequenceMain.h"
-#include "MESInterface.h"
+
 
 #define UDP_CAPATTACH_LPORT	8050
 #define UDP_CAPATTACH_HPORT	8050
