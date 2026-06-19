@@ -62,18 +62,12 @@ private:
 public:
 	void Set_S7F25();
 	
-	void Set_S2F49_PP_SELECT(CString sMGZID, CString sOperID);
-	void Set_S2F49_MGZ_CANCEL();
-
-	void Set_S2F49_MGZ_CONFIRM();
-	void Set_S2F49_PP_UPLOAD_CONFIRM();
-	void Set_S2F49_PP_UPLOAD_FAIL();
+	void Set_S2F49_PP_SELECT(CString sLotID, CString sRecipe, CString sOperID);
+	void Set_S2F49_LOT_ID_FAIL();	
+	//void Set_S2F49_PP_UPLOAD_CONFIRM();
+	//void Set_S2F49_PP_UPLOAD_FAIL();
 
 	void Set_S2F49_LOT_START();
-
-
-	void Set_S2F49_TRAY_ID_CONFIRM();
-	void Set_S2F49_TRAY_CANCEL();
 	/////////////////////////////////////
 	
 
