@@ -217,6 +217,7 @@ void CMesAgent::Get_ControlState(CString sFlag)
 
 void CMesAgent::Get_LotStart(CString sLotId, CString sRecipe, CString sCMCount)
 {
+	gMes.bPPSelected = TRUE;
 	gMes.sHostLotID = sLotId;
 	gMes.sHostRecipe = sRecipe;
 	gMes.nHostCount = atoi(sCMCount);
@@ -244,7 +245,7 @@ void CMesAgent::Get_PPSelect(CString sLotId, CString sRecipe, CString sOperID)
 	{
 		g_objCommon.Show_Error(9004); return;
 	}	
-	//gMes.bMGZIDReported = TRUE;	
+	gMes.bLotReported = TRUE;	
 }
 
 

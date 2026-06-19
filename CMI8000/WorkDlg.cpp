@@ -1769,9 +1769,7 @@ void CWorkDlg::WriteCMCount(int nPortNo)
 	strValue.Format("%d", nCmCnt);
 	m_stcCmCount[nPortNo].SetWindowText(strValue);
 	if (nPortNo == 1) g_dlgOperator.m_stcOperCmCount.SetWindowText(strValue);
-
 	
-
 }
 
 

@@ -64,12 +64,11 @@ public:
 
 	void Set_LotStartedReport(CString sOperID, CString sLotId, CString sRecipe, CString sCMCount);
 	void Set_ProductCompletedReport(CString sOperID, CString sLotID, int nTrayNo, int nCMNo,  CString sResult, CString sReasonCode, CString sCMBarcode, int UnitNo);
+	
+	//void Set_LotCompleteReport(CString sLotID, int nPortNo, CString sRecipe, int nCmTotal, int nRealTotal, int nGoodCnt, int nBadCnt);
 	//old 
 	//void Set_PPUploadCompletedReport(CString sLotId, CString sMGZId, CString sRecipeId);
-		
-	
-
-	
+			
 };
 
 

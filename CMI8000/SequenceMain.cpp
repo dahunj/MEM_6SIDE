@@ -11,6 +11,8 @@
 #include "Inspector.h"
 #include "Dispatcher.h"
 #include "CapAttach.h"
+#include "MesAgent.h"
+
 #include "WorkDlg.h"
 
 CSequenceMain g_objSequenceMain;
@@ -2268,6 +2270,11 @@ BOOL CSequenceMain::LoadTray_Run()
 
 		if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) 
 		{
+			if(m_pEquipData->bUseMES)
+			{
+				g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
+				m_nLoadTrayCase = 40; m_tLoadTrayLoop.Set_LoopTime(30000);
+			}
 			//if (g_objMES.m_bMESUse) {
 			//	if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
 			//	else
@@ -2280,10 +2287,56 @@ BOOL CSequenceMain::LoadTray_Run()
 			//		g_objLogFile.Save_MesAgentLog(m_strLog);					
 			//	}
 			//}
-		}	
-		m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
-		m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
-		m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
+		}
+		else
+		{
+			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
+			m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
+			m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
+		}		
+		break;
+	case 40:
+		if(nLtWorkPort == 1)
+		{
+			gMes.bLotReported = FALSE;
+			g_objMesAgent.Set_LotIDReport(0, gData.sLotID[0], 1, gData.sRecipe);
+			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
+		}
+		else if(nLtWorkPort == 2)
+		{
+			gMes.bLotReported = FALSE;
+			g_objMesAgent.Set_LotIDReport(0, gData.sLotID[1], 2, gData.sRecipe);
+			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
+		}		
+		break;
+	case 41:
+		if(gMes.bLotReported)
+		{
+			gMes.bPPSelected = FALSE;
+			g_objMesAgent.Set_PPSelectedReport(gMes.sHostLotID, gMes.sHostRecipe);
+			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
+		}
+		break;
+	case 42:
+		if(gMes.bPPSelected)
+		{			
+			if(nLtWorkPort == 1)
+			{
+				gData.nCmUseCount[0] = gMes.nHostCount;
+				g_dlgWork.WriteCMCount(0);
+			}
+			else if(nLtWorkPort == 2) 
+			{
+				gData.nCmUseCount[1] = gMes.nHostCount;
+				g_dlgWork.WriteCMCount(1);
+			}
+
+			CString sCount;
+			sCount.Format("%d",gMes.nHostCount);
+
+			g_objMesAgent.Set_LotStartedReport(gData.sOperID, gMes.sHostLotID, gMes.sHostRecipe, sCount);
+			m_nLoadTrayCase = 3; m_tLoadTrayLoop.Set_LoopTime(5000);
+		}
 		break;
 	case 3:		// Check Position, Lot Start		
 		#ifndef AJIN_BOARD_USE
@@ -7540,10 +7593,9 @@ BOOL CSequenceMain::SortPicker1_Run()
 					else																	  gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1] = "N1";
 				}
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0],gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_NGDown );
-
-				//g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
-				//g_objMES.Set_Result(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
-								
+				
+				g_objMesAgent.Set_ProductCompletedReport(gData.sOperID, gLot.sLotID[nSp1PNo-1], nTNo, nCNo, gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], 1);
+							
 				if(nSp1WorkNg == 0  || nSp1WorkNg == 2 )  sNgTray.Format("NG");
 				if(nSp1WorkNg == 1  || nSp1WorkNg == 3 )  sNgTray.Format("NG-N4");
 
@@ -7873,8 +7925,9 @@ BOOL CSequenceMain::SortPicker1_Run()
 				g_objCapAttach.Set_BarcodeUpdate(nSp1PNo, nGTNo, nGCNo, gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1]);
 				
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_GoodDown);
-								
-				//g_objMES.Save_ProcessedData(gLot.sLotID[nSp1PNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], "OK", sInfo, gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
+						
+				g_objMesAgent.Set_ProductCompletedReport(gData.sOperID, gLot.sLotID[nSp1PNo-1], nTNo, nCNo, gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], 1);
+
 				g_objLogFile.Save_OutTray("GOOD", gData.nGoodTrayCount, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("GOOD", gData.nGoodTrayCount, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 
@@ -8689,8 +8742,8 @@ BOOL CSequenceMain::SortPicker2_Run()
 				}
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1],gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_NGDown );
 				
-				//g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
-				
+				g_objMesAgent.Set_ProductCompletedReport(gData.sOperID, gLot.sLotID[nSp2PNo-1], nTNo, nCNo, gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], 1);
+							
 				if(nSp2WorkNg == 0  || nSp2WorkNg == 2 )  sNgTray.Format("NG");
 				if(nSp2WorkNg == 1  || nSp2WorkNg == 3 )  sNgTray.Format("NG-N4");
 				//sNgTray.Format("NG-%d", nSp2WorkNg + 1);
@@ -9031,7 +9084,8 @@ BOOL CSequenceMain::SortPicker2_Run()
 
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_GoodDown);
 				
-				//g_objMES.Save_ProcessedData(gLot.sLotID[nSp2PNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], "OK", sInfo, gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], nTNo, nCNo, 0,0,0,0);
+				g_objMesAgent.Set_ProductCompletedReport(gData.sOperID, gLot.sLotID[nSp2PNo-1], nTNo, nCNo, gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], 1);
+
 				g_objLogFile.Save_OutTray("GOOD", gData.nGoodTrayCount, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("GOOD", gData.nGoodTrayCount, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 
