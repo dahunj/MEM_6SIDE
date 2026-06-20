@@ -29,6 +29,7 @@
 #include "Dispatcher.h"
 #include "CapAttach.h"
 #include "LaserComm.h"
+#include "MesAgent.h"
 
 #include "SequenceInit.h"
 #include "SequenceMain.h"
@@ -143,6 +144,8 @@ BOOL CCMI8000Dlg::OnInitDialog()
 	g_dlgVersion.Create(CVersionDlg::IDD, this);
 	g_dlgNoWork.Create(CNoWorkDlg::IDD, this);
 
+	g_objMesAgent.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
+
 	CString strLog;
 	strLog.Format("[Main Dialog] Program Begin [%s]", MAIN_VERSION);
 	g_objLogFile.Save_HandlerLog(strLog);
@@ -234,6 +237,7 @@ void CCMI8000Dlg::OnDestroy()
 	g_objBarcodeLot.DestroyWindow();
 	g_objCommon.DestroyWindow();
 	g_objLaserComm.DestroyWindow();
+	g_objMesAgent.DestroyWindow();
 }
 
 void CCMI8000Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
@@ -260,6 +264,7 @@ void CCMI8000Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	g_objDispatcher.Initialize();
 	g_objCapAttach.Initialize();
 	g_objLaserComm.Initialize();
+	g_objMesAgent.Initialize();
 	//g_objLaserComm.Set_M0();
 
 	gData.sOperID = "";
@@ -1000,6 +1005,7 @@ void CCMI8000Dlg::Exit_System(int nExitNo)
 	g_objInspector.Terminate();
 	g_objAJinAXL.Terminate();
 	g_objLaserComm.Terminate();
+	g_objMesAgent.Terminate();
 
 	KillTimer(TIMER_BUZZER_FLKR);
 	KillTimer(TIMER_TOWER_FLKR);

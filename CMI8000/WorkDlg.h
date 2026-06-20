@@ -79,6 +79,11 @@ public:
 	CButtonCS		m_btnBuffComplete;
 	CStaticCS		m_stcLaserResult[2];
 
+	CLabelCS		m_lblOperId;
+	CStaticCS		m_stcOperId;
+	CStaticCS		m_stcMesConnect;
+	CStaticCS		m_stcMesOnline;
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
@@ -95,8 +100,8 @@ protected:
 	afx_msg void OnBnClickedRdoWorkStop();
 	afx_msg void OnBnClickedChkCycleStop();
 	afx_msg void OnBnClickedChkMesUse();
-	afx_msg void OnBnClickedBtnMesAbort();
-	afx_msg void OnBnClickedBtnMesManual();
+
+	
 	afx_msg void OnBnClickedLotID(UINT nID);
 	afx_msg void OnBnClickedNgClear(UINT nID);
 	afx_msg LRESULT OnUpdateModel(WPARAM wParam, LPARAM lParam);
@@ -125,8 +130,11 @@ private:
 	int		m_nPortIdx;
 
 	int		m_nBuffChange;
+	
 
-	BOOL	m_bMesManual;
+
+
+
 
 private:
 	BOOL Work_Start();
@@ -150,7 +158,7 @@ public:
 
 	void ResetInfoDisplay();
 
-	afx_msg void OnBnClickedBtnIdleReport();
+
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButton3();
@@ -162,6 +170,15 @@ public:
 	afx_msg void OnBnClickedBtnLaserconnect();
 	afx_msg void OnBnClickedBtnLaserGetdata();
 	afx_msg void OnBnClickedButton6();
+
+	afx_msg void OnStnClickedStcOperId();
+	afx_msg void OnBnClickedBtnMesOnline();
+	afx_msg void OnBnClickedBtnMesOffline();
+
+	afx_msg void OnBnClickedBtnMesConnect();
+	afx_msg void OnBnClickedBtnMesDisconnect();
+	afx_msg void OnBnClickedBtnMesAbort();
+	afx_msg void OnBnClickedBtnIdleReport();
 
 
 	CButton m_Btn1;

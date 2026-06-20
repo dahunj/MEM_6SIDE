@@ -12,6 +12,7 @@
 #include "Dispatcher.h"
 #include "CapAttach.h"
 #include "BarcodeLot.h"
+#include "MesAgent.h"
 #include "SequenceInit.h"
 #include "SequenceMain.h"
 
@@ -98,6 +99,11 @@ void CWorkDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON5, m_Btn5);
 	DDX_Control(pDX, IDC_BUTTON4, m_Btn4);
 	DDX_Control(pDX, IDC_BUTTON6, m_Btn6);
+
+	DDX_Control(pDX, IDC_LBL_OPER_ID, m_lblOperId);
+	DDX_Control(pDX, IDC_STC_OPER_ID, m_stcOperId);
+	DDX_Control(pDX, IDC_STC_MES_CONNECT, m_stcMesConnect);
+	DDX_Control(pDX, IDC_STC_MES_ONLINE, m_stcMesOnline);
 }
 
 BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
@@ -107,9 +113,7 @@ BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_LOT_ID_0, IDC_STC_LOT_ID_1, OnStcLotIdClick)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_CM_COUNT_0, IDC_STC_CM_COUNT_1, OnStcCmCountClick)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_B1_NO_0,IDC_STC_B1_NO_9, OnStcBtm1InfoClick)
-
-	ON_BN_CLICKED(IDC_BTN_MES_ABORT, &CWorkDlg::OnBnClickedBtnMesAbort)
-	ON_BN_CLICKED(IDC_BTN_MES_MANUAL, &CWorkDlg::OnBnClickedBtnMesManual)
+		
 	ON_BN_CLICKED(IDC_RDO_WORK_START, &CWorkDlg::OnBnClickedRdoWorkStart)
 	ON_BN_CLICKED(IDC_RDO_WORK_STOP, &CWorkDlg::OnBnClickedRdoWorkStop)
 	ON_BN_CLICKED(IDC_CHK_CYCLE_STOP, &CWorkDlg::OnBnClickedChkCycleStop)
@@ -129,14 +133,12 @@ BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
 	ON_CONTROL_RANGE(BN_CLICKED, IDC_BTN_NG_CLEAR_0, IDC_BTN_NG_CLEAR_3, OnBnClickedNgClear)
 	ON_BN_CLICKED(IDC_BTN_BUFFER_CHANGE, &CWorkDlg::OnBnClickedBtnBufferChange)
 	ON_BN_CLICKED(IDC_BTN_BUFFER_COMPLETE, &CWorkDlg::OnBnClickedBtnBufferComplete)
-	ON_BN_CLICKED(IDC_BTN_IDLE_REPORT, &CWorkDlg::OnBnClickedBtnIdleReport)
 	ON_BN_CLICKED(IDC_BUTTON1, &CWorkDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CWorkDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CWorkDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CWorkDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CWorkDlg::OnBnClickedButton5)
-
-	
+		
 	ON_BN_CLICKED(IDC_BTN_PORTZ_INIT, &CWorkDlg::OnBnClickedBtnPortzInit)
 	ON_BN_CLICKED(IDC_BTN_LASERCONNECT, &CWorkDlg::OnBnClickedBtnLaserconnect)
 	ON_BN_CLICKED(IDC_BTN_LASER_GETDATA, &CWorkDlg::OnBnClickedBtnLaserGetdata)
@@ -145,6 +147,16 @@ BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON9, &CWorkDlg::OnBnClickedButton9)
 	ON_BN_CLICKED(IDC_CHK_PULLFORCE, &CWorkDlg::OnBnClickedChkPullforce)
 	ON_BN_CLICKED(IDC_BTN_LIGHT, &CWorkDlg::OnBnClickedBtnLight)
+
+	ON_STN_CLICKED(IDC_STC_OPER_ID, &CWorkDlg::OnStnClickedStcOperId)
+	ON_BN_CLICKED(IDC_BTN_MES_ONLINE, &CWorkDlg::OnBnClickedBtnMesOnline)
+	ON_BN_CLICKED(IDC_BTN_MES_OFFLINE, &CWorkDlg::OnBnClickedBtnMesOffline)
+
+	ON_BN_CLICKED(IDC_BTN_MES_CONNECT, &CWorkDlg::OnBnClickedBtnMesConnect)
+	ON_BN_CLICKED(IDC_BTN_MES_DISCONNECT, &CWorkDlg::OnBnClickedBtnMesDisconnect)
+	ON_BN_CLICKED(IDC_BTN_MES_ABORT, &CWorkDlg::OnBnClickedBtnMesAbort)
+	ON_BN_CLICKED(IDC_BTN_IDLE_REPORT, &CWorkDlg::OnBnClickedBtnIdleReport)
+
 END_MESSAGE_MAP()
 
 // CWorkDlg 메시지 처리기입니다.
@@ -243,6 +255,7 @@ void CWorkDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 			gData.nLogInLevel = 9300;
 		}
 
+		m_stcOperId.SetWindowText(gData.sOperID);
 
 		m_stcLotId[0].GetWindowText(strText);
 		if (strText.GetLength() < 1) {
@@ -597,28 +610,6 @@ void CWorkDlg::OnBnClickedChkMesUse()
 	g_objLogFile.Save_MesAgentLog(strLog);
 }
 
-void CWorkDlg::OnBnClickedBtnMesAbort()
-{
-	if (m_rdoWorkStart.GetCheck()) { g_objCommon.Show_MsgBox(1, "You can't cancel the Lot during Run........."); return; }
-
-	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-	if (!pEquipData->bUseMES) { g_objCommon.Show_MsgBox(1, "You can't cancel the MES No_Use........."); return; }
-
-//	g_objMES.Set_LotCancel(gData.sLotID[m_nPortIdx], gData.nCmUseCount[m_nPortIdx], gData.sOperID);
-// 	gData.bMesRegistered[m_nPortIdx] = FALSE;
-
-	CString strLog;
-	strLog.Format("Lot Cancel OK...  => Lot[%s] 취소를 MES에 전송하였습니다.", gData.sLotID[m_nPortIdx]);
-	AfxMessageBox(strLog);
-
-	strLog.Format("[Work Dialog] MES Cancel Button Click. (LotID:%s, CmCnt:%d)", gData.sLotID[m_nPortIdx], gData.nCmUseCount[m_nPortIdx]);
-	g_objLogFile.Save_MesAgentLog(strLog);
-}
-
-void CWorkDlg::OnBnClickedBtnMesManual()
-{
-	
-}
 
 void CWorkDlg::OnBnClickedRdoWorkStart()
 {
@@ -691,8 +682,7 @@ BOOL CWorkDlg::Work_Start()
 	pDY09->oBufferStage1Vacuum = pDX09->iBufferStage1Vacuum = TRUE;
 	pDY09->oBufferStage2Vacuum = pDX09->iBufferStage2Vacuum = TRUE;	
 #endif 
-
-	if (m_bMesManual) { g_objCommon.Show_MsgBox(1, "MES 수동 착공 중입니다. 완료후 진행해 주십시오."); return FALSE; }
+		
 	if (gData.bBuffTrayChange) { g_objCommon.Show_MsgBox(1, "Buffer Tray 교체 작업 진행해 주십시오."); return FALSE; }
 
 	if (!pDX09->iBufferStage1Vacuum) {g_objCommon.Show_MsgBox(1, "Check Buffer1 Tray Vacuum On."); return FALSE; }
@@ -872,6 +862,11 @@ void CWorkDlg::Initial_Controls()
 	for (int i = 0; i < 4; i++) m_btnNgClear[i].Init_Ctrl("Arial", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 	m_btnBuffChange.Init_Ctrl("Arial", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
 	m_btnBuffComplete.Init_Ctrl("Arial", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
+
+	m_stcMesConnect.Init_Ctrl("바탕", 8, TRUE, RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00));
+	m_stcMesOnline.Init_Ctrl("바탕", 10, TRUE, RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00));
+	m_lblOperId.Init_Ctrl("바탕", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x20, 0x20, 0x80));
+	m_stcOperId.Init_Ctrl("바탕", 12, TRUE, COLOR_DEFAULT, RGB(0xD0, 0xD0, 0xD0));
 }
 
 void CWorkDlg::Initial_Grid(CGridCS *pGrid, int nRows, int nCols, int nType)
@@ -1057,12 +1052,13 @@ void CWorkDlg::Display_Status()
 {
 	CString strTemp, strText;
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+	
+	if (g_objMesAgent.Is_Connected()) { m_stcMesConnect.Set_Text("Connected"); m_stcMesConnect.Set_Color(RGB(0x00, 0x00, 0x00), RGB(0x00, 0xFF, 0x00)); }
+	else { m_stcMesConnect.Set_Text("Disconnected"); m_stcMesConnect.Set_Color(RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00)); }
 
-// 	if (g_objMesAgent.Is_Connected()) { m_stcMesConnect.Set_Text("Connected"); m_stcMesConnect.Set_Color(RGB(0x00, 0x00, 0x00), RGB(0x00, 0xFF, 0x00)); }
-// 	else { m_stcMesConnect.Set_Text("Disconnected"); m_stcMesConnect.Set_Color(RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00)); }
-// 
-// 	if (g_objMesAgent.Is_HostOnline()) { m_stcMesOnline.Set_Text("Online"); m_stcMesOnline.Set_Color(RGB(0x00, 0x00, 0x00), RGB(0x00, 0xFF, 0x00)); }
-// 	else { m_stcMesOnline.Set_Text("Offline"); m_stcMesOnline.Set_Color(RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00)); }
+	if (g_objMesAgent.Is_HostOnline()) { m_stcMesOnline.Set_Text("Online"); m_stcMesOnline.Set_Color(RGB(0x00, 0x00, 0x00), RGB(0x00, 0xFF, 0x00)); }
+	else { m_stcMesOnline.Set_Text("Offline"); m_stcMesOnline.Set_Color(RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00)); }
+	
 
 	BOOL bInitComplete = g_objSequenceInit.Get_InitComplete();
 	m_ledInitComplete.Set_On(bInitComplete);
@@ -1663,13 +1659,6 @@ LRESULT CWorkDlg::OnShowMsg(WPARAM wParam, LPARAM lParam)
 
 
 
-void CWorkDlg::OnBnClickedBtnIdleReport()
-{
-	if (g_dlgNoWork.IsWindowVisible()) return;
-	g_dlgNoWork.Start_NoWork(TRUE);
-	g_dlgNoWork.ShowWindow(SW_SHOW);
-}
-
 
 void CWorkDlg::OnBnClickedButton1()
 {
@@ -2016,4 +2005,119 @@ void CWorkDlg::OnBnClickedBtnLight()
 	}
 	g_objAJinAXL.Write_Output(15);
 
+}
+
+
+
+
+void CWorkDlg::OnStnClickedStcOperId()
+{
+	CString strKey, sLog;
+	if (g_objCommon.Show_KeyPad(strKey) != IDOK) return;
+
+	m_stcOperId.SetWindowText(strKey);
+	gData.sOperID = strKey;
+	g_objMesAgent.Set_OperUpdate(gData.sOperID);
+	g_dlgOperator.m_stcOperOperId.SetWindowText(strKey);
+
+	sLog.Format("[Work Dialog] Oper ID Button Click. [%s]", gData.sOperID);
+	g_objLogFile.Save_HandlerLog(sLog);
+}
+
+
+void CWorkDlg::OnBnClickedBtnMesOnline()
+{
+	if (gData.sOperID.GetLength() < 4) { AfxMessageBox("Input the Operator ID....."); return; }
+
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+	if (!pEquipData->bUseMES) return;
+
+	g_objMesAgent.Set_ControlState(1, gData.sOperID);
+
+	g_objLogFile.Save_HandlerLog("[Work Dialog] MES Online Button Click.");
+}
+
+
+void CWorkDlg::OnBnClickedBtnMesOffline()
+{
+	if (gData.sOperID.GetLength() < 4) { AfxMessageBox("Input the Operator ID....."); return; }
+
+	g_objMesAgent.Set_ControlState(2, gData.sOperID);
+
+	g_objLogFile.Save_HandlerLog("[Work Dialog] MES Offline Button Click.");
+}
+
+
+
+
+void CWorkDlg::OnBnClickedBtnMesConnect()
+{
+	if (gData.sOperID.GetLength() < 4) { AfxMessageBox("Input the Operator ID....."); return; }
+
+	g_objMesAgent.Initialize();
+	g_objLogFile.Save_HandlerLog("[Work Dialog] MES Connect Button Click.");
+}
+
+
+void CWorkDlg::OnBnClickedBtnMesDisconnect()
+{
+	if (gData.sOperID.GetLength() < 4) { AfxMessageBox("Input the Operator ID....."); return; }
+
+	g_objMesAgent.Terminate();
+	g_objLogFile.Save_HandlerLog("[Work Dialog] MES Disconnect Button Click.");
+}
+
+
+void CWorkDlg::OnBnClickedBtnMesAbort()
+{
+	if (gData.sOperID.GetLength() < 4) { AfxMessageBox("Input the Operator ID....."); return; }
+
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+	if (!pEquipData->bUseMES) return;
+
+	if (!g_objMesAgent.Is_Connected()) { AfxMessageBox("MES Disconnect 상태에서는 처리를 할수 없습니다."); return; }
+	if (!g_objMesAgent.Is_HostOnline()) { AfxMessageBox("MES Offline 상태에서는 처리를 할수 없습니다."); return; }
+	if (gData.nSelectNo < 1 || gData.nSelectNo > 2) { AfxMessageBox("Abort Lot을 먼저 선택해 주세요."); return; }
+	if (!m_rdoWorkStop.GetCheck()) { AfxMessageBox("장비 Stop상태에서 Abort처리 하세요."); return; }
+	//if (gMes.nLotStatus[gData.nSelectNo-1] == 0) { AfxMessageBox("진행중인 Lot만 Abort처리가 가능합니다."); return; }
+
+	//int nCase1 = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_STAGE_1);
+	//int nCase2 = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_STAGE_2);
+	//if ((nCase1 > 5 && nCase1 < 8) || (nCase2 > 5 && nCase2 < 8)) {
+
+	//	CString sData;
+	//	sData.Format("Are you want to cancel this Port[%d] Lot[%s]?", gData.nSelectNo, gLot.sLotID[gData.nSelectNo-1]);
+	//	if (g_objCommon.Show_MsgBox(2, sData) != IDOK) return;
+
+	//	gMes.nLotStatus[gData.nSelectNo-1] = 0;
+	//	g_objMesAgent.Set_LotAbort(gLot.sLotID[gData.nSelectNo-1]);
+
+	//	//	int nCase1 = g_objSequenceMain.Get_MainRunCase(AUTO_TRANSFER_1);
+	//	//	if (nCase1 == 7) g_objSequenceMain.Set_MainRunCase(AUTO_TRANSFER_1, 0);
+	//	if (nCase1 > 5 && nCase1 < 8) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_STAGE_1, 20);
+	//	if (nCase2 > 5 && nCase2 < 8) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_STAGE_2, 20);
+
+	//	m_stcLotsIdS[gData.nSelectNo-1].SetWindowText("");
+	//	m_stcCmsCountS[gData.nSelectNo-1].SetWindowText("");
+	//	g_objCommon.Set_LotDataClear(gData.nSelectNo-1);
+
+	//	sData.Format("[Work Dialog] MES Abort Button Click. PortNo[%d] LotID[%s]", gData.nSelectNo, gLot.sLotID[gData.nSelectNo-1]);
+	//	g_objLogFile.Save_HandlerLog(sData);
+	//} else {
+	//	AfxMessageBox("진행중인 Lot만 Abort처리가 가능합니다.");
+	//}
+}
+
+
+void CWorkDlg::OnBnClickedBtnIdleReport()
+{
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+	if (!pEquipData->bUseMES) return;
+
+	if (m_rdoWorkStart.GetCheck()) {
+		 AfxMessageBox(_T("장비 Stop 상태에서 진행이 가능합니다....."));		
+	}
+
+	/*if (g_dlgNoWork.IsWindowVisible()) g_dlgNoWork.ShowWindow(SW_HIDE);
+	else g_dlgNoWork.ShowWindow(SW_SHOW);	*/
 }
