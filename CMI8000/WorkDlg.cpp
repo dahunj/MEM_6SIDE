@@ -782,7 +782,7 @@ BOOL CWorkDlg::Work_Start()
 	gData.bFirstLotStart = TRUE;
 
 	m_stcLotId[0].GetWindowText(strTemp);		// Lot ID
-	if (strTemp.GetLength() < 2) { g_objCommon.Show_MsgBox(1, "Port1번에 LOT ID를 입력하여 주십시오."); return FALSE; }
+	if (strTemp.GetLength() < 2 || strTemp == "LOT_ID") { g_objCommon.Show_MsgBox(1, "Port1번에 LOT ID를 입력하여 주십시오."); return FALSE; }
 	gData.sLotID[0] = strTemp;
 
 	if(!m_chkMesUse.GetCheck())
