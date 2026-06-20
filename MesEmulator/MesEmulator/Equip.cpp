@@ -158,11 +158,11 @@ BOOL CEquip::Extract_Xml(CString sXmlData)
 			int nCount = nodes.GetCount();
 
 			//제대로 받는지 내일 해보자 
-			CString sOperID = nodes[1]->GetAttribute("VALUE", "");
-			CString sLotID =  nodes[4]->GetAttribute("VALUE", "");
-			CString sRecipe = nodes[5]->GetAttribute("VALUE", "");
+			//CString sOperID = nodes[0]->GetAttribute("VALUE", "");
+			CString sLotID =  nodes[3]->GetAttribute("VALUE", "");
+			CString sRecipe = nodes[4]->GetAttribute("VALUE", "");
 
-			Set_S2F49_PP_SELECT(sOperID ,sLotID, sRecipe);				
+			Set_S2F49_PP_SELECT(gData.sOperId ,sLotID, sRecipe);				
 		}
 
 		if(m_strRcmd == "40102") //PP Selected Report 
@@ -171,11 +171,13 @@ BOOL CEquip::Extract_Xml(CString sXmlData)
 			int nCount = nodes.GetCount();
 
 			//제대로 받는지 내일 해보자
-			gData.sHostLotID = nodes[1]->GetAttribute("VALUE","");
-			gData.sHostMGZID = nodes[2]->GetAttribute("VALUE", "");
+			gData.sHostLotID = nodes[2]->GetAttribute("VALUE","");
 			gData.sHostRecipeID = nodes[3]->GetAttribute("VALUE", "");
 
-			Set_S7F25();
+			Set_S2F49_LOT_START();
+
+
+			//Set_S7F25();
 		}
 
 		//if(m_strRcmd == "40103") //PP Upload Completed Report 

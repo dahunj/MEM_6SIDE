@@ -38,15 +38,10 @@ private:
 	void Get_PPSelectedReport(CString sLotID, CString sRecipeId);
 
 	void Get_LotStartedReport(CString sOperID, CString sLotID, CString sRecipe, CString sCMCount);
-
+	void Get_ProductCompletedReport(CString sOperID, CString sLotID, CString sTNo, CString sCNo, CString sResult, CString sReasonCode, CString sBarcode, CString sUnitNo);
 	//old 
-	void Get_MGZIDReport(CString sType, CString sMGZId);
+	//void Get_PPUploadCompletedReport(CString sLotID, CString sMGZId, CString sRecipeId);	
 	
-	void Get_PPUploadCompletedReport(CString sLotID, CString sMGZId, CString sRecipeId);	
-
-	void Get_TrayIDReport(CString sType, CString sTrayID);
-	void Get_TrayStartedReport(CString sLotID, CString sTrayID, CString sRecipeID);
-
 	void Send_Command(CString sSend);
 
 public:
@@ -63,17 +58,16 @@ public:
 	
 	//New 
 	void Set_PPSelect();
-	void Set_MGZ_Cancel();
+	
 
-	void Set_MGZ_Confirm();
+	
 	void Set_PP_Upload_Confirm();
 	void Set_PP_Upload_Fail();
 
 	void Set_Lot_Start();
 	void Set_Lot_ID_Fail();
 
-	void Set_TrayID_Confirm();
-	void Set_Tray_Cancel();
+
 };
 
 extern CHandler g_objHandler;

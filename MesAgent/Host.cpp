@@ -676,8 +676,8 @@ void CHost::Set_S6F11_LotStartedReport(CString sOperID, CString sLotID, CString 
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
 	strSend += "  <ITEM>" + CRLF;
-	strSend += "    <CEID NAME=\"CEID\" VALUE=\"40102\" />" + CRLF;
-	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"40102\" />" + CRLF;
+	strSend += "    <CEID NAME=\"CEID\" VALUE=\"20101\" />" + CRLF;
+	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"20101\" />" + CRLF;
 	strSend += "    <DVLIST COUNT=\"5\">" + CRLF;
 	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
@@ -688,13 +688,8 @@ void CHost::Set_S6F11_LotStartedReport(CString sOperID, CString sLotID, CString 
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
-	Send_Command(strSend, FALSE, "S6F11", "40102");
+	Send_Command(strSend, FALSE, "S6F11", "20101");
 }
-
-
-
-
-
 
 void CHost::Set_S6F11_PPSelectedReport(CString sLotId, CString sRecipeId)
 {
@@ -723,6 +718,42 @@ void CHost::Set_S6F11_PPSelectedReport(CString sLotId, CString sRecipeId)
 	strSend += "</EIF>";
 
 	Send_Command(strSend, FALSE, "S6F11", "40102");
+}
+
+void CHost::Set_S6F11_ProductCompletedReport(CString sOperID, CString sLotID, CString sTrayNo, CString sCMNo, CString sResult, CString sReasonCode, CString sBarcode, CString sUnitNo)
+{
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	CString strTime;
+	strTime.Format("%04d%02d%02d%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+
+	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
+
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
+	strSend += "  <ELEMENT>" + CRLF;
+	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
+	strSend += "  </ELEMENT>" + CRLF;
+	strSend += "  <ITEM>" + CRLF;
+	strSend += "    <CEID NAME=\"CEID\" VALUE=\"20401\" />" + CRLF;
+	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"20401\" />" + CRLF;
+	strSend += "    <DVLIST COUNT=\"11\">" + CRLF;
+	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"TOTRAYID\" VALUE=\"" + sTrayNo + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"TOPOCKETID\" VALUE=\"" + sCMNo + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"RESULT\" VALUE=\"" + sResult + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"REASONCODE\" VALUE=\"" + sReasonCode + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"MODULEID\" VALUE=\"" + sBarcode + "\"/>" + CRLF;
+	strSend += "      <DV NAME=\"UNITNO\" VALUE=\"" + sUnitNo + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATAQTY\" VALUE=\"1\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATANAME1\" VALUE=\"NAME1\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATAVALUE1\" VALUE=\"VALUE1\" />" + CRLF;
+	strSend += "    </DVLIST>" + CRLF;
+	strSend += "  </ITEM>" + CRLF;
+	strSend += "</EIF>";
+
+	Send_Command(strSend, FALSE, "S6F11", "20401");
 }
 
 

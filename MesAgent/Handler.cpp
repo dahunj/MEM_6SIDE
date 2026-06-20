@@ -119,8 +119,8 @@ LRESULT CHandler::OnServerReceive(WPARAM wLocalPort, LPARAM lClientIdx)
 		AfxExtractSubString(strCmd, strRecv, 0, chSep);
 		AfxExtractSubString(strOp, strRecv, 1, chSep);
 
-		CString strA[7];
-		for (int i = 0; i < 7; i++) AfxExtractSubString(strA[i], strRecv, i + 2, chSep);
+		CString strA[8];
+		for (int i = 0; i < 8; i++) AfxExtractSubString(strA[i], strRecv, i + 2, chSep);
 
 		if (strCmd == "OPER") {
 			if (strOp == "UPDATE") Get_OperUpdate(strA[0]);
@@ -144,6 +144,10 @@ LRESULT CHandler::OnServerReceive(WPARAM wLocalPort, LPARAM lClientIdx)
 		{
 			if(strOp == "SELECTED") Get_PPSelectedReport(strA[0], strA[1]);
 			//if(strOp == "COMPLETED") Get_PPUploadCompletedReport(strA[0], strA[1], strA[2]);
+		}
+		else if(strCmd == "PRODUCT")
+		{
+			if(strOp == "COMPLETED") Get_ProductCompletedReport(strA[0], strA[1], strA[2], strA[3],strA[4], strA[5], strA[6], strA[7]);
 		}
 
 		/*else if(strCmd == "MGZ")
@@ -236,6 +240,11 @@ void CHandler::Get_LotStartedReport(CString sOperID, CString sLotID, CString sRe
 	g_objHost.Set_S6F11_LotStartedReport(sOperID, sLotID, sRecipe, sCMCount);
 }
 
+void CHandler::Get_ProductCompletedReport(CString sOperID, CString sLotID, CString sTrayNo, CString sCMNo, CString sResult, CString sReasonCode, CString sBarcode, CString sUnitNo)
+{
+	g_objHost.Set_S6F11_ProductCompletedReport(sOperID, sLotID, sTrayNo, sCMNo, sResult, sReasonCode, sBarcode, sUnitNo);
+}
+
 /////////
 
 //
@@ -254,19 +263,6 @@ void CHandler::Set_PPSelect()
 	Send_Command(strSend);
 }
 
-void CHandler::Set_MGZ_Cancel()
-{
-	CString strSend;
-	strSend.Format("MGZ,CANCEL,%s,%s,%s", gMes.sHostLdMGZId, gMes.sCancelCode, gMes.sCancelText);
-	Send_Command(strSend);
-}
-
-void CHandler::Set_MGZ_Confirm()
-{
-	CString strSend;
-	strSend.Format("MGZ,CONFIRM,%s", gMes.sHostUldMGZId);
-	Send_Command(strSend);
-}
 
 void CHandler::Set_PP_Upload_Confirm()
 {
@@ -297,28 +293,6 @@ void CHandler::Set_Lot_ID_Fail()
 	Send_Command(strSend);
 }
 
-
-void CHandler::Set_TrayID_Confirm()
-{
-	CString strSend, strTemp;
-	strSend.Format("TRAY,CONFIRM,%s,%d", gMes.sHostTrayID, gMes.nPocketCnt);
-
-	for (int i = 0; i < gMes.nPocketCnt; i++)
-	{
-		strTemp.Format(",%s,%s", gMes.sPocketNo[i], gMes.sResult[i]);
-		strSend += strTemp;
-	}
-
-	Send_Command(strSend);
-}
-
-
-void CHandler::Set_Tray_Cancel()
-{
-	CString strSend;
-	strSend.Format("TRAY,CANCEL,%s,%s", gMes.sHostTrayID, gMes.sFailCode, gMes.sFailText);
-	Send_Command(strSend);
-}
 
 
 void CHandler::Set_ControlState(int nFlag)
