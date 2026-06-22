@@ -7926,7 +7926,7 @@ BOOL CSequenceMain::SortPicker1_Run()
 				
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i], AX_SORT_PICKER1_Z, SORT_PICKER1_Z_GoodDown);
 						
-				g_objMesAgent.Set_ProductCompletedReport(gData.sOperID, gLot.sLotID[nSp1PNo-1], nTNo, nCNo, gMes.sJudge[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp1PNo-1][nTNo-1][nCNo-1], gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], 1);
+				g_objMesAgent.Set_ProductCompletedReport(gData.sOperID, gLot.sLotID[nSp1PNo-1], nTNo, nCNo, "OK", "", gMes.sBarID[nSp1PNo-1][nTNo-1][nCNo-1], 1);
 
 				g_objLogFile.Save_OutTray("GOOD", gData.nGoodTrayCount, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("GOOD", gData.nGoodTrayCount, nSp1TrayPosX+i, nSp1TrayPosY, gData.nPNoSortPick[0], gData.nTNoSortPick[0][nSp1StartNo+i], gData.nCNoSortPick[0][nSp1StartNo+i]);
@@ -9084,7 +9084,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 
 				g_objLogFile.Save_PositionLog(gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i], AX_SORT_PICKER2_Z, SORT_PICKER2_Z_GoodDown);
 				
-				g_objMesAgent.Set_ProductCompletedReport(gData.sOperID, gLot.sLotID[nSp2PNo-1], nTNo, nCNo, gMes.sJudge[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sNGCode[nSp2PNo-1][nTNo-1][nCNo-1], gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], 1);
+				g_objMesAgent.Set_ProductCompletedReport(gData.sOperID, gLot.sLotID[nSp2PNo-1], nTNo, nCNo, "OK", "", gMes.sBarID[nSp2PNo-1][nTNo-1][nCNo-1], 1);
 
 				g_objLogFile.Save_OutTray("GOOD", gData.nGoodTrayCount, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
 				g_objLogFile.Save_CmTrackingLog("GOOD", gData.nGoodTrayCount, nSp2TrayPosX+i, nSp2TrayPosY, gData.nPNoSortPick[1], gData.nTNoSortPick[1][nSp2StartNo+i], gData.nCNoSortPick[1][nSp2StartNo+i]);
