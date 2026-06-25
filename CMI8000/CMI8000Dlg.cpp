@@ -1273,18 +1273,16 @@ void CCMI8000Dlg::Set_NoWork()
 	static DWORD dwNoWorkBegin = GetTickCount();
 
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-	//if (pEquipData->nNoWorkTime < 1) { dwNoWorkBegin = GetTickCount(); return; }
+	if (pEquipData->nNoWorkTime < 1) { dwNoWorkBegin = GetTickCount(); return; }
 
 	int nState = theApp.Get_MainState();
-	if (nState != STATE_STOP && nState != STATE_NONE && nState != STATE_ALARM && nState != STATE_ERROR) {
-		dwNoWorkBegin = GetTickCount(); return; 
-	}
+	if (nState != STATE_STOP) { dwNoWorkBegin = GetTickCount(); return; }
 
 	if (g_dlgNoWork.IsWindowVisible()) { dwNoWorkBegin = GetTickCount(); return; }
 
 	int nTerm = (int)(GetTickCount() - dwNoWorkBegin);
 	if (nTerm < pEquipData->nNoWorkTime * 1000) return;	// 초 -> 밀리초
 
-	g_dlgNoWork.Start_NoWork(TRUE);
+	g_dlgNoWork.Set_NoWorkAuto(TRUE);
 	g_dlgNoWork.ShowWindow(SW_SHOW);
 }

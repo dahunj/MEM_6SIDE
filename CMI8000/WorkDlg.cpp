@@ -2033,6 +2033,7 @@ void CWorkDlg::OnBnClickedBtnMesOnline()
 	if (!pEquipData->bUseMES) return;
 
 	g_objMesAgent.Set_ControlState(1, gData.sOperID);
+	g_objMesAgent.Set_EquipState(4);	// Idle
 
 	g_objLogFile.Save_HandlerLog("[Work Dialog] MES Online Button Click.");
 }
@@ -2070,42 +2071,26 @@ void CWorkDlg::OnBnClickedBtnMesDisconnect()
 
 void CWorkDlg::OnBnClickedBtnMesAbort()
 {
-	if (gData.sOperID.GetLength() < 4) { AfxMessageBox("Input the Operator ID....."); return; }
-
-	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-	if (!pEquipData->bUseMES) return;
+	int nPx = gData.nULPNo - 1;
+	if (nPx < 0) nPx = gData.nLPNo - 1;
+	if (nPx < 0) nPx = 0;
 
 	if (!g_objMesAgent.Is_Connected()) { AfxMessageBox("MES Disconnect 상태에서는 처리를 할수 없습니다."); return; }
 	if (!g_objMesAgent.Is_HostOnline()) { AfxMessageBox("MES Offline 상태에서는 처리를 할수 없습니다."); return; }
-	if (gData.nSelectNo < 1 || gData.nSelectNo > 2) { AfxMessageBox("Abort Lot을 먼저 선택해 주세요."); return; }
-	if (!m_rdoWorkStop.GetCheck()) { AfxMessageBox("장비 Stop상태에서 Abort처리 하세요."); return; }
-	//if (gMes.nLotStatus[gData.nSelectNo-1] == 0) { AfxMessageBox("진행중인 Lot만 Abort처리가 가능합니다."); return; }
+	if (!g_objSequenceMain.Get_IsAutoRun()) { AfxMessageBox("진행중인 Lot이 없어 처리를 할수 없습니다."); return; }
+	if (m_rdoWorkStart.GetCheck() || !m_rdoWorkStop.GetCheck()) { AfxMessageBox("진행중인 Lot이 Stop되어 있어야 처리가 가능합니다."); return; }
 
-	//int nCase1 = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_STAGE_1);
-	//int nCase2 = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_STAGE_2);
-	//if ((nCase1 > 5 && nCase1 < 8) || (nCase2 > 5 && nCase2 < 8)) {
+	if (g_objCommon.Show_MsgBox(2, "If there were the modules in the machine, Please remove the modules by the CycleStop. Are you want to cancel this Lot?") != IDOK) return;
 
-	//	CString sData;
-	//	sData.Format("Are you want to cancel this Port[%d] Lot[%s]?", gData.nSelectNo, gLot.sLotID[gData.nSelectNo-1]);
-	//	if (g_objCommon.Show_MsgBox(2, sData) != IDOK) return;
+	g_objMesAgent.Set_LotAbort(gData.sLotID[nPx], gData.sRecipe);
+	g_objMesAgent.Set_EquipState(4);	// Idle
 
-	//	gMes.nLotStatus[gData.nSelectNo-1] = 0;
-	//	g_objMesAgent.Set_LotAbort(gLot.sLotID[gData.nSelectNo-1]);
+	m_stcLotId[nPx].SetWindowText("");
+	m_stcTrayCount[nPx].SetWindowText("0");
+	m_stcCmCount[nPx].SetWindowText("0");
 
-	//	//	int nCase1 = g_objSequenceMain.Get_MainRunCase(AUTO_TRANSFER_1);
-	//	//	if (nCase1 == 7) g_objSequenceMain.Set_MainRunCase(AUTO_TRANSFER_1, 0);
-	//	if (nCase1 > 5 && nCase1 < 8) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_STAGE_1, 20);
-	//	if (nCase2 > 5 && nCase2 < 8) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_STAGE_2, 20);
-
-	//	m_stcLotsIdS[gData.nSelectNo-1].SetWindowText("");
-	//	m_stcCmsCountS[gData.nSelectNo-1].SetWindowText("");
-	//	g_objCommon.Set_LotDataClear(gData.nSelectNo-1);
-
-	//	sData.Format("[Work Dialog] MES Abort Button Click. PortNo[%d] LotID[%s]", gData.nSelectNo, gLot.sLotID[gData.nSelectNo-1]);
-	//	g_objLogFile.Save_HandlerLog(sData);
-	//} else {
-	//	AfxMessageBox("진행중인 Lot만 Abort처리가 가능합니다.");
-	//}
+	g_objLogFile.Save_HandlerLog("[Work Mode] MES Abort Button Click.");
+	
 }
 
 
@@ -2118,6 +2103,7 @@ void CWorkDlg::OnBnClickedBtnIdleReport()
 		 AfxMessageBox(_T("장비 Stop 상태에서 진행이 가능합니다....."));		
 	}
 
-	/*if (g_dlgNoWork.IsWindowVisible()) g_dlgNoWork.ShowWindow(SW_HIDE);
-	else g_dlgNoWork.ShowWindow(SW_SHOW);	*/
+	if (g_dlgNoWork.IsWindowVisible()) return;
+	g_dlgNoWork.Set_NoWorkAuto(FALSE);
+	g_dlgNoWork.ShowWindow(SW_SHOW);
 }

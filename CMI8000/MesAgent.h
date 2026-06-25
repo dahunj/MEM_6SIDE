@@ -56,7 +56,10 @@ public:
 	void Set_EquipState(int nFlag);						// 
 	void Set_ErrorUpdate(int nFlag, CString sErrNo);	// 0:해제, 1:발생
 		
-	void Set_IdleReport(CString sOperId, CString sSTime, CString sETime, CString sCode, CString sType);	//1:Start, 2:End
+	void Set_LotAbort(CString sLotId, CString sRecipe);
+	void Set_IdleSet(CString sOperId, CString sCode);	// 비가동 집계 Set
+	void Set_IdleReset(CString sOperId, CString sCode);	// 비가동 집계 Reset
+	void Set_IdleReport(CString sOperId, CString sCode, CString sText, CString sSTime, CString sETime);
 
 	//new
 	void Set_LotIDReport(int nType, CString sLotID, int nPortNo, CString sRecipe);	

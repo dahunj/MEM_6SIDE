@@ -68,7 +68,7 @@ BOOL CMesAgentDlg::OnInitDialog()
 	if (!g_objCommon.Read_Config()) return FALSE;
 
 	CString strType, strText;
-	strType = (gData.nAgentType == 1) ? "CAP" : "UAO";
+	strType = (gData.nAgentType == 0) ? "AVI" : "CAP";
 	strText.Format("MesAgent (%s) - %s", strType, MAIN_VERSION);
 	SetWindowText(strText);
 

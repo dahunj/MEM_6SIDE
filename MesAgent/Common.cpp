@@ -28,7 +28,7 @@ BOOL CCommon::Read_Config()
 	CIniFileCS INI(gsCurrentDir + "\\Config.ini");
 	if (!INI.Check_File()) { AfxMessageBox("Config.ini File Not Found!!!"); return FALSE; }
 
-	gData.nAgentType = INI.Get_Integer("DATA", "AGENT_TYPE", 0);	// 0:UAO, 1:CAP
+	gData.nAgentType = INI.Get_Integer("DATA", "AGENT_TYPE", 0);	// 0:AVI, 1:CAP
 	gData.nHostPort = INI.Get_Integer("DATA", "HOST_PORT", 0);
 	gData.sEquipId = INI.Get_String("DATA", "EQUIP_ID", "");
 	gData.bHandlerLog = INI.Get_Bool("DATA", "HANDLER_LOG", FALSE);
@@ -43,7 +43,7 @@ void CCommon::Save_Config()
 	CIniFileCS INI(gsCurrentDir + "\\Config.ini");
 	if (!INI.Check_File()) { AfxMessageBox("Config.ini File Not Found!!!"); return; }
 
-	INI.Set_Integer("DATA", "AGENT_TYPE", gData.nAgentType);	// 0:UAO, 1:CAP
+	INI.Set_Integer("DATA", "AGENT_TYPE", gData.nAgentType);	// 0:AVI, 1:CAP
 }
 
 void CCommon::Delete_LogAll()

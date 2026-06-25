@@ -301,10 +301,32 @@ void CMesAgent::Set_OperUpdate(CString sOperId)
 	Send_Command(strSend);
 }
 
-void CMesAgent::Set_IdleReport(CString sOperId, CString sSTime, CString sETime, CString sCode, CString sType)
+void CMesAgent::Set_LotAbort(CString sLotId, CString sRecipe)
 {
 	CString strSend;
-	strSend.Format("IDLE,REPORT,%s,%s,%s,%s,%s", sOperId, sSTime, sETime, sCode, sType);
+	strSend.Format("LOT,ABORT,%s,%s", sLotId, sRecipe);
+	Send_Command(strSend);
+}
+
+
+void CMesAgent::Set_IdleSet(CString sOperId, CString sCode)
+{
+	CString strSend;
+	strSend.Format("IDLE,SET,%s,%s", sOperId, sCode);
+	Send_Command(strSend);
+}
+
+void CMesAgent::Set_IdleReset(CString sOperId, CString sCode)
+{
+	CString strSend;
+	strSend.Format("IDLE,RESET,%s,%s", sOperId, sCode);
+	Send_Command(strSend);
+}
+
+void CMesAgent::Set_IdleReport(CString sOperId, CString sCode, CString sText, CString sSTime, CString sETime)
+{
+	CString strSend;
+	strSend.Format("IDLE,REPORT,%s,%s,%s,%s,%s", sOperId, sCode, sText, sSTime, sETime);
 	Send_Command(strSend);
 }
 

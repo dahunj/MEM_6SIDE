@@ -33,13 +33,17 @@ private:
 	void Get_EquipState(CString sState);					// 1:Run, 4:Idle, 5:Down
 	void Get_ErrorUpdate(CString sFlag, CString sErrNo, CString sCategory);
 
-	//new
+	void Get_LotAbort(CString sLotId, CString sRecipe);
+	void Get_IdleSet(CString sOperId, CString sCode);
+	void Get_IdleReset(CString sOperId, CString sCode);
+	void Get_IdleReport(CString sOperId, CString sCode, CString sText, CString sSTime, CString sETime);
+	
 	void Get_LotIDReport(CString sType, CString sLotID, CString sPortNo, CString sRecipe);
 	void Get_PPSelectedReport(CString sLotID, CString sRecipeId);
 
 	void Get_LotStartedReport(CString sOperID, CString sLotID, CString sRecipe, CString sCMCount);
 	void Get_ProductCompletedReport(CString sOperID, CString sLotID, CString sTNo, CString sCNo, CString sResult, CString sReasonCode, CString sBarcode, CString sUnitNo);
-	//old 
+	
 	//void Get_PPUploadCompletedReport(CString sLotID, CString sMGZId, CString sRecipeId);	
 	
 	void Send_Command(CString sSend);
@@ -56,16 +60,15 @@ public:
 	void Set_TerminalDisplay(CString sDisplay);
 	void Set_TimeSync();
 	
-	//New 
 	void Set_PPSelect();
 	
-
-	
-	void Set_PP_Upload_Confirm();
-	void Set_PP_Upload_Fail();
-
 	void Set_Lot_Start();
 	void Set_Lot_ID_Fail();
+	
+	//void Set_PP_Upload_Confirm();
+	//void Set_PP_Upload_Fail();
+
+
 
 
 };

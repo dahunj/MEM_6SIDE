@@ -89,6 +89,11 @@ public:
 	
 	//void Set_S6F11_PPUploadCompleted(CString sLotId, CString sMGZId, CString sRecipeId);
 
+	void Set_S6F11_LotAbort(CString sLotId, CString sRecipe);	// Lot Suspended Report
+	void Set_S6F11_IdleSet();
+	void Set_S6F11_IdleReset();
+	void Set_S6F11_IdleReport();
+
 	//////////
 	void Set_S2F50_PPSelect();
 	
