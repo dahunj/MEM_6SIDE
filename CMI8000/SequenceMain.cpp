@@ -1996,8 +1996,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	gLot.sEndTime[nPx].Format("%04d-%02d-%02d %02d:%02d:%02d.%03d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 
 	g_objInspector.Set_LotEnd(INSPECTOR_ALL, gData.sLotID[nPx], nPortNo);
-	g_objDispatcher.Set_LotEnd(nPortNo);
-
+	
 	g_objCapAttach.Set_TrayEnd(nPortNo);
 	theApp.uSleep(30);
 	g_objCapAttach.Set_LotEnd(nPortNo);
