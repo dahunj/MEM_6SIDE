@@ -2273,26 +2273,16 @@ BOOL CSequenceMain::LoadTray_Run()
 			{
 				g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
 				m_nLoadTrayCase = 40; m_tLoadTrayLoop.Set_LoopTime(30000);
+				m_strLog.Format("[Sequence] Get_LotInfo. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
+				g_objLogFile.Save_HandlerLog(m_strLog);	
 			}
-			//if (g_objMES.m_bMESUse) {
-			//	if (gData.bMesFirstLot) gData.bMesFirstLot = FALSE;
-			//	else
-			//	{	
-			//		// 연속 랏 관련하여 MES Lot Start 부분 수정.
-			//		g_objMES.m_bMesStart = TRUE;
-			//		g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
-			//		g_objMES.Set_JobReady(gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], gData.sOperID, nLtWorkPort);	//2020.9.16+
-			//		m_strLog.Format("[Sequence] Set_JobReady. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
-			//		g_objLogFile.Save_MesAgentLog(m_strLog);					
-			//	}
-			//}
+
 		}
-		else
-		{
-			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
-			m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
-			m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
-		}		
+
+		m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
+		m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
+		m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
+				
 		break;
 	case 40:
 		if(nLtWorkPort == 1)
