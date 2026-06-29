@@ -2275,14 +2275,12 @@ BOOL CSequenceMain::LoadTray_Run()
 				m_nLoadTrayCase = 40; m_tLoadTrayLoop.Set_LoopTime(30000);
 				m_strLog.Format("[Sequence] Get_LotInfo. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
 				g_objLogFile.Save_HandlerLog(m_strLog);	
+				break;
 			}
-
-		}
-
+		}	
 		m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
 		m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
 		m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
-				
 		break;
 	case 40:
 		if(nLtWorkPort == 1)
