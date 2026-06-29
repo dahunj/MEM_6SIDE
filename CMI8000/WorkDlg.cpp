@@ -726,19 +726,20 @@ BOOL CWorkDlg::Work_Start()
 	if(!gData.bUseDryRun)
 	{
 		if (!pEquipData->bUseInspectAngle || !pEquipData->bUseInspectBtm1Specular || !pEquipData->bUseInspectBtm1Angle || !pEquipData->bUseInspectBtm13D
-			|| !pEquipData->bUseInspectTop1 || !pEquipData->bUseInspectTop2 || !pEquipData->bUseInspectBtm2) {
+			|| !pEquipData->bUseInspectTop1 || !pEquipData->bUseInspectTop2 || !pEquipData->bUseInspectBtm2) 
+		{
+			if (!pEquipData->bResultTestUse && gData.nLogInLevel != 9300) 
+			{
+				if (g_objCommon.Show_MsgBox(2, "Vision Option을 끄고 진행하시겠습니까?") != IDOK) return FALSE;
+			}
 
-				if (!pEquipData->bResultTestUse && gData.nLogInLevel != 9300) 
-				{
-					if (g_objCommon.Show_MsgBox(2, "Vision Option을 끄고 진행하시겠습니까?") != IDOK) return FALSE;
-				}
-
-				if (gData.bCycleStop) {
-					if (!pEquipData->bUseInspectBtm1Specular || !pEquipData->bUseInspectBtm1Angle || !pEquipData->bUseInspectBtm13D) g_objInspector.Set_CycleStop(INSPECTOR_PC1);
-					if (!pEquipData->bUseInspectTop1 || !pEquipData->bUseInspectAngle) g_objInspector.Set_CycleStop(INSPECTOR_PC2);
-					if (!pEquipData->bUseInspectTop2) g_objInspector.Set_CycleStop(INSPECTOR_PC3);
-					if (!pEquipData->bUseInspectBtm2) g_objInspector.Set_CycleStop(INSPECTOR_PC4);
-				}
+			if (gData.bCycleStop) 
+			{
+				if (!pEquipData->bUseInspectBtm1Specular || !pEquipData->bUseInspectBtm1Angle || !pEquipData->bUseInspectBtm13D) g_objInspector.Set_CycleStop(INSPECTOR_PC1);
+				if (!pEquipData->bUseInspectTop1 || !pEquipData->bUseInspectAngle) g_objInspector.Set_CycleStop(INSPECTOR_PC2);
+				if (!pEquipData->bUseInspectTop2) g_objInspector.Set_CycleStop(INSPECTOR_PC3);
+				if (!pEquipData->bUseInspectBtm2) g_objInspector.Set_CycleStop(INSPECTOR_PC4);
+			}
 		}
 
 		int nTimeOut = 0;
