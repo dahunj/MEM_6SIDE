@@ -3253,7 +3253,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 5);
 		}
 	case 7:		// 안전 확인.
-		if (m_nAngleTray2Case >= 20 && m_pDX02->iAngleStage1AlignIn && !m_pDX02->iAngleStage1AlignOut) 
+		if (m_nAngleTray2Case >= 20 && m_pDX02->iAngleStage1AlignIn && !m_pDX02->iAngleStage1AlignOut)  //
 		{	// Btm1 Picker CM Loading
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
 			m_tAngleTray1Loop.Takt_Start(nTaktZone, 7);
@@ -3354,7 +3354,6 @@ BOOL CSequenceMain::AngleTray1_Run()
 			m_tAngleTray1Loop.Takt_Start(nTaktZone, 20);
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 20);
 			m_tAngleTray1Loop.Takt_Start(nTaktZone, 21);
-
 		}
 		return TRUE;
 	case 22:	// Down Check
