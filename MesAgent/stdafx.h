@@ -94,13 +94,13 @@ typedef struct {
 
 	CString		sCancelCode;
 	CString		sCancelText;
-
-	
+		
 	int			nHostType;		
+	
 
-	int			nPocketCnt;
-	CString		sPocketNo[141];
-	CString		sResult[141];
+	BOOL		bCTTickStarted[20];
+	DWORD		dwCTStart[20];
+
 
 } GLOVAL_MES;
 
@@ -117,6 +117,17 @@ typedef struct {
 	CString		sAlmCat;
 	CString		sAlmMsg;
 } GLOVAL_ALM;
+
+
+struct eCT
+{
+	enum Name
+	{
+		LOT_REPORT = 0,
+		PP_SELECTED = 1,		
+	};
+};
+
 
 extern  GLOVAL_DATA	gData;
 extern  GLOVAL_MES	gMes;

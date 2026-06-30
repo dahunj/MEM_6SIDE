@@ -107,6 +107,7 @@ public:
 	void Set_S9F13_Timeout();	// Conversation Timeout
 
 	void Test_Command();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 extern CHost g_objHost;

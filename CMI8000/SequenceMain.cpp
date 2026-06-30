@@ -2260,30 +2260,30 @@ BOOL CSequenceMain::LoadTray_Run()
 		}
 		break;
 	case 2:		// Tray X Move to Load Position
-		//if (gData.bCycleStop) {
-		//	nLtWorkPort = 0;
-		//	m_nLoadTrayCase = 0;	// 사이클스탑이면 투입된 모듈 트레이까지만 작업 후 종료.
-		//}		
-		//	
-		//if ((nLtWorkPort == 1 && !m_pDX00->iLoadPort1Bottom) || (nLtWorkPort == 2 && !m_pDX00->iLoadPort2Bottom)) break;
+		if (gData.bCycleStop) {
+			nLtWorkPort = 0;
+			m_nLoadTrayCase = 0;	// 사이클스탑이면 투입된 모듈 트레이까지만 작업 후 종료.
+		}		
+			
+		if ((nLtWorkPort == 1 && !m_pDX00->iLoadPort1Bottom) || (nLtWorkPort == 2 && !m_pDX00->iLoadPort2Bottom)) break;
 
-		//if (nLtWorkPort == 1 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 0)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 0);	// Port1
-		//if (nLtWorkPort == 2 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 1);	// Port2
+		if (nLtWorkPort == 1 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 0)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 0);	// Port1
+		if (nLtWorkPort == 2 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 1);	// Port2
 
-		//if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) 
-		//{
-		//	if(m_pEquipData->bUseMES)
-		//	{
-		//		g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
-		//		m_nLoadTrayCase = 40; m_tLoadTrayLoop.Set_LoopTime(30000);
-		//		m_strLog.Format("[Sequence] Get_LotInfo. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
-		//		g_objLogFile.Save_HandlerLog(m_strLog);	
-		//		break;
-		//	}
-		//}	
-		//m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
-		//m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
-		//m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
+		if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) 
+		{
+			if(m_pEquipData->bUseMES)
+			{
+				g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
+				m_nLoadTrayCase = 40; m_tLoadTrayLoop.Set_LoopTime(30000);
+				m_strLog.Format("[Sequence] Get_LotInfo. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
+				g_objLogFile.Save_HandlerLog(m_strLog);	
+				break;
+			}
+		}	
+		m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
+		m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
+		m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
 		break;
 	case 40:
 		if(nLtWorkPort == 1)

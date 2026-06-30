@@ -28,6 +28,15 @@ CHost::CHost()
 	m_strStFn = "";
 	m_strRcmd = "";
 	m_dwLastTime = GetTickCount();
+
+
+	for(int i = 0; i < 20; i++)
+	{
+		 gMes.dwCTStart[i] = 0 ;
+		 gMes.bCTTickStarted[i] = FALSE;	
+	}
+
+	
 }
 
 CHost::~CHost()
@@ -38,6 +47,7 @@ BEGIN_MESSAGE_MAP(CHost, CWnd)
 	ON_MESSAGE(UM_SERVER_ACCEPT, &CHost::OnServerAccept)
 	ON_MESSAGE(UM_SERVER_RECEIVE, &CHost::OnServerReceive)
 	ON_MESSAGE(UM_SERVER_REMOVE, &CHost::OnServerRemove)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CHost 메시지 처리기입니다.
@@ -48,6 +58,8 @@ void CHost::Initialize()
 	m_nSendCmdCount = 0;
 	m_nLPort = gData.nHostPort;
 	m_Server.Listen_Socket(m_nLPort, this);
+
+	SetTimer(0, 100, NULL);
 }
 
 void CHost::Terminate()
@@ -663,6 +675,7 @@ void CHost::Set_S6F11_LotIDReport(CString sType, CString sLotID, CString sPortNo
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
+	gMes.bCTTickStarted[eCT::LOT_REPORT] = TRUE;
 	Send_Command(strSend, FALSE, "S6F11", "20106");
 }
 
@@ -724,6 +737,7 @@ void CHost::Set_S6F11_PPSelectedReport(CString sLotId, CString sRecipeId)
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
+	gMes.bCTTickStarted[eCT::PP_SELECTED] = TRUE;
 	Send_Command(strSend, FALSE, "S6F11", "40102");
 }
 
@@ -1163,4 +1177,22 @@ void CHost::Test_Command()
 	if (!Extract_Xml(strXml)) { AfxMessageBox("Extract XML Fail."); return; }
 
 	AfxMessageBox("Test Command Sucess.");
+}
+
+
+void CHost::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
+	for(int i = 0; i < 20; i++)
+	{
+		if(GetTickCount() - gMes.dwCTStart[i] > 3000 && gMes.bCTTickStarted[i])
+		{
+			gMes.bCTTickStarted[i] = FALSE;
+			Set_S9F13_Timeout();
+		}
+	}
+
+
+	CWnd::OnTimer(nIDEvent);
 }
