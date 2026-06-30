@@ -237,8 +237,8 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 
 				 if (strName == "LOTID")			gMes.sHostLotId = strData;
 				 if (strName == "OPERATORID")		gData.sOperId = strData;
-				 if (strName == "RTSTID")			gMes.sRTSTID = strData;
-				 if (strName == "LABELTYPE")		gMes.sLabelType = strData;
+				/* if (strName == "RTSTID")			gMes.sRTSTID = strData;
+				 if (strName == "LABELTYPE")		gMes.sLabelType = strData;*/
 			 }
 
 			 nodeE = m_xml.GetRoot()->GetChild("ITEM")->GetChild("RCMDCP")->GetChild("RESULT");
@@ -616,12 +616,12 @@ void CHost::Set_S6F11_EquipState(int nState, CString sErrNo, CString sCategory, 
 	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;	
 	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"PROCESSSTATE\" VALUE=\"" + strState + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"ALMLISTQTY\" VALUE=\"3\" />" + CRLF;
-	strSend += "      <DV NAME=\"DATANAME1\" VALUE=\"" + sErrNo + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"DATAVALUE1\" VALUE=\"" + sErrMsg + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"DATANAME2\" VALUE=\"" + sErrNo + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"DATAVALUE2\" VALUE=\"" + sErrMsg + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"DATANAME3\" VALUE=\"" + sErrNo + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"ALMLISTQTY\" VALUE=\"1\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATANAME1\" VALUE=\"Alarm ID\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATAVALUE1\" VALUE=\"" + sErrNo + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATANAME2\" VALUE=\"Alarm Category\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATAVALUE2\" VALUE=\"33\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATANAME3\" VALUE=\"Alarm Text\" />" + CRLF;
 	strSend += "      <DV NAME=\"DATAVALUE3\" VALUE=\"" + sErrMsg + "\" />" + CRLF;		
 	strSend += "    </DVLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;

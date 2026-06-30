@@ -128,7 +128,8 @@ LRESULT CHandler::OnServerReceive(WPARAM wLocalPort, LPARAM lClientIdx)
 		} else if (strCmd == "CONTROL") {
 			if (strOp == "STATE") Get_ControlState(strA[0], strA[1]);
 
-		} else if (strCmd == "EQUIP") {
+		} else if (strCmd == "EQUIP")
+		{
 			if (strOp == "STATE") Get_EquipState(strA[0]);
 
 		} else if (strCmd == "ERROR") {
@@ -229,6 +230,8 @@ void CHandler::Get_ErrorUpdate(CString sFlag, CString sErrNo, CString sCategory)
 	gAlarm.sAlmNo = sErrNo;
 	gAlarm.sAlmCat = sCategory;
 	gAlarm.sAlmMsg = INI.Get_String("ERROR", sErrNo, "");
+
+	if( nSet == 1 ) g_objHost.Set_S6F11_EquipState(5, sErrNo, sCategory, gAlarm.sAlmMsg);
 
 	g_objHost.Set_S5F1_AlarmReport(nSet, sErrNo, gAlarm.sAlmMsg);
 }

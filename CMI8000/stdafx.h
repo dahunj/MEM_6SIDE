@@ -388,6 +388,7 @@ typedef struct {
 	CString	sLotID;
 	int		nAlmNo;
 	CString sAlmMsg;
+	int		nCategory;
 	CString sStartTime;
 	CString sEndTime;
 	DWORD	dwStartTime;

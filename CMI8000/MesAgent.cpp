@@ -278,10 +278,10 @@ void CMesAgent::Set_EquipState(int nFlag)
 	Send_Command(strSend);
 }
 
-void CMesAgent::Set_ErrorUpdate(int nFlag, CString sErrNo)
+void CMesAgent::Set_ErrorUpdate(int nFlag, int nErrNo, int nCategory)
 {
 	CString strSend;
-	strSend.Format("ERROR,UPDATE,%d,%s", nFlag, sErrNo);
+	strSend.Format("ERROR,UPDATE,%d,%04d,%d", nFlag, nErrNo, nCategory);
 	Send_Command(strSend);
 }
 
@@ -378,3 +378,54 @@ void CMesAgent::Set_ProductCompletedReport(CString sOperID, CString sLotID, int 
 	strSend.Format("PRODUCT,COMPLETED,%s,%s,%d,%d,%s,%s,%s,%d", sOperID, sLotID,nTrayNo,nCMNo,sResult,sReasonCode,sCMBarcode, UnitNo);
 	Send_Command(strSend);
 }
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CMesAgent::Set_AlarmLog(int nErrNo, CString sErrMsg, int nCategory)
+{
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	int nPx = gData.nULPNo - 1;
+	if (nPx < 0) nPx = gData.nLPNo - 1;
+	if (nPx < 0) nPx = 0;
+
+	gAlm.bBegin = TRUE;
+	gAlm.sLotID = (gData.sLotID[nPx] == "") ? "LOT-ID" : gData.sLotID[nPx];
+	gAlm.nAlmNo = nErrNo;
+	gAlm.sAlmMsg = sErrMsg;
+	gAlm.nCategory = 3;//nCategory;
+	gAlm.dwStartTime = GetTickCount();
+	gAlm.sStartTime.Format("%04d%02d%02d_%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+
+	CString strLog;
+	strLog.Format("%s,%d,%s", gAlm.sLotID, gAlm.nAlmNo, gAlm.sAlmMsg);
+	g_objLogFile.Save_AlarmLog(strLog);
+
+	Set_ErrorUpdate(1, gAlm.nAlmNo, gAlm.nCategory);	// Error Set
+}
+
+void CMesAgent::Reset_AlarmLog()
+{
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	gAlm.bBegin = FALSE;
+	gAlm.dwEndTime = GetTickCount();
+	gAlm.sEndTime.Format("%04d%02d%02d_%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+	gAlm.dwProcTime = gAlm.dwEndTime - gAlm.dwStartTime;
+
+	CString strLog;
+	strLog.Format("%s,%04d,%s,%s,%s,%d", gAlm.sLotID, gAlm.nAlmNo, gAlm.sAlmMsg, gAlm.sStartTime, gAlm.sEndTime, gAlm.dwProcTime);
+	g_objLogFile.Save_AlarmLog(strLog);
+
+	Set_ErrorUpdate(0, gAlm.nAlmNo, gAlm.nCategory);	// Error Reset
+
+	//g_objLogFile.Save_EcmLog(1, strLog, gAlm.sLotId);
+}
+
+///////////////////////////////////////////////////////////////////////////////

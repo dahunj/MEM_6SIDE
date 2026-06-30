@@ -399,7 +399,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 				pMainDlg->Enable_ModeButton(FALSE);
 				if (gAlm.bBegin) Reset_AlarmLog();
 				pMainDlg->Set_CurrentState(STATE_RUN);
-
+				g_objMesAgent.Set_EquipState(1);
 
 				//need to do MES Check 
 				g_objLogFile.Save_HandlerLog("[Work Mode] Main Thread Start");
@@ -443,6 +443,11 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 
 			g_objLogFile.Save_HandlerLog("[Work Mode] Main Thread End");
 			g_objSequenceMain.End_MainRunThread();
+
+			if (!gAlm.bBegin) 
+			{
+				g_objMesAgent.Set_EquipState(4);	// Idle
+			}
 
 			g_objLogFile.Save_HandlerLog("[Work Mode] Main Thread End Complete");
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);		// °­Á¦ STOP
@@ -1802,7 +1807,8 @@ void CWorkDlg::OnBnClickedBtnLaserGetdata()
 
 void CWorkDlg::OnBnClickedButton7()
 {
-	g_objCommon.Show_Error(7000);
+	//g_objCommon.Show_Error(7000);
+	g_objMesAgent.Set_EquipState(1);
 	
 }
 

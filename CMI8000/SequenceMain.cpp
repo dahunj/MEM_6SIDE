@@ -2295,7 +2295,7 @@ BOOL CSequenceMain::LoadTray_Run()
 		else if(nLtWorkPort == 2)
 		{
 			gMes.bLotReported = FALSE;
-			g_objMesAgent.Set_LotIDReport(0, gData.sLotID[1], 2, gData.sRecipe);
+			g_objMesAgent.Set_LotIDReport(0, gData.sLotID[1], 1, gData.sRecipe);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
 		}		
 		break;
