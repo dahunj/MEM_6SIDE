@@ -397,7 +397,10 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 					
 				if(pEquipData->bUseDoorLock) g_objCommon.Locking_MainDoor(TRUE, TRUE);
 				pMainDlg->Enable_ModeButton(FALSE);
-				if (gAlm.bBegin) Reset_AlarmLog();
+				if (gAlm.bBegin) 
+				{
+					g_objMesAgent.Reset_AlarmLog();
+				}
 				pMainDlg->Set_CurrentState(STATE_RUN);
 				g_objMesAgent.Set_EquipState(1);
 

@@ -2260,30 +2260,30 @@ BOOL CSequenceMain::LoadTray_Run()
 		}
 		break;
 	case 2:		// Tray X Move to Load Position
-		if (gData.bCycleStop) {
-			nLtWorkPort = 0;
-			m_nLoadTrayCase = 0;	// 사이클스탑이면 투입된 모듈 트레이까지만 작업 후 종료.
-		}		
-			
-		if ((nLtWorkPort == 1 && !m_pDX00->iLoadPort1Bottom) || (nLtWorkPort == 2 && !m_pDX00->iLoadPort2Bottom)) break;
+		//if (gData.bCycleStop) {
+		//	nLtWorkPort = 0;
+		//	m_nLoadTrayCase = 0;	// 사이클스탑이면 투입된 모듈 트레이까지만 작업 후 종료.
+		//}		
+		//	
+		//if ((nLtWorkPort == 1 && !m_pDX00->iLoadPort1Bottom) || (nLtWorkPort == 2 && !m_pDX00->iLoadPort2Bottom)) break;
 
-		if (nLtWorkPort == 1 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 0)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 0);	// Port1
-		if (nLtWorkPort == 2 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 1);	// Port2
+		//if (nLtWorkPort == 1 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 0)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 0);	// Port1
+		//if (nLtWorkPort == 2 && !g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1)) g_objCommon.Move_Position(AX_LOAD_STAGE_X, 1);	// Port2
 
-		if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) 
-		{
-			if(m_pEquipData->bUseMES)
-			{
-				g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
-				m_nLoadTrayCase = 40; m_tLoadTrayLoop.Set_LoopTime(30000);
-				m_strLog.Format("[Sequence] Get_LotInfo. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
-				g_objLogFile.Save_HandlerLog(m_strLog);	
-				break;
-			}
-		}	
-		m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
-		m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
-		m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
+		//if (gData.nLoadTrayCount[nLtWorkPort-1] == 0) 
+		//{
+		//	if(m_pEquipData->bUseMES)
+		//	{
+		//		g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
+		//		m_nLoadTrayCase = 40; m_tLoadTrayLoop.Set_LoopTime(30000);
+		//		m_strLog.Format("[Sequence] Get_LotInfo. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
+		//		g_objLogFile.Save_HandlerLog(m_strLog);	
+		//		break;
+		//	}
+		//}	
+		//m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(30000);
+		//m_tLoadTrayLoop.Takt_End(nTaktZone, 1);
+		//m_tLoadTrayLoop.Takt_Start(nTaktZone, 2);
 		break;
 	case 40:
 		if(nLtWorkPort == 1)
@@ -2302,6 +2302,17 @@ BOOL CSequenceMain::LoadTray_Run()
 	case 41:
 		if(gMes.bLotReported)
 		{
+			if(nLtWorkPort == 1)
+			{
+				if(gData.sLotID[0] != gMes.sHostLotID) break; //Error 발생 필요 
+				if(gData.sRecipe != gMes.sHostRecipe) break;
+			}
+			if(nLtWorkPort == 2)
+			{
+				if(gData.sLotID[1] != gMes.sHostLotID) break; //Error 발생 필요 
+				if(gData.sRecipe != gMes.sHostRecipe) break;
+			}
+
 			gMes.bPPSelected = FALSE;
 			g_objMesAgent.Set_PPSelectedReport(gMes.sHostLotID, gMes.sHostRecipe);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
@@ -2323,6 +2334,16 @@ BOOL CSequenceMain::LoadTray_Run()
 
 			CString sCount;
 			sCount.Format("%d",gMes.nHostCount);
+
+
+			if(nLtWorkPort == 1)
+			{
+				if(gData.sLotID[0] != gMes.sHostLotID) break; //Error 발생 필요 
+			}
+			if(nLtWorkPort == 2)
+			{
+				if(gData.sLotID[1] != gMes.sHostLotID) break; //Error 발생 필요 
+			}
 
 			g_objMesAgent.Set_LotStartedReport(gData.sOperID, gMes.sHostLotID, gMes.sHostRecipe, sCount);
 			m_nLoadTrayCase = 3; m_tLoadTrayLoop.Set_LoopTime(5000);
@@ -3245,6 +3266,10 @@ BOOL CSequenceMain::AngleTray1_Run()
 		}
 		break;
 	case 6:		// Support Check
+#ifndef AJIN_BOARD_USE
+		m_pDX02->iAngleStage1AlignIn = FALSE;
+		m_pDX02->iAngleStage1AlignOut = TRUE;
+#endif
 		if (g_objCommon.Get_AnglePortSupportIn() && !m_pDX02->iAngleStage1AlignIn && m_pDX02->iAngleStage1AlignOut)
 		{			
 			m_pDY02->oAngleStage1AlignIn = TRUE;
@@ -3253,6 +3278,10 @@ BOOL CSequenceMain::AngleTray1_Run()
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 5);
 		}
 	case 7:		// 안전 확인.
+#ifndef AJIN_BOARD_USE
+		m_pDX02->iAngleStage1AlignIn = TRUE;
+		m_pDX02->iAngleStage1AlignOut = FALSE;
+#endif
 		if (m_nAngleTray2Case >= 20 && m_pDX02->iAngleStage1AlignIn && !m_pDX02->iAngleStage1AlignOut)  //
 		{	// Btm1 Picker CM Loading
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
@@ -3575,6 +3604,10 @@ BOOL CSequenceMain::AngleTray2_Run()
 		}
 		break;
 	case 6:		// Support Check
+#ifndef AJIN_BOARD_USE
+		m_pDX02->iAngleStage1AlignIn = FALSE;
+		m_pDX02->iAngleStage1AlignOut = TRUE;
+#endif
 		if (g_objCommon.Get_AnglePortSupportIn()
 			&& !m_pDX02->iAngleStage2AlignIn && m_pDX02->iAngleStage2AlignOut) 
 		{			
@@ -3584,6 +3617,10 @@ BOOL CSequenceMain::AngleTray2_Run()
 			m_tAngleTray2Loop.Takt_End(nTaktZone, 5);
 		}
 	case 7:		// 안전 확인.
+#ifndef AJIN_BOARD_USE
+		m_pDX02->iAngleStage1AlignIn = TRUE;
+		m_pDX02->iAngleStage1AlignOut = FALSE;
+#endif
 		if (m_nAngleTray1Case >= 20 && m_pDX02->iAngleStage2AlignIn && !m_pDX02->iAngleStage2AlignOut) 
 		{	// Btm1 Picker CM Loading
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);

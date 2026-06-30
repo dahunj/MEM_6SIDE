@@ -449,7 +449,7 @@ void CHost::Get_S2F31_Time()
 
 void CHost::Get_S2F49_PPSelect()
 {
-	Set_S2F50_PPSelect();
+	Set_S2F50_PPSelect(0);
 	g_objHandler.Set_PPSelect();
 }
 
@@ -614,11 +614,11 @@ void CHost::Set_S6F11_EquipState(int nState, CString sErrNo, CString sCategory, 
 	strSend += "  <ITEM>" + CRLF;
 	strSend += "    <CEID NAME=\"CEID\" VALUE=\"10108\" />" + CRLF;
 	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"10108\" />" + CRLF;
-	strSend += "    <DVLIST COUNT=\"10\">" + CRLF;
+	strSend += "    <DVLIST COUNT=\"11\">" + CRLF;
 	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;	
 	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"PROCESSSTATE\" VALUE=\"" + strState + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"ALMLISTQTY\" VALUE=\"1\" />" + CRLF;
+	strSend += "      <DV NAME=\"ALMLISTQTY\" VALUE=\"3\" />" + CRLF;
 	strSend += "      <DV NAME=\"DATANAME1\" VALUE=\"Alarm ID\" />" + CRLF;
 	strSend += "      <DV NAME=\"DATAVALUE1\" VALUE=\"" + sErrNo + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"DATANAME2\" VALUE=\"Alarm Category\" />" + CRLF;
@@ -971,8 +971,12 @@ void CHost::Set_S6F11_IdleReport()
 //}
 
 
-void CHost::Set_S2F50_PPSelect()
+void CHost::Set_S2F50_PPSelect(int nFail)
 {
+	CString sFail;
+
+	sFail.Format("%d", nFail);  // 1: Fail, 0 :OK 
+
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
 	strSend += "<EIF VERSION=\"2.0\" ID=\"S2F50\" NAME=\"Enhanced Remote Command Acknowledge\">" + CRLF;
@@ -983,7 +987,7 @@ void CHost::Set_S2F50_PPSelect()
 	strSend += "    <RCMDCP>" + CRLF;
 	strSend += "      <RCMD NAME=\"RCMD\" VALUE=\"PP_SELECT\" />" + CRLF;
 	strSend += "    </RCMDCP>" + CRLF;
-	strSend += "    <HCACK NAME=\"HCACK\" VALUE=\"0\" />" + CRLF;
+	strSend += "    <HCACK NAME=\"HCACK\" VALUE=\""+ sFail + "\" />" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 

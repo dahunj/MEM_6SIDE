@@ -96,7 +96,7 @@ public:
 	void Set_S6F11_IdleReport();
 
 	//////////
-	void Set_S2F50_PPSelect();
+	void Set_S2F50_PPSelect(int nFail);
 	
 	//void Set_S2F50_PP_UPLOAD_CONFIRM();
 	//void Set_S2F50_PP_UPLOAD_FAIL();
