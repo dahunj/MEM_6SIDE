@@ -3212,7 +3212,7 @@ BOOL CSequenceMain::AngleTray1_Run()
 		break;
 	case 4:		// 정보전달, Z Axis Move to Ready Down Position
 		if (g_objCommon.Get_AnglePortSupportOut() && m_pDX02->iAngleStage1Exist 
-			&&m_pDX02->iAngleStage1AlignIn && !m_pDX02->iAngleStage1AlignOut) 
+			&& m_pDX02->iAngleStage1AlignIn && !m_pDX02->iAngleStage1AlignOut) 
 		{
 
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 3);
@@ -3235,19 +3235,25 @@ BOOL CSequenceMain::AngleTray1_Run()
 		if (g_objCommon.Check_Position(AX_ANGLE_STAGE1_Z, 3)) 
 		{
 			g_objCommon.Set_AnglePortSupportIn();
+
+			m_pDY02->oAngleStage1AlignIn = FALSE;
+			g_objAJinAXL.Write_Output(2);
+
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 4);
 			m_tAngleTray1Loop.Takt_Start(nTaktZone, 5);
 		}
 		break;
 	case 6:		// Support Check
-		if (g_objCommon.Get_AnglePortSupportIn())
+		if (g_objCommon.Get_AnglePortSupportIn() && !m_pDX02->iAngleStage1AlignIn && m_pDX02->iAngleStage1AlignOut)
 		{			
+			m_pDY02->oAngleStage1AlignIn = TRUE;
+			g_objAJinAXL.Write_Output(2);
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 5);
 		}
 	case 7:		// 안전 확인.
-		if (m_nAngleTray2Case >= 20) 
+		if (m_nAngleTray2Case >= 20 && m_pDX02->iAngleStage1AlignIn && !m_pDX02->iAngleStage1AlignOut) 
 		{	// Btm1 Picker CM Loading
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
 			m_tAngleTray1Loop.Takt_Start(nTaktZone, 7);
@@ -3560,19 +3566,26 @@ BOOL CSequenceMain::AngleTray2_Run()
 		if (g_objCommon.Check_Position(AX_ANGLE_STAGE2_Z, 3)) 
 		{			
 			g_objCommon.Set_AnglePortSupportIn();
+
+			m_pDY02->oAngleStage2AlignIn = FALSE;
+			g_objAJinAXL.Write_Output(2);
+
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
 			m_tAngleTray2Loop.Takt_End(nTaktZone, 4);
 			m_tAngleTray2Loop.Takt_Start(nTaktZone, 5);
 		}
 		break;
 	case 6:		// Support Check
-		if (g_objCommon.Get_AnglePortSupportIn()) 
+		if (g_objCommon.Get_AnglePortSupportIn()
+			&& !m_pDX02->iAngleStage2AlignIn && m_pDX02->iAngleStage2AlignOut) 
 		{			
+			m_pDY02->oAngleStage2AlignIn = TRUE;
+			g_objAJinAXL.Write_Output(2);
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
 			m_tAngleTray2Loop.Takt_End(nTaktZone, 5);
 		}
 	case 7:		// 안전 확인.
-		if (m_nAngleTray1Case >= 20) 
+		if (m_nAngleTray1Case >= 20 && m_pDX02->iAngleStage2AlignIn && !m_pDX02->iAngleStage2AlignOut) 
 		{	// Btm1 Picker CM Loading
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
 			m_tAngleTray2Loop.Takt_Start(nTaktZone, 7);
