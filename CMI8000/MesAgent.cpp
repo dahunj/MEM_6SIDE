@@ -338,6 +338,14 @@ void CMesAgent::Set_LotIDReport(int nType, CString sLotID, int nPortNo, CString 
 	Send_Command(strSend);
 }
 
+void CMesAgent::Set_LotEnd(CString sLotId, CString sRecipe, int nCount, int nOk, int nNg, int nBNg)
+{
+	CString strSend;
+	strSend.Format("LOT,END,%s,%s,%d,%d,%d,%d", sLotId, sRecipe, nCount, nOk, nNg, nBNg);
+	Send_Command(strSend);
+}
+
+
 
 void CMesAgent::Set_PPSelectedReport(CString sLotId, CString sRecipeId)
 {

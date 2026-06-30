@@ -1990,6 +1990,11 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	g_objInspector.Set_LotEnd(INSPECTOR_ALL, gData.sLotID[nPx], nPortNo);
 	
+	if(!m_pEquipData->bUseInlineMode && m_pEquipData->bUseMES)
+	{
+		g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], gData.sRecipe, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
+	}	
+
 	g_objCapAttach.Set_TrayEnd(nPortNo);
 	theApp.uSleep(30);
 	g_objCapAttach.Set_LotEnd(nPortNo);
