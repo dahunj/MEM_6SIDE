@@ -140,7 +140,7 @@ LRESULT CHandler::OnServerReceive(WPARAM wLocalPort, LPARAM lClientIdx)
 			if(strOp == "REPORT") Get_LotIDReport(strA[0], strA[1], strA[2], strA[3]);
 			if(strOp == "STARTED") Get_LotStartedReport(strA[0], strA[1], strA[2], strA[3]);
 
-			if(strOp == "END") 
+			if(strOp == "END") Get_LotEnd(strA[0], strA[1], strA[2], strA[3],strA[4], strA[5]);
 			if (strOp == "ABORT")   Get_LotAbort(strA[0], strA[1]);
 		}
 		else if(strCmd == "PP")
