@@ -429,7 +429,7 @@ void CHost::Get_S2F31_Time()
 
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
-	strSend += "<EIF VERSION=\"1.4\" ID=\"S2F32\" NAME=\"Date and Time Set Acknowledge\">" + CRLF;
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S2F32\" NAME=\"Date and Time Set Acknowledge\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
@@ -596,6 +596,8 @@ void CHost::Set_S6F11_EquipState(int nState, CString sErrNo, CString sCategory, 
 
 	CString strState;
 	strState.Format("%d", nState);
+
+	CString strUnitNo = "1"; // 1: AVI, 4: CAP 
 		
 	SYSTEMTIME time;
 	GetLocalTime(&time);
@@ -622,7 +624,8 @@ void CHost::Set_S6F11_EquipState(int nState, CString sErrNo, CString sCategory, 
 	strSend += "      <DV NAME=\"DATANAME2\" VALUE=\"Alarm Category\" />" + CRLF;
 	strSend += "      <DV NAME=\"DATAVALUE2\" VALUE=\"33\" />" + CRLF;
 	strSend += "      <DV NAME=\"DATANAME3\" VALUE=\"Alarm Text\" />" + CRLF;
-	strSend += "      <DV NAME=\"DATAVALUE3\" VALUE=\"" + sErrMsg + "\" />" + CRLF;		
+	strSend += "      <DV NAME=\"DATAVALUE3\" VALUE=\"" + sErrMsg + "\" />" + CRLF;	
+	strSend += "      <DV NAME=\"UNITNO\" VALUE=\"" + strUnitNo + "\" />" + CRLF;
 	strSend += "    </DVLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
@@ -842,7 +845,7 @@ void CHost::Set_S6F11_LotAbort(CString sLotId, CString sRecipe)
 
 void CHost::Set_S6F11_IdleSet()
 {
-	CString strUnitNo = (gData.nAgentType == 0) ? "1" : "4";	// 1: AVI, 4:CAP
+	CString strUnitNo = "1";	// 1: AVI, 4:CAP
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
