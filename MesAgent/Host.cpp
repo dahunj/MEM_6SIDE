@@ -556,7 +556,7 @@ void CHost::Set_S6F11_ControlState(int nState)
 	CString strState;
 	strState.Format("%d", nState);
 
-	CString strUnitNo = (gData.nAgentType == 0) ? "1" : "4";	// 1: AVI, 4:CAP
+	CString strUnitNo = "1";	// 1: AVI, 4:CAP
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
@@ -574,10 +574,11 @@ void CHost::Set_S6F11_ControlState(int nState)
 	strSend += "    <CEID NAME=\"CEID\" VALUE=\"10101\" />" + CRLF;
 	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"10101\" />" + CRLF;
 	strSend += "    <DVLIST COUNT=\"5\">" + CRLF;
+	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;	
 	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"CONTROLSTATE\" VALUE=\"" + strState + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"REASONTEXT\" VALUE=\"\"/>" + CRLF;
-	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;	
+	strSend += "      <DV NAME=\"REASONTEXT\" VALUE=\"\"/>" + CRLF;	
+	strSend += "      <DV NAME=\"UNITNO\" VALUE=\"" + strUnitNo + "\" />" + CRLF;
 	strSend += "    </DVLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
@@ -604,21 +605,24 @@ void CHost::Set_S6F11_EquipState(int nState, CString sErrNo, CString sCategory, 
 
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
-	strSend += "<EIF VERSION=\"1.4\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
 	strSend += "  <ITEM>" + CRLF;
 	strSend += "    <CEID NAME=\"CEID\" VALUE=\"10108\" />" + CRLF;
 	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"10108\" />" + CRLF;
-	strSend += "    <DVLIST COUNT=\"11\">" + CRLF;
-	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"NEWEQPSTATE\" VALUE=\"" + strState + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"ALMLISTQTY\" VALUE=\"3\" />" + CRLF;
-	strSend += "      <DV NAME=\"ALARMID#1\" VALUE=\"" + sErrNo + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"ALARMCATEGORY#1\" VALUE=\"" + sCategory + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"ALARMTEXT#1\" VALUE=\"" + sErrMsg + "\" />" + CRLF;
+	strSend += "    <DVLIST COUNT=\"10\">" + CRLF;
 	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;	
+	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"PROCESSSTATE\" VALUE=\"" + strState + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"ALMLISTQTY\" VALUE=\"3\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATANAME1\" VALUE=\"" + sErrNo + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATAVALUE1\" VALUE=\"" + sErrMsg + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATANAME2\" VALUE=\"" + sErrNo + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATAVALUE2\" VALUE=\"" + sErrMsg + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATANAME3\" VALUE=\"" + sErrNo + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"DATAVALUE3\" VALUE=\"" + sErrMsg + "\" />" + CRLF;		
 	strSend += "    </DVLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
@@ -646,7 +650,7 @@ void CHost::Set_S6F11_LotIDReport(CString sType, CString sLotID, CString sPortNo
 	strSend += "  <ITEM>" + CRLF;
 	strSend += "    <CEID NAME=\"CEID\" VALUE=\"20106\" />" + CRLF;
 	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"20106\" />" + CRLF;
-	strSend += "    <DVLIST COUNT=\"4\">" + CRLF;
+	strSend += "    <DVLIST COUNT=\"5\">" + CRLF;
 	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"TIME\" VALUE=\""		+ strTime + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"PORTNO\" VALUE=\""		+ sPortNo +"\" />" + CRLF;
@@ -709,10 +713,10 @@ void CHost::Set_S6F11_PPSelectedReport(CString sLotId, CString sRecipeId)
 	strSend += "    <CEID NAME=\"CEID\" VALUE=\"40102\" />" + CRLF;
 	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"40102\" />" + CRLF;
 	strSend += "    <DVLIST COUNT=\"4\">" + CRLF;
+	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"LOTID\" VALUE=\"" + sLotId + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"RECIPEID\" VALUE=\"" + sRecipeId + "\"/>" + CRLF;
-	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"RECIPEID\" VALUE=\"" + sRecipeId + "\"/>" + CRLF;	
 	strSend += "    </DVLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
@@ -737,9 +741,10 @@ void CHost::Set_S6F11_ProductCompletedReport(CString sOperID, CString sLotID, CS
 	strSend += "  <ITEM>" + CRLF;
 	strSend += "    <CEID NAME=\"CEID\" VALUE=\"20401\" />" + CRLF;
 	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"20401\" />" + CRLF;
-	strSend += "    <DVLIST COUNT=\"11\">" + CRLF;
+	strSend += "    <DVLIST COUNT=\"12\">" + CRLF;
 	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"LOTID\" VALUE=\"" + sLotID + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"TOTRAYID\" VALUE=\"" + sTrayNo + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"TOPOCKETID\" VALUE=\"" + sCMNo + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"RESULT\" VALUE=\"" + sResult + "\" />" + CRLF;
@@ -756,6 +761,55 @@ void CHost::Set_S6F11_ProductCompletedReport(CString sOperID, CString sLotID, CS
 	Send_Command(strSend, FALSE, "S6F11", "20401");
 }
 
+void CHost::Set_S6F11_LotEnd(CString sLotId, CString sRecipe, int nCount, int nOk, int nNg, int nBNg)
+{
+	CString strTotal, strReal, strGood, strBad, strVNg, strBNg;
+	strTotal.Format("%d", nCount);
+	strReal.Format("%d", nOk + nNg);
+	strGood.Format("%d", nOk);
+	strVNg.Format("%d", nNg);	// AVI NG
+	strBNg.Format("%d", nBNg);			// Barcode NG
+
+	CString strEndPort = "2";	//1: Loader, 2:Unloader(AVI only), 3:CapAttach-Inline
+	CString strRsnCode = "AVING";
+
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	CString strTime;
+	strTime.Format("%04d%02d%02d%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+
+	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
+
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
+	strSend += "  <ELEMENT>" + CRLF;
+	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
+	strSend += "  </ELEMENT>" + CRLF;
+	strSend += "  <ITEM>" + CRLF;
+	strSend += "    <CEID NAME=\"CEID\" VALUE=\"20102\" />" + CRLF;
+	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"20102\" />" + CRLF;
+	strSend += "    <DVLIST COUNT=\"14\">" + CRLF;
+	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"PORTNO\" VALUE=\"" + strEndPort + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"LOTID\" VALUE=\"" + sLotId + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"RECIPEID\" VALUE=\"" + sRecipe + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"LOTCOUNT\" VALUE=\"" + strTotal + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"LOTREALCOUNT\" VALUE=\"" + strReal + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"LOTGOODCOUNT\" VALUE=\"" + strGood + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"LOTBADCOUNT\" VALUE=\"" + strBad + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"REASONCODEQTY\" VALUE=\"2\" />" + CRLF;
+	strSend += "      <DV NAME=\"REASONCODE#1\" VALUE=\"" + strRsnCode + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"REASONCODECOUNT#1\" VALUE=\"" + strVNg + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"REASONCODE#2\" VALUE=\"BLNG\" />" + CRLF;
+	strSend += "      <DV NAME=\"REASONCODECOUNT#2\" VALUE=\"" + strBNg + "\" />" + CRLF;
+	strSend += "    </DVLIST>" + CRLF;
+	strSend += "  </ITEM>" + CRLF;
+	strSend += "</EIF>";
+
+	Send_Command(strSend, FALSE, "S6F11", "20102");
+}
+
 
 void CHost::Set_S6F11_LotAbort(CString sLotId, CString sRecipe)
 {
@@ -767,7 +821,7 @@ void CHost::Set_S6F11_LotAbort(CString sLotId, CString sRecipe)
 
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
-	strSend += "<EIF VERSION=\"1.4\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
@@ -798,7 +852,7 @@ void CHost::Set_S6F11_IdleSet()
 
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
-	strSend += "<EIF VERSION=\"1.4\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
@@ -819,7 +873,7 @@ void CHost::Set_S6F11_IdleSet()
 
 void CHost::Set_S6F11_IdleReset()
 {
-	CString strUnitNo = (gData.nAgentType == 0) ? "1" : "4";	// 1: AVI, 4:CAP
+	CString strUnitNo = "1";	// 1: AVI, 4:CAP
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
@@ -829,7 +883,7 @@ void CHost::Set_S6F11_IdleReset()
 
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
-	strSend += "<EIF VERSION=\"1.4\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
@@ -850,7 +904,7 @@ void CHost::Set_S6F11_IdleReset()
 
 void CHost::Set_S6F11_IdleReport()
 {
-	CString strUnitNo = (gData.nAgentType == 0) ? "1" : "4";	// 1: AVI, 4:CAP
+	CString strUnitNo = "1";	// 1: AVI, 4:CAP
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
@@ -860,7 +914,7 @@ void CHost::Set_S6F11_IdleReport()
 
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
-	strSend += "<EIF VERSION=\"1.4\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
@@ -870,7 +924,7 @@ void CHost::Set_S6F11_IdleReport()
 	strSend += "    <DVLIST COUNT=\"7\">" + CRLF;
 	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"REASONCODE\" VALUE=\"" + gIdle.sIdleCode + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"IDLEREASONCODE\" VALUE=\"" + gIdle.sIdleCode + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"REASONTEXT\" VALUE=\"" + gIdle.sIdleText + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"STARTTIME\" VALUE=\"" + gIdle.sIdleSTime + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"ENDTIME\" VALUE=\"" + gIdle.sIdleETime + "\" />" + CRLF;

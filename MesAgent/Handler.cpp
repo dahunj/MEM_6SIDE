@@ -140,6 +140,7 @@ LRESULT CHandler::OnServerReceive(WPARAM wLocalPort, LPARAM lClientIdx)
 			if(strOp == "REPORT") Get_LotIDReport(strA[0], strA[1], strA[2], strA[3]);
 			if(strOp == "STARTED") Get_LotStartedReport(strA[0], strA[1], strA[2], strA[3]);
 
+			if(strOp == "END") 
 			if (strOp == "ABORT")   Get_LotAbort(strA[0], strA[1]);
 		}
 		else if(strCmd == "PP")
@@ -282,6 +283,17 @@ void CHandler::Get_ProductCompletedReport(CString sOperID, CString sLotID, CStri
 {
 	g_objHost.Set_S6F11_ProductCompletedReport(sOperID, sLotID, sTrayNo, sCMNo, sResult, sReasonCode, sBarcode, sUnitNo);
 }
+
+void CHandler::Get_LotEnd(CString sLotID, CString sRecipe, CString sTotalCnt, CString sGoodCnt, CString sNgCnt, CString sBNgCnt)
+{
+	int nCnt = atoi(sTotalCnt);
+	int nOk = atoi(sGoodCnt);
+	int nNg = atoi(sNgCnt);
+	int nBNg = atoi(sBNgCnt);
+
+	g_objHost.Set_S6F11_LotEnd(sLotID, sRecipe, nCnt, nOk, nNg, nBNg);
+}
+
 
 /////////
 

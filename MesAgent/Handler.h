@@ -44,6 +44,8 @@ private:
 	void Get_LotStartedReport(CString sOperID, CString sLotID, CString sRecipe, CString sCMCount);
 	void Get_ProductCompletedReport(CString sOperID, CString sLotID, CString sTNo, CString sCNo, CString sResult, CString sReasonCode, CString sBarcode, CString sUnitNo);
 	
+	void Get_LotEnd(CString sLotID, CString sRecipe, CString sTotalCnt, CString sGoodCnt, CString sNgCnt, CString sBNgCnt);
+
 	//void Get_PPUploadCompletedReport(CString sLotID, CString sMGZId, CString sRecipeId);	
 	
 	void Send_Command(CString sSend);

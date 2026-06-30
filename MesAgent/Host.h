@@ -87,6 +87,7 @@ public:
 	void Set_S6F11_LotStartedReport(CString sOperID, CString sLotID, CString sRecipe, CString sCMCount);
 	void Set_S6F11_ProductCompletedReport(CString sOperID, CString sLotID, CString sTrayNo, CString sCMNo, CString sResult, CString sReasonCode, CString sBarcode, CString sUnitNo);
 	
+	void Set_S6F11_LotEnd(CString sLotId, CString sRecipe, int nCount, int nOk, int nNg, int nBNg);
 	//void Set_S6F11_PPUploadCompleted(CString sLotId, CString sMGZId, CString sRecipeId);
 
 	void Set_S6F11_LotAbort(CString sLotId, CString sRecipe);	// Lot Suspended Report

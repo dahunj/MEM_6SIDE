@@ -1982,14 +1982,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	if (gLot.nCmCount[nPx] < 1) return;	// Error
 	if (gLot.bLotEndComplete[nPx] == TRUE) return;
 
-	if(gLot.nSNgCount[nPx][0] > 0) g_dlgWork.PostMessage(UM_SHOW_MSG, 4, NULL); 
-	
-	gLot.bLotEndComplete[nPx] = TRUE;
-
-	gData.nTrayUseCount[nPx] = 0;
-	gData.nCmUseCount[nPx] = 0;
-
-	
+		
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 	gLot.dwLotEnd[nPx] = GetTickCount();
@@ -2167,7 +2160,12 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	gData.bLoadLampOn[nPx] = TRUE;
 
+	
 
+	gLot.bLotEndComplete[nPx] = TRUE;
+
+	gData.nTrayUseCount[nPx] = 0;
+	gData.nCmUseCount[nPx] = 0;
 
 	gData.nTrayCntNG[nPx][2] = 1;
 	gData.nTrayCntNG[nPx][3] = 1;
@@ -2175,7 +2173,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	gData.nTrayCntNG[nPx][1] = gData.nTrayCntNG[nPx][3] + 1;
 
 
-	
+	if(gLot.nSNgCount[nPx][0] > 0) g_dlgWork.PostMessage(UM_SHOW_MSG, 4, NULL); 
 
 	g_dlgWork.PostMessage(UM_LOT_INFO_CLEAR, nPx, NULL);
 	g_dlgWork.PostMessage(UM_UPDATE_UPH, NULL, NULL);
