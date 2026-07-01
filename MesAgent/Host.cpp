@@ -462,7 +462,15 @@ void CHost::Get_S2F31_Time()
 
 void CHost::Get_S2F49_PPSelect()
 {
-	Set_S2F50_PPSelect(0);
+	if(gMes.sHostRecipe != gData.sRecipe)
+	{
+		Set_S2F50_PPSelect(1);
+	}
+	else
+	{
+		Set_S2F50_PPSelect(0);
+	}
+	
 	g_objHandler.Set_PPSelect();
 }
 
@@ -677,6 +685,7 @@ void CHost::Set_S6F11_LotIDReport(CString sType, CString sLotID, CString sPortNo
 	strSend += "</EIF>";
 
 	gMes.bCTTickStarted[eCT::LOT_REPORT] = TRUE;
+	gMes.dwCTStart[eCT::LOT_REPORT] = GetTickCount();
 	Send_Command(strSend, FALSE, "S6F11", "20106");
 }
 
@@ -739,6 +748,7 @@ void CHost::Set_S6F11_PPSelectedReport(CString sLotId, CString sRecipeId)
 	strSend += "</EIF>";
 
 	gMes.bCTTickStarted[eCT::PP_SELECTED] = TRUE;
+	gMes.dwCTStart[eCT::PP_SELECTED] = GetTickCount();
 	Send_Command(strSend, FALSE, "S6F11", "40102");
 }
 
@@ -1189,6 +1199,7 @@ void CHost::OnTimer(UINT_PTR nIDEvent)
 	{
 		if(GetTickCount() - gMes.dwCTStart[i] > 3000 && gMes.bCTTickStarted[i])
 		{
+			
 			gMes.bCTTickStarted[i] = FALSE;
 			Set_S9F13_Timeout();
 		}

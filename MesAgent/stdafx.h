@@ -71,6 +71,8 @@ typedef struct {
 	int			nPreEquipState;	// 1:Run, 4:Idle, 5:Down
 	int			nCurEquipState;	// 1:Run, 4:Idle, 5:Down
 	CString		sReCmId[100];	// Retest Modle => Max 100
+
+	CString		sRecipe;
 } GLOVAL_DATA;
 
 typedef struct {

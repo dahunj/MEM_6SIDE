@@ -269,6 +269,7 @@ void CHandler::Get_IdleReport(CString sOperId, CString sCode, CString sText, CSt
 
 void CHandler::Get_LotIDReport(CString sType, CString sLotID, CString sPortNo, CString sRecipe)
 {	
+	gData.sRecipe = sRecipe;
 	g_objHost.Set_S6F11_LotIDReport(sType, sLotID, sPortNo, sRecipe);
 }
 

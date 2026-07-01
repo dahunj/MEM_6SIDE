@@ -1269,10 +1269,12 @@ void CCMI8000Dlg::SaveLog_DoorInterlock(BOOL bFirst, int Type)
 void CCMI8000Dlg::Set_NoWork()
 {
 	//if (gData.bDryRunTest) return;
-
+	
 	static DWORD dwNoWorkBegin = GetTickCount();
 
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+
+	
 	if (pEquipData->nNoWorkTime < 1) { dwNoWorkBegin = GetTickCount(); return; }
 
 	int nState = theApp.Get_MainState();

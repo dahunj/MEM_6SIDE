@@ -19,7 +19,7 @@ public:
 	CRichEditCtrl	m_redtLogDisplay;
 	CStaticCS		m_stcLogDate;
 	CButtonCS		m_btnGoToday;
-	CButtonCS		m_btnPrintList;
+	
 	CMonthCalCtrl	m_calMonth;
 	CRadioCS		m_rdoLogAlarm;
 	CRadioCS		m_rdoLogJobList;
@@ -52,6 +52,7 @@ protected:
 	void Read_LogFile();
 public:
 	afx_msg void OnBnClickedBtnPrintList();
+	
 	afx_msg void OnBnClickedRdoLogTerminal();
 };
 
