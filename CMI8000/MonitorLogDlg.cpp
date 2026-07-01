@@ -46,6 +46,8 @@ BEGIN_MESSAGE_MAP(CMonitorLogDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RDO_LOG_JOB_LIST, &CMonitorLogDlg::OnBnClickedRdoLogJobList)
 	ON_BN_CLICKED(IDC_RDO_LOG_HANDLER, &CMonitorLogDlg::OnBnClickedRdoLogHandler)
 	ON_BN_CLICKED(IDC_RDO_LOG_INSPECTOR, &CMonitorLogDlg::OnBnClickedRdoLogInspector)
+	ON_BN_CLICKED(IDC_BTN_PRINT_LIST, &CMonitorLogDlg::OnBnClickedBtnPrintList)
+	ON_BN_CLICKED(IDC_RDO_LOG_TERMINAL, &CMonitorLogDlg::OnBnClickedRdoLogTerminal)
 END_MESSAGE_MAP()
 
 // CMonitorLogDlg 메시지 처리기입니다.
@@ -131,25 +133,7 @@ void CMonitorLogDlg::OnMcnSelectCalMonth(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CMonitorLogDlg::OnBnClickedRdoLogAlarm()
-{
-	Read_LogFile();
-}
 
-void CMonitorLogDlg::OnBnClickedRdoLogJobList()
-{
-	Read_LogFile();
-}
-
-void CMonitorLogDlg::OnBnClickedRdoLogHandler()
-{
-	Read_LogFile();
-}
-
-void CMonitorLogDlg::OnBnClickedRdoLogInspector()
-{
-	Read_LogFile();
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // User Functions
@@ -206,18 +190,19 @@ void CMonitorLogDlg::Read_LogFile()
 	sysTime.wHour = sysTime.wMinute = sysTime.wSecond = sysTime.wMilliseconds = 0;
 
 	CString strDate, strFile;
-	CString strAlarm, strHandler, strInspector, strJobList;
+	CString strAlarm, strHandler, strInspector, strJobList, strTerminal;
 	strDate.Format("%04d%02d%02d", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
 	strAlarm.Format("%04d%02d%02d_Alarm", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
 	strHandler.Format("%04d%02d%02d_Handler", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
 	strInspector.Format("%04d%02d%02d_Inspector", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
 	strJobList.Format("%04d%02d%02d_JobList", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
-
+	strTerminal.Format("%04d%02d%02d_Terminal", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
 
 	if		(m_rdoLogAlarm.GetCheck()) strFile.Format(gData.sLogPath + "\\Alarm\\%s.txt", strAlarm);
 	else if (m_rdoLogHandler.GetCheck()) strFile.Format(gData.sLogPath + "\\Handler\\%s.txt", strHandler);
 	else if (m_rdoLogInspector.GetCheck()) strFile.Format(gData.sLogPath + "\\Inspector\\%s.txt", strInspector);
 	else if (m_rdoLogJobList.GetCheck()) strFile.Format(gData.sLogPath + "\\JobList\\%s.txt", strJobList);
+	else if (m_rdoLogTerminal.GetCheck()) strFile.Format(gData.sLogPath + "\\Terminal\\%s.txt", strTerminal);
 	else return;
 
 	CFileFind Finder;
@@ -238,4 +223,36 @@ void CMonitorLogDlg::Read_LogFile()
 	int nMaxLine = 31;	// 화면에 보이는 Line Count
 	int nLineCount = m_redtLogDisplay.GetLineCount();
 	if (nLineCount > nMaxLine) m_redtLogDisplay.LineScroll(nLineCount - nMaxLine);
+}
+
+
+void CMonitorLogDlg::OnBnClickedBtnPrintList()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CMonitorLogDlg::OnBnClickedRdoLogTerminal()
+{
+	Read_LogFile();
+}
+
+void CMonitorLogDlg::OnBnClickedRdoLogAlarm()
+{
+	Read_LogFile();
+}
+
+void CMonitorLogDlg::OnBnClickedRdoLogJobList()
+{
+	Read_LogFile();
+}
+
+void CMonitorLogDlg::OnBnClickedRdoLogHandler()
+{
+	Read_LogFile();
+}
+
+void CMonitorLogDlg::OnBnClickedRdoLogInspector()
+{
+	Read_LogFile();
 }

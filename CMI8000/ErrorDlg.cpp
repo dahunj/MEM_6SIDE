@@ -230,6 +230,62 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 			if(m_nErrNo == 993) strErrPick.Format("#==> User_LotID[%s]. MES_LotID[%s]", g_objMES.m_sOperLotID, g_objMES.m_sMESLotID);
 			if(m_nErrNo == 994) strErrPick.Format("#==> User_Count[%d]. MES_Count[%d]", g_objMES.m_nOperCount, g_objMES.m_nMESCount);
 		}*/
+		m_btnErrRetry.ShowWindow(SW_HIDE);
+
+		if(m_nErrNo == 9004)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);
+			
+		}
+		if(m_nErrNo == 9005)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);
+			strErrPick.Format(", Port1: %s, Port2: %s, Host %s,", gData.sLotID[0], gData.sLotID[1], gMes.sHostLotID);
+
+		}
+		if(m_nErrNo == 9006)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);
+			strErrPick.Format(", Equip: %s, Host %s,", gData.sRecipe, gMes.sHostRecipe);
+			
+		}
+
+		if(m_nErrNo == 9007)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);
+			strErrPick.Format(", Port1: %s, Port2: %s, Host %s,", gData.sLotID[0], gData.sLotID[1], gMes.sHostLotID);
+
+		}
+		if(m_nErrNo == 9008)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);
+			strErrPick.Format(", Equip: %s, Host %s,", gData.sRecipe, gMes.sHostRecipe);
+
+		}
+
+		if(m_nErrNo == 3141)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);
+			strErrPick.Format(", Port1: %s, Port2: %s, Host %s,", gData.sLotID[0], gData.sLotID[1], gMes.sHostLotID);
+			
+			
+		}
+		if(m_nErrNo == 3142)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);
+			strErrPick.Format(", Equip: %s, Host %s,", gData.sRecipe, gMes.sHostRecipe);
+			
+			
+		}
+
+		if(m_nErrNo == 9032)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);
+
+			strErrPick.Format(", Fail ID: %s, Code: %s, Text: %s", gMes.sHostFailLotId, gMes.sHostFailCode, gMes.sHostFailText);
+		
+		}
+
 
 		if (m_nErrNo > 2 && m_nErrNo < 9) g_objSequenceInit.Set_InitComplete(FALSE);	// 3,4,5,6
 
@@ -377,13 +433,66 @@ void CErrorDlg::OnBnClickedBtnErrSkip()
 
 void CErrorDlg::OnBnClickedBtnErrRetry()
 {
-// 	g_objLogFile.Save_HandlerLog("[Error Mode] RETRY button push");
-// 
-// 	switch (m_nErrNo) {
-// 	}
-// 
-// 	ShowWindow(SW_HIDE);
-// 	g_dlgWork.Set_AutoRun(TRUE);
+	g_objLogFile.Save_HandlerLog("[Error Mode] Retry button push");
+
+	switch (m_nErrNo) 
+	{
+	case 9004:
+		g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+		break;
+
+	case 3141:
+		{
+			//int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_TRAY);
+			g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+		}
+		break;
+	case 3142:
+		{
+			g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
+		}
+		break;
+	case 9005:
+		{
+			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_TRAY);
+			if(nCase == 3141) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+			else if(nCase == 3142) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
+		}
+		break;
+	case 9006:
+		{
+			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_TRAY);
+			if(nCase == 3141) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+			else if(nCase == 3142) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
+		}
+		break;
+	case 9007:
+		{
+			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_TRAY);
+			if(nCase == 3141) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+			else if(nCase == 3142) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
+		}
+		break;
+	case 9008:
+		{
+			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_TRAY);
+			if(nCase == 3141) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+			else if(nCase == 3142) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
+		}
+		break;
+	case 9032:
+		{
+			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_TRAY);
+			if(nCase == 3141) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+			else if(nCase == 3142) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
+		}
+		break;
+
+
+	}
+
+	ShowWindow(SW_HIDE);
+	g_dlgWork.Set_AutoRun(TRUE);
 }
 
 void CErrorDlg::OnBnClickedBtnErrOk()

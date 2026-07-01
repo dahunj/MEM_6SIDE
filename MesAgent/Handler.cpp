@@ -377,6 +377,13 @@ void CHandler::Set_TimeSync()
 	Send_Command(strSend);
 }
 
+void CHandler::Set_Terminal(CString sMsg)
+{
+	CString strSend;
+	strSend.Format("TERMINAL,DISPLAY,%s", sMsg);
+	Send_Command(strSend);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 void CHandler::Send_Command(CString sSend)

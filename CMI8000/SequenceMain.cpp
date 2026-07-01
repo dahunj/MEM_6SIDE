@@ -2304,13 +2304,25 @@ BOOL CSequenceMain::LoadTray_Run()
 		{
 			if(nLtWorkPort == 1)
 			{
-				if(gData.sLotID[0] != gMes.sHostLotID) break; //Error 발생 필요 
-				if(gData.sRecipe != gMes.sHostRecipe) break;
+				if(gData.sLotID[0] != gMes.sHostLotID) 
+				{
+					g_objCommon.Show_Error(9005); return FALSE;
+				}
+				if(gData.sRecipe != gMes.sHostRecipe)
+				{
+					g_objCommon.Show_Error(9006); return FALSE;
+				}
 			}
 			if(nLtWorkPort == 2)
 			{
-				if(gData.sLotID[1] != gMes.sHostLotID) break; //Error 발생 필요 
-				if(gData.sRecipe != gMes.sHostRecipe) break;
+				if(gData.sLotID[1] != gMes.sHostLotID)
+				{
+					g_objCommon.Show_Error(9005); return FALSE;
+				}
+				if(gData.sRecipe != gMes.sHostRecipe)
+				{
+					g_objCommon.Show_Error(9006); return FALSE;
+				}
 			}
 
 			gMes.bPPSelected = FALSE;
@@ -2318,9 +2330,37 @@ BOOL CSequenceMain::LoadTray_Run()
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
 		}
 		break;
+	case 45:
+		gMes.bPPSelected = FALSE;
+		g_objMesAgent.Set_PPSelectedReport(gMes.sHostLotID, gMes.sHostRecipe);
+		m_nLoadTrayCase = 42; m_tLoadTrayLoop.Set_LoopTime(5000);
+		break;
 	case 42:
 		if(gMes.bPPSelected)
 		{			
+			if(nLtWorkPort == 1)
+			{
+				if(gData.sLotID[0] != gMes.sHostLotID) 
+				{
+					g_objCommon.Show_Error(9007); return FALSE;
+				}
+				if(gData.sRecipe != gMes.sHostRecipe)
+				{
+					g_objCommon.Show_Error(9008); return FALSE;
+				}
+			}
+			if(nLtWorkPort == 2)
+			{
+				if(gData.sLotID[1] != gMes.sHostLotID)
+				{
+					g_objCommon.Show_Error(9007); return FALSE;
+				}
+				if(gData.sRecipe != gMes.sHostRecipe)
+				{
+					g_objCommon.Show_Error(9008); return FALSE;
+				}
+			}
+
 			if(nLtWorkPort == 1)
 			{
 				gData.nCmUseCount[0] = gMes.nHostCount;
@@ -2334,17 +2374,7 @@ BOOL CSequenceMain::LoadTray_Run()
 
 			CString sCount;
 			sCount.Format("%d",gMes.nHostCount);
-
-
-			if(nLtWorkPort == 1)
-			{
-				if(gData.sLotID[0] != gMes.sHostLotID) break; //Error 발생 필요 
-			}
-			if(nLtWorkPort == 2)
-			{
-				if(gData.sLotID[1] != gMes.sHostLotID) break; //Error 발생 필요 
-			}
-
+			
 			g_objMesAgent.Set_LotStartedReport(gData.sOperID, gMes.sHostLotID, gMes.sHostRecipe, sCount);
 			m_nLoadTrayCase = 3; m_tLoadTrayLoop.Set_LoopTime(5000);
 		}

@@ -198,9 +198,8 @@ private:
 	BOOL EmptyTrayElevator_Run();	// 19. (Error : 4900)
 	BOOL EmptyTrayY_Run();			// 20. (Error : 5000)
 		
-	int  iGoodTrayBufferCount;
+	
 	BOOL Run_Simulation();
-
 	BOOL LotEnd_Run();
 	BOOL Check_VisionHdd();
 
@@ -273,6 +272,7 @@ private:
 	int	 Get_GoodTrayCmCnt();
 
 public:
+	int  iGoodTrayBufferCount;
 	double	m_dAlignZ, m_dAngleZ, m_dAngleX, m_dAngleY, m_dAngleR, m_dBtm1Z, m_dTop1Z, m_dTop1MirrorZ, m_dTop2Z, m_dBtm2Z;
 	BOOL	m_bReqShiftB1Y, m_bReqMirrorT1Z, m_bReqShiftT2Y;
 	DWORD	m_dwULPickUpTime;		// Tray 1번 모듈 집은 시간.

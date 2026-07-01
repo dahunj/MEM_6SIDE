@@ -38,6 +38,8 @@ public:
 	void Save_MotionLog(const CString& sLog);
 
 
+	void Save_TerminalLog(const CString& sLog);
+
 	void Save_DoorInterlock(int nPNo, const CString& sLog, BOOL bfirst);
 	void Save_PCLog(int nPNo, const CString& sLog);
 

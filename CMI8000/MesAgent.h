@@ -40,7 +40,8 @@ private:
 	//old 
 	//void Get_PPUpload_Confirm(CString sRecipeID);
 	//void Get_PPUpload_Fail(CString sRecipeID, CString sFailCode, CString sFailText);
-	
+	void Get_Terminal(CString sMsg);
+
 	void Send_Command(CString sSend);
 
 public:

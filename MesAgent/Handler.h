@@ -67,6 +67,7 @@ public:
 	void Set_Lot_Start();
 	void Set_Lot_ID_Fail();
 	
+	void Set_Terminal(CString sMsg);
 	//void Set_PP_Upload_Confirm();
 	//void Set_PP_Upload_Fail();
 

@@ -132,9 +132,7 @@ LRESULT CMesAgent::OnClientReceive(WPARAM wParam, LPARAM lParam)
 		CString strCmd, strOp;
 
 		AfxExtractSubString(strCmd, strRecv, 0, chSep);
-		AfxExtractSubString(strOp, strRecv, 1, chSep);
-				
-		
+		AfxExtractSubString(strOp, strRecv, 1, chSep);						
 
 		CString strArg[10];
 		for (int i = 0; i < 5; i++) AfxExtractSubString(strArg[i], strRecv, i + 2, chSep);
@@ -156,7 +154,10 @@ LRESULT CMesAgent::OnClientReceive(WPARAM wParam, LPARAM lParam)
 			//if (strOp == "CONFIRM") Get_PPUpload_Confirm(strArg[0]);
 			//if (strOp == "FAIL") Get_PPUpload_Fail(strArg[0], strArg[1], strArg[2]);
 		}
-		
+		else if(strCmd == "TERMINAL")
+		{
+			if(strOp == "DISPLAY") Get_Terminal(strArg[0]);			
+		}		
 	}
 	return 0;
 }
@@ -241,14 +242,17 @@ void CMesAgent::Get_PPSelect(CString sLotId, CString sRecipe, CString sOperID)
 	gMes.sHostLotID = sLotId;
 	gMes.sHostRecipe = sRecipe;
 
-	if (gMes.sHostLotID.GetLength() < 5 || gMes.sHostRecipe.GetLength() < 1) 
+	if (gMes.sHostLotID.GetLength() < 4 || gMes.sHostRecipe.GetLength() < 1) 
 	{
 		g_objCommon.Show_Error(9004); return;
 	}	
 	gMes.bLotReported = TRUE;	
 }
 
-
+void CMesAgent::Get_Terminal(CString sMsg)
+{
+	g_objLogFile.Save_TerminalLog(sMsg);
+}
 
 //
 //void CMesAgent::Get_PPUpload_Confirm(CString sRecipeID)

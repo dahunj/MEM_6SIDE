@@ -350,6 +350,7 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 	else if (m_strStFn == "S10F3")
 	{
 		m_strDisplay = m_xml.GetRoot()->GetChild("ITEM")->GetChild("TEXT")->GetAttribute("VALUE");
+		g_objHandler.Set_TerminalDisplay(m_strDisplay);
 	}
 
 	m_xml.Close();

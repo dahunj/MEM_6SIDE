@@ -25,7 +25,7 @@ public:
 	CRadioCS		m_rdoLogJobList;
 	CRadioCS		m_rdoLogHandler;
 	CRadioCS		m_rdoLogInspector;
-
+	CRadioCS		m_rdoLogTerminal;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
@@ -50,6 +50,9 @@ private:
 protected:
 	void Initial_RichEdit();
 	void Read_LogFile();
+public:
+	afx_msg void OnBnClickedBtnPrintList();
+	afx_msg void OnBnClickedRdoLogTerminal();
 };
 
 ///////////////////////////////////////////////////////////////////////////////
