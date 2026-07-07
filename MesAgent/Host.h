@@ -38,6 +38,10 @@ private:
 	CString m_strStFn;	// StreamFunction (S1F1, S2F3, S2F31, S2F49, S6F12)
 	CString m_strRcmd;	// RCMD Command (START, CANCEL, DATA, PERMIT)
 
+	CString m_strName;
+	CString m_strStream;
+	CString m_strFunction;
+
 	DWORD	m_dwLastTime;	// 마지막 통신 시간
 	CString m_strSetTime;	// Host 설정 시간
 
@@ -76,8 +80,7 @@ public:
 	void Set_S1F1_Ready();		// Are You There Request
 	void Set_S5F1_AlarmReport(int nFlag, CString sErrNo, CString sErrMsg);	// nFlag(1:Alarm, 0:해제) Alarm Report Send
 	void Set_S7F26();
-
-
+	
 	void Set_S6F11_ControlState(int nState);	// 1:Online, 2:Offline
 	void Set_S6F11_EquipState(int nState, CString sErrNo, CString sCategory, CString sErrMsg);	// 2:Idle, 5:Run, 6:Down
 	
@@ -104,6 +107,12 @@ public:
 	void Set_S2F50_LOT_START();
 	void Set_S2F50_LOT_ID_FAIL();
 	
+	void Set_SSF0_Abort_Transaction();
+
+	void Set_S9F3_Unrecognized_Stream();
+	void Set_S9F5_Unrecognized_Function();
+
+	void Set_S9F9_T_Timeout();
 	void Set_S9F13_Timeout();	// Conversation Timeout
 
 

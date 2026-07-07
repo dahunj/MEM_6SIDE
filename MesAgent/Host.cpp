@@ -32,8 +32,14 @@ CHost::CHost()
 
 	for(int i = 0; i < 20; i++)
 	{
-		 gMes.dwCTStart[i] = 0 ;
-		 gMes.bCTTickStarted[i] = FALSE;	
+		 gMes.dwC_Timeout[i] = 0 ;
+		 gMes.bC_TimoutStarted[i] = FALSE;	
+	}
+
+	for(int i = 0; i < 20; i++)
+	{
+		gMes.dwT_Timeout[i] = 0 ;
+		gMes.bT_TimoutStarted[i] = FALSE;	
 	}
 
 	
@@ -212,6 +218,84 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 
 	CXmlNode node = m_xml.GetRoot();
 	m_strStFn = node.GetAttribute("ID");
+	m_strName = node.GetAttribute("NAME");
+			
+	if(m_strName =="Are You There Request") //S1F1
+	{
+		m_strStream = m_strStFn.Mid(0, 2);
+		m_strFunction = m_strStFn.Mid(2, 2);
+		if(m_strStream != "S1") Set_S9F3_Unrecognized_Stream();
+		if(m_strFunction != "F1") Set_S9F5_Unrecognized_Function();
+
+		if(m_strStFn == "S1F1" && !Is_HostOnline())
+		{
+			Set_SSF0_Abort_Transaction();
+		}
+
+	}
+	else if(m_strName =="Selected Equipment Status Request") //S1F3
+	{
+		m_strStream = m_strStFn.Mid(0, 2);
+		m_strFunction = m_strStFn.Mid(2, 2);
+		if(m_strStream != "S1") Set_S9F3_Unrecognized_Stream();
+		if(m_strFunction != "F3") Set_S9F5_Unrecognized_Function();
+
+		if(m_strStFn == "S1F3" && !Is_HostOnline())
+		{
+			Set_SSF0_Abort_Transaction();
+		}
+	}
+	else if(m_strName =="Link Test Request") //S2F3
+	{
+		m_strStream = m_strStFn.Mid(0, 2);
+		m_strFunction = m_strStFn.Mid(2, 2);
+		if(m_strStream != "S2") Set_S9F3_Unrecognized_Stream();
+		if(m_strFunction != "F3") Set_S9F5_Unrecognized_Function();
+
+		if(m_strStFn == "S2F3" && !Is_HostOnline())
+		{
+			Set_SSF0_Abort_Transaction();
+		}
+	}
+	else if(m_strName =="Date and Time Set Request") //S2F31
+	{
+		m_strStream = m_strStFn.Mid(0, 2);
+		m_strFunction = m_strStFn.Mid(2, 3);
+		if(m_strStream != "S2") Set_S9F3_Unrecognized_Stream();
+		if(m_strFunction != "F31") Set_S9F5_Unrecognized_Function();
+
+		if(m_strStFn == "S2F31" && !Is_HostOnline())
+		{
+			Set_SSF0_Abort_Transaction();
+		}
+
+	}
+	else if(m_strName == "Enhanced Remote Command") //S2F49
+	{
+		m_strStream = m_strStFn.Mid(0, 2);
+		m_strFunction = m_strStFn.Mid(2, 3);
+		if(m_strStream != "S2") Set_S9F3_Unrecognized_Stream();
+		if(m_strFunction != "F49") Set_S9F5_Unrecognized_Function();
+
+		if(m_strStFn == "S2F49" && !Is_HostOnline())
+		{
+			Set_SSF0_Abort_Transaction();
+		}
+	}
+	else if(m_strName == "Terminal Display, Single") //S10F3
+	{
+		m_strStream = m_strStFn.Mid(0, 3);
+		m_strFunction = m_strStFn.Mid(3, 2);
+		if(m_strStream != "S10") Set_S9F3_Unrecognized_Stream();
+		if(m_strFunction != "F3") Set_S9F5_Unrecognized_Function();
+
+		if(m_strStFn == "S10F3" && !Is_HostOnline())
+		{
+			Set_SSF0_Abort_Transaction();
+		}
+	}
+
+
 
 	if (m_strStFn == "S2F31") {
 		CXmlNode nodeTime = m_xml.GetRoot()->GetChild("ITEM")->GetChild("TIME");
@@ -267,11 +351,9 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 			 {
 				 CString strName = nodes[i]->GetChild("CPNAME")->GetAttribute("VALUE");
 				 CString strData = nodes[i]->GetChild("CPVAL")->GetAttribute("VALUE");
-
 				 if (strName == "LOTID")		gMes.sHostLotId = strData;
 				 if (strName == "RECIPEID")		gMes.sHostRecipe = strData;
-				 if (strName == "TOTALQTY")		gMes.sHostCMCount = strData;
-				 								
+				 if (strName == "TOTALQTY")		gMes.sHostCMCount = strData;				 								
 			 }		
 		 }	
 
@@ -343,10 +425,10 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 		
 
 	} 
-	else if(m_strStFn == "S7F25")
+	/*else if(m_strStFn == "S7F25")
 	{
-		Set_S7F26();
-	}
+	Set_S7F26();
+	}*/
 	else if (m_strStFn == "S10F3")
 	{
 		m_strDisplay = m_xml.GetRoot()->GetChild("ITEM")->GetChild("TEXT")->GetAttribute("VALUE");
@@ -539,7 +621,7 @@ void CHost::Set_S1F1_Ready()
 {
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
-	strSend += "<EIF VERSION=\"1.4\" ID=\"S1F1\" NAME=\"Are You There Request\">" + CRLF;
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S1F1\" NAME=\"Are You There Request\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
@@ -558,7 +640,7 @@ void CHost::Set_S5F1_AlarmReport(int nFlag, CString sErrNo, CString sErrMsg)
 
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
-	strSend += "<EIF VERSION=\"1.4\" ID=\"S5F1\" NAME=\"Alarm Report Send\">" + CRLF;
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S5F1\" NAME=\"Alarm Report Send\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
@@ -605,6 +687,9 @@ void CHost::Set_S6F11_ControlState(int nState)
 	strSend += "</EIF>";
 
 	Send_Command(strSend, FALSE, "S6F11", "10101");
+
+	gMes.bT_TimoutStarted[eT_Timeout::eControlState] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::eControlState] = GetTickCount();
 
 	if (nState == 1) g_objHandler.Set_ControlState(1);	// 1:Online, 2:Offline
 	m_bHostOnline = (nState == 1 ? TRUE : FALSE);
@@ -653,6 +738,9 @@ void CHost::Set_S6F11_EquipState(int nState, CString sErrNo, CString sCategory, 
 
 	Send_Command(strSend, FALSE, "S6F11", "10108");
 
+	gMes.bT_TimoutStarted[eT_Timeout::eEquipState] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::eEquipState] = GetTickCount();
+
 	gData.nPreEquipState = gData.nCurEquipState;
 }
 
@@ -684,8 +772,11 @@ void CHost::Set_S6F11_LotIDReport(CString sType, CString sLotID, CString sPortNo
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
-	gMes.bCTTickStarted[eCT::LOT_REPORT] = TRUE;
-	gMes.dwCTStart[eCT::LOT_REPORT] = GetTickCount();
+	gMes.bC_TimoutStarted[eC_Timeout::LOT_REPORT] = TRUE;
+	gMes.dwC_Timeout[eC_Timeout::LOT_REPORT] = GetTickCount();
+
+	gMes.bT_TimoutStarted[eT_Timeout::eLotIDReport] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::eLotIDReport] = GetTickCount();
 	Send_Command(strSend, FALSE, "S6F11", "20106");
 }
 
@@ -718,6 +809,9 @@ void CHost::Set_S6F11_LotStartedReport(CString sOperID, CString sLotID, CString 
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
+	gMes.bT_TimoutStarted[eT_Timeout::eLotStarted] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::eLotStarted] = GetTickCount();
+
 	Send_Command(strSend, FALSE, "S6F11", "20101");
 }
 
@@ -747,8 +841,11 @@ void CHost::Set_S6F11_PPSelectedReport(CString sLotId, CString sRecipeId)
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
-	gMes.bCTTickStarted[eCT::PP_SELECTED] = TRUE;
-	gMes.dwCTStart[eCT::PP_SELECTED] = GetTickCount();
+	gMes.bC_TimoutStarted[eC_Timeout::PP_SELECTED] = TRUE;
+	gMes.dwC_Timeout[eC_Timeout::PP_SELECTED] = GetTickCount();
+
+	gMes.bT_TimoutStarted[eT_Timeout::ePPSelected] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::ePPSelected] = GetTickCount();
 	Send_Command(strSend, FALSE, "S6F11", "40102");
 }
 
@@ -785,6 +882,9 @@ void CHost::Set_S6F11_ProductCompletedReport(CString sOperID, CString sLotID, CS
 	strSend += "    </DVLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
+
+	gMes.bT_TimoutStarted[eT_Timeout::eProductCompleted] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::eProductCompleted] = GetTickCount();
 
 	Send_Command(strSend, FALSE, "S6F11", "20401");
 }
@@ -835,6 +935,9 @@ void CHost::Set_S6F11_LotEnd(CString sLotId, CString sRecipe, int nCount, int nO
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
+	gMes.bT_TimoutStarted[eT_Timeout::eLotEnd] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::eLotEnd] = GetTickCount();
+
 	Send_Command(strSend, FALSE, "S6F11", "20102");
 }
 
@@ -864,6 +967,9 @@ void CHost::Set_S6F11_LotAbort(CString sLotId, CString sRecipe)
 	strSend += "    </DVLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
+
+	gMes.bT_TimoutStarted[eT_Timeout::eLotAbort] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::eLotAbort] = GetTickCount();
 
 	Send_Command(strSend, FALSE, "S6F11", "20104");
 }
@@ -896,6 +1002,9 @@ void CHost::Set_S6F11_IdleSet()
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
+	gMes.bT_TimoutStarted[eT_Timeout::eIdleSet] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::eIdleSet] = GetTickCount();
+
 	Send_Command(strSend, FALSE, "S6F11", "50102");
 }
 
@@ -926,6 +1035,9 @@ void CHost::Set_S6F11_IdleReset()
 	strSend += "    </DVLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
+
+	gMes.bT_TimoutStarted[eT_Timeout::eIdleReset] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::eIdleReset] = GetTickCount();
 
 	Send_Command(strSend, FALSE, "S6F11", "50103");
 }
@@ -960,6 +1072,9 @@ void CHost::Set_S6F11_IdleReport()
 	strSend += "    </DVLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
+
+	gMes.bT_TimoutStarted[eT_Timeout::eIdleReport] = TRUE;
+	gMes.dwT_Timeout[eT_Timeout::eIdleReport] = GetTickCount();
 
 	Send_Command(strSend, FALSE, "S6F11", "50104");
 }
@@ -1099,7 +1214,60 @@ void CHost::Set_S2F50_LOT_ID_FAIL()
 	Send_Command(strSend, TRUE, "S2F50", "LOT_ID_FAIL");
 }
 
+void CHost::Set_SSF0_Abort_Transaction()	// Conversation Timeout
+{
+	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S*F0\" NAME=\"Abort Transaction\">" + CRLF;
+	strSend += "  <ELEMENT>" + CRLF;
+	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
+	strSend += "  </ELEMENT>" + CRLF;
+	strSend += "</EIF>";
+
+	Send_Command(strSend, FALSE, "S*F0");
+}
+
+
+
+void CHost::Set_S9F3_Unrecognized_Stream()	// Conversation Timeout
+{
+	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
+
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S9F3\" NAME=\"Unrecognized Stream Type\">" + CRLF;
+	strSend += "  <ELEMENT>" + CRLF;
+	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
+	strSend += "  </ELEMENT>" + CRLF;
+	strSend += "</EIF>";
+
+	Send_Command(strSend, FALSE, "S9F3");
+}
+
+
+void CHost::Set_S9F5_Unrecognized_Function()	// Conversation Timeout
+{
+	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
+
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S9F5\" NAME=\"Unrecognized Function Type\">" + CRLF;
+	strSend += "  <ELEMENT>" + CRLF;
+	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
+	strSend += "  </ELEMENT>" + CRLF;
+	strSend += "</EIF>";
+
+	Send_Command(strSend, FALSE, "S9F5");
+}
+
+void CHost::Set_S9F9_T_Timeout()	// Conversation Timeout
+{
+	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
+
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S9F9\" NAME=\"Transaction Timer Timeout\">" + CRLF;
+	strSend += "  <ELEMENT>" + CRLF;
+	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
+	strSend += "  </ELEMENT>" + CRLF;
+	strSend += "</EIF>";
+
+	Send_Command(strSend, FALSE, "S9F9");
+}
 
 
 
@@ -1107,7 +1275,7 @@ void CHost::Set_S9F13_Timeout()	// Conversation Timeout
 {
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
-	strSend += "<EIF VERSION=\"1.4\" ID=\"S9F13\" NAME=\"ConversationTimeout\">" + CRLF;
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S9F13\" NAME=\"ConversationTimeout\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
@@ -1197,11 +1365,18 @@ void CHost::OnTimer(UINT_PTR nIDEvent)
 
 	for(int i = 0; i < 20; i++)
 	{
-		if(GetTickCount() - gMes.dwCTStart[i] > 3000 && gMes.bCTTickStarted[i])
+		if(GetTickCount() - gMes.dwC_Timeout[i] > 3000 && gMes.bC_TimoutStarted[i])
 		{
 			
-			gMes.bCTTickStarted[i] = FALSE;
+			gMes.bC_TimoutStarted[i] = FALSE;
 			Set_S9F13_Timeout();
+		}
+
+		if(GetTickCount() - gMes.dwT_Timeout[i] > 3000 && gMes.bC_TimoutStarted[i])
+		{
+
+			gMes.bT_TimoutStarted[i] = FALSE;
+			Set_S9F9_T_Timeout();
 		}
 	}
 

@@ -100,8 +100,11 @@ typedef struct {
 	int			nHostType;		
 	
 
-	BOOL		bCTTickStarted[20];
-	DWORD		dwCTStart[20];
+	BOOL		bC_TimoutStarted[20];
+	DWORD		dwC_Timeout[20];
+
+	BOOL		bT_TimoutStarted[20];
+	DWORD		dwT_Timeout[20];
 
 
 } GLOVAL_MES;
@@ -121,12 +124,30 @@ typedef struct {
 } GLOVAL_ALM;
 
 
-struct eCT
+struct eC_Timeout
 {
 	enum Name
 	{
 		LOT_REPORT = 0,
 		PP_SELECTED = 1,		
+	};
+};
+
+struct eT_Timeout
+{
+	enum Name
+	{
+		eControlState = 0,
+		eEquipState = 1,
+		eLotIDReport = 2,
+		ePPSelected = 3,
+		eLotStarted = 4,
+		eProductCompleted = 5,
+		eLotEnd = 6,
+		eLotAbort = 7,
+		eIdleSet = 8,
+		eIdleReset = 9,
+		eIdleReport = 10,
 	};
 };
 
