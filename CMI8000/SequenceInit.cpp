@@ -216,9 +216,9 @@ BOOL CSequenceInit::Initial_MainInit()
 		break;
 
 	case 2:		// Load Stage Exist Check
-	/*	if (!m_pDX01->iLoadStageExist) {
+		if (!m_pDX01->iLoadStageExist) {
 			m_niMainInitCase++; m_tiMainInitLoop.Set_LoopTime(5000);
-		}*/
+		}
 		break;
 	case 3:		// Load Picker Exist Check
 		if (!m_pDX01->iLoadPickerExist) {
