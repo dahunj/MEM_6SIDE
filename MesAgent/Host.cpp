@@ -101,7 +101,7 @@ LRESULT CHost::OnServerAccept(WPARAM wLocalPort, LPARAM lClientIdx)
 
 	if (g_objHandler.Is_Connected()) Set_S6F11_ControlState(1);	//1:Online, 2:Offline
 
-	Set_S1F1_Ready();
+	if(Is_HostOnline()) Set_S1F1_Ready();
 
 	return 0;
 }
@@ -229,7 +229,7 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 
 		if(m_strStFn == "S1F1" && !Is_HostOnline())
 		{
-			Set_SSF0_Abort_Transaction();
+			Set_SSF0_Abort_Transaction("S1");
 		}
 
 	}
@@ -242,7 +242,7 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 
 		if(m_strStFn == "S1F3" && !Is_HostOnline())
 		{
-			Set_SSF0_Abort_Transaction();
+			Set_SSF0_Abort_Transaction("S1");
 		}
 	}
 	else if(m_strName =="Link Test Request") //S2F3
@@ -252,10 +252,10 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 		if(m_strStream != "S2") Set_S9F3_Unrecognized_Stream();
 		if(m_strFunction != "F3") Set_S9F5_Unrecognized_Function();
 
-		if(m_strStFn == "S2F3" && !Is_HostOnline())
+	/*	if(m_strStFn == "S2F3" && !Is_HostOnline())
 		{
-			Set_SSF0_Abort_Transaction();
-		}
+			Set_SSF0_Abort_Transaction("S2");
+		}*/
 	}
 	else if(m_strName =="Date and Time Set Request") //S2F31
 	{
@@ -266,7 +266,7 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 
 		if(m_strStFn == "S2F31" && !Is_HostOnline())
 		{
-			Set_SSF0_Abort_Transaction();
+			Set_SSF0_Abort_Transaction("S2");
 		}
 
 	}
@@ -279,7 +279,7 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 
 		if(m_strStFn == "S2F49" && !Is_HostOnline())
 		{
-			Set_SSF0_Abort_Transaction();
+			Set_SSF0_Abort_Transaction("S2");
 		}
 	}
 	else if(m_strName == "Terminal Display, Single") //S10F3
@@ -291,7 +291,7 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 
 		if(m_strStFn == "S10F3" && !Is_HostOnline())
 		{
-			Set_SSF0_Abort_Transaction();
+			Set_SSF0_Abort_Transaction("S10");
 		}
 	}
 
@@ -460,7 +460,7 @@ void CHost::Get_S1F1_Ready()
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
-	Send_Command(strSend, TRUE, "S1F2");	// Are You There Data => S1F1 응답
+	if(Is_HostOnline()) Send_Command(strSend, TRUE, "S1F2");	// Are You There Data => S1F1 응답
 }
 
 void CHost::Get_S1F3_State()
@@ -485,7 +485,7 @@ void CHost::Get_S1F3_State()
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
-	Send_Command(strSend, TRUE, "S1F4");	// Equip Status Response => S1F3 응답
+	if(Is_HostOnline()) Send_Command(strSend, TRUE, "S1F4");	// Equip Status Response => S1F3 응답
 }
 
 void CHost::Get_S2F3_Link()
@@ -533,7 +533,7 @@ void CHost::Get_S2F31_Time()
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
 
-	Send_Command(strSend, TRUE, "S2F32");	// Date and Time Set Acknowledge => S1F31 응답
+	if(Is_HostOnline()) Send_Command(strSend, TRUE, "S2F32");	// Date and Time Set Acknowledge => S1F31 응답
 
 	g_objHandler.Set_TimeSync();
 }
@@ -1214,17 +1214,20 @@ void CHost::Set_S2F50_LOT_ID_FAIL()
 	Send_Command(strSend, TRUE, "S2F50", "LOT_ID_FAIL");
 }
 
-void CHost::Set_SSF0_Abort_Transaction()	// Conversation Timeout
+void CHost::Set_SSF0_Abort_Transaction(CString sStream)	// Conversation Timeout
 {
+	CString strTemp;
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
 
-	strSend += "<EIF VERSION=\"2.0\" ID=\"S*F0\" NAME=\"Abort Transaction\">" + CRLF;
+	strSend += "<EIF VERSION=\"2.0\" ID=\""+ sStream + "F0\" NAME=\"Abort Transaction\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
 	strSend += "  </ELEMENT>" + CRLF;
 	strSend += "</EIF>";
 
-	Send_Command(strSend, FALSE, "S*F0");
+	strTemp.Format("%sF0", sStream);
+
+	Send_Command(strSend, FALSE, strTemp);
 }
 
 
@@ -1372,9 +1375,8 @@ void CHost::OnTimer(UINT_PTR nIDEvent)
 			Set_S9F13_Timeout();
 		}
 
-		if(GetTickCount() - gMes.dwT_Timeout[i] > 3000 && gMes.bC_TimoutStarted[i])
+		if(GetTickCount() - gMes.dwT_Timeout[i] > 3000 && gMes.bT_TimoutStarted[i])
 		{
-
 			gMes.bT_TimoutStarted[i] = FALSE;
 			Set_S9F9_T_Timeout();
 		}

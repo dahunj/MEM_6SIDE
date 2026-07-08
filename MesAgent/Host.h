@@ -107,7 +107,7 @@ public:
 	void Set_S2F50_LOT_START();
 	void Set_S2F50_LOT_ID_FAIL();
 	
-	void Set_SSF0_Abort_Transaction();
+	void Set_SSF0_Abort_Transaction(CString sStream);
 
 	void Set_S9F3_Unrecognized_Stream();
 	void Set_S9F5_Unrecognized_Function();
