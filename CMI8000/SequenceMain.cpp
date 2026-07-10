@@ -2295,7 +2295,7 @@ BOOL CSequenceMain::LoadTray_Run()
 		else if(nLtWorkPort == 2)
 		{
 			gMes.bLotReported = FALSE;
-			g_objMesAgent.Set_LotIDReport(0, gData.sLotID[1], 1, gData.sRecipe);
+			g_objMesAgent.Set_LotIDReport(0, gData.sLotID[1], 2, gData.sRecipe);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
 		}		
 		break;
@@ -3287,32 +3287,20 @@ BOOL CSequenceMain::AngleTray1_Run()
 		{
 			g_objCommon.Set_AnglePortSupportIn();
 
-			m_pDY02->oAngleStage1AlignIn = FALSE;
-			g_objAJinAXL.Write_Output(2);
-
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 4);
 			m_tAngleTray1Loop.Takt_Start(nTaktZone, 5);
 		}
 		break;
 	case 6:		// Support Check
-#ifndef AJIN_BOARD_USE
-		m_pDX02->iAngleStage1AlignIn = FALSE;
-		m_pDX02->iAngleStage1AlignOut = TRUE;
-#endif
-		if (g_objCommon.Get_AnglePortSupportIn() && !m_pDX02->iAngleStage1AlignIn && m_pDX02->iAngleStage1AlignOut)
-		{			
-			m_pDY02->oAngleStage1AlignIn = TRUE;
-			g_objAJinAXL.Write_Output(2);
+
+		if (g_objCommon.Get_AnglePortSupportIn() )
+		{						
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 5);
 		}
 	case 7:		// 안전 확인.
-#ifndef AJIN_BOARD_USE
-		m_pDX02->iAngleStage1AlignIn = TRUE;
-		m_pDX02->iAngleStage1AlignOut = FALSE;
-#endif
-		if (m_nAngleTray2Case >= 20 && m_pDX02->iAngleStage1AlignIn && !m_pDX02->iAngleStage1AlignOut)  //
+		if (m_nAngleTray2Case >= 20 )  //
 		{	// Btm1 Picker CM Loading
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
 			m_tAngleTray1Loop.Takt_Start(nTaktZone, 7);
@@ -3624,34 +3612,21 @@ BOOL CSequenceMain::AngleTray2_Run()
 		if (g_objCommon.Check_Position(AX_ANGLE_STAGE2_Z, 3)) 
 		{			
 			g_objCommon.Set_AnglePortSupportIn();
-
-			m_pDY02->oAngleStage2AlignIn = FALSE;
-			g_objAJinAXL.Write_Output(2);
-
+			
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
 			m_tAngleTray2Loop.Takt_End(nTaktZone, 4);
 			m_tAngleTray2Loop.Takt_Start(nTaktZone, 5);
 		}
 		break;
 	case 6:		// Support Check
-#ifndef AJIN_BOARD_USE
-		m_pDX02->iAngleStage1AlignIn = FALSE;
-		m_pDX02->iAngleStage1AlignOut = TRUE;
-#endif
-		if (g_objCommon.Get_AnglePortSupportIn()
-			&& !m_pDX02->iAngleStage2AlignIn && m_pDX02->iAngleStage2AlignOut) 
-		{			
-			m_pDY02->oAngleStage2AlignIn = TRUE;
-			g_objAJinAXL.Write_Output(2);
+
+		if (g_objCommon.Get_AnglePortSupportIn()) 
+		{						
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
 			m_tAngleTray2Loop.Takt_End(nTaktZone, 5);
 		}
 	case 7:		// 안전 확인.
-#ifndef AJIN_BOARD_USE
-		m_pDX02->iAngleStage1AlignIn = TRUE;
-		m_pDX02->iAngleStage1AlignOut = FALSE;
-#endif
-		if (m_nAngleTray1Case >= 20 && m_pDX02->iAngleStage2AlignIn && !m_pDX02->iAngleStage2AlignOut) 
+		if (m_nAngleTray1Case >= 20 ) 
 		{	// Btm1 Picker CM Loading
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
 			m_tAngleTray2Loop.Takt_Start(nTaktZone, 7);

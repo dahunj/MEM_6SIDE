@@ -1278,17 +1278,21 @@ void CCMI8000Dlg::Set_NoWork()
 	if (pEquipData->nNoWorkTime < 1) { dwNoWorkBegin = GetTickCount(); return; }
 
 	int nState = theApp.Get_MainState();
-	/*if (nState != STATE_STOP)
+	if (nState != STATE_STOP)
 	{
 		dwNoWorkBegin = GetTickCount();
 		return;
-	}*/
+	}
 
 	if (g_dlgNoWork.IsWindowVisible()) { dwNoWorkBegin = GetTickCount(); return; }
 
 	int nTerm = (int)(GetTickCount() - dwNoWorkBegin);
-	if (nTerm < pEquipData->nNoWorkTime * 60 * 1000) return;	//분 -> 초 -> 밀리초
+	int nNoWork = (pEquipData->nNoWorkTime*60*1000);
+	if (nTerm < nNoWork) 
+	{
+		return;	//분 -> 초 -> 밀리초
+	}
 
 	g_dlgNoWork.Set_NoWorkAuto(TRUE);
-	g_dlgNoWork.ShowWindow(SW_SHOW);
+ 	g_dlgNoWork.ShowWindow(SW_SHOW);
 }

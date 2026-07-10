@@ -11,7 +11,7 @@
 #include "Inspector.h"
 
 #define	MES_AGENT_IP	"127.0.0.1"
-#define MES_AGENT_PORT	10000		// MesAgent Handler Port
+#define MES_AGENT_PORT	20000		// MesAgent Handler Port
 
 
 // CMesAgent
@@ -84,7 +84,7 @@ LRESULT CMesAgent::OnClientConnect(WPARAM wConnect, LPARAM lParam)
 	if (!m_bConnected) return 0;
 
 	Set_OperUpdate(gData.sOperID);
-	Set_EquipState(2);	//Idle
+	Set_EquipState(4);	//Idle
 	g_objLogFile.Save_MesAgentLog("MesAgent Connected");
 	return 0;
 }

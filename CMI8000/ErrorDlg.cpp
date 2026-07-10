@@ -455,8 +455,8 @@ void CErrorDlg::OnBnClickedBtnErrRetry()
 	case 9005:
 		{
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_TRAY);
-			if(nCase == 3141) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
-			else if(nCase == 3142) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
+			if(nCase == 41) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+			else if(nCase == 42) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
 		}
 		break;
 	case 9006:
@@ -476,15 +476,15 @@ void CErrorDlg::OnBnClickedBtnErrRetry()
 	case 9008:
 		{
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_TRAY);
-			if(nCase == 3141) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
-			else if(nCase == 3142) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
+			if(nCase == 41) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+			else if(nCase == 42) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
 		}
 		break;
 	case 9032:
 		{
 			int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_TRAY);
-			if(nCase == 3141) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
-			else if(nCase == 3142) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
+			if(nCase == 41) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+			else if(nCase == 42) g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
 		}
 		break;
 
