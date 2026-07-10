@@ -895,6 +895,7 @@ void CHost::Set_S6F11_LotEnd(CString sLotId, CString sRecipe, int nCount, int nO
 	strTotal.Format("%d", nCount);
 	strReal.Format("%d", nOk + nNg);
 	strGood.Format("%d", nOk);
+	strBad.Format("%d", 0);
 	strVNg.Format("%d", nNg);	// AVI NG
 	strBNg.Format("%d", nBNg);			// Barcode NG
 
@@ -929,7 +930,7 @@ void CHost::Set_S6F11_LotEnd(CString sLotId, CString sRecipe, int nCount, int nO
 	strSend += "      <DV NAME=\"REASONCODEQTY\" VALUE=\"2\" />" + CRLF;
 	strSend += "      <DV NAME=\"REASONCODE#1\" VALUE=\"" + strRsnCode + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"REASONCODECOUNT#1\" VALUE=\"" + strVNg + "\" />" + CRLF;
-	strSend += "      <DV NAME=\"REASONCODE#2\" VALUE=\"BLNG\" />" + CRLF;
+	strSend += "      <DV NAME=\"REASONCODE#2\" VALUE=\"CAPNG\" />" + CRLF;
 	strSend += "      <DV NAME=\"REASONCODECOUNT#2\" VALUE=\"" + strBNg + "\" />" + CRLF;
 	strSend += "    </DVLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;

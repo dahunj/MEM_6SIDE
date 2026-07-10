@@ -36,7 +36,7 @@ END_MESSAGE_MAP()
 void CHandler::Initialize()
 {
 	m_nLPort = HANDLER_PORT;
-	m_Server.Listen_Socket(m_nLPort, this);
+	BOOL ret = m_Server.Listen_Socket(m_nLPort, this);
 }
 
 void CHandler::Terminate()

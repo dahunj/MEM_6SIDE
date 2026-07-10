@@ -4,7 +4,7 @@
 
 // CHandler
 
-#define HANDLER_PORT	10000	// Local Port for Handler
+#define HANDLER_PORT	20000	// Local Port for Handler
 
 class CHandler : public CWnd
 {
