@@ -219,7 +219,64 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 	CXmlNode node = m_xml.GetRoot();
 	m_strStFn = node.GetAttribute("ID");
 	m_strName = node.GetAttribute("NAME");
-			
+
+
+
+	//Transaction Timeout 
+	if(m_strStFn == "S6F12")
+	{
+		CXmlNode nodeCEID = m_xml.GetRoot()->GetChild("ITEM")->GetChild("CEID");
+		m_strCEID = nodeCEID.GetAttribute("VALUE", "");
+
+		if(m_strCEID =="10101")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::eControlState] = FALSE;
+		}
+		if(m_strCEID =="10108")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::eEquipState] = FALSE;
+		}
+		if(m_strCEID =="20106")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::eLotIDReport] = FALSE;
+		}
+		if(m_strCEID =="40102")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::ePPSelected] = FALSE;
+		}
+		if(m_strCEID =="20101")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::eLotStarted] = FALSE;
+		}
+		if(m_strCEID =="20401")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::eProductCompleted] = FALSE;
+		}
+		if(m_strCEID =="20102")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::eLotEnd] = FALSE;
+		}
+		if(m_strCEID =="20104")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::eLotAbort] = FALSE;
+		}
+		if(m_strCEID =="50102")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::eIdleSet] = FALSE;
+		}
+		if(m_strCEID =="50103")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::eIdleReset] = FALSE;
+		}
+		if(m_strCEID =="50104")
+		{
+			gMes.bT_TimoutStarted[eT_Timeout::eIdleReport] = FALSE;
+		}
+	}
+
+
+
+	//F0 , S9F3, S9F5
 	if(m_strName =="Are You There Request") //S1F1
 	{
 		m_strStream = m_strStFn.Mid(0, 2);
@@ -296,7 +353,6 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 	}
 
 
-
 	if (m_strStFn == "S2F31") {
 		CXmlNode nodeTime = m_xml.GetRoot()->GetChild("ITEM")->GetChild("TIME");
 		m_strSetTime = nodeTime.GetAttribute("VALUE", "");
@@ -308,6 +364,8 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 		
 		 if (m_strRcmd == "PP_SELECT") 
 		 {
+			 gMes.bC_TimoutStarted[eC_Timeout::LOT_REPORT] = FALSE;
+
 			CXmlNodes nodes = m_xml.GetRoot()->GetChild("ITEM")->GetChild("RCMDCP")->GetChild("CPLIST")->GetChildren();
 			int nCount = nodes.GetCount();
 
@@ -323,6 +381,9 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 		 }	
 		 if (m_strRcmd == "LOT_ID_FAIL") 
 		 {
+			  gMes.bC_TimoutStarted[eC_Timeout::LOT_REPORT] = FALSE;
+			  gMes.bC_TimoutStarted[eC_Timeout::PP_SELECTED] = FALSE;
+
 			 CXmlNodes nodes = m_xml.GetRoot()->GetChild("ITEM")->GetChild("RCMDCP")->GetChild("CPLIST")->GetChildren();
 			 int nCount = nodes.GetCount();
 
@@ -344,6 +405,8 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 
 		 if (m_strRcmd == "LOT_START") 
 		 {
+			 gMes.bC_TimoutStarted[eC_Timeout::PP_SELECTED] = FALSE;
+
 			 CXmlNodes nodes = m_xml.GetRoot()->GetChild("ITEM")->GetChild("RCMDCP")->GetChild("CPLIST")->GetChildren();
 			 int nCount = nodes.GetCount();
 

@@ -45,6 +45,9 @@ private:
 	DWORD	m_dwLastTime;	// 마지막 통신 시간
 	CString m_strSetTime;	// Host 설정 시간
 
+	CString m_strCEID;
+	CString m_strRPTID;
+
 	CString m_strDisplay;	// Teminal Display Message
 
 private:
