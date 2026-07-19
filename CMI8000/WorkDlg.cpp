@@ -2092,7 +2092,10 @@ void CWorkDlg::OnBnClickedBtnMesAbort()
 
 	if (g_objCommon.Show_MsgBox(2, "If there were the modules in the machine, Please remove the modules by the CycleStop. Are you want to cancel this Lot?") != IDOK) return;
 
-	g_objMesAgent.Set_LotAbort(gData.sLotID[nPx], gData.sRecipe);
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+
+	g_objMesAgent.Set_LotAbort(gData.sLotID[nPx], pEquipData->sRecipeName);
+	//g_objMesAgent.Set_LotAbort(gData.sLotID[nPx], gData.sModelName);
 	g_objMesAgent.Set_EquipState(4);	// Idle
 
 	m_stcLotId[nPx].SetWindowText("");

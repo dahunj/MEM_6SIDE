@@ -1962,7 +1962,7 @@ void CSequenceMain::Job_LotStart(int nPortNo)
 	g_objCommon.Get_RAMSize(strRAM);
 	g_objCommon.Get_HardInfo(strHardDisk);
 		
-	strLog.Format("%s,%s,%s,%s,%s,%s",gData.sLotID[nLPNo],gData.sRecipe, strCPU,strRAM,strHardDisk,"");
+	strLog.Format("%s,%s,%s,%s,%s,%s",gData.sLotID[nLPNo],gData.sModelName, strCPU,strRAM,strHardDisk,"");
 	g_objLogFile.Save_PCLog(nLPNo+1, strLog);
 
 	// Motion 파일명 : LotID_생성년월일시_공정명_Normal_#호기번호_PC이름_모델명_순번.csv
@@ -1992,7 +1992,8 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	
 	if(m_pEquipData->bUseMES)//if(!m_pEquipData->bUseInlineMode && m_pEquipData->bUseMES)
 	{
-		g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], gData.sRecipe, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
+		//g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], gData.sModelName, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
+		g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], m_pEquipData->sRecipeName, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
 	}	
 
 	g_objCapAttach.Set_TrayEnd(nPortNo);
@@ -2289,13 +2290,15 @@ BOOL CSequenceMain::LoadTray_Run()
 		if(nLtWorkPort == 1)
 		{
 			gMes.bLotReported = FALSE;
-			g_objMesAgent.Set_LotIDReport(0, gData.sLotID[0], 1, gData.sRecipe);
+			g_objMesAgent.Set_LotIDReport(0, gData.sLotID[0], 1, m_pEquipData->sRecipeName);
+			//g_objMesAgent.Set_LotIDReport(0, gData.sLotID[0], 1, gData.sModelName);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
 		}
 		else if(nLtWorkPort == 2)
 		{
 			gMes.bLotReported = FALSE;
-			g_objMesAgent.Set_LotIDReport(0, gData.sLotID[1], 2, gData.sRecipe);
+			g_objMesAgent.Set_LotIDReport(0, gData.sLotID[1], 2, m_pEquipData->sRecipeName);
+			//g_objMesAgent.Set_LotIDReport(0, gData.sLotID[1], 2, gData.sModelName);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
 		}		
 		break;
@@ -2308,7 +2311,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				{
 					g_objCommon.Show_Error(9005); return FALSE;
 				}
-				if(gData.sRecipe != gMes.sHostRecipe)
+				if(m_pEquipData->sRecipeName != gMes.sHostRecipe)//if(gData.sModelName != gMes.sHostRecipe)
 				{
 					g_objCommon.Show_Error(9006); return FALSE;
 				}
@@ -2319,7 +2322,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				{
 					g_objCommon.Show_Error(9005); return FALSE;
 				}
-				if(gData.sRecipe != gMes.sHostRecipe)
+				if(m_pEquipData->sRecipeName != gMes.sHostRecipe)//if(gData.sModelName != gMes.sHostRecipe)
 				{
 					g_objCommon.Show_Error(9006); return FALSE;
 				}
@@ -2344,7 +2347,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				{
 					g_objCommon.Show_Error(9007); return FALSE;
 				}
-				if(gData.sRecipe != gMes.sHostRecipe)
+				if(m_pEquipData->sRecipeName != gMes.sHostRecipe)//if(gData.sModelName != gMes.sHostRecipe)
 				{
 					g_objCommon.Show_Error(9008); return FALSE;
 				}
@@ -2355,7 +2358,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				{
 					g_objCommon.Show_Error(9007); return FALSE;
 				}
-				if(gData.sRecipe != gMes.sHostRecipe)
+				if(m_pEquipData->sRecipeName != gMes.sHostRecipe)//if(gData.sModelName != gMes.sHostRecipe)
 				{
 					g_objCommon.Show_Error(9008); return FALSE;
 				}

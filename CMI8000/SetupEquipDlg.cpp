@@ -37,8 +37,9 @@ void CSetupEquipDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	for (int i = 0; i < 8; i++) DDX_Control(pDX, IDC_GROUP_0 + i, m_Group[i]);
-	for (int i = 0; i < 39; i++) DDX_Control(pDX, IDC_LABEL_0 + i,  m_Label[i]);
+	for (int i = 0; i < 40; i++) DDX_Control(pDX, IDC_LABEL_0 + i,  m_Label[i]);
 	DDX_Control(pDX, IDC_STC_EQUIP_NAME, m_stcEquipName);
+	DDX_Control(pDX, IDC_STC_RECIPE_NAME, m_stcRecipeName);
 	for (int i = 0; i < 2; i++) DDX_Control(pDX, IDC_RDO_MODEL_0 + i, m_rdoModel[i]);
 	DDX_Control(pDX, IDC_CBO_LOT_BARCODE_PORT, m_cboLotBarcodePort);
 	DDX_Control(pDX, IDC_STC_SCREEN_OFF, m_stcScreenOff);
@@ -156,6 +157,7 @@ BEGIN_MESSAGE_MAP(CSetupEquipDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RDO_DOOR_LOCK_1, &CSetupEquipDlg::OnBnClickedRdoDoorLock1)
 
 	ON_BN_CLICKED(IDC_CHK_USE_DRY_RUN, &CSetupEquipDlg::OnBnClickedChkUseDryRun)
+	ON_STN_CLICKED(IDC_STC_RECIPE_NAME, &CSetupEquipDlg::OnStnClickedStcRecipeName)
 END_MESSAGE_MAP()
 
 // CSetupEquipDlg ¸Þ½ÃÁö Ã³¸®±âÀÔ´Ï´Ù.
@@ -248,6 +250,7 @@ void CSetupEquipDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 void CSetupEquipDlg::Set_Enable(BOOL bEnable)
 {
 	m_stcEquipName.EnableWindow(bEnable);
+	m_stcRecipeName.EnableWindow(bEnable);
 	m_rdoModel[0].EnableWindow(bEnable);
 	m_rdoModel[1].EnableWindow(bEnable);
 	m_cboLotBarcodePort.EnableWindow(bEnable);
@@ -609,9 +612,11 @@ void CSetupEquipDlg::Initial_Controls()
 	for (int i = 25; i < 29; i++) m_Label[i].Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x80, 0x00, 0x00));	// Vacuum Off
 	for (int i = 29; i < 34; i++) m_Label[i].Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x40, 0x60, 0x40));	// Delay Add
 	m_Label[34].Init_Ctrl("¹ÙÅÁ", 12, TRUE, RGB(0x00, 0x00, 0x00), RGB(0xFF, 0xA0, 0x00));	// Model
-	for (int i = 35; i < 39; i++) m_Label[i].Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x40, 0x60, 0x40));	// Trigger
+	for (int i = 35; i < 40; i++) m_Label[i].Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x40, 0x60, 0x40));	// Trigger
 
 	m_stcEquipName.Init_Ctrl("¹ÙÅÁ", 15, TRUE, RGB(0x00, 0x00, 0x80), RGB(0xE0, 0xFF, 0xE0));
+	m_stcRecipeName.Init_Ctrl("¹ÙÅÁ", 9, TRUE, RGB(0x00, 0x00, 0x80), RGB(0xE0, 0xFF, 0xE0));
+
 	for (int i = 0; i < 2; i++) m_rdoModel[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xF0, 0xE0, 0x00), CRadioCS::emRed, 0);
 	for (int i = 0; i < 4; i++) { strText.Format("COM%d", i + 1); m_cboLotBarcodePort.AddString(strText); }
 	m_cboLotBarcodePort.Init_Ctrl("¹ÙÅÁ", 12, TRUE, RGB(0x00, 0x00, 0x00), RGB(0xF0, 0xE0, 0x00));
@@ -707,7 +712,9 @@ void CSetupEquipDlg::Display_EquipData()
 
 
 	m_stcEquipName.SetWindowText(pEquipData->sEquipName);
-	gData.sRecipe == "R54B" ? m_rdoModel[1].SetCheck(TRUE) : m_rdoModel[0].SetCheck(TRUE);
+	m_stcRecipeName.SetWindowText(pEquipData->sRecipeName);
+
+	gData.sModelName == "R64B" ? m_rdoModel[1].SetCheck(TRUE) : m_rdoModel[0].SetCheck(TRUE);
 	m_cboLotBarcodePort.SetCurSel(pEquipData->nLotBarcodePort - 1);
 	strData.Format("%d", pEquipData->nScreenOff); m_stcScreenOff.SetWindowText(strData);
 	strData.Format("%d", pEquipData->nNoWorkTime); m_stcNoWorkTime.SetWindowText(strData);
@@ -807,8 +814,9 @@ void CSetupEquipDlg::Save_EquipData()
 	g_objCommon.Backup_File(gData.sEnvPath, "EquipData");
 
 	m_stcEquipName.GetWindowText(strData); INI.Set_String("EQUIPMENT", "NAME", strData);
+	m_stcRecipeName.GetWindowText(strData); INI.Set_String("EQUIPMENT", "RECIPE", strData);
 
-	gData.sRecipe = (m_rdoModel[1].GetCheck() ? "R64B" : "R63B");
+	gData.sModelName = (m_rdoModel[1].GetCheck() ? "R64B" : "R63B");
 	g_objDataManager.Save_ModelData();
 
 	nData = m_cboLotBarcodePort.GetCurSel(); INI.Set_Integer("EQUIPMENT", "LOT_BARCODE", nData + 1);
@@ -941,7 +949,7 @@ void CSetupEquipDlg::Save_EquipDataForAllParam()
 
 	m_stcEquipName.GetWindowText(strData); INI.Set_String("EQUIPMENT", "NAME", strData);
 
-	gData.sRecipe = (m_rdoModel[1].GetCheck() ? "R64B" : "R63B");
+	gData.sModelName = (m_rdoModel[1].GetCheck() ? "R64B" : "R63B");
 	g_objDataManager.Save_ModelData();
 
 	nData = m_cboLotBarcodePort.GetCurSel(); INI.Set_Integer("EQUIPMENT", "LOT_BARCODE", nData + 1);
@@ -1175,4 +1183,13 @@ void CSetupEquipDlg::OnBnClickedRdoDoorLock1()
 {
 	m_strLog.Format("DoorLockUse Checked : %d", m_chkUseInspectAngle.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
+}
+
+
+void CSetupEquipDlg::OnStnClickedStcRecipeName()
+{
+	CString strKey;
+	if (g_objCommon.Show_KeyPad(strKey) != IDOK) return;
+
+	m_stcRecipeName.SetWindowText(strKey);
 }

@@ -287,7 +287,7 @@ void CDispatcher::Set_LotStart(int nPortNo)
 	int nCmUseCnt = gData.nCmUseCount[nPortNo-1];
 
 	CString	strSendCmd;
-	strSendCmd.Format("LOT,START,%s,%s,%s,%d,%d,%d", pRosData->sHandlerIp, gData.sRecipe, strLotId, nPortNo, nTrayUseCnt, nCmUseCnt);
+	strSendCmd.Format("LOT,START,%s,%s,%s,%d,%d,%d", pRosData->sHandlerIp, gData.sModelName, strLotId, nPortNo, nTrayUseCnt, nCmUseCnt);
 	Send_Command(strSendCmd);
 }
 
@@ -298,7 +298,7 @@ void CDispatcher::Set_LotEnd(int nPortNo)
 	CString strLotId = gData.sLotID[nPortNo-1];
 
 	CString	strSendCmd;
-	strSendCmd.Format("LOT,END,%s,%s,%s,%d", pRosData->sHandlerIp, gData.sRecipe, strLotId, nPortNo);
+	strSendCmd.Format("LOT,END,%s,%s,%s,%d", pRosData->sHandlerIp, gData.sModelName, strLotId, nPortNo);
 	Send_Command(strSendCmd);
 }
 
@@ -313,7 +313,7 @@ void CDispatcher::Set_InfoReply()
 	int nCmUseCnt = gData.nCmUseCount[gData.nLPNo-1];
 
 	CString	strSendCmd;
-	strSendCmd.Format("INFO,REPLY,%s,%s,%s,%d,%d,%d", pRosData->sHandlerIp, gData.sRecipe, strLotId, gData.nLPNo, nTrayUseCnt, nCmUseCnt);
+	strSendCmd.Format("INFO,REPLY,%s,%s,%s,%d,%d,%d", pRosData->sHandlerIp, gData.sModelName, strLotId, gData.nLPNo, nTrayUseCnt, nCmUseCnt);
 	Send_Command(strSendCmd);
 }
 
@@ -327,7 +327,7 @@ void CDispatcher::Set_JudgeRequest(int nPortNo, int nTrayNo, int nCmNo)
 
 	CString	strSendCmd;
 	strSendCmd.Format("JUDGE,REQUEST,%s,%s,%s,%d,%d,%d,%s,%s",
-		pRosData->sHandlerIp, gData.sRecipe, strLotId, nPortNo, nTrayNo, nCmNo, strBarcode, strNgCode);
+		pRosData->sHandlerIp, gData.sModelName, strLotId, nPortNo, nTrayNo, nCmNo, strBarcode, strNgCode);
 	Send_Command(strSendCmd);
 
 	gLot.nRosRequest[nPortNo-1]++;

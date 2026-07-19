@@ -1236,7 +1236,7 @@ void CInspector::Set_LotStart(int nInspector, CString sLotId, int nPortNo, CStri
 
 	m_bLotReady1 = m_bLotReady2 = m_bLotReady3 = m_bLotReady4 = FALSE;
 	CString	strSendCmd;
-	strSendCmd.Format("LOT,START,%s,%d,%d,%d,%s,%s,%s", sLotId, nPortNo, gData.nTrayUseCount[nPortNo-1], gData.nCmUseCount[nPortNo-1], gData.sRecipe, sProgVer, sParaVer);
+	strSendCmd.Format("LOT,START,%s,%d,%d,%d,%s,%s,%s", sLotId, nPortNo, gData.nTrayUseCount[nPortNo-1], gData.nCmUseCount[nPortNo-1], gData.sModelName, sProgVer, sParaVer);
 	Send_Command(nInspector, strSendCmd);
 }
 

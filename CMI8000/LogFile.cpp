@@ -652,11 +652,11 @@ void CLogFile::Save_ECMLog(int nType, const CString& strLog)
 
 		if (file.GetLength() < 1) file.Write(sTitle, sTitle.GetLength());
 
-		if(nType == 4) strSave.Format("%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe, strLog);
-		else if(nType == 2) strSave.Format("%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe, strLog);
+		if(nType == 4) strSave.Format("%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sModelName, strLog);
+		else if(nType == 2) strSave.Format("%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sModelName, strLog);
 		else
 		{
-			strSave.Format("%s,%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sRecipe, strLog, "");
+			strSave.Format("%s,%s,%s,%s,%s\r\n", strTime, gData.sComName, gData.sModelName, strLog, "");
 		}
 		file.Write(strSave, strSave.GetLength());
 		file.Close();
@@ -857,7 +857,7 @@ void CLogFile::Save_ECMOutTray(const CString& sLog, int nTrayCount, int nPosX, i
 	strJudge = (nJudge == 1 ? "G" : (nJudge == 2 ? "N" : (nJudge == 4 ? "N1" : (nJudge == 5 ? "N2" : (nJudge == 6 ? "N3" : (nJudge == 7 ? "B" : (nJudge == 8 ? "N4" : " ")))))));
 	
 	strSave.Format("%s,%s,%s,%s,%d,%d,%s,%d,%d,%s\r\n", 
-		strTime, gData.sComName, gData.sRecipe, gLot.sLotID[nPortNo-1], nTrayCount, nPos, gMes.sBarID[nPx][nTx][nCx], nTrayNo, nCmNo, strJudge);
+		strTime, gData.sComName, gData.sModelName, gLot.sLotID[nPortNo-1], nTrayCount, nPos, gMes.sBarID[nPx][nTx][nCx], nTrayNo, nCmNo, strJudge);
 	strTitle.Format("Time,Station,Type,LotNum,Count,Position,Barcode,LoadTray,LoadPos,Judge\r\n");
 
 	CFile file;
@@ -924,13 +924,13 @@ void CLogFile::Save_CmTrackingLog(const CString& strOut, int nTrayCount, int nPo
 		if (strOut == "GOOD") {
 			strSave.Format("'%04d-%02d-%02d %02d:%02d:%02d.%03d,%s,%s,%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", 
 				time.wYear, time.wMonth, time.wDay,
-				time.wHour, time.wMinute, time.wSecond,time.wMilliseconds,gData.sComName, gData.sRecipe,gLot.sLotID[nPortNo-1], gMes.sBarID[nPx][nTx][nCx], strJudge, nPortNo, nTrayNo, nCmNo, 
+				time.wHour, time.wMinute, time.wSecond,time.wMilliseconds,gData.sComName, gData.sModelName,gLot.sLotID[nPortNo-1], gMes.sBarID[nPx][nTx][nCx], strJudge, nPortNo, nTrayNo, nCmNo, 
 				nAStageNo, nBtm1Pick, nIStageNo, nIStageJig, Btm2Pick, nBStageNo, nBStagePocket, nSortPickNo, nSortPickJig,
 				0, 0, 0, nTrayCount, nPosY+1, nPosX+1);
 		} else {
 			strSave.Format("'%04d-%02d-%02d %02d:%02d:%02d.%03d,%s,%s,%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", 
 				time.wYear, time.wMonth, time.wDay,
-				time.wHour, time.wMinute, time.wSecond,time.wMilliseconds, gData.sComName, gData.sRecipe,gLot.sLotID[nPortNo-1], gMes.sBarID[nPx][nTx][nCx], strJudge, nPortNo, nTrayNo, nCmNo, 
+				time.wHour, time.wMinute, time.wSecond,time.wMilliseconds, gData.sComName, gData.sModelName,gLot.sLotID[nPortNo-1], gMes.sBarID[nPx][nTx][nCx], strJudge, nPortNo, nTrayNo, nCmNo, 
 				nAStageNo, nBtm1Pick, nIStageNo, nIStageJig, Btm2Pick, nBStageNo, nBStagePocket, nSortPickNo, nSortPickJig,
 				nTrayCount, nPosY+1, nPosX+1, 0, 0, 0);
 		}
@@ -1171,7 +1171,7 @@ void CLogFile::Save_UnloadingTime(int nSNo, int nPNo)
 		if (gData.dwGoodTray2LoadingTime < 1) dOverlapTime = 0;
 		else								  dOverlapTime = (double)(gData.dwGoodTray1UnloadingTime - gData.dwGoodTray2LoadingTime) / 1000.0;
 
-		strSave.Format("%s,%s,%s,%s,%s,%s,%0.3lf,%0.3lf,%d,%d\r\n", strTime, szPcName, gData.sRecipe, gData.sLotID[nPort], gData.sGoodTray1LoadTime, gData.sGoodTray1UnloadTime,
+		strSave.Format("%s,%s,%s,%s,%s,%s,%0.3lf,%0.3lf,%d,%d\r\n", strTime, szPcName, gData.sModelName, gData.sLotID[nPort], gData.sGoodTray1LoadTime, gData.sGoodTray1UnloadTime,
 			dWorkingTime, dOverlapTime, gData.nCGoodTrayCount[nStage], nSNo);
 
 	} else {
@@ -1179,7 +1179,7 @@ void CLogFile::Save_UnloadingTime(int nSNo, int nPNo)
 		if (gData.dwGoodTray1LoadingTime < 1) dOverlapTime = 0;
 		else								  dOverlapTime = (double)(gData.dwGoodTray2UnloadingTime - gData.dwGoodTray1LoadingTime) / 1000.0;
 
-		strSave.Format("%s,%s,%s,%s,%s,%s,%0.3lf,%0.3lf,%d,%d\r\n", strTime, szPcName, gData.sRecipe, gData.sLotID[nPort], gData.sGoodTray2LoadTime, gData.sGoodTray2UnloadTime,
+		strSave.Format("%s,%s,%s,%s,%s,%s,%0.3lf,%0.3lf,%d,%d\r\n", strTime, szPcName, gData.sModelName, gData.sLotID[nPort], gData.sGoodTray2LoadTime, gData.sGoodTray2UnloadTime,
 			dWorkingTime, dOverlapTime, gData.nCGoodTrayCount[nStage], nSNo);
 	}
 	

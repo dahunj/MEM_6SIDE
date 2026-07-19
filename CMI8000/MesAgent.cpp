@@ -338,7 +338,7 @@ void CMesAgent::Set_IdleReport(CString sOperId, CString sCode, CString sText, CS
 void CMesAgent::Set_LotIDReport(int nType, CString sLotID, int nPortNo, CString sRecipe)
 {
 	CString strSend; 
-	strSend.Format("LOT,REPORT,%d,%s,%d,%s", nType, sLotID, nPortNo, gData.sRecipe);
+	strSend.Format("LOT,REPORT,%d,%s,%d,%s", nType, sLotID, nPortNo, sRecipe);
 	Send_Command(strSend);
 }
 

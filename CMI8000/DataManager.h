@@ -6,6 +6,7 @@
 // Equip Data
 typedef struct tag_EQUIP_DATA {
 	CString sEquipName;
+	CString sRecipeName;
 	int		nLotBarcodePort;
 	int		nScreenOff;
 	int		nNoWorkTime;

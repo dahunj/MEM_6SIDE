@@ -74,7 +74,7 @@
 #endif
 
 
-#define MAIN_VERSION	_T("V 3.5.2.0 MEM26")
+#define MAIN_VERSION	_T("V 3.7.0.0 MEM26")
 
 
 //---------------주석처리하면 SIMULATION-------------------------- 
@@ -108,7 +108,7 @@ typedef struct {
 
 	CString	sLotID[2];
 	CString	sOperID;				// Operator
-	CString	sRecipe;				// Model
+	CString	sModelName;				// Model
 
 	int		nTrayUseCount[2];		// 사용자 입력한 Tray 갯수
 	int		nCmUseCount[2];			// 사용자 입력한 CM 갯수

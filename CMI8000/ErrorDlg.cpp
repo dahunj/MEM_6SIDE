@@ -96,6 +96,8 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialogEx::OnShowWindow(bShow, nStatus);
 
+	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+
 	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
 	int nNo = 0;
 	if (gData.nLPNo > 0 || gData.nULPNo > 0) {
@@ -246,7 +248,8 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		if(m_nErrNo == 9006)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Equip: %s, Host %s,", gData.sRecipe, gMes.sHostRecipe);
+			strErrPick.Format(", Equip: %s, Host %s,", pEquipData->sRecipeName, gMes.sHostRecipe);
+			//strErrPick.Format(", Equip: %s, Host %s,", gData.sModelName, gMes.sHostRecipe);
 			
 		}
 
@@ -259,7 +262,8 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		if(m_nErrNo == 9008)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Equip: %s, Host %s,", gData.sRecipe, gMes.sHostRecipe);
+			strErrPick.Format(", Equip: %s, Host %s,", pEquipData->sRecipeName, gMes.sHostRecipe);
+			//strErrPick.Format(", Equip: %s, Host %s,", gData.sModelName, gMes.sHostRecipe);
 
 		}
 
@@ -273,7 +277,8 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		if(m_nErrNo == 3142)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Equip: %s, Host %s,", gData.sRecipe, gMes.sHostRecipe);
+			strErrPick.Format(", Equip: %s, Host %s,", pEquipData->sRecipeName, gMes.sHostRecipe);
+			//strErrPick.Format(", Equip: %s, Host %s,", gData.sModelName, gMes.sHostRecipe);
 			
 			
 		}

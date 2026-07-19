@@ -276,7 +276,8 @@ void CCapAttach::Set_LotStart(int nPortNo)
 	int nTrayUseCnt = gData.nTrayUseCount[nPortNo-1];
 	int nCmUseCnt = gData.nCmUseCount[nPortNo-1];
 
-	strSendCmd.Format("LOT,START,%s,%d,%d,%d,%s", strLotId, nPortNo, nTrayUseCnt, nCmUseCnt, gData.sRecipe);
+	strSendCmd.Format("LOT,START,%s,%d,%d,%d,%s", strLotId, nPortNo, nTrayUseCnt, nCmUseCnt, pEquipData->sRecipeName);
+	//strSendCmd.Format("LOT,START,%s,%d,%d,%d,%s", strLotId, nPortNo, nTrayUseCnt, nCmUseCnt, gData.sModelName);
 	Send_Command(strSendCmd);
 }
 

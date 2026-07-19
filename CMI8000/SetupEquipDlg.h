@@ -17,8 +17,9 @@ public:
 // 대화 상자 데이터입니다.
 	enum { IDD = IDD_SETUP_EQUIP_DLG };
 	CGroupCS	m_Group[8];
-	CLabelCS	m_Label[39];
+	CLabelCS	m_Label[40];
 	CStaticCS	m_stcEquipName;
+	CStaticCS	m_stcRecipeName;
 	CRadioCS	m_rdoModel[2];	// 0:R63B, 1:R64B
 	CComboCS	m_cboLotBarcodePort;
 	CStaticCS	m_stcScreenOff;
@@ -156,6 +157,7 @@ public:
 	afx_msg void OnBnClickedRdoDoorLock1();
 
 	afx_msg void OnBnClickedChkUseDryRun();
+	afx_msg void OnStnClickedStcRecipeName();
 };
 
 ///////////////////////////////////////////////////////////////////////////////

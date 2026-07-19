@@ -949,7 +949,7 @@ void CCMI8000Dlg::Enable_ModeButton(BOOL bEnable)
 void CCMI8000Dlg::Display_EquipName()
 {
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-	CString strText = pEquipData->sEquipName + " ( " + gData.sRecipe + " )";
+	CString strText = pEquipData->sEquipName + " ( " + gData.sModelName + " )";
 	m_stcMainEquip.SetWindowText(strText);
 }
 

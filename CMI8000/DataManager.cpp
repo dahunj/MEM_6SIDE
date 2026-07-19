@@ -24,6 +24,7 @@ CDataManager::~CDataManager()
 void CDataManager::Reset_EquipData()
 {
 	m_EquipData.sEquipName = "";
+	m_EquipData.sRecipeName = "";
 	m_EquipData.nLotBarcodePort = 0;
 	m_EquipData.nScreenOff = 0;
 	m_EquipData.nNoWorkTime = 0;
@@ -153,6 +154,7 @@ BOOL CDataManager::Read_EquipData()
 	gData.bUseDryRun = m_EquipData.bUseDryRun ;
 
 	m_EquipData.sEquipName = INI.Get_String("EQUIPMENT", "NAME", "");
+	m_EquipData.sRecipeName = INI.Get_String("EQUIPMENT", "RECIPE", "");
 	m_EquipData.nLotBarcodePort = INI.Get_Integer("EQUIPMENT", "LOT_BARCODE", 1);
 	m_EquipData.nScreenOff = INI.Get_Integer("EQUIPMENT", "SCREEN_OFF", 0);
 	m_EquipData.nNoWorkTime = INI.Get_Integer("EQUIPMENT", "NOWORK_TIME", 500000);
@@ -369,7 +371,7 @@ BOOL CDataManager::Read_ModelData()
 	if (!INI.Check_File()) { AfxMessageBox("ModelData.ini File Not Found!!!"); return FALSE; }
 	
 	CString strModel = INI.Get_String("MODEL", "NAME", "");
-	gData.sRecipe = (strModel == "" ? "R63B" : strModel);	// Default(R63B)
+	gData.sModelName = (strModel == "" ? "R63B" : strModel);	// Default(R63B)
 
 	gData.nTrayX = INI.Get_Integer("DATA", "TRAY_X", 4);
 	gData.nTrayY = INI.Get_Integer("DATA", "TRAY_Y", 3);
@@ -385,7 +387,7 @@ void CDataManager::Save_ModelData()
 	CIniFileCS INI(gData.sEnvPath + "\\ModelData.ini");
 	if (!INI.Check_File()) { AfxMessageBox("ModelData.ini File Not Found!!!"); return; }
 
-	INI.Set_String("MODEL", "NAME", gData.sRecipe);
+	INI.Set_String("MODEL", "NAME", gData.sModelName);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
