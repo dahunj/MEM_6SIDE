@@ -929,7 +929,7 @@ void CHost::Set_S6F11_ProductCompletedReport(CString sOperID, CString sLotID, CS
 	strSend += "  <ITEM>" + CRLF;
 	strSend += "    <CEID NAME=\"CEID\" VALUE=\"20401\" />" + CRLF;
 	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"20401\" />" + CRLF;
-	strSend += "    <DVLIST COUNT=\"12\">" + CRLF;
+	strSend += "    <DVLIST COUNT=\"13\">" + CRLF;
 	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"LOTID\" VALUE=\"" + sLotID + "\" />" + CRLF;
@@ -939,6 +939,7 @@ void CHost::Set_S6F11_ProductCompletedReport(CString sOperID, CString sLotID, CS
 	strSend += "      <DV NAME=\"REASONCODE\" VALUE=\"" + sReasonCode + "\" />" + CRLF;
 	strSend += "      <DV NAME=\"MODULEID\" VALUE=\"" + sBarcode + "\"/>" + CRLF;
 	strSend += "      <DV NAME=\"UNITNO\" VALUE=\"" + sUnitNo + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"HEADID\" VALUE=\"\" />" + CRLF;
 	strSend += "      <DV NAME=\"DATAQTY\" VALUE=\"1\" />" + CRLF;
 	strSend += "      <DV NAME=\"DATANAME1\" VALUE=\"NAME1\" />" + CRLF;
 	strSend += "      <DV NAME=\"DATAVALUE1\" VALUE=\"VALUE1\" />" + CRLF;
