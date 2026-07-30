@@ -3757,7 +3757,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 
 	case 1:		// Picker 
 		if(!g_objAJinAXL.Is_Done(AX_BTM1_PICKER_Z)) break;
-		if(!m_tBtm1PickLoop.Waiting_Time(50)) break;
+		if(!m_tBtm1PickLoop.Waiting_Time(100)) break;
 		if(!g_objCommon.Get_InfoBtm1PickerClose()) break;
 		//if(m_bBtm1ModulePick && !g_objCommon.Get_InfoBtm1PickerClose())break;
 		if ((g_objCommon.Check_Position(AX_BTM1_PICKER_X, 0) || g_objCommon.Check_Position(AX_BTM1_PICKER_X, 1) ||
@@ -3965,7 +3965,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 		if ( g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0) && g_objCommon.Get_InfoBtm1PickerVacOn() 
 			&& g_objCommon.Get_InfoBtm1PickerClose())
 		{
-			if(!m_tBtm1PickLoop.Waiting_Time(50)) break;
+			if(!m_tBtm1PickLoop.Waiting_Time(100)) break;
 			int nBtmX = 4 * nB1pRow;
 
 			g_objLogFile.Save_PositionLog(gData.nPNoBtm1Pick, gData.nTNoBtm1Pick[nBtmX], -1
