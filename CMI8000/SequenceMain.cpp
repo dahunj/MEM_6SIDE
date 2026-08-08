@@ -2165,13 +2165,15 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	gData.nTrayUseCount[nPx] = 0;	
 
 	gData.bLoadLampOn[nPx] = TRUE;
-
 	
-
 	gLot.bLotEndComplete[nPx] = TRUE;
 
 	gData.nTrayUseCount[nPx] = 0;
 	gData.nCmUseCount[nPx] = 0;
+
+	for (int i = 0; i < 30; i++) for (int j = 0; j < 40; j++) gMes.sBarID[nPx][i][j] = gMes.sJudge[nPx][i][j] = gMes.sNGCode[nPx][i][j] = "";
+	for (int i = 0; i < 30; i++) for (int j = 0; j < 40; j++) for (int k = 0; k < 7; k++) gData.sNGData[nPx][i][j][k] = "";
+
 
 	gData.nTrayCntNG[nPx][2] = 1;
 	gData.nTrayCntNG[nPx][3] = 1;
@@ -3857,7 +3859,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 
 	case 1:		// Picker 
 		if(!g_objAJinAXL.Is_Done(AX_BTM1_PICKER_Z)) break;
-		if(!m_tBtm1PickLoop.Waiting_Time(100)) break;
+		if(!m_tBtm1PickLoop.Waiting_Time(50)) break;
 		if(!g_objCommon.Get_InfoBtm1PickerClose()) break; 		
 		if ((g_objCommon.Check_Position(AX_BTM1_PICKER_X, 0) || g_objCommon.Check_Position(AX_BTM1_PICKER_X, 1) ||
 			g_objCommon.Check_Position(AX_BTM1_PICKER_X, 2) || g_objCommon.Check_Position(AX_BTM1_PICKER_X, 3)) && 
@@ -4066,7 +4068,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 		if ( g_objCommon.Check_Position(AX_BTM1_PICKER_Z, 0) && g_objCommon.Get_InfoBtm1PickerVacOn() 
 			&& g_objCommon.Get_InfoBtm1PickerClose())
 		{
-			if(!m_tBtm1PickLoop.Waiting_Time(100)) break;
+			if(!m_tBtm1PickLoop.Waiting_Time(50)) break;
 			int nBtmX = 4 * nB1pRow;
 
 			g_objLogFile.Save_PositionLog(gData.nPNoBtm1Pick, gData.nTNoBtm1Pick[nBtmX], -1
