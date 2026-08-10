@@ -6339,15 +6339,25 @@ BOOL CSequenceMain::Btm2Picker_Run()
 		break;
 	case 4:		// Picker Vaccum On & Stage Vacuum Off
 		if (!m_tBtm2PickLoop.Waiting_Time(50)) break;	// Btm2 Close Delay
-		if (g_objCommon.Get_InfoBtm2Close()) {
-			
-
-			g_objCommon.Set_InfoBtm2VacOn();					// Picker Vac On
+		if (g_objCommon.Get_InfoBtm2Close()) 
+		{			
 			g_objCommon.Set_InspectVacOff(nB2pInspStageNo, 0);	// Stage Vac Off
-
-			m_nBtm2PickCase++; m_tBtm2PickLoop.Set_LoopTime(5000);
+			m_nBtm2PickCase = -1; m_tBtm2PickLoop.Set_LoopTime(5000);
 			m_tBtm2PickLoop.Takt_End(nTaktZone, 3);
 			m_tBtm2PickLoop.Takt_Start(nTaktZone, 4);
+		}
+		break;
+	case -1:
+		if(g_objCommon.Get_InspectVacOff(nB2pInspStageNo, 0))
+		{
+			g_objCommon.Set_InfoBtm2VacOn();					// Picker Vac On
+			m_nBtm2PickCase = -2; m_tBtm2PickLoop.Set_LoopTime(5000);
+		}		
+		break;
+	case -2:
+		if(g_objCommon.Get_InfoBtm2VacOn())
+		{
+			m_nBtm2PickCase = 5; m_tBtm2PickLoop.Set_LoopTime(5000);
 		}
 		break;
 	case 5:		// Picker Up
