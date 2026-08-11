@@ -3940,12 +3940,12 @@ BOOL CSequenceMain::Btm1Picker_Run()
 				if (Check_Btm1PickerFull() || Check_LoadLotEnd(gData.nPNoBtm1Pick, 1)) 
 				{ 
 					nB1pTrayPosY++;					
-					m_nBtm1PickCase = 7; m_tBtm1PickLoop.Set_LoopTime(60000); 
+					m_nBtm1PickCase = 7; m_tBtm1PickLoop.Set_LoopTime(20000); 
 				}
 				else
 				{ 
 					
-					 m_nBtm1PickCase = 1; m_tBtm1PickLoop.Set_LoopTime(60000); 
+					 m_nBtm1PickCase = 1; m_tBtm1PickLoop.Set_LoopTime(20000); 
 				}
 			} 
 			else 
