@@ -3854,7 +3854,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 	switch (m_nBtm1PickCase) {
 	case 0:		// Wait for Angle Tray L1 Position
 		if (m_nAngleTray1Case == 20 || m_nAngleTray2Case == 20) {
-			m_nBtm1PickCase++;
+			m_nBtm1PickCase++;m_tBtm1PickLoop.Set_LoopTime(600000);
 		}
 		return TRUE;
 
@@ -4040,11 +4040,11 @@ BOOL CSequenceMain::Btm1Picker_Run()
 				if (Check_Btm1PickerFull() || Check_LoadLotEnd(gData.nPNoBtm1Pick, 1)) 
 				{ 
 					nB1pTrayPosY++;					
-					m_nBtm1PickCase = 7; m_tBtm1PickLoop.Set_LoopTime(5000); 
+					m_nBtm1PickCase = 7; m_tBtm1PickLoop.Set_LoopTime(15000); 
 				}
 				else
 				{ 					
-					m_nBtm1PickCase = 1; m_tBtm1PickLoop.Set_LoopTime(20000); 
+					m_nBtm1PickCase = 1; m_tBtm1PickLoop.Set_LoopTime(15000); 
 				}
 			} 
 			else 
