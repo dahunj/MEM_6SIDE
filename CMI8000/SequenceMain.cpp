@@ -3750,7 +3750,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 	case 0:		// Wait for Angle Tray L1 Position
 		if (m_nAngleTray1Case == 20 || m_nAngleTray2Case == 20) {
 			m_nBtm1PickCase++;
-			m_nBtm1PickCase++; m_tBtm1PickLoop.Set_LoopTime(600000);
+			 m_tBtm1PickLoop.Set_LoopTime(15000);
 		}
 		return TRUE;
 
