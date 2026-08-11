@@ -3751,7 +3751,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 	switch (m_nBtm1PickCase) {
 	case 0:		// Wait for Angle Tray L1 Position
 		if (m_nAngleTray1Case == 20 || m_nAngleTray2Case == 20) {
-			m_nBtm1PickCase++;
+			m_nBtm1PickCase++; m_tBtm1PickLoop.Set_LoopTime(600000);
 		}
 		return TRUE;
 
@@ -3941,7 +3941,7 @@ BOOL CSequenceMain::Btm1Picker_Run()
 				if (Check_Btm1PickerFull() || Check_LoadLotEnd(gData.nPNoBtm1Pick, 1)) 
 				{ 
 					nB1pTrayPosY++;					
-					m_nBtm1PickCase = 7; m_tBtm1PickLoop.Set_LoopTime(5000); 
+					m_nBtm1PickCase = 7; m_tBtm1PickLoop.Set_LoopTime(20000); 
 				}
 				else
 				{ 
@@ -6334,15 +6334,27 @@ BOOL CSequenceMain::Btm2Picker_Run()
 		break;
 	case 4:		// Picker Vaccum On & Stage Vacuum Off
 		if (!m_tBtm2PickLoop.Waiting_Time(50)) break;	// Btm2 Close Delay
-		if (g_objCommon.Get_InfoBtm2Close()) {
-			
-
+		if (g_objCommon.Get_InfoBtm2Close()) 
+		{
 			g_objCommon.Set_InfoBtm2VacOn();					// Picker Vac On
 			g_objCommon.Set_InspectVacOff(nB2pInspStageNo, 0);	// Stage Vac Off
 
-			m_nBtm2PickCase++; m_tBtm2PickLoop.Set_LoopTime(5000);
+			m_nBtm2PickCase = -1; m_tBtm2PickLoop.Set_LoopTime(5000);
 			m_tBtm2PickLoop.Takt_End(nTaktZone, 3);
 			m_tBtm2PickLoop.Takt_Start(nTaktZone, 4);
+		}
+		break;
+	case -1:
+		if(g_objCommon.Get_InspectVacOff(nB2pInspStageNo, 0))
+		{
+			g_objCommon.Set_InfoBtm2VacOn();                    // Picker Vac On
+			m_nBtm2PickCase = -2; m_tBtm2PickLoop.Set_LoopTime(5000);
+		}        
+		break;
+	case -2:
+		if(g_objCommon.Get_InfoBtm2VacOn())
+		{
+			m_nBtm2PickCase = 5; m_tBtm2PickLoop.Set_LoopTime(5000);
 		}
 		break;
 	case 5:		// Picker Up
