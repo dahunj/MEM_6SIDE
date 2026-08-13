@@ -1439,7 +1439,7 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 				// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 				gData.nInspectInfo[nPx][nTx][nCx] = 4;
 				gMes.sJudge[nPx][nTx][nCx] = "N1";
-				gMes.sNGCode[nPx][nTx][nCx].Empty();
+				gMes.sNGCode[nPx][nTx][nCx] = "TimeOut";
 				strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
 				g_objLogFile.Save_HandlerLog(strLog);
 			} 
@@ -1577,7 +1577,7 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 			if (m_pEquipData->bUseInspectSkip || ((dwTick - gData.dwSkipTime_Sort2)  > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 				gData.nInspectInfo[nPx][nTx][nCx] = 4;
 				gMes.sJudge[nPx][nTx][nCx] = "N1";
-				gMes.sNGCode[nPx][nTx][nCx].Empty();
+				gMes.sNGCode[nPx][nTx][nCx] = "TimeOut";
 				strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
 				g_objLogFile.Save_HandlerLog(strLog);
 			} else {
