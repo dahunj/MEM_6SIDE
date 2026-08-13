@@ -2177,7 +2177,8 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	gData.nTrayCntNG[nPx][0] = gData.nTrayCntNG[nPx][2] + 1;
 	gData.nTrayCntNG[nPx][1] = gData.nTrayCntNG[nPx][3] + 1;
 
-
+	for (int i = 0; i < 30; i++) for (int j = 0; j < 40; j++) gMes.sBarID[nPx][i][j] = gMes.sJudge[nPx][i][j] = gMes.sNGCode[nPx][i][j] = "";
+	for (int i = 0; i < 30; i++) for (int j = 0; j < 40; j++) for (int k = 0; k < 7; k++) gData.sNGData[nPx][i][j][k] = "";
 	
 
 	g_dlgWork.PostMessage(UM_LOT_INFO_CLEAR, nPx, NULL);
