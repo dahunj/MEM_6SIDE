@@ -198,6 +198,7 @@ void CSetupEquipDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 
 	int nTempSy = atoi(m_pEquipData->sPasswordSi);
+	int nTempOp = atoi(m_pEquipData->sPasswordOP);
 
 	Set_Enable(TRUE);
 	if(gData.nLogInLevel == 9300)
@@ -212,15 +213,21 @@ void CSetupEquipDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		m_rdoDoorLock[0].ShowWindow(SW_SHOW);
 		m_rdoDoorLock[1].ShowWindow(SW_SHOW);
 	}
-	else
-	{		
+	else if(gData.nLogInLevel == nTempOp)
+	{
 		Set_Enable(FALSE);
 
 		m_pEquipData->bUseDoorLock = TRUE;
 		INI.Set_Bool("EQUIPMENT", "DOOR_LOCK", TRUE);
-		m_lblDoorLock.ShowWindow(SW_HIDE);
-		m_rdoDoorLock[0].ShowWindow(SW_HIDE);
-		m_rdoDoorLock[1].ShowWindow(SW_HIDE);
+		m_lblDoorLock.ShowWindow(SW_SHOW);
+		m_rdoDoorLock[0].ShowWindow(SW_SHOW);
+		m_rdoDoorLock[1].ShowWindow(SW_SHOW);
+	}
+	else
+	{				
+		m_lblDoorLock.ShowWindow(SW_SHOW);
+		m_rdoDoorLock[0].ShowWindow(SW_SHOW);
+		m_rdoDoorLock[1].ShowWindow(SW_SHOW);
 	}
 
 	m_grpHidden.ShowWindow(SW_HIDE);
