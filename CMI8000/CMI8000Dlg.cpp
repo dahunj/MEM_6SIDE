@@ -1175,34 +1175,37 @@ void CCMI8000Dlg::Set_HourlyTimer()
 void CCMI8000Dlg::Set_DoorLock()
 {
 	EQUIP_DATA *m_pEquipData = g_objDataManager.Get_pEquipData();
-	if (m_pEquipData->bUseDoorLock) return;
-	if (gData.dwDoorStartTime <= 0) gData.dwDoorStartTime = GetTickCount();
-
-	DWORD dwCurrentTime = GetTickCount();
-	DWORD dwDoorEndTime = DWORD(gData.nDoorLockTime) * 60 * 1000;	//분
-	if (dwCurrentTime - gData.dwDoorStartTime >= dwDoorEndTime) {
-		CIniFileCS INI(gData.sEnvPath + "\\EquipData.ini");
-		if (!INI.Check_File()) return;
-		INI.Set_Bool("EQUIPMENT", "DOOR_LOCK", TRUE);
-
-		g_objLogFile.Save_HandlerLog("Door Lock을 Auto로 설정 하였습니다...");
-
+	if (m_pEquipData->bUseDoorLock)
+	{
 		gData.dwDoorStartTime = 0;
-		g_objDataManager.Read_EquipData();
+		return;
+	}	
+	if (gData.nDoorLockTime == 0)  return;
 
-		SaveLog_DoorInterlock(FALSE, 1);
+	if (gData.dwDoorStartTime == 0) gData.dwDoorStartTime = GetTickCount();	
 
-		if(gData.bWasUnlock){
-			gData.tDoorUnlockEnd = CTime::GetCurrentTime();
-			gData.tsDoorUnlockTotal += gData.tDoorUnlockEnd - gData.tDoorUnlockStart;
-			gData.tDoorUnlockEnd = CTime();
-			gData.tDoorUnlockStart = CTime();
-			gData.bWasUnlock = FALSE;
-		}
+	DWORD dwDoorLockTerm = DWORD(gData.nDoorLockTime) * 60 * 1000;	// 분
+	if (GetTickCount() - gData.dwDoorStartTime < dwDoorLockTerm) return;
 
-		//		CWorkDlg *pWorkDlg = CWorkDlg::Get_Instance();
-		//		pWorkDlg->PostMessage(UM_UPDATE_MODEL, NULL, NULL);
+	CIniFileCS INI(gsCurrentDir + "\\System\\EquipData.ini");
+	if (!INI.Check_File()) return;
+	INI.Set_Bool("EQUIPMENT", "DOOR_LOCK", TRUE);
+	m_pEquipData->bUseDoorLock = TRUE;
+
+	g_objDataManager.Read_EquipData();
+	
+	SaveLog_DoorInterlock(FALSE, 1);
+
+	if(gData.bWasUnlock)
+	{
+		gData.tDoorUnlockEnd = CTime::GetCurrentTime();
+		gData.tsDoorUnlockTotal += gData.tDoorUnlockEnd - gData.tDoorUnlockStart;
+		gData.tDoorUnlockEnd = CTime();
+		gData.tDoorUnlockStart = CTime();
+		gData.bWasUnlock = FALSE;
 	}
+
+	g_objLogFile.Save_HandlerLog("Door Lock 시간이 경과되어 Door Lock이 설정 되었습니다.");
 }
 
 void CCMI8000Dlg::SaveLog_DoorInterlock(BOOL bFirst, int Type)

@@ -463,8 +463,8 @@ int CCommon::Show_KeyPad(CString &sKey)
 
 int CCommon::Show_Password(int &nUser)
 {
-	if(gData.sOperID == "SY")
-	{
+	if(gData.sOperID == "SY/Synapse")
+	{		
 		return IDOK;
 	}	
 
@@ -499,8 +499,9 @@ BOOL CCommon::Check_MainDoor(BOOL bAuto)
 	int nTempSy = atoi(pEquipData->sPasswordSi); 
 	int nTempOp = atoi(pEquipData->sPasswordOP); 
 	
-	if(gData.sOperID == "SY")
+	if(gData.sOperID == "SY/Synapse")
 	{
+		
 		return TRUE;
 	}	
 	else if(gData.bUseDryRun)
@@ -780,13 +781,13 @@ void CCommon::Btm1BlowSunctionOnOff(BOOL bOn)
 		pDY09->oBtm1BlowOnOff = TRUE;
 
 		pDY09->oBtm1SuctionOn = TRUE;
-		pDY09->oBtm1SuctionRelease = FALSE;
+		pDY09->oBtm1SuctionRelease = TRUE;
 	}
 	else{
 		pDY09->oBtm1BlowOnOff = FALSE;
 
 		pDY09->oBtm1SuctionOn = FALSE;
-		pDY09->oBtm1SuctionRelease = TRUE;
+		pDY09->oBtm1SuctionRelease = FALSE;
 	}
 
 	g_objAJinAXL.Write_Output(9);
@@ -805,13 +806,13 @@ void CCommon::TopBlowSunctionOnOff(BOOL bOn)
 		pDY09->oTopBlowOnOff = TRUE;
 
 		pDY09->oTopSuctionOn = TRUE;
-		pDY09->oTopSuctionRelease = FALSE;
+		pDY09->oTopSuctionRelease = TRUE;
 	}
 	else{
 		pDY09->oTopBlowOnOff = FALSE;
 
 		pDY09->oTopSuctionOn = FALSE;
-		pDY09->oTopSuctionRelease = TRUE;
+		pDY09->oTopSuctionRelease = FALSE;
 	}
 
 	g_objAJinAXL.Write_Output(9);

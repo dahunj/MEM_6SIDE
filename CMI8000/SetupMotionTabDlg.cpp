@@ -177,7 +177,7 @@ void CSetupMotionTabDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 		int nPasswordOP = atoi(pEquipData->sPasswordOP);
 
-		if (gData.nLogInLevel == nPasswordOP) // SI User
+		if (gData.nLogInLevel == nPasswordOP || gData.nLogInLevel == 9300 ) // SI User
 		{	
 			m_stcAbsDist[i].EnableWindow(TRUE);
 			m_btnAbsMove[i].EnableWindow(TRUE);

@@ -196,6 +196,7 @@ void CSetupEquipDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 
 
 	int nTempSy = atoi(m_pEquipData->sPasswordSi);
+	int nTempOp = atoi(m_pEquipData->sPasswordOP);
 
 	Set_Enable(TRUE);
 	if(gData.nLogInLevel == 9300)
@@ -210,15 +211,21 @@ void CSetupEquipDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		m_rdoDoorLock[0].ShowWindow(SW_SHOW);
 		m_rdoDoorLock[1].ShowWindow(SW_SHOW);
 	}
-	else
-	{		
+	else if(gData.nLogInLevel == nTempOp)
+	{
 		Set_Enable(FALSE);
 
 		m_pEquipData->bUseDoorLock = TRUE;
 		INI.Set_Bool("EQUIPMENT", "DOOR_LOCK", TRUE);
-		m_lblDoorLock.ShowWindow(SW_HIDE);
-		m_rdoDoorLock[0].ShowWindow(SW_HIDE);
-		m_rdoDoorLock[1].ShowWindow(SW_HIDE);
+		m_lblDoorLock.ShowWindow(SW_SHOW);
+		m_rdoDoorLock[0].ShowWindow(SW_SHOW);
+		m_rdoDoorLock[1].ShowWindow(SW_SHOW);
+	}
+	else
+	{				
+		m_lblDoorLock.ShowWindow(SW_SHOW);
+		m_rdoDoorLock[0].ShowWindow(SW_SHOW);
+		m_rdoDoorLock[1].ShowWindow(SW_SHOW);
 	}
 
 	m_grpHidden.ShowWindow(SW_HIDE);
@@ -705,9 +712,8 @@ void CSetupEquipDlg::Display_EquipData()
 		pMainDlg->m_stcMainEquip.Init_Ctrl("Segoe UI", 14, TRUE, RGB(0x00, 0x00, 0x00), RGB(0xE6, 0xE6, 0xE6));
 	}
 
-
 	m_stcEquipName.SetWindowText(pEquipData->sEquipName);
-	gData.sRecipe == "R54B" ? m_rdoModel[1].SetCheck(TRUE) : m_rdoModel[0].SetCheck(TRUE);
+	gData.sRecipe == "R64B" ? m_rdoModel[1].SetCheck(TRUE) : m_rdoModel[0].SetCheck(TRUE);
 	m_cboLotBarcodePort.SetCurSel(pEquipData->nLotBarcodePort - 1);
 	strData.Format("%d", pEquipData->nScreenOff); m_stcScreenOff.SetWindowText(strData);
 	strData.Format("%d", pEquipData->nNoWorkTime); m_stcNoWorkTime.SetWindowText(strData);

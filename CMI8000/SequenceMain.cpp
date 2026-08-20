@@ -4560,39 +4560,44 @@ BOOL CSequenceMain::Inspection1_Run()
 			
 			m_pDY06->oCmAlignMasterOpen = FALSE; m_pDY06->oCmAlignMasterClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect1Case = 9; m_tInspect1Loop.Set_LoopTime(5000);
+			m_nInspect1Case = -1; m_tInspect1Loop.Set_LoopTime(5000);
 
 			m_tInspect1Loop.Takt_End(nTaktZone,2);
 			m_tInspect1Loop.Takt_Start(nTaktZone, 3);
 		}
 		break;
-	case 9: //Slave Close
+	case -1: //Slave Close
 		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose)
 		{
-		
-			//g_objCommon.Set_InspectVacOff(1, 0);	// Vac Off
-			//if(!m_tInspect1Loop.Waiting_Time(400)) break;
-
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
 
 			m_tInspect1Loop.Takt_End(nTaktZone,3); 
 			m_tInspect1Loop.Takt_Start(nTaktZone,9); 
-			m_nInspect1Case = 4; m_tInspect1Loop.Set_LoopTime(10000);
+			m_nInspect1Case = -2; m_tInspect1Loop.Set_LoopTime(10000);
 			bTaktSave1 = FALSE;
 		}
+		break;
+	case -2:
+		if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
+			!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose &&
+			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose) 
+		{		
+			g_objCommon.Set_InspectVacOff(1, 0);	// Vac Off
+			m_nInspect1Case = -3; m_tInspect1Loop.Set_LoopTime(10000);
+		}
+		break;
+	case -3:
+		if(!m_tInspect1Loop.Waiting_Time(300)) break;
+		g_objCommon.Set_InfoInspectVacOn(1, 1);	// Vac On
+		m_nInspect1Case = 4; m_tInspect1Loop.Set_LoopTime(10000);
 		break;
 
 	case 4:		// CM Align Vac On and Slave Open
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE1_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
 			!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose &&
-			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose) 
-		{		
-			g_objCommon.Set_InfoInspectVacOn(1, 1);	// Vac On
-
-			// io WRITE를 동시에 하면 씹힐수 있어서 딜레이 추가
-			if (!m_tInspect1Loop.Waiting_Time(10)) return TRUE;
-
+			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose ) 
+		{				
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
 
@@ -4603,7 +4608,7 @@ BOOL CSequenceMain::Inspection1_Run()
 		}
 		break;
 	case 5:
-		if(m_pDX06->iCmAlignSlaveOpen && !m_pDX06->iCmAlignSlaveClose)
+		if(m_pDX06->iCmAlignSlaveOpen && !m_pDX06->iCmAlignSlaveClose )
 		{
 			if (!m_tInspect1Loop.Waiting_Time(300)) return TRUE;
 			m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
@@ -4616,7 +4621,8 @@ BOOL CSequenceMain::Inspection1_Run()
 		break;
 	case 6:		// Align Z Axis Move to Ready Up Position
 		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Y, 0) && g_objCommon.Get_InfoInspectVacOn(1) &&
-			m_pDX06->iCmAlignMasterOpen && !m_pDX06->iCmAlignMasterClose && m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose ) {
+			m_pDX06->iCmAlignMasterOpen && !m_pDX06->iCmAlignMasterClose 
+			&& m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose ) {
 			
 			//if(!m_tInspect1Loop.Waiting_Time(100)) break;
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 0);
@@ -5155,13 +5161,13 @@ BOOL CSequenceMain::Inspection2_Run()
 			
 			m_pDY06->oCmAlignMasterOpen = FALSE; m_pDY06->oCmAlignMasterClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect2Case = 9; m_tInspect2Loop.Set_LoopTime(5000);
+			m_nInspect2Case = -1; m_tInspect2Loop.Set_LoopTime(5000);
 
 			m_tInspect2Loop.Takt_End(nTaktZone,2);
 			m_tInspect2Loop.Takt_Start(nTaktZone, 3);
 		}
 		break;
-	case 9: //Slave Close
+	case -1: //Slave Close
 		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose)
 		{		
 			//g_objCommon.Set_InspectVacOff(2, 0);	// Vac Off
@@ -5175,16 +5181,25 @@ BOOL CSequenceMain::Inspection2_Run()
 			m_tInspect2Loop.Takt_Start(nTaktZone,9); 
 		}
 		break;
+	case -2:
+		if (g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
+			!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose &&
+			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose) 
+		{		
+			g_objCommon.Set_InspectVacOff(2, 0);	// Vac Off
+			m_nInspect2Case = -3; m_tInspect2Loop.Set_LoopTime(10000);
+		}
+		break;
+	case -3:
+		if(!m_tInspect2Loop.Waiting_Time(300)) break;
+		g_objCommon.Set_InfoInspectVacOn(2, 1);	// Vac On
+		m_nInspect2Case = 4; m_tInspect2Loop.Set_LoopTime(10000);
+		break;
 	case 4:		// CM Align Slave Open
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
 			!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose &&
-			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose)
+			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose )
 		{
-			g_objCommon.Set_InfoInspectVacOn(2, 1);	// Vac On
-
-			// io WRITE를 동시에 하면 씹힐수 있어서 딜레이 추가
-			if (!m_tInspect2Loop.Waiting_Time(10)) return TRUE;
-
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;			
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect2Case = 5; m_tInspect2Loop.Set_LoopTime(5000); 
@@ -5735,17 +5750,15 @@ BOOL CSequenceMain::Inspection3_Run()
 			
 			m_pDY06->oCmAlignMasterOpen = FALSE; m_pDY06->oCmAlignMasterClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect3Case = 9; m_tInspect3Loop.Set_LoopTime(5000); 
+			m_nInspect3Case = -1; m_tInspect3Loop.Set_LoopTime(5000); 
 
 			m_tInspect3Loop.Takt_End(nTaktZone,2);
 			m_tInspect3Loop.Takt_Start(nTaktZone, 3);
 		}
 		break;
-	case 9: //Slave Close
+	case -1: //Slave Close
 		if(!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose)
 		{		
-			//g_objCommon.Set_InspectVacOff(3, 0);	// Vac Off
-			//if(!m_tInspect3Loop.Waiting_Time(400)) break;
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
 			m_nInspect3Case = 4; m_tInspect3Loop.Set_LoopTime(5000);
@@ -5754,16 +5767,25 @@ BOOL CSequenceMain::Inspection3_Run()
 			m_tInspect3Loop.Takt_Start(nTaktZone,9); 			
 		}
 		break;
-	case 4:		// CM Align Slave Open
+	case -2:
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
 			!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose &&
 			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose) 
+		{		
+			g_objCommon.Set_InspectVacOff(3, 0);	// Vac Off
+			m_nInspect3Case = -3; m_tInspect3Loop.Set_LoopTime(10000);
+		}
+		break;
+	case -3:
+		if(!m_tInspect3Loop.Waiting_Time(300)) break;
+		g_objCommon.Set_InfoInspectVacOn(3, 1);	// Vac On
+		m_nInspect3Case = 4; m_tInspect3Loop.Set_LoopTime(10000);
+		break;
+	case 4:		// CM Align Slave Open
+		if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
+			!m_pDX06->iCmAlignMasterOpen && m_pDX06->iCmAlignMasterClose &&
+			!m_pDX06->iCmAlignSlaveOpen  && m_pDX06->iCmAlignSlaveClose  ) 
 		{				
-			g_objCommon.Set_InfoInspectVacOn(3, 1);	// Vac On
-
-			// io WRITE를 동시에 하면 씹힐수 있어서 딜레이 추가
-			if (!m_tInspect3Loop.Waiting_Time(10)) return TRUE;
-
 			m_pDY06->oCmAlignSlaveOpen = TRUE;  m_pDY06->oCmAlignSlaveClose = FALSE;
 			//m_pDY06->oCmAlignMasterOpen = TRUE;  m_pDY06->oCmAlignMasterClose = FALSE;
 			g_objAJinAXL.Write_Output(6);
@@ -5788,7 +5810,7 @@ BOOL CSequenceMain::Inspection3_Run()
 	case 6:		// Align Z Axis Move to Ready Up Position
 		if (g_objCommon.Check_Position(AX_MODULE_ALIGN_Y, 0) &&
 			m_pDX06->iCmAlignMasterOpen && !m_pDX06->iCmAlignMasterClose &&
-			m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose) 
+			m_pDX06->iCmAlignSlaveOpen  && !m_pDX06->iCmAlignSlaveClose && g_objCommon.Get_InfoInspectVacOn(3) ) 
 		{
 			//if(!m_tInspect3Loop.Waiting_Time(100)) break;
 			g_objCommon.Move_Position(AX_MODULE_ALIGN_Z, 0);

@@ -60,8 +60,25 @@ BOOL CPasswordDlg::PreTranslateMessage(MSG* pMsg)
 	if (pMsg->message == WM_KEYDOWN) {
 		if (pMsg->wParam == VK_ESCAPE) return TRUE;
 		if (pMsg->wParam == VK_RETURN) { OnBnClickedBtnOk(); return TRUE; }
+		/*if (pMsg->wParam == VK_BACK) { OnBnClickedBtnBack(); return TRUE; }
+		if (pMsg->wParam == VK_DELETE) { OnBnClickedBtnBack(); return TRUE; }*/
 	}
 
+	if (pMsg->message == WM_CHAR) {
+		TCHAR tChar[256];
+		tChar[0] = pMsg->wParam;
+		tChar[1] = NULL;
+
+		if ((tChar[0] >= '0' && tChar[0] <= '9') ||
+			(tChar[0] >= 'a' && tChar[0] <= 'z') ||
+			(tChar[0] >= 'A' && tChar[0] <= 'Z') ||
+			(tChar[0] == '-') || (tChar[0] == '_')) {
+				CString strKeyName, sData;
+				sData = tChar;	sData.MakeUpper();
+				m_edtPassword.GetWindowText(strKeyName);
+				m_edtPassword.SetWindowText(strKeyName);
+		}
+	}
 	return CDialogEx::PreTranslateMessage(pMsg);
 }
 
