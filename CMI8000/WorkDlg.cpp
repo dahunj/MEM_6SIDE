@@ -455,7 +455,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			m_bAutoRunning = FALSE;
 
 			g_objLogFile.Save_HandlerLog("[Work Mode] Main Thread End");
-			g_objSequenceMain.End_MainRunThread();
+			g_objSequenceMain.End_MainRunThread(3000);
 
 			g_objLogFile.Save_HandlerLog("[Work Mode] Main Thread End Complete");
 			g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);		// °­Á¦ STOP
