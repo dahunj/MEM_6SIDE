@@ -282,16 +282,16 @@ void CSequenceMain::Begin_MainRunThread()
 	g_objDispatcher.Set_StatusUpdate(1);
 	g_objCapAttach.Set_StatusUpdate(1);
 
-	if (m_pThreadMainRun) End_MainRunThread();
+	if (m_pThreadMainRun) End_MainRunThread(INFINITE);
 	m_bThreadMainRun = TRUE;
 	m_pThreadMainRun = AfxBeginThread(Thread_MainRun, NULL);
 }
 
-void CSequenceMain::End_MainRunThread()
+void CSequenceMain::End_MainRunThread(DWORD dwWait)
 {
 	if (m_pThreadMainRun) {
 		m_bThreadMainRun = FALSE;
-		WaitForSingleObject(m_pThreadMainRun->m_hThread, INFINITE);
+		WaitForSingleObject(m_pThreadMainRun->m_hThread, dwWait);
 	}
 }
 

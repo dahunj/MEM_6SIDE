@@ -279,7 +279,7 @@ public:
 	DWORD	m_dwULCycleTime;		//  Unload 시작한 Tray와 다음 Tray Unload 시작되는 Cycle Time 저장해준다.
 
 	void Begin_MainRunThread();
-	void End_MainRunThread();
+	void End_MainRunThread(DWORD dwWait);
 	void Run_Replay();
 	
 	BOOL Is_MainThreadRun() { return m_bThreadMainRun; }
