@@ -52,8 +52,8 @@ void CDataManager::Reset_EquipData()
 	m_EquipData.dInspectPitchX = 0.0;
 	m_EquipData.dInspectPitchY = 0.0;
 
-	for (int i = 0; i < 4; i++) m_EquipData.nVacOffDelay[i] = 0;
-	for (int i = 0; i < 4; i++) m_EquipData.nVacOffRepeat[i] = 0;
+	for (int i = 0; i < 5; i++) m_EquipData.nVacOffDelay[i] = 0;
+	for (int i = 0; i < 5; i++) m_EquipData.nVacOffRepeat[i] = 0;
 	for (int i = 0; i < 5; i++) m_EquipData.nDelayAdd[i] = 0;
 
 	for (int i = 0; i < 6; i++) for (int j = 0; j < 4; j++) m_EquipData.bTower[i][j] = FALSE;
@@ -218,8 +218,8 @@ BOOL CDataManager::Read_EquipData()
 
 	m_EquipData.dNgBufferPitchX = INI.Get_Double ("NG_BUFFER", "PITCH_X", 0.0);
 
-	for (int i = 0; i < 4; i++) { strKey.Format("%d", i); m_EquipData.nVacOffDelay[i] = INI.Get_Integer("VAC_OFF_DELAY", strKey, 30); }
-	for (int i = 0; i < 4; i++) { strKey.Format("%d", i); m_EquipData.nVacOffRepeat[i] = INI.Get_Integer("VAC_OFF_REPEAT", strKey, 3); }
+	for (int i = 0; i < 5; i++) { strKey.Format("%d", i); m_EquipData.nVacOffDelay[i] = INI.Get_Integer("VAC_OFF_DELAY", strKey, 30); }
+	for (int i = 0; i < 5; i++) { strKey.Format("%d", i); m_EquipData.nVacOffRepeat[i] = INI.Get_Integer("VAC_OFF_REPEAT", strKey, 3); }
 	for (int i = 0; i < 4; i++) { strKey.Format("%d", i); m_EquipData.nDelayAdd[i] = INI.Get_Integer("DELAY_ADD", strKey, 100); }
 	for (int i = 4; i < 5; i++) { strKey.Format("%d", i); m_EquipData.nDelayAdd[i] = INI.Get_Integer("DELAY_ADD", strKey, 30000); }	// Sort Picker 검사 대기 기본 30초
 	

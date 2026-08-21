@@ -4588,9 +4588,11 @@ BOOL CSequenceMain::Inspection1_Run()
 		}
 		break;
 	case -3:
-		if(!m_tInspect1Loop.Waiting_Time(300)) break;
-		g_objCommon.Set_InfoInspectVacOn(1, 1);	// Vac On
-		m_nInspect1Case = 4; m_tInspect1Loop.Set_LoopTime(10000);
+		if(m_tInspect1Loop.Waiting_Time(m_pEquipData->nVacOffDelay[4]))
+		{
+			g_objCommon.Set_InfoInspectVacOn(1, 1);	// Vac On
+			m_nInspect1Case = 4; m_tInspect1Loop.Set_LoopTime(10000);
+		}	
 		break;
 
 	case 4:		// CM Align Vac On and Slave Open
@@ -5175,7 +5177,7 @@ BOOL CSequenceMain::Inspection2_Run()
 
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect2Case = 4; m_tInspect2Loop.Set_LoopTime(10000);
+			m_nInspect2Case = -2; m_tInspect2Loop.Set_LoopTime(10000);
 			
 			m_tInspect2Loop.Takt_End(nTaktZone,3); 
 			m_tInspect2Loop.Takt_Start(nTaktZone,9); 
@@ -5191,9 +5193,11 @@ BOOL CSequenceMain::Inspection2_Run()
 		}
 		break;
 	case -3:
-		if(!m_tInspect2Loop.Waiting_Time(300)) break;
-		g_objCommon.Set_InfoInspectVacOn(2, 1);	// Vac On
-		m_nInspect2Case = 4; m_tInspect2Loop.Set_LoopTime(10000);
+		if(m_tInspect2Loop.Waiting_Time(m_pEquipData->nVacOffDelay[4]))
+		{
+			g_objCommon.Set_InfoInspectVacOn(2, 1);	// Vac On
+			m_nInspect2Case = 4; m_tInspect2Loop.Set_LoopTime(10000);
+		}		
 		break;
 	case 4:		// CM Align Slave Open
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE2_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
@@ -5761,7 +5765,7 @@ BOOL CSequenceMain::Inspection3_Run()
 		{		
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect3Case = 4; m_tInspect3Loop.Set_LoopTime(5000);
+			m_nInspect3Case = -2; m_tInspect3Loop.Set_LoopTime(5000);
 
 			m_tInspect3Loop.Takt_End(nTaktZone,3); 
 			m_tInspect3Loop.Takt_Start(nTaktZone,9); 			
@@ -5777,9 +5781,11 @@ BOOL CSequenceMain::Inspection3_Run()
 		}
 		break;
 	case -3:
-		if(!m_tInspect3Loop.Waiting_Time(300)) break;
-		g_objCommon.Set_InfoInspectVacOn(3, 1);	// Vac On
-		m_nInspect3Case = 4; m_tInspect3Loop.Set_LoopTime(10000);
+		if(m_tInspect3Loop.Waiting_Time(m_pEquipData->nVacOffDelay[4]))
+		{
+			g_objCommon.Set_InfoInspectVacOn(3, 1);	// Vac On
+			m_nInspect3Case = 4; m_tInspect3Loop.Set_LoopTime(10000);
+		}		
 		break;
 	case 4:		// CM Align Slave Open
 		if (g_objCommon.Check_Position(AX_INSPECT_STAGE3_X, 1) && g_objCommon.Check_Position(AX_MODULE_ALIGN_Z, 1) &&
