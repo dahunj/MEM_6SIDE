@@ -4683,7 +4683,7 @@ BOOL CSequenceMain::Inspection1_Run()
 		}
 		break;
 	case -3:
-		if(!m_tInspect1Loop.Waiting_Time(300)) break;
+		if(!m_tInspect1Loop.Waiting_Time(m_pEquipData->nVacOffDelay[4])) break;
 		g_objCommon.Set_InfoInspectVacOn(1, 1);	// Vac On
 		m_nInspect1Case = 4; m_tInspect1Loop.Set_LoopTime(10000);
 		break;
@@ -5270,7 +5270,7 @@ BOOL CSequenceMain::Inspection2_Run()
 
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect2Case = 4; m_tInspect2Loop.Set_LoopTime(10000);
+			m_nInspect2Case = -2; m_tInspect2Loop.Set_LoopTime(10000);
 			
 			m_tInspect2Loop.Takt_End(nTaktZone,3); 
 			m_tInspect2Loop.Takt_Start(nTaktZone,9); 
@@ -5286,7 +5286,7 @@ BOOL CSequenceMain::Inspection2_Run()
 		}
 		break;
 	case -3:
-		if(!m_tInspect2Loop.Waiting_Time(300)) break;
+		if(!m_tInspect2Loop.Waiting_Time(m_pEquipData->nVacOffDelay[4])) break;
 		g_objCommon.Set_InfoInspectVacOn(2, 1);	// Vac On
 		m_nInspect2Case = 4; m_tInspect2Loop.Set_LoopTime(10000);
 		break;
@@ -5856,7 +5856,7 @@ BOOL CSequenceMain::Inspection3_Run()
 		{		
 			m_pDY06->oCmAlignSlaveOpen = FALSE;  m_pDY06->oCmAlignSlaveClose = TRUE;
 			g_objAJinAXL.Write_Output(6);
-			m_nInspect3Case = 4; m_tInspect3Loop.Set_LoopTime(5000);
+			m_nInspect3Case = -2; m_tInspect3Loop.Set_LoopTime(5000);
 
 			m_tInspect3Loop.Takt_End(nTaktZone,3); 
 			m_tInspect3Loop.Takt_Start(nTaktZone,9); 			
@@ -5872,7 +5872,7 @@ BOOL CSequenceMain::Inspection3_Run()
 		}
 		break;
 	case -3:
-		if(!m_tInspect3Loop.Waiting_Time(300)) break;
+		if(!m_tInspect3Loop.Waiting_Time(m_pEquipData->nVacOffDelay[4])) break;
 		g_objCommon.Set_InfoInspectVacOn(3, 1);	// Vac On
 		m_nInspect3Case = 4; m_tInspect3Loop.Set_LoopTime(10000);
 		break;

@@ -17,7 +17,7 @@ public:
 // 대화 상자 데이터입니다.
 	enum { IDD = IDD_SETUP_EQUIP_DLG };
 	CGroupCS	m_Group[8];
-	CLabelCS	m_Label[40];
+	CLabelCS	m_Label[41];
 	CStaticCS	m_stcEquipName;
 	CStaticCS	m_stcRecipeName;
 	CRadioCS	m_rdoModel[2];	// 0:R63B, 1:R64B
@@ -54,8 +54,8 @@ public:
 	CStaticCS	m_stcTrayData[4];
 	CStaticCS	m_stcInspectData[8];
 	CStaticCS	m_stcNgBufferData[1];
-	CStaticCS	m_stcVacOffDelay[4];
-	CStaticCS	m_stcVacOffRepeat[4];
+	CStaticCS	m_stcVacOffDelay[5];
+	CStaticCS	m_stcVacOffRepeat[5];
 	CStaticCS	m_stcDelayAdd[5];
 	CGroupCS	m_grpRos;
 	CLabelCS	m_lblRos[3];

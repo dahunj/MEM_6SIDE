@@ -37,7 +37,7 @@ void CSetupEquipDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	for (int i = 0; i < 8; i++) DDX_Control(pDX, IDC_GROUP_0 + i, m_Group[i]);
-	for (int i = 0; i < 40; i++) DDX_Control(pDX, IDC_LABEL_0 + i,  m_Label[i]);
+	for (int i = 0; i < 41; i++) DDX_Control(pDX, IDC_LABEL_0 + i,  m_Label[i]);
 	DDX_Control(pDX, IDC_STC_EQUIP_NAME, m_stcEquipName);
 	DDX_Control(pDX, IDC_STC_RECIPE_NAME, m_stcRecipeName);
 	for (int i = 0; i < 2; i++) DDX_Control(pDX, IDC_RDO_MODEL_0 + i, m_rdoModel[i]);
@@ -74,8 +74,8 @@ void CSetupEquipDlg::DoDataExchange(CDataExchange* pDX)
 	for (int i = 0; i < 4; i++) DDX_Control(pDX, IDC_STC_TRAY_DATA_0 + i, m_stcTrayData[i]);
 	for (int i = 0; i < 8; i++) DDX_Control(pDX, IDC_STC_INSPECT_DATA_0 + i, m_stcInspectData[i]);
 	for (int i = 0; i < 1; i++) DDX_Control(pDX, IDC_STC_NG_BUFFER_DATA_0 + i, m_stcNgBufferData[i]);
-	for (int i = 0; i < 4; i++) DDX_Control(pDX, IDC_STC_VAC_OFF_DELAY_0 + i, m_stcVacOffDelay[i]);
-	for (int i = 0; i < 4; i++) DDX_Control(pDX, IDC_STC_VAC_OFF_REPEAT_0 + i, m_stcVacOffRepeat[i]);
+	for (int i = 0; i < 5; i++) DDX_Control(pDX, IDC_STC_VAC_OFF_DELAY_0 + i, m_stcVacOffDelay[i]);
+	for (int i = 0; i < 5; i++) DDX_Control(pDX, IDC_STC_VAC_OFF_REPEAT_0 + i, m_stcVacOffRepeat[i]);
 	for (int i = 0; i < 5; i++) DDX_Control(pDX, IDC_STC_DELAY_ADD_0 + i, m_stcDelayAdd[i]);
 	DDX_Control(pDX, IDC_GRP_ROS, m_grpRos);
 	for (int i = 0; i < 3; i++) DDX_Control(pDX, IDC_LBL_ROS_0 + i, m_lblRos[i]);
@@ -122,8 +122,8 @@ BEGIN_MESSAGE_MAP(CSetupEquipDlg, CDialogEx)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_TRAY_DATA_0, IDC_STC_TRAY_DATA_3, OnStcTrayDataClick)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_INSPECT_DATA_0, IDC_STC_INSPECT_DATA_7, OnStcInspectDataClick)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_NG_BUFFER_DATA_0, IDC_STC_NG_BUFFER_DATA_0, OnStcNgBufferDataClick)
-	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_VAC_OFF_DELAY_0, IDC_STC_VAC_OFF_DELAY_3, OnStcVacOffDelayClick)
-	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_VAC_OFF_REPEAT_0, IDC_STC_VAC_OFF_REPEAT_3, OnStcVacOffRepeatClick)
+	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_VAC_OFF_DELAY_0, IDC_STC_VAC_OFF_DELAY_4, OnStcVacOffDelayClick)
+	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_VAC_OFF_REPEAT_0, IDC_STC_VAC_OFF_REPEAT_4, OnStcVacOffRepeatClick)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_DELAY_ADD_0, IDC_STC_DELAY_ADD_4, OnStcDelayAddClick)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_TRIGGER_DATA_0, IDC_STC_TRIGGER_DATA_3, OnStcTriggerDataClick)
 	ON_BN_CLICKED(IDC_BTN_ROS_CONNECT, &CSetupEquipDlg::OnBnClickedBtnRosConnect)
@@ -274,8 +274,8 @@ void CSetupEquipDlg::Set_Enable(BOOL bEnable)
 	for(int i =0; i < 8; i++) m_stcInspectData[i].EnableWindow(bEnable);
 	for(int i =0; i < 1; i++) m_stcNgBufferData[i].EnableWindow(bEnable);
 
-	for(int i =0; i < 4; i++) m_stcVacOffDelay[i].EnableWindow(bEnable);
-	for(int i =0; i < 4; i++) m_stcVacOffRepeat[i].EnableWindow(bEnable);
+	for(int i =0; i < 5; i++) m_stcVacOffDelay[i].EnableWindow(bEnable);
+	for(int i =0; i < 5; i++) m_stcVacOffRepeat[i].EnableWindow(bEnable);
 	for(int i =0; i < 5; i++) m_stcDelayAdd[i].EnableWindow(bEnable);
 
 	m_ipaDispatcherIp.EnableWindow(bEnable);
@@ -620,7 +620,7 @@ void CSetupEquipDlg::Initial_Controls()
 	for (int i = 29; i < 34; i++) m_Label[i].Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x40, 0x60, 0x40));	// Delay Add
 	m_Label[34].Init_Ctrl("¹ÙÅÁ", 12, TRUE, RGB(0x00, 0x00, 0x00), RGB(0xFF, 0xA0, 0x00));	// Model
 	for (int i = 35; i < 40; i++) m_Label[i].Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x40, 0x60, 0x40));	// Trigger
-
+	m_Label[40].Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x80, 0x00, 0x00));
 	m_stcEquipName.Init_Ctrl("¹ÙÅÁ", 15, TRUE, RGB(0x00, 0x00, 0x80), RGB(0xE0, 0xFF, 0xE0));
 	m_stcRecipeName.Init_Ctrl("¹ÙÅÁ", 9, TRUE, RGB(0x00, 0x00, 0x80), RGB(0xE0, 0xFF, 0xE0));
 
@@ -661,8 +661,8 @@ void CSetupEquipDlg::Initial_Controls()
 	for (int i = 2; i < 6; i++) m_stcInspectData[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xFF, 0xE0));
 	for (int i = 6; i < 8; i++) m_stcInspectData[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xFF, 0xE0));
 	for (int i = 0; i < 1; i++) m_stcNgBufferData[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xFF, 0xE0));
-	for (int i = 0; i < 4; i++) m_stcVacOffDelay[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xE0, 0xE0));
-	for (int i = 0; i < 4; i++) m_stcVacOffRepeat[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xE0, 0xE0));
+	for (int i = 0; i < 5; i++) m_stcVacOffDelay[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xE0, 0xE0));
+	for (int i = 0; i < 5; i++) m_stcVacOffRepeat[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xE0, 0xE0));
 	for (int i = 0; i < 5; i++) m_stcDelayAdd[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xFF, 0xE0));
 	for (int i = 0; i < 4; i++) m_stcTriggerData[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xFF, 0xE0));
 	m_grpRos.Init_Ctrl("¹ÙÅÁ", 12, TRUE, COLOR_DEFAULT, COLOR_DEFAULT);
@@ -772,8 +772,8 @@ void CSetupEquipDlg::Display_EquipData()
 	strData.Format("%0.2lf", pEquipData->dInspectBTM1ShiftX); m_stcInspectData[7].SetWindowText(strData);
 	strData.Format("%0.2lf", pEquipData->dNgBufferPitchX); m_stcNgBufferData[0].SetWindowText(strData);
 
-	for (int i = 0; i < 4; i++) { strData.Format("%d", pEquipData->nVacOffDelay[i]); m_stcVacOffDelay[i].SetWindowText(strData); }
-	for (int i = 0; i < 4; i++) { strData.Format("%d", pEquipData->nVacOffRepeat[i]); m_stcVacOffRepeat[i].SetWindowText(strData); }
+	for (int i = 0; i < 5; i++) { strData.Format("%d", pEquipData->nVacOffDelay[i]); m_stcVacOffDelay[i].SetWindowText(strData); }
+	for (int i = 0; i < 5; i++) { strData.Format("%d", pEquipData->nVacOffRepeat[i]); m_stcVacOffRepeat[i].SetWindowText(strData); }
 	for (int i = 0; i < 5; i++) { strData.Format("%d", pEquipData->nDelayAdd[i]); m_stcDelayAdd[i].SetWindowText(strData); }
 
 	ROS_DATA *pRosData = g_objDataManager.Get_pRosData();
@@ -904,8 +904,8 @@ void CSetupEquipDlg::Save_EquipData()
 
 	m_stcNgBufferData[0].GetWindowText(strData); dData = atof(strData); INI.Set_Double ("NG_BUFFER", "PITCH_X", dData, "%0.2lf");
 
-	for (int i = 0; i < 4; i++) { strKey.Format("%d", i); m_stcVacOffDelay[i].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("VAC_OFF_DELAY", strKey, nData); }
-	for (int i = 0; i < 4; i++) { strKey.Format("%d", i); m_stcVacOffRepeat[i].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("VAC_OFF_REPEAT", strKey, nData); }
+	for (int i = 0; i < 5; i++) { strKey.Format("%d", i); m_stcVacOffDelay[i].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("VAC_OFF_DELAY", strKey, nData); }
+	for (int i = 0; i < 5; i++) { strKey.Format("%d", i); m_stcVacOffRepeat[i].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("VAC_OFF_REPEAT", strKey, nData); }
 	for (int i = 0; i < 5; i++) { strKey.Format("%d", i); m_stcDelayAdd[i].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("DELAY_ADD", strKey, nData); }
 	for (int i = 0; i < 6; i++) for (int j = 0; j < 4; j++) { strKey.Format("%d%d", i, j); INI.Set_Bool("TOWER", strKey, m_chkTower[i][j].GetCheck()); }
 	for (int i = 0; i < 2; i++) for (int j = 0; j < 6; j++) { strKey.Format("%d%d", i, j); INI.Set_Bool("BUZZER", strKey, m_chkBuzzer[i][j].GetCheck()); }
@@ -1006,8 +1006,8 @@ void CSetupEquipDlg::Save_EquipDataForAllParam()
 
 	m_stcNgBufferData[0].GetWindowText(strData); dData = atof(strData); INI.Set_Double ("NG_BUFFER", "PITCH_X", dData, "%0.2lf");
 
-	for (int i = 0; i < 4; i++) { strKey.Format("%d", i); m_stcVacOffDelay[i].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("VAC_OFF_DELAY", strKey, nData); }
-	for (int i = 0; i < 4; i++) { strKey.Format("%d", i); m_stcVacOffRepeat[i].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("VAC_OFF_REPEAT", strKey, nData); }
+	for (int i = 0; i < 5; i++) { strKey.Format("%d", i); m_stcVacOffDelay[i].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("VAC_OFF_DELAY", strKey, nData); }
+	for (int i = 0; i < 5; i++) { strKey.Format("%d", i); m_stcVacOffRepeat[i].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("VAC_OFF_REPEAT", strKey, nData); }
 	for (int i = 0; i < 5; i++) { strKey.Format("%d", i); m_stcDelayAdd[i].GetWindowText(strData); nData = atoi(strData); INI.Set_Integer("DELAY_ADD", strKey, nData); }
 	for (int i = 0; i < 6; i++) for (int j = 0; j < 4; j++) { strKey.Format("%d%d", i, j); INI.Set_Bool("TOWER", strKey, m_chkTower[i][j].GetCheck()); }
 	for (int i = 0; i < 2; i++) for (int j = 0; j < 6; j++) { strKey.Format("%d%d", i, j); INI.Set_Bool("BUZZER", strKey, m_chkBuzzer[i][j].GetCheck()); }
