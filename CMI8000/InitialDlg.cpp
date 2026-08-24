@@ -104,6 +104,9 @@ void CInitialDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 			CString strName = g_objAJinAXL.Get_AxisName(i);
 			m_stcAxisName[i].SetWindowText(" " + strName);
 		}
+		g_objCommon.Btm1BlowSunctionOnOff(TRUE);
+		g_objCommon.TopBlowSunctionOnOff(TRUE);
+
 		g_objCommon.Locking_MainDoor(FALSE);
 		SetTimer(0, 100, NULL);
 

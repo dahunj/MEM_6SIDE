@@ -438,8 +438,8 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 					pMainDlg->Set_CurrentState(STATE_STOP);
 					g_objMES.Set_Status(2);
 
-					g_objCommon.Btm1BlowSunctionOnOff(FALSE);
-					g_objCommon.TopBlowSunctionOnOff(FALSE);
+					//g_objCommon.Btm1BlowSunctionOnOff(FALSE);
+					//g_objCommon.TopBlowSunctionOnOff(FALSE);
 				}
 			}
 			if(pEquipData->bUseDoorLock) g_objCommon.Locking_MainDoor(TRUE, TRUE);
@@ -475,8 +475,8 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 			pMainDlg->Save_EquipRunTime();
 			g_objCommon.Save_MotionPos();
 
-			g_objCommon.Btm1BlowSunctionOnOff(FALSE);
-			g_objCommon.TopBlowSunctionOnOff(FALSE);
+		/*	g_objCommon.Btm1BlowSunctionOnOff(FALSE);
+			g_objCommon.TopBlowSunctionOnOff(FALSE);*/
 			
 
 		} else {				// Stop
