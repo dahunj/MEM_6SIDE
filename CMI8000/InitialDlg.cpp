@@ -105,6 +105,8 @@ void CInitialDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 			m_stcAxisName[i].SetWindowText(" " + strName);
 		}
 		g_objCommon.Locking_MainDoor(FALSE);
+		g_objCommon.Btm1BlowSunctionOnOff(TRUE);
+		g_objCommon.TopBlowSunctionOnOff(TRUE);
 		SetTimer(0, 100, NULL);
 
 	} else {
