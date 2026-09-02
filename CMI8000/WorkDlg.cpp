@@ -428,8 +428,8 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 				pMainDlg->Set_CurrentState(STATE_STOP);
 
 
-				g_objCommon.Btm1BlowSunctionOnOff(FALSE);
-				g_objCommon.TopBlowSunctionOnOff(FALSE);
+					//g_objCommon.Btm1BlowSunctionOnOff(FALSE);
+					//g_objCommon.TopBlowSunctionOnOff(FALSE);
 			}
 
 			if(pEquipData->bUseDoorLock) g_objCommon.Locking_MainDoor(TRUE, TRUE);
@@ -1767,7 +1767,9 @@ void CWorkDlg::WriteCMCount(int nPortNo)
 	strValue.Format("%d", nCmCnt);
 	m_stcCmCount[nPortNo].SetWindowText(strValue);
 	if (nPortNo == 1) g_dlgOperator.m_stcOperCmCount.SetWindowText(strValue);
+
 	
+
 }
 
 

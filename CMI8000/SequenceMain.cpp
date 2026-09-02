@@ -3856,7 +3856,8 @@ BOOL CSequenceMain::Btm1Picker_Run()
 	switch (m_nBtm1PickCase) {
 	case 0:		// Wait for Angle Tray L1 Position
 		if (m_nAngleTray1Case == 20 || m_nAngleTray2Case == 20) {
-			m_nBtm1PickCase++;m_tBtm1PickLoop.Set_LoopTime(600000);
+			m_nBtm1PickCase++;
+			 m_tBtm1PickLoop.Set_LoopTime(15000);
 		}
 		return TRUE;
 
@@ -4025,7 +4026,8 @@ BOOL CSequenceMain::Btm1Picker_Run()
 			g_dlgWork.PostMessage(UM_UPDATE_TRAY_INFO, 2, nB1pWorkTray-1);
 			g_objCommon.Set_InfoBtm1PickerVacOn(INFO_PICK);	// 모듈 없는 부분은 Vac 꺼준다.
 			g_objCommon.Set_InfoBtm1PickerClose(INFO_PICK);	// 모듈 없는 부분은 Open 해준다.
-			
+
+
 			if (Check_Btm1PickerFull() || Check_AngleTrayEmpty(nB1pWorkTray)) 
 			{
 				if (Check_AngleTrayEmpty(nB1pWorkTray) || (nB1pTrayPosY + 1 >= gData.nTrayY)) // Tray Change 
@@ -4042,11 +4044,12 @@ BOOL CSequenceMain::Btm1Picker_Run()
 				if (Check_Btm1PickerFull() || Check_LoadLotEnd(gData.nPNoBtm1Pick, 1)) 
 				{ 
 					nB1pTrayPosY++;					
-					m_nBtm1PickCase = 7; m_tBtm1PickLoop.Set_LoopTime(15000); 
+					m_nBtm1PickCase = 7; m_tBtm1PickLoop.Set_LoopTime(20000); 
 				}
 				else
-				{ 					
-					m_nBtm1PickCase = 1; m_tBtm1PickLoop.Set_LoopTime(15000); 
+				{ 
+					
+					 m_nBtm1PickCase = 1; m_tBtm1PickLoop.Set_LoopTime(20000); 
 				}
 			} 
 			else 
