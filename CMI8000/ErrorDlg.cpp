@@ -454,7 +454,12 @@ void CErrorDlg::OnBnClickedBtnErrRetry()
 		break;
 	case 3142:
 		{
-			g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 45);
+			g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 51);
+		}
+		break;
+	case 3143:
+		{
+			g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 52);
 		}
 		break;
 	case 9005:

@@ -422,8 +422,8 @@ typedef struct {
 	DWORD	dwMesTime;
 
 	BOOL	bLotReported;	//port 1, 2 
-	BOOL	bPPSelected;
-
+	BOOL	bPPConfirm;
+	BOOL	bPPCompleted;
 	// Host 전공정 Data
 	CString		sHostLotID;			//Host 수신 Lot ID
 	CString		sHostRecipe;		//Host 수신 Recipe ID

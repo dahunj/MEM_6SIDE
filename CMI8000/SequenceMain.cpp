@@ -2333,18 +2333,31 @@ BOOL CSequenceMain::LoadTray_Run()
 				}
 			}
 
-			gMes.bPPSelected = FALSE;
+			gMes.bPPConfirm = FALSE;
 			g_objMesAgent.Set_PPSelectedReport(gMes.sHostLotID, gMes.sHostRecipe);
 			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
 		}
 		break;
-	case 45:
-		gMes.bPPSelected = FALSE;
+	case 51:
+		gMes.bPPConfirm = FALSE;
 		g_objMesAgent.Set_PPSelectedReport(gMes.sHostLotID, gMes.sHostRecipe);
 		m_nLoadTrayCase = 42; m_tLoadTrayLoop.Set_LoopTime(5000);
 		break;
 	case 42:
-		if(gMes.bPPSelected)
+		if(gMes.bPPConfirm)
+		{		
+			gMes.bPPCompleted = FALSE;
+			g_objMesAgent.Set_PPUploadCompletedReport(gMes.sHostLotID, gMes.sHostRecipe);
+			m_nLoadTrayCase++; m_tLoadTrayLoop.Set_LoopTime(5000);
+		}
+		break;
+	case 52:
+		gMes.bPPCompleted = FALSE;
+		g_objMesAgent.Set_PPUploadCompletedReport(gMes.sHostLotID, gMes.sHostRecipe);
+		m_nLoadTrayCase = 43; m_tLoadTrayLoop.Set_LoopTime(5000);
+		break;
+	case 43:
+		if(gMes.bPPCompleted)
 		{			
 			if(nLtWorkPort == 1)
 			{

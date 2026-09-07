@@ -71,8 +71,9 @@ typedef struct {
 	int			nPreEquipState;	// 1:Run, 4:Idle, 5:Down
 	int			nCurEquipState;	// 1:Run, 4:Idle, 5:Down
 	CString		sReCmId[100];	// Retest Modle => Max 100
-
 	CString		sRecipe;
+
+	CString		sBodyData[8];
 } GLOVAL_DATA;
 
 typedef struct {
@@ -105,6 +106,8 @@ typedef struct {
 
 	BOOL		bT_TimoutStarted[20];
 	DWORD		dwT_Timeout[20];
+
+	
 
 
 } GLOVAL_MES;

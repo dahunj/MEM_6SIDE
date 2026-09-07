@@ -33,13 +33,15 @@ private:
 
 	//new 
 	void Get_PPSelect(CString sLotId, CString sRecipe, CString sOperID);
+	void Get_PPBodyRequest(CString sLotId, CString sRecipe, CString sOperID);
+	
 	void Get_LotIDFail(CString sLotId, CString sRTSTID, CString sLabelType, CString sCode, CString sText);
 		
 	void Get_LotStart(CString sLotId, CString sRecipe, CString sCMCount);
-			
-	//old 
-	//void Get_PPUpload_Confirm(CString sRecipeID);
-	//void Get_PPUpload_Fail(CString sRecipeID, CString sFailCode, CString sFailText);
+	void Get_BodyRequest(CString sLotID, CString sRecipe);		
+	
+	void Get_PPUpload_Confirm(CString sRecipeID);
+	void Get_PPUpload_Fail(CString sRecipeID, CString sFailCode, CString sFailText);
 	void Get_Terminal(CString sMsg);
 
 	void Send_Command(CString sSend);
@@ -65,6 +67,9 @@ public:
 	//new
 	void Set_LotIDReport(int nType, CString sLotID, int nPortNo, CString sRecipe);	
 	void Set_PPSelectedReport(CString sLotId, CString sRecipeId);
+	
+	void Set_PPBodyData(CString sLotID, CString sRecipe, CString sBodyData);
+	void Set_PPUploadCompletedReport(CString sLotId, CString sRecipeId);
 
 	void Set_LotStartedReport(CString sOperID, CString sLotId, CString sRecipe, CString sCMCount);
 	void Set_ProductCompletedReport(CString sOperID, CString sLotID, int nTrayNo, int nCMNo,  CString sResult, CString sReasonCode, CString sCMBarcode, int UnitNo);
@@ -76,7 +81,7 @@ public:
 
 	//void Set_LotCompleteReport(CString sLotID, int nPortNo, CString sRecipe, int nCmTotal, int nRealTotal, int nGoodCnt, int nBadCnt);
 	//old 
-	//void Set_PPUploadCompletedReport(CString sLotId, CString sMGZId, CString sRecipeId);
+	
 			
 };
 

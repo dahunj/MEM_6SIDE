@@ -488,10 +488,10 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 		
 
 	} 
-	/*else if(m_strStFn == "S7F25")
+	else if(m_strStFn == "S7F25")
 	{
-	Set_S7F26();
-	}*/
+		Set_S7F26();
+	}
 	else if (m_strStFn == "S10F3")
 	{
 		m_strDisplay = m_xml.GetRoot()->GetChild("ITEM")->GetChild("TEXT")->GetAttribute("VALUE");
@@ -652,13 +652,16 @@ void CHost::Get_S2F49_LOT_ID_FAIL()
 
 void CHost::Set_S7F26()
 {
+	
+	CString sBodyName[8] = 
+	{
+		"INSPECT_ALIGN","INSPECT_ANGLE", "INSPECT_B1SP", "INSPECT_B1AG",
+		"INSPECT_B13D",  "INSPECT_TOP1",   "INSPECT_TOP2",   "INSPECT_BTM2"
+	};
+	
+	
+
 	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
-
-	CString sBodyName, sBodyData;
-
-	sBodyName = "Name";
-	sBodyData = "Data";
-
 	strSend += "<EIF VERSION=\"2.0\" ID=\"S7F26\" NAME=\"Formatted Process Program Data\">" + CRLF;
 	strSend += "  <ELEMENT>" + CRLF;
 	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
@@ -668,11 +671,17 @@ void CHost::Set_S7F26()
 	strSend += "    <MDLN VALUE=\"0\"/>" + CRLF;
 	strSend += "    <SOFTREV VALUE=\"" + gData.sVersion + "\" />" + CRLF;
 	strSend += "    <LOTID VALUE=\"" + gMes.sHostLotId + "\" />" + CRLF;
-	strSend += "    <PCLIST COUNT=\"1\">" + CRLF;
-	strSend += "      <LIST>" + CRLF;
-	strSend += "        <CCODE VALUE=\"" + sBodyName + "\" />" + CRLF;
-	strSend += "        <PPARM VALUE=\"" + sBodyData + "\" />" + CRLF;
-	strSend += "      </LIST>" + CRLF;
+	strSend += "    <PCLIST COUNT=\"8\">" + CRLF;
+
+
+	for (int i = 0; i < 8; i++) {
+		strSend += "    <LIST>" + CRLF;
+		strSend += "      <CCODE VALUE=\"" + sBodyName[i] + "\" />" + CRLF;
+		strSend += "      <PPARM VALUE=\"" + gData.sBodyData[i] + "\" />" + CRLF;
+		strSend += "    </LIST>" + CRLF;
+	}
+
+
 	strSend += "    </PCLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";

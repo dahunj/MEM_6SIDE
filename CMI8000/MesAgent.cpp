@@ -151,6 +151,7 @@ LRESULT CMesAgent::OnClientReceive(WPARAM wParam, LPARAM lParam)
 		else if(strCmd == "PP")
 		{
 			if (strOp == "SELECT")	Get_PPSelect(strArg[0], strArg[1], strArg[2]);
+			if (strOp == "BODYREQUEST") Get_PPBodyRequest(strArg[0], strArg[1], strArg[2]);
 			//if (strOp == "CONFIRM") Get_PPUpload_Confirm(strArg[0]);
 			//if (strOp == "FAIL") Get_PPUpload_Fail(strArg[0], strArg[1], strArg[2]);
 		}
@@ -218,10 +219,16 @@ void CMesAgent::Get_ControlState(CString sFlag)
 
 void CMesAgent::Get_LotStart(CString sLotId, CString sRecipe, CString sCMCount)
 {
-	gMes.bPPSelected = TRUE;
+	gMes.bPPCompleted = TRUE;
 	gMes.sHostLotID = sLotId;
 	gMes.sHostRecipe = sRecipe;
 	gMes.nHostCount = atoi(sCMCount);
+}
+
+void CMesAgent::Get_BodyRequest(CString sLotID, CString sRecipe)
+{
+
+
 }
 
 void CMesAgent::Get_LotIDFail(CString sLotId, CString sRTSTID, CString sLabelType, CString sCode, CString sText)
@@ -249,26 +256,48 @@ void CMesAgent::Get_PPSelect(CString sLotId, CString sRecipe, CString sOperID)
 	gMes.bLotReported = TRUE;	
 }
 
+void CMesAgent::Get_PPBodyRequest(CString sLotId, CString sRecipe, CString sOperID)
+{
+	gMes.sHostLotID = sLotId;
+	gMes.sHostRecipe = sRecipe;
+
+	if (gMes.sHostLotID.GetLength() < 4 || gMes.sHostRecipe.GetLength() < 1) 
+	{
+		g_objCommon.Show_Error(9004); return;
+	}	
+
+	EQUIP_DATA * pEquipData = g_objDataManager.Get_pEquipData();
+
+	CString sBodyData;
+	sBodyData.Format("%d,%d,%d,%d,%d,%d,%d,%d", pEquipData->bUseVisionAlign, pEquipData->bUseInspectAngle, pEquipData->bUseInspectBtm1Specular,
+		pEquipData->bUseInspectBtm1Angle, pEquipData->bUseInspectBtm13D, pEquipData->bUseInspectTop1, pEquipData->bUseInspectTop2
+		,pEquipData->bUseInspectBtm2);
+
+	Set_PPBodyData(sLotId, sRecipe, sBodyData);
+
+	
+}
+
 void CMesAgent::Get_Terminal(CString sMsg)
 {
 	g_objLogFile.Save_TerminalLog(sMsg);
 }
 
-//
-//void CMesAgent::Get_PPUpload_Confirm(CString sRecipeID)
-//{
-//	gMes.sHostRecipe[gMes.nElevPos] = sRecipeID;
-//	gMes.bPPConfirm = TRUE;
-//}
 
-//void CMesAgent::Get_PPUpload_Fail(CString sRecipeID, CString sFailCode, CString sFailText)
-//{
-//	gMes.sHostRecipe[gMes.nElevPos] = sRecipeID;
-//	gMes.bPPConfirm = FALSE;
-//	gMes.sHostCancelCode = sFailCode;
-//	gMes.sHostCancelText = sFailText;
-//	g_objCommon.Show_Error(9031);
-//}
+void CMesAgent::Get_PPUpload_Confirm(CString sRecipeID)
+{
+	gMes.sHostRecipe = sRecipeID;
+	gMes.bPPConfirm = TRUE;
+}
+
+void CMesAgent::Get_PPUpload_Fail(CString sRecipeID, CString sFailCode, CString sFailText)
+{
+	gMes.sHostRecipe = sRecipeID;
+	gMes.bPPConfirm = FALSE;
+	gMes.sHostCancelCode = sFailCode;
+	gMes.sHostCancelText = sFailText;
+	g_objCommon.Show_Error(9031);
+}
 
 
 
@@ -349,8 +378,6 @@ void CMesAgent::Set_LotEnd(CString sLotId, CString sRecipe, int nCount, int nOk,
 	Send_Command(strSend);
 }
 
-
-
 void CMesAgent::Set_PPSelectedReport(CString sLotId, CString sRecipeId)
 {
 	CString strSend; 
@@ -358,12 +385,20 @@ void CMesAgent::Set_PPSelectedReport(CString sLotId, CString sRecipeId)
 	Send_Command(strSend);
 }
 
-//void CMesAgent::Set_PPUploadCompletedReport(CString sLotId, CString sMGZId, CString sRecipeId)
-//{
-//	CString strSend; 
-//	strSend.Format("PP,COMPLETED,%s,%s,%s", sLotId, sMGZId, sRecipeId);
-//	Send_Command(strSend);
-//}
+void CMesAgent::Set_PPBodyData(CString sLotID, CString sRecipe, CString sBodyData )
+{
+	CString strSend;
+	strSend.Format("PP,BODYDATA,%s,%s,%s", sLotID, sRecipe, sBodyData);
+	Send_Command(strSend);
+}
+
+
+void CMesAgent::Set_PPUploadCompletedReport(CString sLotId, CString sRecipeId)
+{
+	CString strSend; 
+	strSend.Format("PP,COMPLETED,%s,%s,%s", sLotId, sRecipeId);
+	Send_Command(strSend);
+}
 
 
 void CMesAgent::Set_LotStartedReport(CString sOperID, CString sLotId, CString sRecipe, CString sCMCount)
