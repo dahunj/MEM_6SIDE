@@ -147,7 +147,8 @@ LRESULT CHandler::OnServerReceive(WPARAM wLocalPort, LPARAM lClientIdx)
 		else if(strCmd == "PP")
 		{
 			if(strOp == "SELECTED") Get_PPSelectedReport(strA[0], strA[1]);
-			//if(strOp == "COMPLETED") Get_PPUploadCompletedReport(strA[0], strA[1], strA[2]);
+			if(strOp == "BODYDATA") Get_PPBodyData(strA[0], strA[1], strA[2]);
+			if(strOp == "COMPLETED") Get_PPUploadCompletedReport(strA[0], strA[1]);
 		}
 		else if(strCmd == "PRODUCT")
 		{
@@ -298,14 +299,19 @@ void CHandler::Get_LotEnd(CString sLotID, CString sRecipe, CString sTotalCnt, CS
 	g_objHost.Set_S6F11_LotEnd(sLotID, sRecipe, nCnt, nOk, nNg, nBNg);
 }
 
+void CHandler::Get_PPBodyData(CString sLotID, CString sRecipe, CString sBodyData)
+{
+	g_objHost.Set_S7F26();
+}
+
 
 /////////
 
-//
-//void CHandler::Get_PPUploadCompletedReport(CString sLotID, CString sMGZId, CString sRecipeId)
-//{	
-//	g_objHost.Set_S6F11_PPUploadCompleted(sLotID, sMGZId,sRecipeId);
-//}
+
+void CHandler::Get_PPUploadCompletedReport(CString sLotID, CString sRecipe)
+{	
+	g_objHost.Set_S6F11_PPUploadCompleted(sLotID, sRecipe);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Set Command
@@ -317,20 +323,27 @@ void CHandler::Set_PPSelect()
 	Send_Command(strSend);
 }
 
-//
-//void CHandler::Set_PP_Upload_Confirm()
-//{
-//	CString strSend;
-//	strSend.Format("PP,CONFIRM,%s", gMes.sHostRecipe);
-//	Send_Command(strSend);
-//}
-//
-//void CHandler::Set_PP_Upload_Fail()
-//{
-//	CString strSend;
-//	strSend.Format("PP,FAIL,%s,%s,%s", gMes.sHostRecipe, gMes.sFailCode, gMes.sFailText);
-//	Send_Command(strSend);
-//}
+
+void CHandler::Set_PPBodyRequest()
+{
+	CString strSend;
+	strSend.Format("PP,BODYREQUEST,%s,%s,%s", gMes.sHostLotId, gMes.sHostRecipe, gData.sOperId);
+	Send_Command(strSend);
+}
+
+void CHandler::Set_PP_Upload_Confirm()
+{
+	CString strSend;
+	strSend.Format("PP,CONFIRM,%s", gMes.sHostRecipe);
+	Send_Command(strSend);
+}
+
+void CHandler::Set_PP_Upload_Fail()
+{
+	CString strSend;
+	strSend.Format("PP,FAIL,%s,%s,%s", gMes.sHostRecipe, gMes.sFailCode, gMes.sFailText);
+	Send_Command(strSend);
+}
 
 void CHandler::Set_Lot_Start()
 {

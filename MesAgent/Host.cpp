@@ -490,7 +490,7 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 	} 
 	else if(m_strStFn == "S7F25")
 	{
-		Set_S7F26();
+		g_objHandler.Set_PPBodyRequest();		
 	}
 	else if (m_strStFn == "S10F3")
 	{
@@ -619,18 +619,18 @@ void CHost::Get_S2F49_PPSelect()
 	g_objHandler.Set_PPSelect();
 }
 
-//void CHost::Get_S2F49_PP_UPLOAD_CONFIRM()
-//{
-//	Set_S2F50_PP_UPLOAD_CONFIRM();
-//	g_objHandler.Set_PP_Upload_Confirm();
-//}
-//
-//
-//void CHost::Get_S2F49_PP_UPLOAD_FAIL()
-//{
-//	Set_S2F50_PP_UPLOAD_FAIL();
-//	g_objHandler.Set_PP_Upload_Fail();
-//}
+void CHost::Get_S2F49_PP_UPLOAD_CONFIRM()
+{
+	Set_S2F50_PP_UPLOAD_CONFIRM();
+	g_objHandler.Set_PP_Upload_Confirm();
+}
+
+
+void CHost::Get_S2F49_PP_UPLOAD_FAIL()
+{
+	Set_S2F50_PP_UPLOAD_FAIL();
+	g_objHandler.Set_PP_Upload_Fail();
+}
 
 void CHost::Get_S2F49_LOT_START()
 {
@@ -1153,36 +1153,35 @@ void CHost::Set_S6F11_IdleReport()
 	Send_Command(strSend, FALSE, "S6F11", "50104");
 }
 
-//
-//void CHost::Set_S6F11_PPUploadCompleted(CString sLotId, CString sMGZId, CString sRecipeId)
-//{
-//	SYSTEMTIME time;
-//	GetLocalTime(&time);
-//
-//	CString strTime;
-//	strTime.Format("%04d%02d%02d%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
-//
-//	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
-//
-//	strSend += "<EIF VERSION=\"2.0\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
-//	strSend += "  <ELEMENT>" + CRLF;
-//	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
-//	strSend += "  </ELEMENT>" + CRLF;
-//	strSend += "  <ITEM>" + CRLF;
-//	strSend += "    <CEID NAME=\"CEID\" VALUE=\"40103\" />" + CRLF;
-//	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"40103\" />" + CRLF;
-//	strSend += "    <DVLIST COUNT=\"5\">" + CRLF;
-//	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
-//	strSend += "      <DV NAME=\"LOTID\" VALUE=\"" + sLotId + "\" />" + CRLF;
-//	strSend += "      <DV NAME=\"MGZID\" VALUE=\"" + sMGZId + "\" />" + CRLF;
-//	strSend += "      <DV NAME=\"RECIPEID\" VALUE=\"" + sRecipeId + "\" />" + CRLF;
-//	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
-//	strSend += "    </DVLIST>" + CRLF;
-//	strSend += "  </ITEM>" + CRLF;
-//	strSend += "</EIF>";
-//
-//	Send_Command(strSend, FALSE, "S6F11", "40103");
-//}
+
+void CHost::Set_S6F11_PPUploadCompleted(CString sLotID, CString sRecipe)
+{
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	CString strTime;
+	strTime.Format("%04d%02d%02d%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+
+	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
+
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S6F11\" NAME=\"Event Report\">" + CRLF;
+	strSend += "  <ELEMENT>" + CRLF;
+	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
+	strSend += "  </ELEMENT>" + CRLF;
+	strSend += "  <ITEM>" + CRLF;
+	strSend += "    <CEID NAME=\"CEID\" VALUE=\"40103\" />" + CRLF;
+	strSend += "    <RPTID NAME=\"RPTID\" VALUE=\"40103\" />" + CRLF;
+	strSend += "    <DVLIST COUNT=\"4\">" + CRLF;
+	strSend += "      <DV NAME=\"TIME\" VALUE=\"" + strTime + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"LOTID\" VALUE=\"" + sLotID + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"RECIPEID\" VALUE=\"" + sRecipe + "\" />" + CRLF;
+	strSend += "      <DV NAME=\"OPERATORID\" VALUE=\"" + gData.sOperId + "\" />" + CRLF;
+	strSend += "    </DVLIST>" + CRLF;
+	strSend += "  </ITEM>" + CRLF;
+	strSend += "</EIF>";
+
+	Send_Command(strSend, FALSE, "S6F11", "40103");
+}
 
 
 void CHost::Set_S2F50_PPSelect(int nFail)
@@ -1208,45 +1207,45 @@ void CHost::Set_S2F50_PPSelect(int nFail)
 	Send_Command(strSend, TRUE, "S2F50", "PP_SELECT");
 }
 
-//
-//void CHost::Set_S2F50_PP_UPLOAD_CONFIRM()
-//{
-//	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
-//
-//	strSend += "<EIF VERSION=\"2.0\" ID=\"S2F50\" NAME=\"Enhanced Remote Command Acknowledge\">" + CRLF;
-//	strSend += "  <ELEMENT>" + CRLF;
-//	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
-//	strSend += "  </ELEMENT>" + CRLF;
-//	strSend += "  <ITEM>" + CRLF;
-//	strSend += "    <RCMDCP>" + CRLF;
-//	strSend += "      <RCMD NAME=\"RCMD\" VALUE=\"PP_UPLOAD_CONFIRM\" />" + CRLF;
-//	strSend += "    </RCMDCP>" + CRLF;
-//	strSend += "    <HCACK NAME=\"HCACK\" VALUE=\"0\" />" + CRLF;
-//	strSend += "  </ITEM>" + CRLF;
-//	strSend += "</EIF>";
-//
-//	Send_Command(strSend, TRUE, "S2F50", "PP_UPLOAD_CONFIRM");
-//}
-//
-//
-//void CHost::Set_S2F50_PP_UPLOAD_FAIL()
-//{
-//	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
-//
-//	strSend += "<EIF VERSION=\"2.0\" ID=\"S2F50\" NAME=\"Enhanced Remote Command Acknowledge\">" + CRLF;
-//	strSend += "  <ELEMENT>" + CRLF;
-//	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
-//	strSend += "  </ELEMENT>" + CRLF;
-//	strSend += "  <ITEM>" + CRLF;
-//	strSend += "    <RCMDCP>" + CRLF;
-//	strSend += "      <RCMD NAME=\"RCMD\" VALUE=\"PP_UPLOAD_FAIL\" />" + CRLF;
-//	strSend += "    </RCMDCP>" + CRLF;
-//	strSend += "    <HCACK NAME=\"HCACK\" VALUE=\"0\" />" + CRLF;
-//	strSend += "  </ITEM>" + CRLF;
-//	strSend += "</EIF>";
-//
-//	Send_Command(strSend, TRUE, "S2F50", "PP_UPLOAD_FAIL");
-//}
+
+void CHost::Set_S2F50_PP_UPLOAD_CONFIRM()
+{
+	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
+
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S2F50\" NAME=\"Enhanced Remote Command Acknowledge\">" + CRLF;
+	strSend += "  <ELEMENT>" + CRLF;
+	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
+	strSend += "  </ELEMENT>" + CRLF;
+	strSend += "  <ITEM>" + CRLF;
+	strSend += "    <RCMDCP>" + CRLF;
+	strSend += "      <RCMD NAME=\"RCMD\" VALUE=\"PP_UPLOAD_CONFIRM\" />" + CRLF;
+	strSend += "    </RCMDCP>" + CRLF;
+	strSend += "    <HCACK NAME=\"HCACK\" VALUE=\"0\" />" + CRLF;
+	strSend += "  </ITEM>" + CRLF;
+	strSend += "</EIF>";
+
+	Send_Command(strSend, TRUE, "S2F50", "PP_UPLOAD_CONFIRM");
+}
+
+
+void CHost::Set_S2F50_PP_UPLOAD_FAIL()
+{
+	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
+
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S2F50\" NAME=\"Enhanced Remote Command Acknowledge\">" + CRLF;
+	strSend += "  <ELEMENT>" + CRLF;
+	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
+	strSend += "  </ELEMENT>" + CRLF;
+	strSend += "  <ITEM>" + CRLF;
+	strSend += "    <RCMDCP>" + CRLF;
+	strSend += "      <RCMD NAME=\"RCMD\" VALUE=\"PP_UPLOAD_FAIL\" />" + CRLF;
+	strSend += "    </RCMDCP>" + CRLF;
+	strSend += "    <HCACK NAME=\"HCACK\" VALUE=\"0\" />" + CRLF;
+	strSend += "  </ITEM>" + CRLF;
+	strSend += "</EIF>";
+
+	Send_Command(strSend, TRUE, "S2F50", "PP_UPLOAD_FAIL");
+}
 
 
 void CHost::Set_S2F50_LOT_START()

@@ -60,16 +60,15 @@ private:
 
 	void Reply_HeartBeat();				// Heart Beat
 	
-	//new
+
 	void Get_S2F49_PPSelect();
-	void Get_S2F49_LOT_ID_FAIL();
+	
+	void Get_S2F49_PP_UPLOAD_CONFIRM();
+	void Get_S2F49_PP_UPLOAD_FAIL();
 
 	void Get_S2F49_LOT_START();
-
-	//old 
-	/*void Get_S2F49_PP_UPLOAD_CONFIRM();
-	void Get_S2F49_PP_UPLOAD_FAIL();*/
-		
+	void Get_S2F49_LOT_ID_FAIL();
+			
 	void Send_Command(CString sSend, BOOL bReply, CString sStFn, CString sRcmd="");	// XML
 
 public:
@@ -94,7 +93,7 @@ public:
 	void Set_S6F11_ProductCompletedReport(CString sOperID, CString sLotID, CString sTrayNo, CString sCMNo, CString sResult, CString sReasonCode, CString sBarcode, CString sUnitNo);
 	
 	void Set_S6F11_LotEnd(CString sLotId, CString sRecipe, int nCount, int nOk, int nNg, int nBNg);
-	//void Set_S6F11_PPUploadCompleted(CString sLotId, CString sMGZId, CString sRecipeId);
+	void Set_S6F11_PPUploadCompleted(CString sLotID, CString sRecipe);
 
 	void Set_S6F11_LotAbort(CString sLotId, CString sRecipe);	// Lot Suspended Report
 	void Set_S6F11_IdleSet();
@@ -104,8 +103,8 @@ public:
 	//////////
 	void Set_S2F50_PPSelect(int nFail);
 	
-	//void Set_S2F50_PP_UPLOAD_CONFIRM();
-	//void Set_S2F50_PP_UPLOAD_FAIL();
+	void Set_S2F50_PP_UPLOAD_CONFIRM();
+	void Set_S2F50_PP_UPLOAD_FAIL();
 	
 	void Set_S2F50_LOT_START();
 	void Set_S2F50_LOT_ID_FAIL();
@@ -117,7 +116,6 @@ public:
 
 	void Set_S9F9_T_Timeout();
 	void Set_S9F13_Timeout();	// Conversation Timeout
-
 
 
 	void Test_Command();
