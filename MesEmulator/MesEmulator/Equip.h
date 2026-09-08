@@ -64,8 +64,8 @@ public:
 	
 	void Set_S2F49_PP_SELECT(CString sLotID, CString sRecipe, CString sOperID);
 	void Set_S2F49_LOT_ID_FAIL();	
-	//void Set_S2F49_PP_UPLOAD_CONFIRM();
-	//void Set_S2F49_PP_UPLOAD_FAIL();
+	void Set_S2F49_PP_UPLOAD_CONFIRM();
+	void Set_S2F49_PP_UPLOAD_FAIL();
 
 	void Set_S2F49_LOT_START();
 	/////////////////////////////////////

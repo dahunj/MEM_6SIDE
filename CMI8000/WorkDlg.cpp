@@ -530,6 +530,7 @@ void CWorkDlg::OnStcLotIdClick(UINT nID)
 
 	m_stcLotId[ID].SetWindowText(strKey);
 	if (ID == 1) g_dlgOperator.m_stcOperLotId.SetWindowText(strKey);
+	gData.sLotID[ID] = strKey;
 
 	CString strLog;
 	strLog.Format("[Work Dialog] Lot ID (%d) Click. (LotID:%s)", ID, strKey);

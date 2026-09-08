@@ -165,8 +165,8 @@ LRESULT CHost::OnServerReceive(WPARAM wLocalPort, LPARAM lClientIdx)
 			else if (m_strStFn == "S2F3")  Get_S2F3_Link();		// Link Test Request
 			else if (m_strStFn == "S2F31") Get_S2F31_Time();	// Date and Time Set Request
 			else if (m_strStFn == "S2F49" && m_strRcmd == "PP_SELECT")			 Get_S2F49_PPSelect();			
-			//else if (m_strStFn == "S2F49" && m_strRcmd == "PP_UPLOAD_CONFIRM")	 Get_S2F49_PP_UPLOAD_CONFIRM();
-			//else if (m_strStFn == "S2F49" && m_strRcmd == "PP_UPLOAD_FAIL")		 Get_S2F49_PP_UPLOAD_FAIL();
+			else if (m_strStFn == "S2F49" && m_strRcmd == "PP_UPLOAD_CONFIRM")	 Get_S2F49_PP_UPLOAD_CONFIRM();
+			else if (m_strStFn == "S2F49" && m_strRcmd == "PP_UPLOAD_FAIL")		 Get_S2F49_PP_UPLOAD_FAIL();
 			else if (m_strStFn == "S2F49" && m_strRcmd == "LOT_START")			 Get_S2F49_LOT_START();
 			else if (m_strStFn == "S2F49" && m_strRcmd == "LOT_ID_FAIL")		 Get_S2F49_LOT_ID_FAIL();
 			
@@ -451,42 +451,39 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 			// }
 		 //}	
 
-		 //if (m_strRcmd == "PP_UPLOAD_CONFIRM") 
-		 //{
-			// CXmlNodes nodes = m_xml.GetRoot()->GetChild("ITEM")->GetChild("RCMDCP")->GetChild("CPLIST")->GetChildren();
-			// int nCount = nodes.GetCount();
+		 if (m_strRcmd == "PP_UPLOAD_CONFIRM") 
+		 {
+			 CXmlNodes nodes = m_xml.GetRoot()->GetChild("ITEM")->GetChild("RCMDCP")->GetChild("CPLIST")->GetChildren();
+			 int nCount = nodes.GetCount();
 
-			// for (int i = 0; i < nCount; i++) 
-			// {
-			//	 CString strName = nodes[i]->GetChild("CPNAME")->GetAttribute("VALUE");
-			//	 CString strData = nodes[i]->GetChild("CPVAL")->GetAttribute("VALUE");
+			 for (int i = 0; i < nCount; i++) 
+			 {
+				 CString strName = nodes[i]->GetChild("CPNAME")->GetAttribute("VALUE");
+				 CString strData = nodes[i]->GetChild("CPVAL")->GetAttribute("VALUE");
 
-			//	 if (strName == "LOTID")		gMes.sHostLotId = strData;
-			//	 if (strName == "MGZID")		gMes.sHostLdMGZId = strData;
-			//	 if (strName == "RECIPEID")		gMes.sHostRecipe = strData;							
-			// }		
-		 //}		
+				 if (strName == "LOTID")		gMes.sHostLotId = strData;				
+				 if (strName == "RECIPEID")		gMes.sHostRecipe = strData;							
+			 }		
+			
 
-		 //if (m_strRcmd == "PP_UPLOAD_FAIL") 
-		 //{
-			// CXmlNodes nodes = m_xml.GetRoot()->GetChild("ITEM")->GetChild("RCMDCP")->GetChild("CPLIST")->GetChildren();
-			// int nCount = nodes.GetCount();
+		 }		
 
-			// for (int i = 0; i < nCount; i++) {
-			//	 CString strName = nodes[i]->GetChild("CPNAME")->GetAttribute("VALUE");
-			//	 CString strData = nodes[i]->GetChild("CPVAL")->GetAttribute("VALUE");
+		 if (m_strRcmd == "PP_UPLOAD_FAIL") 
+		 {
+			 CXmlNodes nodes = m_xml.GetRoot()->GetChild("ITEM")->GetChild("RCMDCP")->GetChild("CPLIST")->GetChildren();
+			 int nCount = nodes.GetCount();
 
-			//	 if (strName == "RECIPEID")			gMes.sHostRecipe = strData;				
-			// }
+			 for (int i = 0; i < nCount; i++) {
+				 CString strName = nodes[i]->GetChild("CPNAME")->GetAttribute("VALUE");
+				 CString strData = nodes[i]->GetChild("CPVAL")->GetAttribute("VALUE");
 
-			// nodeE = m_xml.GetRoot()->GetChild("ITEM")->GetChild("RCMDCP")->GetChild("RESULT");
-			// gMes.sFailCode = nodeE.GetChild("CODE")->GetAttribute("VALUE");
-			// gMes.sFailText = nodeE.GetChild("TEXT")->GetAttribute("VALUE");
-		 //}	
-		
+				 if (strName == "RECIPEID")			gMes.sHostRecipe = strData;				
+			 }
 
-		
-
+			 nodeE = m_xml.GetRoot()->GetChild("ITEM")->GetChild("RCMDCP")->GetChild("RESULT");
+			 gMes.sFailCode = nodeE.GetChild("CODE")->GetAttribute("VALUE");
+			 gMes.sFailText = nodeE.GetChild("TEXT")->GetAttribute("VALUE");
+		 }	
 	} 
 	else if(m_strStFn == "S7F25")
 	{

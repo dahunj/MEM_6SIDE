@@ -152,8 +152,8 @@ LRESULT CMesAgent::OnClientReceive(WPARAM wParam, LPARAM lParam)
 		{
 			if (strOp == "SELECT")	Get_PPSelect(strArg[0], strArg[1], strArg[2]);
 			if (strOp == "BODYREQUEST") Get_PPBodyRequest(strArg[0], strArg[1], strArg[2]);
-			//if (strOp == "CONFIRM") Get_PPUpload_Confirm(strArg[0]);
-			//if (strOp == "FAIL") Get_PPUpload_Fail(strArg[0], strArg[1], strArg[2]);
+			if (strOp == "CONFIRM") Get_PPUpload_Confirm(strArg[0]);
+			if (strOp == "FAIL") Get_PPUpload_Fail(strArg[0], strArg[1], strArg[2]);
 		}
 		else if(strCmd == "TERMINAL")
 		{
@@ -249,7 +249,7 @@ void CMesAgent::Get_PPSelect(CString sLotId, CString sRecipe, CString sOperID)
 	gMes.sHostLotID = sLotId;
 	gMes.sHostRecipe = sRecipe;
 
-	if (gMes.sHostLotID.GetLength() < 4 || gMes.sHostRecipe.GetLength() < 1) 
+	if (gMes.sHostLotID.GetLength() < 2 || gMes.sHostRecipe.GetLength() < 1) 
 	{
 		g_objCommon.Show_Error(9004); return;
 	}	
@@ -261,7 +261,7 @@ void CMesAgent::Get_PPBodyRequest(CString sLotId, CString sRecipe, CString sOper
 	gMes.sHostLotID = sLotId;
 	gMes.sHostRecipe = sRecipe;
 
-	if (gMes.sHostLotID.GetLength() < 4 || gMes.sHostRecipe.GetLength() < 1) 
+	if (gMes.sHostLotID.GetLength() < 2 || gMes.sHostRecipe.GetLength() < 1) 
 	{
 		g_objCommon.Show_Error(9004); return;
 	}	
@@ -396,7 +396,7 @@ void CMesAgent::Set_PPBodyData(CString sLotID, CString sRecipe, CString sBodyDat
 void CMesAgent::Set_PPUploadCompletedReport(CString sLotId, CString sRecipeId)
 {
 	CString strSend; 
-	strSend.Format("PP,COMPLETED,%s,%s,%s", sLotId, sRecipeId);
+	strSend.Format("PP,COMPLETED,%s,%s", sLotId, sRecipeId);
 	Send_Command(strSend);
 }
 
