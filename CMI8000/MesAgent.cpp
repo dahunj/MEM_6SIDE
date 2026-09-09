@@ -154,6 +154,7 @@ LRESULT CMesAgent::OnClientReceive(WPARAM wParam, LPARAM lParam)
 			if (strOp == "BODYREQUEST") Get_PPBodyRequest(strArg[0], strArg[1], strArg[2]);
 			if (strOp == "CONFIRM") Get_PPUpload_Confirm(strArg[0]);
 			if (strOp == "FAIL") Get_PPUpload_Fail(strArg[0], strArg[1], strArg[2]);
+			if (strOp == "LIST_REQ") Get_PPListReq();
 		}
 		else if(strCmd == "TERMINAL")
 		{
@@ -299,7 +300,11 @@ void CMesAgent::Get_PPUpload_Fail(CString sRecipeID, CString sFailCode, CString 
 	g_objCommon.Show_Error(9031);
 }
 
-
+void CMesAgent::Get_PPListReq()
+{
+	EQUIP_DATA * pEquipData = g_objDataManager.Get_pEquipData();
+	Set_PPList(pEquipData->sRecipeName);
+}
 
 //Set
 
@@ -392,14 +397,12 @@ void CMesAgent::Set_PPBodyData(CString sLotID, CString sRecipe, CString sBodyDat
 	Send_Command(strSend);
 }
 
-
 void CMesAgent::Set_PPUploadCompletedReport(CString sLotId, CString sRecipeId)
 {
 	CString strSend; 
 	strSend.Format("PP,COMPLETED,%s,%s", sLotId, sRecipeId);
 	Send_Command(strSend);
 }
-
 
 void CMesAgent::Set_LotStartedReport(CString sOperID, CString sLotId, CString sRecipe, CString sCMCount)
 {
@@ -409,7 +412,6 @@ void CMesAgent::Set_LotStartedReport(CString sOperID, CString sLotId, CString sR
 	Send_Command(strSend);
 }
 
-
 void CMesAgent::Set_ProductCompletedReport(CString sOperID, CString sLotID, int nTrayNo, int nCMNo,  CString sResult, CString sReasonCode, CString sCMBarcode, int UnitNo)
 {
 	CString strSend, strLogID;
@@ -418,7 +420,13 @@ void CMesAgent::Set_ProductCompletedReport(CString sOperID, CString sLotID, int 
 	Send_Command(strSend);
 }
 
+void CMesAgent::Set_PPList(CString sRecipe)
+{
+	CString strSend, strLogID;
 
+	strSend.Format("PP,LIST_RPY,%s", sRecipe);
+	Send_Command(strSend);
+}
 
 
 

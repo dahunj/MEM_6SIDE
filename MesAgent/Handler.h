@@ -42,7 +42,7 @@ private:
 	void Get_PPSelectedReport(CString sLotID, CString sRecipeId);
 	void Get_PPBodyData(CString sLotID, CString sRecipe, CString sBodyData);
 	void Get_PPUploadCompletedReport(CString sLotID, CString sRecipe);	
-
+	void Get_RecipeListRpy(CString sName);
 
 	void Get_LotStartedReport(CString sOperID, CString sLotID, CString sRecipe, CString sCMCount);
 	void Get_ProductCompletedReport(CString sOperID, CString sLotID, CString sTNo, CString sCNo, CString sResult, CString sReasonCode, CString sBarcode, CString sUnitNo);
@@ -76,7 +76,7 @@ public:
 	
 	void Set_Terminal(CString sMsg);
 	
-
+	void Set_RecipeListReq();
 
 
 

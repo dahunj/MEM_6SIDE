@@ -68,6 +68,8 @@ private:
 
 	void Get_S2F49_LOT_START();
 	void Get_S2F49_LOT_ID_FAIL();
+
+	void Get_S7F19_PPListRequest();		// Current EPPD Request
 			
 	void Send_Command(CString sSend, BOOL bReply, CString sStFn, CString sRcmd="");	// XML
 
@@ -117,6 +119,7 @@ public:
 	void Set_S9F9_T_Timeout();
 	void Set_S9F13_Timeout();	// Conversation Timeout
 
+	void Set_S7F20_PPListReply(CString sName);
 
 	void Test_Command();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);

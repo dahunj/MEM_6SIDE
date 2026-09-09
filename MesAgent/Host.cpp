@@ -641,7 +641,10 @@ void CHost::Get_S2F49_LOT_ID_FAIL()
 	g_objHandler.Set_Lot_ID_Fail();
 }
 
-
+void CHost::Get_S7F19_PPListRequest()
+{
+	g_objHandler.Set_RecipeListReq();
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1356,6 +1359,32 @@ void CHost::Set_S9F13_Timeout()	// Conversation Timeout
 
 	Send_Command(strSend, FALSE, "S9F13");
 }
+
+void CHost::Set_S7F20_PPListReply(CString sName)
+{
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	CString strTime;
+	strTime.Format("%04d%02d%02d%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+
+	CString strSend = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" + CRLF;
+
+	strSend += "<EIF VERSION=\"2.0\" ID=\"S7F20\" NAME=\"Current EPPD Data\">" + CRLF;
+	strSend += "  <ELEMENT>" + CRLF;
+	strSend += "    <EQPID VALUE=\"" + gData.sEquipId + "\" />" + CRLF;
+	strSend += "  </ELEMENT>" + CRLF;
+	strSend += "  <ITEM>" + CRLF;
+	strSend += "    <PPIDLIST COUNT =\"1\" >" + CRLF;
+	strSend += "      <PPID VALUE=\"" + sName + "\" />" + CRLF;
+	strSend += "    </PPIDLIST>" + CRLF;
+	strSend += "  </ITEM>" + CRLF;
+	strSend += "</EIF>";
+
+	Send_Command(strSend, FALSE, "S7F20");
+}
+
+
 
 void CHost::Reply_HeartBeat()
 {

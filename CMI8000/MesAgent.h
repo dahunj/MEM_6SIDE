@@ -42,6 +42,7 @@ private:
 	
 	void Get_PPUpload_Confirm(CString sRecipeID);
 	void Get_PPUpload_Fail(CString sRecipeID, CString sFailCode, CString sFailText);
+	void Get_PPListReq();
 	void Get_Terminal(CString sMsg);
 
 	void Send_Command(CString sSend);
@@ -70,6 +71,7 @@ public:
 	
 	void Set_PPBodyData(CString sLotID, CString sRecipe, CString sBodyData);
 	void Set_PPUploadCompletedReport(CString sLotId, CString sRecipeId);
+	void Set_PPList(CString sRecipe);
 
 	void Set_LotStartedReport(CString sOperID, CString sLotId, CString sRecipe, CString sCMCount);
 	void Set_ProductCompletedReport(CString sOperID, CString sLotID, int nTrayNo, int nCMNo,  CString sResult, CString sReasonCode, CString sCMBarcode, int UnitNo);

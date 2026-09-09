@@ -149,6 +149,7 @@ LRESULT CHandler::OnServerReceive(WPARAM wLocalPort, LPARAM lClientIdx)
 			if(strOp == "SELECTED") Get_PPSelectedReport(strA[0], strA[1]);
 			if(strOp == "BODYDATA") Get_PPBodyData(strA[0], strA[1], strA[2]);
 			if(strOp == "COMPLETED") Get_PPUploadCompletedReport(strA[0], strA[1]);
+			if (strOp == "LIST_RPY") Get_RecipeListRpy(strA[0]);
 		}
 		else if(strCmd == "PRODUCT")
 		{
@@ -305,13 +306,18 @@ void CHandler::Get_PPBodyData(CString sLotID, CString sRecipe, CString sBodyData
 }
 
 
-/////////
-
-
 void CHandler::Get_PPUploadCompletedReport(CString sLotID, CString sRecipe)
 {	
 	g_objHost.Set_S6F11_PPUploadCompleted(sLotID, sRecipe);
 }
+
+
+void CHandler::Get_RecipeListRpy(CString sName)
+{
+	
+	g_objHost.Set_S7F20_PPListReply(sName);
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Set Command
@@ -395,6 +401,13 @@ void CHandler::Set_Terminal(CString sMsg)
 {
 	CString strSend;
 	strSend.Format("TERMINAL,DISPLAY,%s", sMsg);
+	Send_Command(strSend);
+}
+
+void CHandler::Set_RecipeListReq()
+{
+	CString strSend;
+	strSend.Format("PP,LIST_REQ");
 	Send_Command(strSend);
 }
 
