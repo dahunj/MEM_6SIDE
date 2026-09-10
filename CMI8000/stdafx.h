@@ -325,7 +325,7 @@ typedef struct {
 															// 2  3
  	int		nLogInLevel;
 
-	int		nSelectNo;
+	int		nLotSelected;
 } GLOVAL_DATA;
 
 typedef struct {

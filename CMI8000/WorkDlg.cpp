@@ -488,6 +488,7 @@ void CWorkDlg::OnBnClickedLotID(UINT nID)
 {
 	int nIndex = nID - IDC_BTN_LOTID_0;
 	m_nPortIdx = nIndex;
+	gData.nLotSelected = nIndex+1;
 }
 
 void CWorkDlg::OnBnClickedNgClear(UINT nID)
@@ -2084,9 +2085,7 @@ void CWorkDlg::OnBnClickedBtnMesDisconnect()
 
 void CWorkDlg::OnBnClickedBtnMesAbort()
 {
-	int nPx = gData.nULPNo - 1;
-	if (nPx < 0) nPx = gData.nLPNo - 1;
-	if (nPx < 0) nPx = 0;
+	int nPx = gData.nLotSelected-1;
 
 	if (!g_objMesAgent.Is_Connected()) { AfxMessageBox("MES Disconnect 상태에서는 처리를 할수 없습니다."); return; }
 	if (!g_objMesAgent.Is_HostOnline()) { AfxMessageBox("MES Offline 상태에서는 처리를 할수 없습니다."); return; }
