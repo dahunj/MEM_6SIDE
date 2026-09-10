@@ -302,6 +302,8 @@ void CHandler::Get_LotEnd(CString sLotID, CString sRecipe, CString sTotalCnt, CS
 
 void CHandler::Get_PPBodyData(CString sLotID, CString sRecipe, CString sBodyData)
 {
+	for(int i=0; i<8; i++) AfxExtractSubString(gData.sBodyData[i],sBodyData,i,'/');
+	
 	g_objHost.Set_S7F26();
 }
 

@@ -169,7 +169,7 @@ LRESULT CHost::OnServerReceive(WPARAM wLocalPort, LPARAM lClientIdx)
 			else if (m_strStFn == "S2F49" && m_strRcmd == "PP_UPLOAD_FAIL")		 Get_S2F49_PP_UPLOAD_FAIL();
 			else if (m_strStFn == "S2F49" && m_strRcmd == "LOT_START")			 Get_S2F49_LOT_START();
 			else if (m_strStFn == "S2F49" && m_strRcmd == "LOT_ID_FAIL")		 Get_S2F49_LOT_ID_FAIL();
-			
+			else if (m_strStFn == "S7F19" )		 Get_S7F19_PPListRequest();
 			//else if (m_strStFn == "S5F2")  Get_S5F2_AlarmAck();	// Alarm Report Acknowledge
 			//else if (m_strStFn == "S10F3") Get_S10F3_Display();
 		}
@@ -494,7 +494,10 @@ BOOL CHost::Extract_Xml(CString sXmlData)
 		m_strDisplay = m_xml.GetRoot()->GetChild("ITEM")->GetChild("TEXT")->GetAttribute("VALUE");
 		g_objHandler.Set_TerminalDisplay(m_strDisplay);
 	}
-
+	else if(m_strStFn == "S7F19")
+	{
+		g_objHandler.Set_PPBodyRequest();		
+	}
 	m_xml.Close();
 	return TRUE;
 }
@@ -680,8 +683,6 @@ void CHost::Set_S7F26()
 		strSend += "      <PPARM VALUE=\"" + gData.sBodyData[i] + "\" />" + CRLF;
 		strSend += "    </LIST>" + CRLF;
 	}
-
-
 	strSend += "    </PCLIST>" + CRLF;
 	strSend += "  </ITEM>" + CRLF;
 	strSend += "</EIF>";
