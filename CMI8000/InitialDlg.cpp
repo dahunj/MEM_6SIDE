@@ -179,7 +179,7 @@ void CInitialDlg::OnTimer(UINT_PTR nIDEvent)
 				g_objDispatcher.Set_TimeUpdate();
 				g_objCapAttach.Set_TimeUpdate();
 
-				pMainDlg->Set_CurrentState(STATE_STOP);
+				pMainDlg->Set_CurrentState(STATE_NONE);
 				pMainDlg->Enable_ModeButton(TRUE);
 				pMainDlg->m_btnMainOperator.EnableWindow(TRUE);
 				pMainDlg->Set_CurrentMode(MODE_OPERATOR);

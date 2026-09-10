@@ -403,7 +403,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 				}
 				pMainDlg->Set_CurrentState(STATE_RUN);
 				g_objMesAgent.Set_EquipState(1);
-
+				g_objMesAgent.Set_OperUpdate(gData.sOperID);
 				//need to do MES Check 
 				g_objLogFile.Save_HandlerLog("[Work Mode] Main Thread Start");
 				g_objSequenceMain.Begin_MainRunThread();

@@ -1288,7 +1288,7 @@ void CCMI8000Dlg::Set_NoWork()
 
 	int nTerm = (int)(GetTickCount() - dwNoWorkBegin);
 	int nNoWork = (pEquipData->nNoWorkTime*60*1000);
-	if (nTerm < nNoWork) 
+	if (nTerm > nNoWork) 
 	{
 		return;	//분 -> 초 -> 밀리초
 	}

@@ -278,17 +278,25 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
 			strErrPick.Format(", Equip: %s, Host %s,", pEquipData->sRecipeName, gMes.sHostRecipe);
-			//strErrPick.Format(", Equip: %s, Host %s,", gData.sModelName, gMes.sHostRecipe);
-			
-			
+			//strErrPick.Format(", Equip: %s, Host %s,", gData.sModelName, gMes.sHostRecipe);		
+		}
+
+		if(m_nErrNo == 3143)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);
+			strErrPick.Format(", Equip: %s, Host %s,", pEquipData->sRecipeName, gMes.sHostRecipe);
+			//strErrPick.Format(", Equip: %s, Host %s,", gData.sModelName, gMes.sHostRecipe);		
 		}
 
 		if(m_nErrNo == 9032)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-
-			strErrPick.Format(", Fail ID: %s, Code: %s, Text: %s", gMes.sHostFailLotId, gMes.sHostFailCode, gMes.sHostFailText);
-		
+			strErrPick.Format(", Fail ID: %s, Code: %s, Text: %s", gMes.sHostFailLotId, gMes.sHostFailCode, gMes.sHostFailText);		
+		}
+		if(m_nErrNo == 9031)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);
+			strErrPick.Format("\r\n Fail ID: %s, Code: %s, Text: %s", gMes.sHostFailLotId, gMes.sHostFailCode, gMes.sHostFailText);
 		}
 
 
@@ -454,12 +462,12 @@ void CErrorDlg::OnBnClickedBtnErrRetry()
 		break;
 	case 3142:
 		{
-			g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 51);
+			g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
 		}
 		break;
 	case 3143:
 		{
-			g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 52);
+			g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
 		}
 		break;
 	case 9005:

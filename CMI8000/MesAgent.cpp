@@ -270,7 +270,7 @@ void CMesAgent::Get_PPBodyRequest(CString sLotId, CString sRecipe, CString sOper
 	EQUIP_DATA * pEquipData = g_objDataManager.Get_pEquipData();
 
 	CString sBodyData;
-	sBodyData.Format("%d,%d,%d,%d,%d,%d,%d,%d", pEquipData->bUseVisionAlign, pEquipData->bUseInspectAngle, pEquipData->bUseInspectBtm1Specular,
+	sBodyData.Format("%d/%d/%d/%d/%d/%d/%d/%d", pEquipData->bUseVisionAlign, pEquipData->bUseInspectAngle, pEquipData->bUseInspectBtm1Specular,
 		pEquipData->bUseInspectBtm1Angle, pEquipData->bUseInspectBtm13D, pEquipData->bUseInspectTop1, pEquipData->bUseInspectTop2
 		,pEquipData->bUseInspectBtm2);
 

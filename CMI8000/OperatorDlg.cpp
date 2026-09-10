@@ -9,6 +9,7 @@
 #include "Common.h"
 #include "SequenceInit.h"
 #include "SequenceMain.h"
+#include "MesAgent.h"
 
 #include "WorkDlg.h"
 #include "SetupDlg.h"
@@ -192,7 +193,7 @@ void COperatorDlg::OnStnClickedStcOperOperId()
 	{
 		gData.nLogInLevel = 9300;
 	}
-
+	g_objMesAgent.Set_OperUpdate(gData.sOperID);
 
 	CString sLog;
 	int nNo = gData.nLPNo-1;
