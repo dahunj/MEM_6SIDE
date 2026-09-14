@@ -622,9 +622,7 @@ void CInspector::Get_InspectComplete(int nInspector, CString sGbn, CString sLotI
 	}
 	if(nPx==1){
 		gData.cJudgeCode2[nTx][nCx][nV] = *(LPSTR)(LPCTSTR)sJudge;
-	}
-
-	
+	}		
 
 	if (sJudge != "G" && sNGCode.GetLength() < 2) sNGCode = "NON";	// Good 일때 NG Code는 Space(" ")
 
@@ -687,27 +685,9 @@ void CInspector::Get_InspectComplete(int nInspector, CString sGbn, CString sLotI
 		if (nPreInfo < 2 || nPreInfo > 8) gData.nInspectInfo[nPx][nTx][nCx] = 9; 
 	}		
 	
-
 	if (sJudge == "B") gLot.nBsNgCount[nPx]++;	// Normal (Barcode Shift도 8로 분류해서 색상다르게 1차로 빼준다.)
 
-	gData.byInspectDone[nPx][nTx][nCx] |= (1 << nV);
-
-	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-	if (!pEquipData->bUseDispatcher) return;
-
-	if (pEquipData->bUseInspectAngle && ((gData.byInspectDone[nPx][nTx][nCx] >> 0) & 1) == 0) return;	// Angle
-	if (pEquipData->bUseInspectBtm1Specular  && ((gData.byInspectDone[nPx][nTx][nCx] >> 1) & 1) == 0) return;	// Btm1_Specular
-	if (pEquipData->bUseInspectTop1  && ((gData.byInspectDone[nPx][nTx][nCx] >> 2) & 1) == 0) return;	// Top1
-	if (pEquipData->bUseInspectTop2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 3) & 1) == 0) return;	// Top2
-	if (pEquipData->bUseInspectBtm2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 4) & 1) == 0) return;	// Btm2
-	if (pEquipData->bUseInspectBtm1Angle  && ((gData.byInspectDone[nPx][nTx][nCx] >> 5) & 1) == 0) return;	// Btm1_Angle
-	if (pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) return;	// Btm1_3D
-
-	if (gData.nInspectInfo[nPx][nTx][nCx] == 4 || gData.nInspectInfo[nPx][nTx][nCx] == 5) {
-		g_objDispatcher.Set_JudgeRequest(nPx+1, nTx+1, nCx+1);	// N1(4), N2(5)
-	} else {
-		g_objDispatcher.Set_JudgeDone(nPx+1, nTx+1, nCx+1);	// ROS 판정 완료
-	}
+	gData.byInspectDone[nPx][nTx][nCx] |= (1 << nV);	
 }
 
 void CInspector::Get_AMoveRequest(int nInspector, CString sGbn, CString sZ)

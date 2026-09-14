@@ -1566,8 +1566,8 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 			bDone = FALSE;	// return FALSE;	// Btm2
 		if (m_pEquipData->bUseInspectBtm1Angle  && ((gData.byInspectDone[nPx][nTx][nCx] >> 5) & 1) == 0)
 			bDone = FALSE;	// return FALSE;	// Btm1_AG
-		//if (m_pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) 
-		//bDone = FALSE;	// return FALSE;	// Btm1_3D
+		if (m_pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) 
+		bDone = FALSE;	// return FALSE;	// Btm1_3D
 
 		DWORD dwTick = GetTickCount();
 
