@@ -195,6 +195,8 @@ BOOL CWorkDlg::OnInitDialog()
 	gData.nMesPortNo = 0;
 	gData.bFirstLotStart = FALSE;
 
+	gData.nSelectedLot = 1;
+
 	m_btnBuffChange.ShowWindow(FALSE);
 	m_btnBuffComplete.ShowWindow(FALSE);
 
@@ -488,7 +490,7 @@ void CWorkDlg::OnBnClickedLotID(UINT nID)
 {
 	int nIndex = nID - IDC_BTN_LOTID_0;
 	m_nPortIdx = nIndex;
-	gData.nLotSelected = nIndex+1;
+	gData.nSelectedLot = nIndex+1;
 }
 
 void CWorkDlg::OnBnClickedNgClear(UINT nID)
@@ -526,6 +528,7 @@ void CWorkDlg::OnBnClickedNgClear(UINT nID)
 void CWorkDlg::OnStcLotIdClick(UINT nID)
 {
 	int ID = nID - IDC_STC_LOT_ID_0;
+	gData.nSelectedLot = ID +1;
 	CString strKey;
 	if (g_objCommon.Show_KeyPad(strKey) != IDOK) return;
 
@@ -1107,32 +1110,6 @@ void CWorkDlg::ResetInfoDisplay()
 }
 
 
-void CWorkDlg::Reset_AlarmLog()
-{
-	CString strLog, strErrNo;
-	SYSTEMTIME time;
-
-	gAlm.bBegin = FALSE;
-	GetLocalTime(&time);
-
-	gAlm.dwEndTime = GetTickCount();
-	gAlm.sEndTime.Format("%04d%02d%02d_%02d%02d%02d", time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
-	gAlm.dwProcTime = gAlm.dwEndTime - gAlm.dwStartTime;
-	
-	gLot.dwErrorTime[PORT1] += gAlm.dwProcTime; 
-	gLot.dwErrorTime[PORT2] += gAlm.dwProcTime;
-		
-	gLot.nErrorCount[PORT1]++;
-	gLot.nErrorCount[PORT2]++;
-
-	strLog.Format("%s,%04d,%s,%s,%s,%d", gAlm.sLotID, gAlm.nAlmNo, gAlm.sAlmMsg, gAlm.sStartTime, gAlm.sEndTime, gAlm.dwProcTime);
-	g_objLogFile.Save_AlarmResetLog(strLog);	// Alarm Reset
-
-	strErrNo.Format("%04d", gAlm.nAlmNo);
-//	g_objMesAgent.Set_ErrorUpdate(0, strErrNo);
-
-	g_objLogFile.Save_ECMLog(1, strLog);
-}
 
 void CWorkDlg::MachineStopLog(CString sType)
 {
@@ -1420,34 +1397,7 @@ LRESULT CWorkDlg::OnUpdateBarcode(WPARAM wParam, LPARAM lParam)
 	CString strTemp, sBarcode, strLog;
 	CString sData = g_objBarcodeLot.Get_BarcodeLot(); 
 	if (sData.GetLength() < 1) return 0;
-	/*
-	sData.Replace("\r","");
-	sData.Replace("\n","");
-
-	char chSep = '/';
-	CString strPartNumber, strModuleCount, strLotID;
-
-	AfxExtractSubString(strPartNumber, sData, 0, chSep);
-	AfxExtractSubString(strModuleCount, sData, 1, chSep);
-	AfxExtractSubString(strLotID, sData, 2, chSep);
-
-	//'/' 구분 바코드 자릿수 체크 
-	if(strPartNumber.GetLength() < 10) { // 바코드 part number 자릿수 10 이하 체크 
-		g_objCommon.Show_MsgBox(1, "바코드 part number 자릿수를 체크해 주십시오\n");
-		return 0;
-	}
-	if(strModuleCount.GetLength() < 3) { // 모듈 수량 자릿수 3 이하 체크 
-		g_objCommon.Show_MsgBox(1, "바코드 모듈 수량 자릿수를 체크해 주십시오\n %s");
-		return 0;
-	}
-	if(strLotID.GetLength() < 12) { // 모듈 수량 자릿수 3 이하 체크 
-		g_objCommon.Show_MsgBox(1, "바코드 Lot ID 자릿수를 체크해 주십시오\n");
-		return 0;
-	}
-
-	BOOL ret = g_objLogFile.Check_BarcodeLog(sData);
-	if(!ret) g_objCommon.Show_MsgBox(1, "2주 내에 같은 바코드를 사용하였습니다.\n 주의 바랍니다.");
-	*/
+	
 	if (!m_stcLotId[m_nPortIdx].IsWindowEnabled()) return 0;
 
 	if (m_chkLotIDInsert.GetCheck()) sBarcode.Format("%sT1", sData);
@@ -1455,6 +1405,8 @@ LRESULT CWorkDlg::OnUpdateBarcode(WPARAM wParam, LPARAM lParam)
 
 	m_stcLotId[m_nPortIdx].GetWindowText(strTemp);
 	if (strTemp == sBarcode) return 0;
+
+	gData.sLotID[m_nPortIdx] = sBarcode;
 
 	m_stcLotId[m_nPortIdx].SetWindowText(sBarcode);
 	g_dlgOperator.m_stcOperLotId.SetWindowText(sBarcode);
@@ -2085,8 +2037,8 @@ void CWorkDlg::OnBnClickedBtnMesDisconnect()
 
 void CWorkDlg::OnBnClickedBtnMesAbort()
 {
-	int nPx = gData.nLotSelected-1;
-
+	int nPx = gData.nSelectedLot - 1;
+	
 	if (!g_objMesAgent.Is_Connected()) { AfxMessageBox("MES Disconnect 상태에서는 처리를 할수 없습니다."); return; }
 	if (!g_objMesAgent.Is_HostOnline()) { AfxMessageBox("MES Offline 상태에서는 처리를 할수 없습니다."); return; }
 	if (!g_objSequenceMain.Get_IsAutoRun()) { AfxMessageBox("진행중인 Lot이 없어 처리를 할수 없습니다."); return; }

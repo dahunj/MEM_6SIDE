@@ -242,13 +242,13 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		if(m_nErrNo == 9005)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Port1: %s, Port2: %s, Host %s,", gData.sLotID[0], gData.sLotID[1], gMes.sHostLotID);
+			strErrPick.Format("/ Port1: %s/ Port2: %s/ Host %s", gData.sLotID[0], gData.sLotID[1], gMes.sHostLotID);
 
 		}
 		if(m_nErrNo == 9006)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Equip: %s, Host %s,", pEquipData->sRecipeName, gMes.sHostRecipe);
+			strErrPick.Format("/ Equip: %s/ Host %s", pEquipData->sRecipeName, gMes.sHostRecipe);
 			//strErrPick.Format(", Equip: %s, Host %s,", gData.sModelName, gMes.sHostRecipe);
 			
 		}
@@ -256,13 +256,13 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		if(m_nErrNo == 9007)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Port1: %s, Port2: %s, Host %s,", gData.sLotID[0], gData.sLotID[1], gMes.sHostLotID);
+			strErrPick.Format("/ Port1: %s/ Port2: %s/ Host %s", gData.sLotID[0], gData.sLotID[1], gMes.sHostLotID);
 
 		}
 		if(m_nErrNo == 9008)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Equip: %s, Host %s,", pEquipData->sRecipeName, gMes.sHostRecipe);
+			strErrPick.Format("/ Equip: %s/ Host %s/", pEquipData->sRecipeName, gMes.sHostRecipe);
 			//strErrPick.Format(", Equip: %s, Host %s,", gData.sModelName, gMes.sHostRecipe);
 
 		}
@@ -270,33 +270,33 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		if(m_nErrNo == 3141)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Port1: %s, Port2: %s, Host %s,", gData.sLotID[0], gData.sLotID[1], gMes.sHostLotID);
+			strErrPick.Format("/ Port1: %s/ Port2: %s/ Host %s/", gData.sLotID[0], gData.sLotID[1], gMes.sHostLotID);
 			
 			
 		}
 		if(m_nErrNo == 3142)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Equip: %s, Host %s,", pEquipData->sRecipeName, gMes.sHostRecipe);
+			strErrPick.Format("/ Equip: %s/ Host %s/", pEquipData->sRecipeName, gMes.sHostRecipe);
 			//strErrPick.Format(", Equip: %s, Host %s,", gData.sModelName, gMes.sHostRecipe);		
 		}
 
 		if(m_nErrNo == 3143)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Equip: %s, Host %s,", pEquipData->sRecipeName, gMes.sHostRecipe);
+			strErrPick.Format("/ Equip: %s/ Host %s/", pEquipData->sRecipeName, gMes.sHostRecipe);
 			//strErrPick.Format(", Equip: %s, Host %s,", gData.sModelName, gMes.sHostRecipe);		
 		}
 
 		if(m_nErrNo == 9032)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format(", Fail ID: %s, Code: %s, Text: %s", gMes.sHostFailLotId, gMes.sHostFailCode, gMes.sHostFailText);		
+			strErrPick.Format("/ Fail ID: %s/ Code: %s/ Text: %s", gMes.sHostFailLotId, gMes.sHostFailCode, gMes.sHostFailText);		
 		}
 		if(m_nErrNo == 9031)
 		{
 			m_btnErrRetry.ShowWindow(SW_SHOW);
-			strErrPick.Format("\r\n Fail ID: %s, Code: %s, Text: %s", gMes.sHostFailLotId, gMes.sHostFailCode, gMes.sHostFailText);
+			strErrPick.Format("\r\n Fail ID: %s/ Code: %s/ Text: %s", gMes.sHostFailLotId, gMes.sHostFailCode, gMes.sHostFailText);
 		}
 
 

@@ -142,7 +142,7 @@ private:
 	void Initial_Grid(CGridCS *pGrid, int nRows, int nCols, int nType=1);
 	void Check_Lamp();
 	void Display_Status();
-	void Reset_AlarmLog();
+
 	
 
 public:
