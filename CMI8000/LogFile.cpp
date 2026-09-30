@@ -121,13 +121,14 @@ void CLogFile::Save_AlarmResetLog(const CString& sLog)
 void CLogFile::Save_HandlerLog(const CString& sLog)
 {
 	g_csHandlerLog.Lock();
-
-	CString strPath = gData.sLogPath + "\\Handler";
-
-	Create_Folder(strPath);
-
+	
 	SYSTEMTIME time;
 	GetLocalTime(&time);
+
+	CString strPath;
+	strPath.Format("%s\\Handler\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+
+	Create_Folder(strPath);
 
 	CString strFile, strSave;
 	strFile.Format("%s\\%04d%02d%02d_Handler.txt", strPath, time.wYear, time.wMonth, time.wDay);
@@ -223,15 +224,19 @@ void CLogFile::Save_InspectorLog(const CString& sLog)
 {
 	g_csInspectorLog.Lock();
 
-	CString strPath = gData.sLogPath + "\\Inspector";
-	CString strPath2 = "D:\\Dump\\Inspector";
+	SYSTEMTIME time;
+	GetLocalTime(&time);
+
+	CString strPath;
+	strPath.Format("%s\\Inspector\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+		
+	CString strPath2;
+	strPath2.Format("D:\\Dump\\Inspector\\%04d\\%02d", time.wYear, time.wMonth);
 
 	Create_Folder(strPath);
 	Create_Folder(strPath2);
 
-	SYSTEMTIME time;
-	GetLocalTime(&time);
-
+	
 	CString strFile,strFile2, strSave;
 	strFile.Format("%s\\%04d%02d%02d_Inspector.txt", strPath, time.wYear, time.wMonth, time.wDay);
 	strFile2.Format("%s\\%04d%02d%02d_Inspector.txt", strPath2, time.wYear, time.wMonth, time.wDay);
@@ -1393,14 +1398,17 @@ void CLogFile::Save_MCCLog(const CString& sLog)
 {
 	g_csMCCLog.Lock();
 
-	CString strPath = gData.sLogPath + "\\MCC";
-	CString strPath2 = "D:\\Dump\\MCC";
-
-	Create_Folder(strPath);
-	Create_Folder(strPath2);
-
 	SYSTEMTIME time;
 	GetLocalTime(&time);
+
+	CString strPath;
+	strPath.Format("%s\\MCC\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+
+	CString strPath2;
+	strPath2.Format("D:\\Dump\\MCC\\%04d\\%02d",  time.wYear, time.wMonth);
+		
+	Create_Folder(strPath);
+	Create_Folder(strPath2);	
 
 	CString strFile,strFile2, strSave;
 	strFile.Format("%s\\%04d%02d%02d_MCC.txt", strPath, time.wYear, time.wMonth, time.wDay);
@@ -1447,12 +1455,13 @@ void CLogFile::Save_MotionLog(const CString& sLog)
 {
 	g_csMotionLog.Lock();
 
-	CString strPath = gData.sLogPath + "\\Motion";
-
-	Create_Folder(strPath);
-
 	SYSTEMTIME time;
 	GetLocalTime(&time);
+
+	CString strPath;
+	strPath.Format("%s\\Motion\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+	
+	Create_Folder(strPath);	
 
 	CString strFile, strSave;
 	strFile.Format("%s\\%04d%02d%02d_Motion.txt", strPath, time.wYear, time.wMonth, time.wDay);

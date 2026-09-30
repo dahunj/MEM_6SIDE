@@ -1161,28 +1161,47 @@ BOOL CCommon::Get_Btm1PickerDown(int nSub)
 		return TRUE;
 	}
 	else if (nSub ==  2 && !pDX03->iBtm1PickerUp02 && pDX03->iBtm1PickerDown02)
-	{m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
-	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	{
+		m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+		g_objLogFile.Save_MotionLog(m_strLog);
+		return TRUE;
+	}
 	else if (nSub ==  3 && !pDX03->iBtm1PickerUp03 && pDX03->iBtm1PickerDown03)
 	{ 
 		m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);	
-		g_objLogFile.Save_MotionLog(m_strLog);return TRUE;
+		g_objLogFile.Save_MotionLog(m_strLog);
+		return TRUE;
 	}
 	else if (nSub ==  4 && !pDX03->iBtm1PickerUp04 && pDX03->iBtm1PickerDown04)
-	{ m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
-	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	{ 
+		m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+		g_objLogFile.Save_MotionLog(m_strLog);
+		return TRUE;
+	}
 	else if (nSub ==  5 && !pDX04->iBtm1PickerUp05 && pDX04->iBtm1PickerDown05)
-	{ m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
-	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	{ 
+		m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+		g_objLogFile.Save_MotionLog(m_strLog);
+		return TRUE;
+	}
 	else if (nSub ==  6 && !pDX04->iBtm1PickerUp06 && pDX04->iBtm1PickerDown06)
-	{ m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
-	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	{ 
+		m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+		g_objLogFile.Save_MotionLog(m_strLog);
+		return TRUE;
+	}
 	else if (nSub ==  7 && !pDX04->iBtm1PickerUp07 && pDX04->iBtm1PickerDown07)
-	{ m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
-	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	{ 
+		m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+		g_objLogFile.Save_MotionLog(m_strLog);
+		return TRUE;
+	}
 	else if (nSub ==  8 && !pDX04->iBtm1PickerUp08 && pDX04->iBtm1PickerDown08)
-	{ m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
-	g_objLogFile.Save_MotionLog(m_strLog);return TRUE;}
+	{
+		m_strLog.Format("Get_Btm1PickerDown, nSub:%d",nSub);
+		g_objLogFile.Save_MotionLog(m_strLog);
+		return TRUE;
+	}
 	return FALSE;
 #else
 	DX_DATA_03 *pDX03 = g_objAJinAXL.Get_pDX03();
