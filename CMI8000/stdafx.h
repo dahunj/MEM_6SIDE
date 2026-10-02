@@ -347,12 +347,7 @@ typedef struct {
 
 	int		nMatchingNgCount[2][6];		//MES보다 실물 수량 적은 만큼 갯수 증가 
 	
-	int		nBsNgCount[2];				// Barcode Shift
-	int		nRosRequest[2];
-	int		nRosGood[2];
-	int		nRosNg[2];
-	int		nRosRepair[2];
-	int		nRosTimeOut[2];
+	int		nBsNgCount[2];				// Barcode Shift	
 
 	// Inline Mode일때 캡 조립 완료 후 MES 완공하도록 정보 저장.
 	CString sCALotID[2];

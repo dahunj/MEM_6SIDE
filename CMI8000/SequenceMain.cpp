@@ -803,8 +803,7 @@ void CSequenceMain::Set_ClearRunData(int nType)
 	for (int p = 0; p < 2; p++) for (int i = 0; i < 6; i++) gLot.nSNgCount[p][i] = 0;	// Special NG
 
 
-	gLot.nGoodCount[0] = gLot.nGoodCount[1] = gLot.nNgCount[0] = gLot.nNgCount[1] = 0;
-	for (int p = 0; p < 2; p++) { gLot.nRosRequest[p] = gLot.nRosGood[p] = gLot.nRosNg[p] = gLot.nRosRepair[p] = gLot.nRosTimeOut[p] = 0; }
+	gLot.nGoodCount[0] = gLot.nGoodCount[1] = gLot.nNgCount[0] = gLot.nNgCount[1] = 0;	
 	g_dlgWork.PostMessage(UM_VISION_RESULT, NULL, NULL);
 
 	for (int p = 0; p <  2; p++) for (int i = 0; i < 30; i++) for (int j = 0; j < 40; j++) gMes.sBarID[p][i][j] = gMes.sJudge[p][i][j] = gMes.sNGCode[p][i][j] = "";
@@ -2065,13 +2064,10 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	g_objLogFile.Save_LotResult(nPx, strMsg);
 
 	//Time, Lot_ID, Total, Good, NG, RosRequest, RosGood, RosNg, RosRepair, Filtering1, Filtering2, RateAvi, Final, Tack
-	double dFiltering1 = (gLot.nRosRequest[nPx] == 0 ? 0.0 : (gLot.nRosGood[nPx] * 100.0) / gLot.nRosRequest[nPx]);
-	double dFiltering2 = (nSum == 0 ? 0.0 : (gLot.nRosGood[nPx] * 100.0) / nSum);
-	double dRateAvi = (nSum == 0 ? 0.0 : ((gLot.nGoodCount[nPx] - gLot.nRosGood[nPx]) * 100.0) / nSum);
-
+	
 	strMsg.Format("\t%s \t%d \t%d \t%d \t%d \t%d \t%d \t%d \t%d \t%0.2lf \t%0.2lf \t%0.2lf \t%0.2lf \t%0.3lf",
-		gLot.sLotID[nPx], nSum, gLot.nGoodCount[nPx], gLot.nNgCount[nPx], gLot.nRosRequest[nPx], gLot.nRosGood[nPx], gLot.nRosNg[nPx], gLot.nRosRepair[nPx], gLot.nRosTimeOut[nPx],
-		dFiltering1, dFiltering2, dRateAvi, dRate, gLot.dTackTime_Unload);
+		gLot.sLotID[nPx], nSum, gLot.nGoodCount[nPx], gLot.nNgCount[nPx], 0, 0, 0, 0, 0,
+		0.0, 0.0, 100.0, dRate, gLot.dTackTime_Unload);
 	g_objLogFile.Save_DailyLot(strMsg);
 
 	CCMI8000Dlg *pMainDlg = (CCMI8000Dlg*)AfxGetApp()->GetMainWnd();
@@ -2132,8 +2128,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	for (int i = 0; i < 6; i++) gLot.nMatchingNgCount[nPx][i] = 0;
 
-	gLot.nRosRequest[nPx] = gLot.nRosGood[nPx] = gLot.nRosNg[nPx] = gLot.nRosRepair[nPx] = gLot.nRosTimeOut[nPx] = 0;
-
+	
 	gData.sLotID[nPx] = "LOT_ID";
 	gData.nCmUseCount[nPx] = 0;
 	gData.nTrayUseCount[nPx] = 0;	
