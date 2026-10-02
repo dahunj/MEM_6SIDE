@@ -109,9 +109,7 @@ protected:
 	afx_msg void OnStcVacOffRepeatClick(UINT nID);
 	afx_msg void OnStcDelayAddClick(UINT nID);
 	afx_msg void OnStcTriggerDataClick(UINT nID);
-	afx_msg void OnBnClickedBtnRosConnect();
-	afx_msg void OnBnClickedBtnRosDisconnect();
-	afx_msg void OnStnClickedStcJudgeTimeOver();
+	
 	afx_msg void OnBnClickedBtnCapConnect();
 	afx_msg void OnBnClickedBtnCapDisconnect();
 	afx_msg void OnStnClickedStcShowHidden();

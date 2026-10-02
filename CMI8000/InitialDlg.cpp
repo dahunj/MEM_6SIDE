@@ -9,7 +9,6 @@
 #include "Common.h"
 
 #include "Inspector.h"
-#include "Dispatcher.h"
 #include "CapAttach.h"
 #include "SequenceInit.h"
 
@@ -175,8 +174,7 @@ void CInitialDlg::OnTimer(UINT_PTR nIDEvent)
 				g_objCommon.Show_MsgBox(1, "Initialization is complete.");
 				g_objCommon.Save_MotionPos();
 
-				g_objInspector.Set_TimeUpdate(INSPECTOR_ALL);
-				g_objDispatcher.Set_TimeUpdate();
+				g_objInspector.Set_TimeUpdate(INSPECTOR_ALL);				
 				g_objCapAttach.Set_TimeUpdate();
 
 				pMainDlg->Set_CurrentState(STATE_NONE);

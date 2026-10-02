@@ -26,7 +26,6 @@
 
 #include "Inspector.h"
 #include "BarcodeLot.h"
-#include "Dispatcher.h"
 #include "CapAttach.h"
 #include "LaserComm.h"
 #include "MesAgent.h"
@@ -127,7 +126,6 @@ BOOL CCMI8000Dlg::OnInitDialog()
 	g_objCommon.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
 	g_objInspector.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
 	g_objBarcodeLot.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
-	g_objDispatcher.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
 	g_objCapAttach.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
 	g_objLaserComm.Create(NULL, NULL, WS_CHILD, CRect(0,0,0,0), this, 0);
 
@@ -231,7 +229,6 @@ void CCMI8000Dlg::OnDestroy()
 	g_dlgOperator.DestroyWindow();
 	g_dlgNoWork.DestroyWindow();
 
-	g_objDispatcher.DestroyWindow();
 	g_objCapAttach.DestroyWindow();
 	g_objInspector.DestroyWindow();
 	g_objBarcodeLot.DestroyWindow();
@@ -261,7 +258,6 @@ void CCMI8000Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	if (!g_objAJinAXL.Initialize()) { Exit_System(EXIT_SYSTEM_AJIN); return; }
 
 	g_objInspector.Initialize();
-	g_objDispatcher.Initialize();
 	g_objCapAttach.Initialize();
 	g_objLaserComm.Initialize();
 	g_objMesAgent.Initialize();
@@ -286,7 +282,6 @@ void CCMI8000Dlg::OnShowWindow(BOOL bShow, UINT nStatus)
 	m_stcMainVer.SetWindowText(strVersion);
 
 	g_objInspector.Set_StatusUpdate(INSPECTOR_ALL, 0);
-	g_objDispatcher.Set_StatusUpdate(0);
 	g_objCapAttach.Set_StatusUpdate(0);
 
 	theApp.uSleep(1000);
@@ -999,7 +994,6 @@ void CCMI8000Dlg::Exit_System(int nExitNo)
 	pDY15->oInsideLight = FALSE;
 	g_objAJinAXL.Write_Output(15);
 
-	g_objDispatcher.Terminate();
 	g_objCapAttach.Terminate();
 	g_objBarcodeLot.Terminate();
 	g_objInspector.Terminate();

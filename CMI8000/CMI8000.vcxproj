@@ -155,7 +155,6 @@
     <ClInclude Include="CMI8000Dlg.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="DataManager.h" />
-    <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="ErrorDlg.h" />
     <ClInclude Include="FifoTaskProcessor.h" />
     <ClInclude Include="InitialDlg.h" />
@@ -215,7 +214,6 @@
     <ClCompile Include="CMI8000Dlg.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="DataManager.cpp" />
-    <ClCompile Include="Dispatcher.cpp" />
     <ClCompile Include="ErrorDlg.cpp" />
     <ClCompile Include="FifoTaskProcessor.cpp" />
     <ClCompile Include="InitialDlg.cpp" />

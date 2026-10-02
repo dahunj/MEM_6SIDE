@@ -9,7 +9,6 @@
 #include "LogFile.h"
 #include "Common.h"
 #include "Inspector.h"
-#include "Dispatcher.h"
 #include "CapAttach.h"
 #include "MesAgent.h"
 
@@ -279,7 +278,6 @@ void CSequenceMain::Begin_MainRunThread()
 	if (m_nEmptyTrayElCase == 0)	m_nEmptyTrayElCase = 1;
 
 	g_objInspector.Set_StatusUpdate(INSPECTOR_ALL, 1);
-	g_objDispatcher.Set_StatusUpdate(1);
 	g_objCapAttach.Set_StatusUpdate(1);
 
 	if (m_pThreadMainRun) End_MainRunThread(INFINITE);
@@ -836,8 +834,6 @@ void CSequenceMain::Set_ClearRunData(int nType)
 
 	gData.bCapTrayLoad = FALSE;
 	gLot.nNGT = gLot.nNGC = gLot.nGDT = gLot.nG1DC = 0;
-
-	g_objDispatcher.Reset_JudgeData(0);
 
 	g_dlgWork.PostMessage(UM_UPDATE_MODEL, NULL, NULL);
 
@@ -1456,18 +1452,7 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		else if (nSortNo == 2)  nWaitTime = GetTickCount() - gData.nSp2Timer;
 		strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
 		g_objLogFile.Save_InspectWaitLog(nPx+1, strLog);
-
-
-		if (m_pEquipData->bUseDispatcher && !g_objDispatcher.Is_JudgeDone(nPx+1, nTx+1, nCx+1)) return FALSE;
-
-		if (!gData.bRosDone[nPx][nTx][nCx]) {
-			if		(nSortNo == 1) nWaitTime = GetTickCount() - gData.nSp1Timer;
-			else if (nSortNo == 2) nWaitTime = GetTickCount() - gData.nSp2Timer;
-
-			strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
-			g_objLogFile.Save_RosWaitLog(nPx+1, strLog);
-			gData.bRosDone[nPx][nTx][nCx] = TRUE;
-		}
+				
 
 		if(gData.bPullForce)
 		{
@@ -1591,19 +1576,7 @@ BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int 
 		if		(nSortNo == 1)	nWaitTime = GetTickCount() - gData.nSp1Timer;
 		else if (nSortNo == 2)  nWaitTime = GetTickCount() - gData.nSp2Timer;
 		strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
-		g_objLogFile.Save_InspectWaitLog(nPx+1, strLog);
-
-
-		if (m_pEquipData->bUseDispatcher && !g_objDispatcher.Is_JudgeDone(nPx+1, nTx+1, nCx+1)) return FALSE;
-
-		if (!gData.bRosDone[nPx][nTx][nCx]) {
-			if		(nSortNo == 1) nWaitTime = GetTickCount() - gData.nSp1Timer;
-			else if (nSortNo == 2) nWaitTime = GetTickCount() - gData.nSp2Timer;
-
-			strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
-			g_objLogFile.Save_RosWaitLog(nPx+1, strLog);
-			gData.bRosDone[nPx][nTx][nCx] = TRUE;
-		}
+		g_objLogFile.Save_InspectWaitLog(nPx+1, strLog);				
 
 		if(gData.bPullForce)
 		{
@@ -1922,7 +1895,7 @@ void CSequenceMain::Job_LotStart(int nPortNo)
 	gData.nLPNo = nPortNo;
 	g_objInspector.Set_LotStart(INSPECTOR_ALL, gData.sLotID[nLPNo], nPortNo, m_pEquipData->sVisionProgVer, m_pEquipData->sVisionParaVer);
 	gLot.bLotEndComplete[nLPNo] = FALSE;
-	g_objDispatcher.Set_LotStart(nPortNo);
+	
 // 	g_objCapAttach.Set_LotStart(nPortNo);	// 시점 변경 (GoodTray1/2) -> (SortPicker1/2)
 
 	SYSTEMTIME time;
@@ -2143,7 +2116,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	}
 
 	// 해당포트 판정 완료, 결과 초기화
-	g_objDispatcher.Reset_JudgeData(nPortNo);
+	
 	memset(gData.byInspectDone[nPx], 0x00, sizeof(BYTE) * 30 * 40);
 	memset(gData.nInspectInfo[nPx], 0x00, sizeof(int) * 30 * 40);
 	memset(gData.bRosDone[nPx], 0x00, sizeof(BOOL) * 30 * 40);

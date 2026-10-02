@@ -15,7 +15,6 @@
 #include "SequenceInit.h"
 #include "WorkDlg.h"
 
-#include "Dispatcher.h"
 #include "CapAttach.h"
 
 #include "CMI8000Dlg.h"
@@ -77,14 +76,7 @@ void CSetupEquipDlg::DoDataExchange(CDataExchange* pDX)
 	for (int i = 0; i < 5; i++) DDX_Control(pDX, IDC_STC_VAC_OFF_DELAY_0 + i, m_stcVacOffDelay[i]);
 	for (int i = 0; i < 5; i++) DDX_Control(pDX, IDC_STC_VAC_OFF_REPEAT_0 + i, m_stcVacOffRepeat[i]);
 	for (int i = 0; i < 5; i++) DDX_Control(pDX, IDC_STC_DELAY_ADD_0 + i, m_stcDelayAdd[i]);
-	DDX_Control(pDX, IDC_GRP_ROS, m_grpRos);
-	for (int i = 0; i < 3; i++) DDX_Control(pDX, IDC_LBL_ROS_0 + i, m_lblRos[i]);
-	DDX_Control(pDX, IDC_IPA_DISPATCHER_IP, m_ipaDispatcherIp);
-	DDX_Control(pDX, IDC_IPA_HANDLER_IP, m_ipaHandlerIp);
-	DDX_Control(pDX, IDC_BTN_ROS_CONNECT, m_btnRosConnect);
-	DDX_Control(pDX, IDC_BTN_ROS_DISCONNECT, m_btnRosDisconnect);
-	DDX_Control(pDX, IDC_STC_JUDGE_TIME_OVER, m_stcJudgeTimeOver);
-	DDX_Control(pDX, IDC_CHK_JUDGE_SPECIA_NG, m_chkJudgeSpecialNg);
+	
 	DDX_Control(pDX, IDC_GRP_CAP, m_grpCap);
 	DDX_Control(pDX, IDC_LBL_CAP_0, m_lblCap);
 	DDX_Control(pDX, IDC_IPA_CAP_IP, m_ipaCapAttachIp);
@@ -126,11 +118,9 @@ BEGIN_MESSAGE_MAP(CSetupEquipDlg, CDialogEx)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_VAC_OFF_REPEAT_0, IDC_STC_VAC_OFF_REPEAT_4, OnStcVacOffRepeatClick)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_DELAY_ADD_0, IDC_STC_DELAY_ADD_4, OnStcDelayAddClick)
 	ON_CONTROL_RANGE(STN_CLICKED, IDC_STC_TRIGGER_DATA_0, IDC_STC_TRIGGER_DATA_3, OnStcTriggerDataClick)
-	ON_BN_CLICKED(IDC_BTN_ROS_CONNECT, &CSetupEquipDlg::OnBnClickedBtnRosConnect)
-	ON_BN_CLICKED(IDC_BTN_ROS_DISCONNECT, &CSetupEquipDlg::OnBnClickedBtnRosDisconnect)
+
 	ON_BN_CLICKED(IDC_BTN_CAP_CONNECT, &CSetupEquipDlg::OnBnClickedBtnCapConnect)
-	ON_BN_CLICKED(IDC_BTN_CAP_DISCONNECT, &CSetupEquipDlg::OnBnClickedBtnCapDisconnect)
-	ON_STN_CLICKED(IDC_STC_JUDGE_TIME_OVER, &CSetupEquipDlg::OnStnClickedStcJudgeTimeOver)
+	ON_BN_CLICKED(IDC_BTN_CAP_DISCONNECT, &CSetupEquipDlg::OnBnClickedBtnCapDisconnect)	
 	ON_STN_CLICKED(IDC_STC_SHOW_HIDDEN, &CSetupEquipDlg::OnStnClickedStcShowHidden)
 	ON_STN_CLICKED(IDC_STC_PASSWORD_MT, &CSetupEquipDlg::OnStnClickedStcPasswordMt)
 	ON_STN_CLICKED(IDC_STC_NOWORK_TIME, &CSetupEquipDlg::OnStnClickedStcNoworkTime)
@@ -438,43 +428,7 @@ void CSetupEquipDlg::OnStcTriggerDataClick(UINT nID)
 	m_stcTriggerData[ID].SetWindowText(strNew);
 }
 
-void CSetupEquipDlg::OnBnClickedBtnRosConnect()
-{
-	g_objLogFile.Save_DispatcherLog("[Ros Connect] Click");
 
-	CString strIp;
-	m_ipaDispatcherIp.GetWindowText(strIp);
-
-	g_objDispatcher.Set_DispatcherIp(strIp);
-	if (!g_objDispatcher.Initialize()) return;
-	Disable_RosCtrl(TRUE);
-
-	DWORD dwStart = GetTickCount();
-	while (!g_objDispatcher.Is_Connected()) {
-		if (GetTickCount() - dwStart > 1500) {	// 1.5ÃÊ
-			g_objLogFile.Save_DispatcherLog("[Ros Connect] Fail");
-			Disable_RosCtrl(FALSE); break;
-		}
-		theApp.DoEvents();
-	}
-}
-
-void CSetupEquipDlg::OnBnClickedBtnRosDisconnect()
-{
-	g_objLogFile.Save_DispatcherLog("[Ros Disconnect] Click");
-
-	g_objDispatcher.Set_ConnectEnd();
-	Disable_RosCtrl(FALSE);
-}
-
-void CSetupEquipDlg::OnStnClickedStcJudgeTimeOver()
-{
-	CString strOld, strNew;
-	m_stcJudgeTimeOver.GetWindowText(strOld);
-	if (g_objCommon.Show_NumPad(strOld, strNew) != IDOK) return;
-
-	m_stcJudgeTimeOver.SetWindowText(strNew);
-}
 
 void CSetupEquipDlg::OnBnClickedBtnCapConnect()
 {
@@ -779,13 +733,7 @@ void CSetupEquipDlg::Display_EquipData()
 	ROS_DATA *pRosData = g_objDataManager.Get_pRosData();
 	m_ipaDispatcherIp.SetWindowText(pRosData->sDispatcherIp);
 	m_ipaHandlerIp.SetWindowText(pRosData->sHandlerIp);
-	BOOL bConnected = g_objDispatcher.Is_Connected();
-	m_ipaDispatcherIp.EnableWindow(!bConnected);
-	m_ipaHandlerIp.EnableWindow(!bConnected);
-	m_btnRosConnect.EnableWindow(!bConnected);
-	m_btnRosDisconnect.EnableWindow(bConnected);
-	strData.Format("%d", pRosData->nJudgeTimeOver); m_stcJudgeTimeOver.SetWindowText(strData);
-	m_chkJudgeSpecialNg.SetCheck(pRosData->bJudgeSpecialNg);
+	
 
 	m_ipaCapAttachIp.EnableWindow(!g_objCapAttach.Is_Opened());
 	m_ipaCapAttachIp.SetWindowText(pEquipData->sCapAttachIp);

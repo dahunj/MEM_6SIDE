@@ -11,7 +11,6 @@
 
 #include "SequenceInit.h"
 #include "SequenceMain.h"
-#include "Dispatcher.h"
 
 #include "WorkDlg.h"
 #include "ManualDlg.h"
@@ -339,7 +338,7 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		g_objMesAgent.Set_AlarmLog(m_nErrNo, m_strErrMsg, nCategory);
 
 		Set_AlarmLog(m_nErrNo, m_strErrMsg);
-		g_objDispatcher.Set_StatusUpdate(2);
+		
 
 		strLog.Format("[Error Mode] Error No ==> %s", strErrNo);
 		g_objLogFile.Save_HandlerLog(strLog);

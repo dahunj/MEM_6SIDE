@@ -9,7 +9,6 @@
 #include "Common.h"
 
 #include "Inspector.h"
-#include "Dispatcher.h"
 #include "CapAttach.h"
 #include "BarcodeLot.h"
 #include "MesAgent.h"
@@ -1096,7 +1095,6 @@ void CWorkDlg::Display_Status()
 	m_ledVisionStatus[1].Set_On(g_objInspector.Get_VisionStatus(INSPECTOR_PC2));
 	m_ledVisionStatus[2].Set_On(g_objInspector.Get_VisionStatus(INSPECTOR_PC3));
 	m_ledVisionStatus[3].Set_On(g_objInspector.Get_VisionStatus(INSPECTOR_PC4));
-	m_ledVisionStatus[4].Set_On(pEquipData->bUseDispatcher && g_objDispatcher.Is_Connected());
 	m_ledVisionStatus[5].Set_On(pEquipData->bUseInlineMode && g_objCapAttach.Is_Opened());
 	m_ledVisionStatus[6].Set_On(g_objLaserComm.getConnection());
 
