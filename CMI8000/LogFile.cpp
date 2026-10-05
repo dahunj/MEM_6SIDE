@@ -60,12 +60,13 @@ void CLogFile::Save_AlarmLog(const CString& sLog)
 {
 	g_csAlarmLog.Lock();
 
-	CString strPath = gData.sLogPath + "\\Alarm";
-
-	Create_Folder(strPath);
-
 	SYSTEMTIME time;
 	GetLocalTime(&time);
+
+	CString strPath;
+	strPath.Format("%s\\Alarm\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+	
+	Create_Folder(strPath);	
 
 	CString strFile, strSave;
 	strFile.Format("%s\\%04d%02d%02d_Alarm.txt", strPath, time.wYear, time.wMonth, time.wDay);
@@ -91,13 +92,14 @@ void CLogFile::Save_AlarmResetLog(const CString& sLog)
 {
 	g_csAlarmResetLog.Lock();
 
-	CString strPath = gData.sLogPath + "\\AlarmReset";
-
-	Create_Folder(strPath);
-
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 
+	CString strPath;
+	strPath.Format("%s\\AlarmReset\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+
+	Create_Folder(strPath);
+	
 	CString strFile, strSave;
 	strFile.Format("%s\\%04d%02d%02d_AlarmReset.txt", strPath, time.wYear, time.wMonth, time.wDay);
 
@@ -193,12 +195,13 @@ void CLogFile::Save_SaveRunTimeLog(const CString& sLog)
 {
 	g_csRunTimeLog.Lock();
 
-	CString strPath = gData.sLogPath + "\\RunTime";
-
-	Create_Folder(strPath);
-
 	SYSTEMTIME time;
 	GetLocalTime(&time);
+
+	CString strPath;
+	strPath.Format("%s\\RunTime\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+
+	Create_Folder(strPath);
 
 	CString strFile, strSave;
 	strFile.Format("%s\\%04d%02d%02d_RunTime.txt", strPath, time.wYear, time.wMonth, time.wDay);
@@ -282,26 +285,26 @@ void CLogFile::Save_JobListLog(const CString& sLog, BOOL bMode)
 {
 	g_csJobListLog.Lock();
 
-	CString strPath = gData.sLogPath + "\\JobList";
-
-	Create_Folder(strPath);
-
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 
+	CString strPath;
+	strPath.Format("%s\\JobList\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+
+	Create_Folder(strPath);
+	
 	CString sTitle, strFile, strSave;
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
-
-
+		
+	strFile.Format("%s\\%04d%02d%02d_JobList.txt", strPath, time.wYear, time.wMonth, time.wDay);
+	
 	//Start Time :  Lot Start (MES 기준) 시점
 	//End Time : Lot End (MES 기준 - Sort Picker 가 마지막 모듈을 Put 후 Up 완료 시점)
 	//Run Time : EndTime - Start Time - Stop Time :  비가동 시간이 제외 되기 때문에 (Start to End 보다는 시간이 짧음)
-	//
-	
 	sTitle.Format("Time,LotNum,Start_Time,End_Time,Run_Time,Unload_Time,Tact(S-E),Tact(RunTime),Tact(Unload_Time),UPH(S-E),UPH(RunTime),UPH(Unload_Time),Alarm_Count,Stop_Time,Efficiency(RunTime), Efficiency(Unload),Tray_Count,CM_Count,Good_Count,NG_Count,NG1_Count,NG2_Count,NG3_Count,NG4_Count,MESNG_Count\r\n");
-	strFile.Format("%s\\%04d%02d%02d_JobList.txt", strPath, time.wYear, time.wMonth, time.wDay);
 
 	CFile file;
+
 	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
 		try 
 		{
@@ -372,12 +375,13 @@ void CLogFile::Save_MesAgentLog(const CString& sLog)
 {
 	g_csMesAgentLog.Lock();
 
-	CString strPath = gData.sLogPath + "\\MESAgent";
-
-	Create_Folder(strPath);
-
 	SYSTEMTIME time;
 	GetLocalTime(&time);
+
+	CString strPath;
+	strPath.Format("%s\\MESAgent\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+	
+	Create_Folder(strPath);	
 
 	CString strFile, strSave;
 	strFile.Format("%s\\%04d%02d%02d_MesAgent.txt", strPath, time.wYear, time.wMonth, time.wDay);
@@ -399,36 +403,6 @@ void CLogFile::Save_MesAgentLog(const CString& sLog)
 	g_csMesAgentLog.Unlock();
 }
 
-void CLogFile::Save_DispatcherLog(const CString& sLog)
-{
-	g_csDispatcherLog.Lock();
-
-	CString strPath = gData.sLogPath + "\\Dispatcher";
-
-	Create_Folder(strPath);
-
-	SYSTEMTIME time;
-	GetLocalTime(&time);
-
-	CString strFile, strSave;
-	strFile.Format("%s\\%04d%02d%02d_Dispatcher.txt", strPath, time.wYear, time.wMonth, time.wDay);
-
-	CFile file;
-	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
-		try {
-			file.SeekToEnd();
-
-			strSave.Format("[%02d:%02d:%02d %03d] %s\r\n", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds, sLog);
-
-			file.Write(strSave, strSave.GetLength());
-			file.Close();
-
-		} catch (CFileException *pEx) {
-			pEx->Delete();
-		}
-	}
-	g_csDispatcherLog.Unlock();
-}
 
 void CLogFile::Save_CapAttachLog(const CString& sLog)
 {
@@ -719,8 +693,9 @@ void CLogFile::Save_TestLog(const CString& sLog)
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 
-	CString strPath = gData.sLogPath + "\\TEST";
-
+	CString strPath;
+	strPath.Format("%s\\Test\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+	
 	Create_Folder(strPath);
 
 	CString strFile, strSave;
@@ -989,15 +964,17 @@ void CLogFile::Save_ECMTracking(const CString& sLog, int nTrayCount, int nPosX, 
 
 void CLogFile::Save_OperatingRatio(const CString& sLog)	// 가동률 작업 중
 {
-	CString strPath = gData.sLogPath + "\\OperatingRatio";
-
-	Create_Folder(strPath);
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 
+	CString strPath;
+	strPath.Format("%s\\OperatingRatio\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+	
+	Create_Folder(strPath);
+
 	CString strFile, strSave, strTitle;
-	strFile.Format("%s\\%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay);
+	strFile.Format("%s\\%04d%02d%02d_OperatingRatio.csv", strPath, time.wYear, time.wMonth, time.wDay);
 
 	CFile file;
 	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
@@ -1026,40 +1003,40 @@ void CLogFile::Save_OperatingRatio(const CString& sLog)	// 가동률 작업 중
 
 void CLogFile::Save_FocusAxisLog(int Axis, const CString& sLog)
 {
-	CString strPath = gData.sLogPath + "\\FocusAxis";
-
-	Create_Folder(strPath);
-
-	SYSTEMTIME time;
-	GetLocalTime(&time);
-
-	CString strFile, strTitle, strSave;
-	if (Axis == AX_VISION_ANGLE_Z) { strFile.Format("%s\\Angle_%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay); } 
-	if (Axis == AX_BTM1_PICKER_Z)  { strFile.Format("%s\\Bottom1_%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay); } 
-	if (Axis == AX_VISION_TOP1_Z)  { strFile.Format("%s\\Top1_%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay); } 
-	if (Axis == AX_VISION_TOP2_Z)  { strFile.Format("%s\\Top2_%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay); } 
-	if (Axis == AX_BTM2_PICKER_Z)  { strFile.Format("%s\\Bottom2_%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay); } 
-//	strFile.Format("%s\\%04d-%02d-%02d.csv", strPath, time.wYear, time.wMonth, time.wDay);
-
-	CFile file;
-	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
-		try {
-			file.SeekToEnd();
-
-			if (file.GetLength() < 1) {
-				strTitle.Format("Time,Teach,Encoder\r\n");
-				file.Write(strTitle, strTitle.GetLength());
-			}
-
-			strSave.Format("%02d:%02d:%02d %03d,%s\r\n", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds, sLog);
-
-			file.Write(strSave, strSave.GetLength());
-			file.Close();
-
-		} catch (CFileException *pEx) {
-			pEx->Delete();
-		}
-	}
+//	CString strPath = gData.sLogPath + "\\FocusAxis";
+//
+//	Create_Folder(strPath);
+//
+//	SYSTEMTIME time;
+//	GetLocalTime(&time);
+//
+//	CString strFile, strTitle, strSave;
+//	if (Axis == AX_VISION_ANGLE_Z) { strFile.Format("%s\\Angle_%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay); } 
+//	if (Axis == AX_BTM1_PICKER_Z)  { strFile.Format("%s\\Bottom1_%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay); } 
+//	if (Axis == AX_VISION_TOP1_Z)  { strFile.Format("%s\\Top1_%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay); } 
+//	if (Axis == AX_VISION_TOP2_Z)  { strFile.Format("%s\\Top2_%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay); } 
+//	if (Axis == AX_BTM2_PICKER_Z)  { strFile.Format("%s\\Bottom2_%04d%02d%02d.csv", strPath, time.wYear, time.wMonth, time.wDay); } 
+////	strFile.Format("%s\\%04d-%02d-%02d.csv", strPath, time.wYear, time.wMonth, time.wDay);
+//
+//	CFile file;
+//	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
+//		try {
+//			file.SeekToEnd();
+//
+//			if (file.GetLength() < 1) {
+//				strTitle.Format("Time,Teach,Encoder\r\n");
+//				file.Write(strTitle, strTitle.GetLength());
+//			}
+//
+//			strSave.Format("%02d:%02d:%02d %03d,%s\r\n", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds, sLog);
+//
+//			file.Write(strSave, strSave.GetLength());
+//			file.Close();
+//
+//		} catch (CFileException *pEx) {
+//			pEx->Delete();
+//		}
+//	}
 }
 
 void CLogFile::Save_RosWaitLog(int nPNo, const CString& sLog)
@@ -1216,10 +1193,12 @@ void CLogFile::Save_MachineStopLog(const CString& sLog)
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 
-	CString strPath, strFile, strTitle, strSave;
-	strPath.Format("%s\\MachineStop", gData.sLogPath);
+	CString strPath;
+	strPath.Format("%s\\MachineStop\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+			
 	Create_Folder(strPath);
 
+	CString strFile, strTitle, strSave;
 	strFile.Format("%s\\%04d%02d%02d_MachineStop.csv", strPath, time.wYear, time.wMonth, time.wDay);
 
 	CFile file;
@@ -1453,14 +1432,16 @@ void CLogFile::Save_MCCLog(const CString& sLog)
 
 void CLogFile::Save_MotionLog(const CString& sLog)
 {
-	g_csMotionLog.Lock();
+
+	//나중에 다시 보고 싶을 수도 있으니까 그냥 주석 
+	/*g_csMotionLog.Lock();
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
 
 	CString strPath;
 	strPath.Format("%s\\Motion\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
-	
+
 	Create_Folder(strPath);	
 
 	CString strFile, strSave;
@@ -1468,19 +1449,19 @@ void CLogFile::Save_MotionLog(const CString& sLog)
 
 	CFile file;
 	if (file.Open(strFile, CFile::modeCreate | CFile::modeNoTruncate | CFile::modeWrite)) {
-		try {
-			file.SeekToEnd();
+	try {
+	file.SeekToEnd();
 
-			strSave.Format("[%02d:%02d:%02d.%03d], %s\r\n", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds, sLog);
+	strSave.Format("[%02d:%02d:%02d.%03d], %s\r\n", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds, sLog);
 
-			file.Write(strSave, strSave.GetLength());
-			file.Close();
+	file.Write(strSave, strSave.GetLength());
+	file.Close();
 
-		} catch (CFileException *pEx) {
-			pEx->Delete();
-		}
+	} catch (CFileException *pEx) {
+	pEx->Delete();
 	}
-	g_csMotionLog.Unlock();
+	}
+	g_csMotionLog.Unlock();*/
 
 }
 

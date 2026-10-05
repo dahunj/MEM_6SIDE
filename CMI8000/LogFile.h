@@ -20,7 +20,6 @@ public:
 	void Save_LotResult(int nPNo,const  CString& sLog);
 	void Save_LotLog(int nPNo);
 	void Save_MesAgentLog(const CString& sLog);
-	void Save_DispatcherLog(const CString& sLog);
 	void Save_CapAttachLog(const CString& sLog);
 	void Save_LotTime(int nPNo, const CString& sLog);
 	void Save_LotError(const CString& sLog, int nPNo=0);

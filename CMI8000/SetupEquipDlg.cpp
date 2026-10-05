@@ -434,7 +434,7 @@ void CSetupEquipDlg::OnBnClickedBtnCapConnect()
 {
 	if (!g_objCapAttach.Initialize()) return;
 	m_ipaCapAttachIp.EnableWindow(FALSE);
-	g_objLogFile.Save_DispatcherLog("[Cap Connect] Click");
+	g_objLogFile.Save_CapAttachLog("[Cap Connect] Click");
 }
 
 void CSetupEquipDlg::OnBnClickedBtnCapDisconnect()
@@ -442,7 +442,7 @@ void CSetupEquipDlg::OnBnClickedBtnCapDisconnect()
 	g_objCapAttach.Terminate();
 	m_ipaCapAttachIp.EnableWindow(TRUE);
 	m_ipaHandlerIp.EnableWindow(TRUE);
-	g_objLogFile.Save_DispatcherLog("[Cap Disconnect] Click");
+	g_objLogFile.Save_CapAttachLog("[Cap Disconnect] Click");
 }
 
 void CSetupEquipDlg::OnStnClickedStcPasswordMt()
