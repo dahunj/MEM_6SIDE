@@ -267,14 +267,7 @@ void CSetupEquipDlg::Set_Enable(BOOL bEnable)
 	for(int i =0; i < 5; i++) m_stcVacOffDelay[i].EnableWindow(bEnable);
 	for(int i =0; i < 5; i++) m_stcVacOffRepeat[i].EnableWindow(bEnable);
 	for(int i =0; i < 5; i++) m_stcDelayAdd[i].EnableWindow(bEnable);
-
-	m_ipaDispatcherIp.EnableWindow(bEnable);
-	m_ipaHandlerIp.EnableWindow(bEnable);
-
-	m_btnRosConnect.EnableWindow(bEnable);
-	m_btnRosDisconnect.EnableWindow(bEnable);
-	m_stcJudgeTimeOver.EnableWindow(bEnable);
-	m_chkJudgeSpecialNg.EnableWindow(bEnable);
+		
 	m_ipaCapAttachIp.EnableWindow(bEnable);
 
 	m_btnCapConnect.EnableWindow(bEnable);
@@ -441,7 +434,6 @@ void CSetupEquipDlg::OnBnClickedBtnCapDisconnect()
 {
 	g_objCapAttach.Terminate();
 	m_ipaCapAttachIp.EnableWindow(TRUE);
-	m_ipaHandlerIp.EnableWindow(TRUE);
 	g_objLogFile.Save_CapAttachLog("[Cap Disconnect] Click");
 }
 
@@ -619,12 +611,7 @@ void CSetupEquipDlg::Initial_Controls()
 	for (int i = 0; i < 5; i++) m_stcVacOffRepeat[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xE0, 0xE0));
 	for (int i = 0; i < 5; i++) m_stcDelayAdd[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xFF, 0xE0));
 	for (int i = 0; i < 4; i++) m_stcTriggerData[i].Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xFF, 0xFF, 0xE0));
-	m_grpRos.Init_Ctrl("¹ÙÅÁ", 12, TRUE, COLOR_DEFAULT, COLOR_DEFAULT);
-	for (int i = 0; i < 3; i++) m_lblRos[i].Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x60, 0x60, 0x60)); // ROS Data
-	m_btnRosConnect.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
-	m_btnRosDisconnect.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
-	m_stcJudgeTimeOver.Init_Ctrl("¹ÙÅÁ", 10, TRUE, RGB(0x00, 0x00, 0xFF), RGB(0xE0, 0xFF, 0xE0));
-	m_chkJudgeSpecialNg.Init_Ctrl("¹ÙÅÁ", 10, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x60, 0x60, 0x60), CCheckCS::emBlue, 0);
+
 	m_grpCap.Init_Ctrl("¹ÙÅÁ", 12, TRUE, COLOR_DEFAULT, COLOR_DEFAULT);
 	m_lblCap.Init_Ctrl("¹ÙÅÁ", 11, FALSE, RGB(0xFF, 0xFF, 0xFF), RGB(0x60, 0x60, 0x60)); // ROS Data
 	m_btnCapConnect.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, COLOR_DEFAULT, 0, 0);
@@ -729,11 +716,6 @@ void CSetupEquipDlg::Display_EquipData()
 	for (int i = 0; i < 5; i++) { strData.Format("%d", pEquipData->nVacOffDelay[i]); m_stcVacOffDelay[i].SetWindowText(strData); }
 	for (int i = 0; i < 5; i++) { strData.Format("%d", pEquipData->nVacOffRepeat[i]); m_stcVacOffRepeat[i].SetWindowText(strData); }
 	for (int i = 0; i < 5; i++) { strData.Format("%d", pEquipData->nDelayAdd[i]); m_stcDelayAdd[i].SetWindowText(strData); }
-
-	ROS_DATA *pRosData = g_objDataManager.Get_pRosData();
-	m_ipaDispatcherIp.SetWindowText(pRosData->sDispatcherIp);
-	m_ipaHandlerIp.SetWindowText(pRosData->sHandlerIp);
-	
 
 	m_ipaCapAttachIp.EnableWindow(!g_objCapAttach.Is_Opened());
 	m_ipaCapAttachIp.SetWindowText(pEquipData->sCapAttachIp);
@@ -879,12 +861,7 @@ void CSetupEquipDlg::Save_EquipData()
 
 	CIniFileCS INI2(gData.sEnvPath + "\\RosData.ini");
 	if (!INI2.Check_File()) { AfxMessageBox("RosData.ini File Not Found!!!"); return; }
-
-	m_ipaDispatcherIp.GetWindowText(strData); INI2.Set_String("DISPATCHER", "DISPATCHER_IP", strData);
-	m_ipaHandlerIp.GetWindowText(strData); INI2.Set_String("DISPATCHER", "HANDLER_IP", strData);
-	m_stcJudgeTimeOver.GetWindowText(strData); nData = atoi(strData); INI2.Set_Integer("DISPATCHER", "TIME_OVER", nData);
-	INI2.Set_Bool("DISPATCHER", "SPECIAL_NG", m_chkJudgeSpecialNg.GetCheck());
-
+	
 	Cancel_EquipData();
 }
 
@@ -993,13 +970,7 @@ void CSetupEquipDlg::Cancel_EquipData()
 	g_objLogFile.Save_HandlerLog("[Setup Equip] Cancel Click");
 }
 
-void CSetupEquipDlg::Disable_RosCtrl(BOOL bDisable)
-{
-	m_ipaDispatcherIp.EnableWindow(!bDisable);
-	m_ipaHandlerIp.EnableWindow(!bDisable);
-	m_btnRosConnect.EnableWindow(!bDisable);
-	m_btnRosDisconnect.EnableWindow(bDisable);
-}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 

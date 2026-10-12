@@ -57,14 +57,7 @@ public:
 	CStaticCS	m_stcVacOffDelay[5];
 	CStaticCS	m_stcVacOffRepeat[5];
 	CStaticCS	m_stcDelayAdd[5];
-	CGroupCS	m_grpRos;
-	CLabelCS	m_lblRos[3];
-	CIPAddressCtrl	m_ipaDispatcherIp;
-	CIPAddressCtrl	m_ipaHandlerIp;
-	CButtonCS	m_btnRosConnect;
-	CButtonCS	m_btnRosDisconnect;
-	CStaticCS	m_stcJudgeTimeOver;
-	CCheckCS	m_chkJudgeSpecialNg;
+	
 	CGroupCS	m_grpCap;
 	CLabelCS	m_lblCap;
 	CIPAddressCtrl	m_ipaCapAttachIp;
@@ -128,15 +121,14 @@ private:
 
 	void Initial_Controls();
 	void Display_EquipData();
-	void Disable_RosCtrl(BOOL bDisable);
-
+	
 public:
 	void Set_Enable(BOOL bEnable);
 		
 	void Save_EquipData();
 	void Save_EquipDataForAllParam();
 	void Cancel_EquipData();
-	void Update_Ip(CString sIp) { m_ipaDispatcherIp.SetWindowText(sIp); }
+
 
 	void SaveLog_DoorInterlock(CString resultCode, CString doorLockUse);
 	
