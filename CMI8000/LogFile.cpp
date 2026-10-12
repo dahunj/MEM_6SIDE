@@ -161,12 +161,14 @@ void CLogFile::Save_TerminalLog(const CString& sLog)
 {
 	g_csTerminalLog.Lock();
 
-	CString strPath = gData.sLogPath + "\\Terminal";
-
-	Create_Folder(strPath);
 
 	SYSTEMTIME time;
 	GetLocalTime(&time);
+
+	CString strPath;
+	strPath.Format("%s\\Terminal\\%04d\\%02d", gData.sLogPath, time.wYear, time.wMonth);
+
+	Create_Folder(strPath);
 
 	CString strFile, strSave;
 	strFile.Format("%s\\%04d%02d%02d_Terminal.txt", strPath, time.wYear, time.wMonth, time.wDay);

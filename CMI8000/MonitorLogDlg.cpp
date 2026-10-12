@@ -192,12 +192,12 @@ void CMonitorLogDlg::Read_LogFile()
 
 	CString strDate, strFile;
 	CString strAlarm, strHandler, strInspector, strJobList, strTerminal;
-	strDate.Format("%04d%02d%02d", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
-	strAlarm.Format("%04d%02d%02d_Alarm", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
-	strHandler.Format("%04d%02d%02d_Handler", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
-	strInspector.Format("%04d%02d%02d_Inspector", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
-	strJobList.Format("%04d%02d%02d_JobList", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
-	strTerminal.Format("%04d%02d%02d_Terminal", sysTime.wYear, sysTime.wMonth, sysTime.wDay);
+	strDate.Format("%04d%02d%02d", sysTime.wYear, sysTime.wMonth,sysTime.wYear, sysTime.wMonth, sysTime.wDay);
+	strAlarm.Format("%04d\\%02d\\%04d%02d%02d_Alarm", sysTime.wYear, sysTime.wMonth,sysTime.wYear, sysTime.wMonth, sysTime.wDay);
+	strHandler.Format("%04d\\%02d\\%04d%02d%02d_Handler", sysTime.wYear, sysTime.wMonth,sysTime.wYear, sysTime.wMonth, sysTime.wDay);
+	strInspector.Format("%04d\\%02d\\%04d%02d%02d_Inspector", sysTime.wYear, sysTime.wMonth,sysTime.wYear, sysTime.wMonth, sysTime.wDay);
+	strJobList.Format("%04d\\%02d\\%04d%02d%02d_JobList", sysTime.wYear, sysTime.wMonth,sysTime.wYear, sysTime.wMonth, sysTime.wDay);
+	strTerminal.Format("%04d\\%02d\\%04d%02d%02d_Terminal", sysTime.wYear, sysTime.wMonth,sysTime.wYear, sysTime.wMonth, sysTime.wDay);
 
 	if		(m_rdoLogAlarm.GetCheck()) strFile.Format(gData.sLogPath + "\\Alarm\\%s.txt", strAlarm);
 	else if (m_rdoLogHandler.GetCheck()) strFile.Format(gData.sLogPath + "\\Handler\\%s.txt", strHandler);

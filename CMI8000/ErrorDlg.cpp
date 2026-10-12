@@ -323,7 +323,7 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		} else {
 			strLog.Format("%s,%s,%s", gData.sLotID[nNo], strErrNo, m_strErrMsg);
 		}
-		g_objLogFile.Save_AlarmLog(strLog);
+		//g_objLogFile.Save_AlarmLog(strLog);
 		
 		int *pCase = g_objSequenceMain.Get_pMainRunCase();
 		strLog.Format("[Error Mode] ErrorNo:%s SeqNo:%d-%d-%d-%d-%d  %d-%d-%d-%d-%d  %d-%d-%d-%d-%d  %d-%d-%d-%d-%d", strErrNo,
