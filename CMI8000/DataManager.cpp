@@ -43,6 +43,8 @@ void CDataManager::Reset_EquipData()
 	m_EquipData.bUsePMTrigger = FALSE;
 	m_EquipData.bUseDryRun = FALSE;
 
+	m_EquipData.bUseMesComplete = FALSE;
+
 	m_EquipData.bUseBtm2PickUpDown = FALSE;
 	m_EquipData.bUseRosSkip = FALSE;
 	m_EquipData.bUseInspectSkip = FALSE;
@@ -163,6 +165,8 @@ BOOL CDataManager::Read_EquipData()
 	m_EquipData.bUseDoorLock = INI.Get_Bool("EQUIPMENT", "DOOR_LOCK", FALSE);
 	gAlm.dMotionChkPos		= INI.Get_Double("EQUIPMENT", "MOTION_CHECK", 0.0);
 	gData.nDoorLockTime = INI.Get_Integer("EQUIPMENT", "DOOR_LOCK_TIME", 10000);
+
+	m_EquipData.bUseMesComplete = INI.Get_Bool("OPTION", "MES_COMPLETE", FALSE);
 
 	if(gData.bUseDryRun)
 	{

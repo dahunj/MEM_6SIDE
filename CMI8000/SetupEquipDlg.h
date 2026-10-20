@@ -39,7 +39,7 @@ public:
 	CCheckCS	m_chkUseInspectTop1;
 	CCheckCS	m_chkUseInspectTop2;
 	CCheckCS	m_chkUseInspectBtm2;
-	CCheckCS	m_chkUseDispatcher;
+
 	CCheckCS	m_chkUseInline;
 	CCheckCS	m_chkUseBtm2;
 	CCheckCS	m_chkUseMesApd;
@@ -85,6 +85,8 @@ public:
 	CStaticCS	m_stcJigNgRate;
 	CStaticCS	m_stcJigNgCnt;
 	CStaticCS   m_stcTriggerData[4];
+
+	CCheckCS	m_chkUseMesComplete;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.

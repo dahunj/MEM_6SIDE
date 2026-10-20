@@ -1944,14 +1944,37 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 
 	g_objInspector.Set_LotEnd(INSPECTOR_ALL, gData.sLotID[nPx], nPortNo);
 	
-	if(!m_pEquipData->bUseInlineMode && m_pEquipData->bUseMES)
-	{		
-		g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], m_pEquipData->sRecipeName, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
-	}	
-
 	g_objCapAttach.Set_TrayEnd(nPortNo);
 	theApp.uSleep(30);
-	g_objCapAttach.Set_LotEnd(nPortNo);
+
+	if (m_pEquipData->bUseInlineMode)
+	{
+		if (m_pEquipData->bUseMesComplete) // AVI 에서 완공 
+		{	
+			if (gLot.nGoodCount[nPortNo-1] > 0) g_objCapAttach.Set_LotEnd(nPortNo, 0); // nCmUse Cnt =0, 이면 AVI 완공 			
+			else g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], m_pEquipData->sRecipeName, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
+		} 
+		else
+		{								
+			if (gLot.nGoodCount[nPortNo-1] > 0)// CAP에서 완공
+			{				
+				g_objCapAttach.Set_LotEnd(nPortNo, gData.nCmUseCount[nPortNo-1]);				
+			} 
+			else
+			{				
+				g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], m_pEquipData->sRecipeName, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
+			}
+		}
+	}
+	else // AVI 에서 완공 
+	{		
+		 g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], m_pEquipData->sRecipeName, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
+	}
+
+
+
+
+	
 	
 	if (gData.bCycleStop == FALSE) {
 		if (gData.bAPDResultErr == FALSE) {	// APD 결과 항목들이 모두 OK이면 MES LotEnd 보고

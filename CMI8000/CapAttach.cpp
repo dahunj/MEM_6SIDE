@@ -281,12 +281,12 @@ void CCapAttach::Set_LotStart(int nPortNo)
 	Send_Command(strSendCmd);
 }
 
-void CCapAttach::Set_LotEnd(int nPortNo)
+void CCapAttach::Set_LotEnd(int nPortNo, int nCmUse)
 {
 	CString	strSendCmd;
 	EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
 
-	strSendCmd.Format("LOT,END,%s,%d,%d,%d,%d,%d", gData.sLotID[nPortNo-1], nPortNo, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
+	strSendCmd.Format("LOT,END,%s,%d,%d,%d,%d,%d", gData.sLotID[nPortNo-1], nPortNo, nCmUse, gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
 	Send_Command(strSendCmd);
 }
 

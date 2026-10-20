@@ -64,6 +64,7 @@ typedef struct tag_EQUIP_DATA {
 	double  dTriggerVel;
 
 	BOOL	bUseInlineMode;
+	BOOL	bUseMesComplete;
 	CString	sCapAttachIp;
 } EQUIP_DATA;
 

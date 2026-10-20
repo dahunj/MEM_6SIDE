@@ -50,7 +50,7 @@ public:
 	void Set_StatusUpdate(int nStatus);
 	void Set_TimeUpdate();
 	void Set_LotStart(int nPortNo);
-	void Set_LotEnd(int nPortNo);
+	void Set_LotEnd(int nPortNo, int nCmUse);
 	void Set_TrayLoad(int nPortNo, int nSNo);
 	void Set_TrayEnd(int nPortNo);
 	void Set_BarcodeUpdate(int nPortNo, int nTrayNo, int nCmNo, CString sBarcode);

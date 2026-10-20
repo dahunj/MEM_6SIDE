@@ -59,7 +59,7 @@ void CSetupEquipDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHK_USE_INSPECT_TOP_1, m_chkUseInspectTop1);
 	DDX_Control(pDX, IDC_CHK_USE_INSPECT_TOP_2, m_chkUseInspectTop2);
 	DDX_Control(pDX, IDC_CHK_USE_INSPECT_BTM_2, m_chkUseInspectBtm2);
-	DDX_Control(pDX, IDC_CHK_USE_DISPATCHER, m_chkUseDispatcher);
+	
 	DDX_Control(pDX, IDC_CHK_USE_INLINE, m_chkUseInline);
 	DDX_Control(pDX, IDC_CHK_USE_MES_APD, m_chkUseMesApd);
 	DDX_Control(pDX, IDC_CHK_USE_BTM2, m_chkUseBtm2);
@@ -105,6 +105,8 @@ void CSetupEquipDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STC_JIG_NG_RATE, m_stcJigNgRate);
 	DDX_Control(pDX, IDC_STC_JIG_NG_CNT, m_stcJigNgCnt);
 	for (int i = 0; i < 4; i++) DDX_Control(pDX, IDC_STC_TRIGGER_DATA_0 + i, m_stcTriggerData[i]);
+
+	DDX_Control(pDX, IDC_CHK_USE_MES_COMPLETE, m_chkUseMesComplete);
 }
 
 BEGIN_MESSAGE_MAP(CSetupEquipDlg, CDialogEx)
@@ -241,6 +243,8 @@ void CSetupEquipDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 		for (int i = 0; i < 4; i++) m_lblResultTest[i].ShowWindow(SW_HIDE);
 		for (int i = 0; i < 4; i++) m_edtResultTest[i].ShowWindow(SW_HIDE);
 	}
+
+	m_chkUseMesComplete.EnableWindow(m_chkUseInline.GetCheck());
 }
 
 
@@ -590,7 +594,6 @@ void CSetupEquipDlg::Initial_Controls()
 	m_chkUseInspectTop1.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0x60, 0xF0, 0x80), CCheckCS::emRed, 0);
 	m_chkUseInspectTop2.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0x60, 0xF0, 0x80), CCheckCS::emRed, 0);
 	m_chkUseInspectBtm2.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0x60, 0xF0, 0x80), CCheckCS::emRed, 0);
-	m_chkUseDispatcher.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0x90, 0x90, 0xF0), CCheckCS::emRed, 0);
 	m_chkUseInline.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xD0, 0x80, 0x20), CCheckCS::emRed, 0);
 	m_chkUseMesApd.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0x90, 0x90, 0xF0), CCheckCS::emRed, 0);
 	m_chkUsePMTrigger.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0x90, 0x90, 0xF0), CCheckCS::emRed, 0);
@@ -637,6 +640,8 @@ void CSetupEquipDlg::Initial_Controls()
 	m_stcTmrFocusLog.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xC0, 0xFF, 0xF0));
 	m_stcJigNgRate.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xC0, 0xFF, 0xF0));
 	m_stcJigNgCnt.Init_Ctrl("¹ÙÅÁ", 11, TRUE, COLOR_DEFAULT, RGB(0xC0, 0xFF, 0xF0));
+
+	m_chkUseMesComplete.Init_Ctrl("¹ÙÅÁ", 11, TRUE, RGB(0xFF, 0xFF, 0xFF), RGB(0x80, 0x00, 0x80), CCheckCS::emRed, 0);
 }
 
 void CSetupEquipDlg::Display_EquipData()
@@ -681,7 +686,6 @@ void CSetupEquipDlg::Display_EquipData()
 	m_chkUseInspectTop1.SetCheck(pEquipData->bUseInspectTop1);
 	m_chkUseInspectTop2.SetCheck(pEquipData->bUseInspectTop2);
 	m_chkUseInspectBtm2.SetCheck(pEquipData->bUseInspectBtm2);
-	m_chkUseDispatcher.SetCheck(pEquipData->bUseDispatcher);
 	m_chkUseInline.SetCheck(pEquipData->bUseInlineMode);
 	m_chkUseMesApd.SetCheck(pEquipData->bUseApdAlarm);
 	m_chkUsePMTrigger.SetCheck(pEquipData->bUsePMTrigger);
@@ -689,6 +693,8 @@ void CSetupEquipDlg::Display_EquipData()
 	m_chkUseBtm2.SetCheck(pEquipData->bUseBtm2PickUpDown);
 	m_chkUseRosSkip.SetCheck(pEquipData->bUseRosSkip);
 	m_chkUseInspectSkip.SetCheck(pEquipData->bUseInspectSkip);
+
+	m_chkUseMesComplete.SetCheck(pEquipData->bUseMesComplete);
 	
 
 	strData.Format("%s", pEquipData->sVisionProgVer); m_stcVisProgVer.SetWindowText(strData);
@@ -763,6 +769,9 @@ void CSetupEquipDlg::Save_EquipData()
 	INI.Set_Bool("EQUIPMENT", "MANUAL_TAKT_TEST", m_chkManualTaktTest.GetCheck());
 	INI.Set_Bool("EQUIPMENT", "DOOR_LOCK", m_rdoDoorLock[1].GetCheck());
 
+	BOOL bComp = m_chkUseInline.GetCheck() ? m_chkUseMesComplete.GetCheck() : FALSE;
+	INI.Set_Bool("OPTION", "MES_COMPLETE", bComp);
+
 	if(m_rdoDoorLock[1].GetCheck()) pEquipData->bUseDoorLock = TRUE;
 	else	pEquipData->bUseDoorLock = FALSE;
 
@@ -803,7 +812,6 @@ void CSetupEquipDlg::Save_EquipData()
 		INI.Set_Bool("OPTION", "INSPECT_TOP_1", m_chkUseInspectTop1.GetCheck());
 		INI.Set_Bool("OPTION", "INSPECT_TOP_2", m_chkUseInspectTop2.GetCheck());
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", m_chkUseInspectBtm2.GetCheck());
-		INI.Set_Bool("OPTION", "DISPATCHER", m_chkUseDispatcher.GetCheck());
 		INI.Set_Bool("OPTION", "INLINE_MODE", m_chkUseInline.GetCheck());
 		INI.Set_Bool("OPTION", "MES_APD", m_chkUseMesApd.GetCheck());
 		INI.Set_Bool("OPTION", "PM_TRIGGER", m_chkUsePMTrigger.GetCheck());
@@ -902,7 +910,6 @@ void CSetupEquipDlg::Save_EquipDataForAllParam()
 		INI.Set_Bool("OPTION", "INSPECT_TOP_1", m_chkUseInspectTop1.GetCheck());
 		INI.Set_Bool("OPTION", "INSPECT_TOP_2", m_chkUseInspectTop2.GetCheck());
 		INI.Set_Bool("OPTION", "INSPECT_BTM_2", m_chkUseInspectBtm2.GetCheck());
-		INI.Set_Bool("OPTION", "DISPATCHER", m_chkUseDispatcher.GetCheck());
 		INI.Set_Bool("OPTION", "INLINE_MODE", m_chkUseInline.GetCheck());
 		INI.Set_Bool("OPTION", "MES_APD", m_chkUseMesApd.GetCheck());
 		INI.Set_Bool("OPTION", "PM_TRIGGER", m_chkUsePMTrigger.GetCheck());
@@ -1044,63 +1051,64 @@ void CSetupEquipDlg::OnBnClickedChkUseInspectAngle()
 
 void CSetupEquipDlg::OnBnClickedChkUseInspectBtm1Sp()
 {
-	m_strLog.Format("Btm1SP Checked : %d", m_chkUseInspectAngle.GetCheck());
+	m_strLog.Format("Btm1SP Checked : %d", m_chkUseInspectBtm1_SP.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
 }
 
 
 void CSetupEquipDlg::OnBnClickedChkUseInspectBtm1Ag()
 {
-	m_strLog.Format("Btm1AG Checked : %d", m_chkUseInspectAngle.GetCheck());
+	m_strLog.Format("Btm1AG Checked : %d", m_chkUseInspectBtm1_AG.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
 }
 
 
 void CSetupEquipDlg::OnBnClickedChkUseInspectBtm13d()
 {
-	m_strLog.Format("Btm13D Checked : %d", m_chkUseInspectAngle.GetCheck());
+	m_strLog.Format("Btm13D Checked : %d", m_chkUseInspectBtm1_3D.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
 }
 
 
 void CSetupEquipDlg::OnBnClickedChkUseInspectTop1()
 {
-	m_strLog.Format("Top1Vision Checked : %d", m_chkUseInspectAngle.GetCheck());
+	m_strLog.Format("Top1Vision Checked : %d", m_chkUseInspectTop1.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
 }
 
 
 void CSetupEquipDlg::OnBnClickedChkUseInspectTop2()
 {
-	m_strLog.Format("Top2Vision Checked : %d", m_chkUseInspectAngle.GetCheck());
+	m_strLog.Format("Top2Vision Checked : %d", m_chkUseInspectTop2.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
 }
 
 
 void CSetupEquipDlg::OnBnClickedChkUseInspectBtm2()
 {
-	m_strLog.Format("Btm2Vision Checked : %d", m_chkUseInspectAngle.GetCheck());
+	m_strLog.Format("Btm2Vision Checked : %d", m_chkUseInspectBtm2.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
 }
 
 
 void CSetupEquipDlg::OnBnClickedChkUseInline()
 {
-	m_strLog.Format("UseInline Checked : %d", m_chkUseInspectAngle.GetCheck());
+	m_chkUseMesComplete.EnableWindow(m_chkUseInline.GetCheck());
+	m_strLog.Format("UseInline Checked : %d", m_chkUseInline.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
 }
 
 
 void CSetupEquipDlg::OnBnClickedChkUseBtm2()
 {
-	m_strLog.Format("PickUpOption Checked : %d", m_chkUseInspectAngle.GetCheck());
+	m_strLog.Format("PickUpOption Checked : %d", m_chkUseBtm2.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
 }
 
 
 void CSetupEquipDlg::OnBnClickedRdoDoorLock0()
 {
-	m_strLog.Format("DoorLockNotUse Checked : %d", m_chkUseInspectAngle.GetCheck());
+	m_strLog.Format("DoorLockNotUse Checked : %d", m_rdoDoorLock[0].GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);
 }
 
