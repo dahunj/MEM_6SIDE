@@ -400,46 +400,26 @@ UINT CSequenceMain::Thread_MainRun(LPVOID lpVoid)
 		//	break;
 		//}
 
-		if (!g_objSequenceMain.LoadTray_Run()) break;			//  1. (Error : 3100)
-		
-		if (!g_objSequenceMain.LoadPicker_Run()) break;			//  2. (Error : 3200)
-		
-		if (!g_objSequenceMain.VisionAngle_Run()) break;		//  3. (Error : 3300)
-		
-		if (!g_objSequenceMain.AngleTray1_Run()) break;			//  4. (Error : 3400)
-		if (!g_objCommon.Check_ServoOn()) break;
+		if (!g_objSequenceMain.LoadTray_Run()) break;			//  1. (Error : 3100)		
+		if (!g_objSequenceMain.LoadPicker_Run()) break;			//  2. (Error : 3200)		
+		if (!g_objSequenceMain.VisionAngle_Run()) break;		//  3. (Error : 3300)		
+		if (!g_objSequenceMain.AngleTray1_Run()) break;			//  4. (Error : 3400)	
 		if (!g_objSequenceMain.AngleTray2_Run()) break;			//  5. (Error : 3500)
-		if (!g_objCommon.Check_ServoOn()) break;
-		if (!g_objSequenceMain.Btm1Picker_Run()) break;			//  6. (Error : 3600)
-		if (!g_objCommon.Check_ServoOn()) break;
+		if (!g_objSequenceMain.Btm1Picker_Run()) break;			//  6. (Error : 3600)	
 		if (!g_objSequenceMain.Inspection1_Run()) break;		//  7. (Error : 3700) Center
-		if (!g_objCommon.Check_ServoOn()) break;
-		if (!g_objSequenceMain.Inspection2_Run()) break;		//  8. (Error : 3800) Front
-		if (!g_objCommon.Check_ServoOn()) break;
-		if (!g_objSequenceMain.Inspection3_Run()) break;		//  9. (Error : 3900) Rear
-		if (!g_objCommon.Check_ServoOn()) break;
-		if (!g_objSequenceMain.Btm2Picker_Run()) break;			// 10. (Error : 4000)
-		
-		if (!g_objSequenceMain.BufferTray1_Run()) break;		// 11. (Error : 4100)
-		
+		if (!g_objSequenceMain.Inspection2_Run()) break;		//  8. (Error : 3800) Front	
+		if (!g_objSequenceMain.Inspection3_Run()) break;		//  9. (Error : 3900) Rear	
+		if (!g_objSequenceMain.Btm2Picker_Run()) break;			// 10. (Error : 4000)		
+		if (!g_objSequenceMain.BufferTray1_Run()) break;		// 11. (Error : 4100)		
 		if (!g_objSequenceMain.BufferTray2_Run()) break;		// 12. (Error : 4200)
-
-		if (!g_objSequenceMain.SortPicker1_Run()) break;		// 13. (Error : 4300) Rear
-		
-		if (!g_objSequenceMain.SortPicker2_Run()) break;		// 14. (Error : 4400) Front
-		
-		if (!g_objSequenceMain.GoodTray1_Run()) break;			// 15. (Error : 4500)
-		
-		if (!g_objSequenceMain.GoodTray2_Run()) break;			// 16. (Error : 4600)
-		
-		if (!g_objSequenceMain.NgTray_Run()) break;				// 17. (Error : 4700)
-		
-		if (!g_objSequenceMain.EmptyTrayX_Run()) break;			// 18. (Error : 4800)
-		
-		if (!g_objSequenceMain.EmptyTrayElevator_Run()) break;	// 19. (Error : 4900)
-		
-		if (!g_objSequenceMain.EmptyTrayY_Run()) break;			// 20. (Error : 5000)	
-		
+		if (!g_objSequenceMain.SortPicker1_Run()) break;		// 13. (Error : 4300) Rear		
+		if (!g_objSequenceMain.SortPicker2_Run()) break;		// 14. (Error : 4400) Front		
+		if (!g_objSequenceMain.GoodTray1_Run()) break;			// 15. (Error : 4500)		
+		if (!g_objSequenceMain.GoodTray2_Run()) break;			// 16. (Error : 4600)		
+		if (!g_objSequenceMain.NgTray_Run()) break;				// 17. (Error : 4700)		
+		if (!g_objSequenceMain.EmptyTrayX_Run()) break;			// 18. (Error : 4800)		
+		if (!g_objSequenceMain.EmptyTrayElevator_Run()) break;	// 19. (Error : 4900)		
+		if (!g_objSequenceMain.EmptyTrayY_Run()) break;			// 20. (Error : 5000)			
 
 		if (!g_objSequenceMain.Run_Simulation()) break;		//  99.
 
