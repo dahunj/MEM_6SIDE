@@ -1952,7 +1952,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 		if (m_pEquipData->bUseMesComplete) // AVI 에서 완공 
 		{	
 			if (gLot.nGoodCount[nPortNo-1] > 0) g_objCapAttach.Set_LotEnd(nPortNo, 0); // nCmUse Cnt =0, 이면 AVI 완공 			
-			else g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], m_pEquipData->sRecipeName, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
+			g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], m_pEquipData->sRecipeName, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
 		} 
 		else
 		{								
@@ -1970,12 +1970,7 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	{		
 		 g_objMesAgent.Set_LotEnd(gData.sLotID[nPortNo-1], m_pEquipData->sRecipeName, gData.nCmUseCount[nPortNo-1], gLot.nGoodCount[nPortNo-1], gLot.nNgCount[nPortNo-1], gLot.nBsNgCount[nPortNo-1] );
 	}
-
-
-
-
-	
-	
+		
 	if (gData.bCycleStop == FALSE) {
 		if (gData.bAPDResultErr == FALSE) {	// APD 결과 항목들이 모두 OK이면 MES LotEnd 보고
 			//g_objMES.Set_LotEnd(gLot.sLotID[nPx], gLot.nCmCount[nPx], gData.sOperID, gLot.nGoodCount[nPx], gLot.nNgCount[nPx], nPx);
