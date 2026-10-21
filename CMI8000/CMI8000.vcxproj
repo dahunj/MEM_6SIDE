@@ -47,7 +47,7 @@
     <OutDir>Run\</OutDir>
     <IncludePath>Include;$(IncludePath)</IncludePath>
     <LibraryPath>Library;$(LibraryPath)</LibraryPath>
-    <TargetName>$(ProjectName)_D</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

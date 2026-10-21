@@ -439,7 +439,6 @@ UINT CSequenceMain::Thread_MainRun(LPVOID lpVoid)
 	g_objAJinAXL.Stop_Motion(AX_EMPTY_PORT_Z);		// °­Á¦ STOP
 #ifdef AJIN_BOARD_USE
 	g_objInspector.Set_StatusUpdate(INSPECTOR_ALL, 0);
-	g_objDispatcher.Set_StatusUpdate(0);
 	g_objCapAttach.Set_StatusUpdate(0);
 #endif
 	g_objSequenceMain.m_bThreadMainRun = FALSE;
