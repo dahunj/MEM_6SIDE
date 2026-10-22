@@ -769,7 +769,7 @@ void CSetupEquipDlg::Save_EquipData()
 	INI.Set_Bool("EQUIPMENT", "MANUAL_TAKT_TEST", m_chkManualTaktTest.GetCheck());
 	INI.Set_Bool("EQUIPMENT", "DOOR_LOCK", m_rdoDoorLock[1].GetCheck());
 
-	BOOL bComp = m_chkUseInline.GetCheck() ? m_chkUseMesComplete.GetCheck() : FALSE;
+	BOOL bComp = m_chkUseInline.GetCheck() ? m_chkUseMesComplete.GetCheck() : !m_chkUseInline.GetCheck();
 	INI.Set_Bool("OPTION", "MES_COMPLETE", bComp);
 
 	if(m_rdoDoorLock[1].GetCheck()) pEquipData->bUseDoorLock = TRUE;
@@ -1093,6 +1093,14 @@ void CSetupEquipDlg::OnBnClickedChkUseInspectBtm2()
 
 void CSetupEquipDlg::OnBnClickedChkUseInline()
 {
+
+	if(!m_chkUseInline.GetCheck())
+	{
+		EQUIP_DATA *pEquipData = g_objDataManager.Get_pEquipData();
+		pEquipData->bUseMesComplete = !m_chkUseInline.GetCheck();
+		m_chkUseMesComplete.SetCheck(!m_chkUseInline.GetCheck());
+	}
+
 	m_chkUseMesComplete.EnableWindow(m_chkUseInline.GetCheck());
 	m_strLog.Format("UseInline Checked : %d", m_chkUseInline.GetCheck());
 	g_objLogFile.Save_HandlerLog(m_strLog);

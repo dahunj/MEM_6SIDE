@@ -240,11 +240,11 @@ void CEquip::Set_S2F49_PP_SELECT(CString sOperID, CString sLotID, CString sRecip
 	strSend += "        </CP>" + CRLF;
 	strSend += "        <CP>" + CRLF;
 	strSend += "          <CPNAME NAME=\"CPNAME\" VALUE=\"LOTID\" />" + CRLF;
-	strSend += "          <CPVAL NAME=\"CPVAL\" VALUE=\"TTTT\" />" + CRLF;
+	strSend += "          <CPVAL NAME=\"CPVAL\" VALUE=\""+sLotID+"\" />" + CRLF;
 	strSend += "        </CP>" + CRLF;
 	strSend += "        <CP>" + CRLF;
 	strSend += "          <CPNAME NAME=\"CPNAME\" VALUE=\"RECIPEID\" />" + CRLF;
-	strSend += "          <CPVAL NAME=\"CPVAL\" VALUE=\"R53B\" />" + CRLF;
+	strSend += "          <CPVAL NAME=\"CPVAL\" VALUE=\"R63B\" />" + CRLF;
 	strSend += "        </CP>" + CRLF;
 	strSend += "        <CP>" + CRLF;
 	strSend += "          <CPNAME NAME=\"CPNAME\" VALUE=\"OPERATORID\" />" + CRLF;
@@ -371,7 +371,7 @@ void CEquip::Set_S2F49_LOT_START()
 	strSend += "        </CP>" + CRLF;
 	strSend += "        <CP>" + CRLF;
 	strSend += "          <CPNAME NAME=\"CPNAME\" VALUE=\"TOTALQTY\" />" + CRLF;
-	strSend += "          <CPVAL NAME=\"CPVAL\" VALUE=\"99\" />" + CRLF;
+	strSend += "          <CPVAL NAME=\"CPVAL\" VALUE=\"69\" />" + CRLF;
 	strSend += "        </CP>" + CRLF;
 	strSend += "        <CP>" + CRLF;
 	strSend += "          <CPNAME NAME=\"CPNAME\" VALUE=\"OPERATORID\" />" + CRLF;
