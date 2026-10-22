@@ -2611,7 +2611,7 @@ BOOL CSequenceMain::LoadTray_Run()
 		{
 			if (gData.nLoadTrayCount[nLtWorkPort-1] >= gData.nTrayUseCount[nLtWorkPort-1]) {
 				m_bLotLoadEnable[nLtWorkPort-1] = TRUE;	// Port에서 트레이 로드 완료
-
+				gData.nLoadTrayCount[nLtWorkPort-1] = 0;
 				if (nLtWorkPort == 1) 
 				{ 
 					m_pDY00->oLoadPort1SlideLock = FALSE; m_pDY00->oLoadPort1SlideUnlock = TRUE; 
@@ -2624,7 +2624,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				}
 				g_objAJinAXL.Write_Output(0);
 				g_objAJinAXL.Write_Output(14);
-				gData.nLoadTrayCount[nLtWorkPort-1] = 0;
+				
 				m_nLoadTrayCase = 30; m_tLoadTrayLoop.Set_LoopTime(10000);
 			} else {
 				m_nLoadTrayCase = 2; m_tLoadTrayLoop.Set_LoopTime(10000);
