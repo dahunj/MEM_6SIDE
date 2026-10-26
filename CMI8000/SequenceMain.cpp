@@ -1653,7 +1653,7 @@ double CSequenceMain::Get_TactEach(CString sLotID, int nPickNo, int nPickIdx, in
 		dTact = gUph.dwTactEachPost[nPickNo-1][nPickIdx] - gUph.dwTactEachPre[nPickNo-1][nPickIdx];
 		dTact = dTact/1000;
 		m_strLog.Format("[Gripper Tact],LotID:%s,SortPicker:%d,Picker Idx:%d,CM PortNo:%d,CM TrayNo:%d, CM No:%d, Tact(s):%0.2lf", sLotID, nPickNo, nPickIdx, nPortNo, nTrayNo, nCmNo, dTact);
-		g_objLogFile.Save_HandlerLog(m_strLog);
+		g_objLogFile.Save_MCCLog(m_strLog);
 	}
 	gUph.dwTactEachPre[nPickNo-1][nPickIdx] = GetTickCount();
 	return dTact;
@@ -1884,6 +1884,9 @@ void CSequenceMain::Job_LotStart(int nPortNo)
 	m_dwFirstLoad = gLot.dwLotStart[nLPNo] = GetTickCount();
 	gLot.nTrayCount[nLPNo] = gData.nTrayUseCount[nLPNo];
 	gLot.nCmCount[nLPNo] = gData.nCmUseCount[nLPNo];
+
+	m_strLog.Format("[Main Seq] Lot Start, LotID: %s, Tray Cnt : %d, CM Cnt : %d", gLot.sLotID[nLPNo], gLot.nTrayCount[nLPNo], gLot.nCmCount[nLPNo]);
+	g_objLogFile.Save_HandlerLog(m_strLog);
 
 	gLot.nBsNgCount[nLPNo] = 0;	// Barcode Shift 불량 수량 초기화
  	gLot.nErrorCount[nLPNo] = 0;
@@ -2350,11 +2353,15 @@ BOOL CSequenceMain::LoadTray_Run()
 			{
 				gData.nCmUseCount[0] = gMes.nHostCount;
 				g_dlgWork.WriteCMCount(0);
+				m_strLog.Format("[Sequence] WriteCMCount. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
+				g_objLogFile.Save_HandlerLog(m_strLog);	
 			}
 			else if(nLtWorkPort == 2) 
 			{
 				gData.nCmUseCount[1] = gMes.nHostCount;
 				g_dlgWork.WriteCMCount(1);
+				m_strLog.Format("[Sequence] WriteCMCount. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
+				g_objLogFile.Save_HandlerLog(m_strLog);	
 			}
 
 			CString sCount;
@@ -2649,7 +2656,7 @@ BOOL CSequenceMain::LoadTray_Run()
 			m_nLoadTrayCase = 2; m_tLoadTrayLoop.Set_LoopTime(10000);
 
 			m_strLog.Format("LoadTray case 30,No,%d,PNo,%d,LoadEnable1,%d,LoadEnable2,%d,1Bottom,%d,2Bottom,%d", 0, nLtWorkPort, m_bLotLoadEnable[0], m_bLotLoadEnable[1], m_pDX00->iLoadPort1Bottom, m_pDX00->iLoadPort2Bottom);
-			g_objLogFile.Save_HandlerLog(m_strLog);
+			g_objLogFile.Save_MCCLog(m_strLog);
 
 		} 
 		else if (nLtWorkPort == 1 && !m_pDX00->iLoadPort1Bottom && m_pDX00->iLoadPort2Bottom && m_bLotLoadEnable[1] == FALSE)
@@ -2661,7 +2668,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				m_nLoadTrayCase = 2; m_tLoadTrayLoop.Set_LoopTime(10000);
 
 				m_strLog.Format("LoadTray case 30,No,%d,PNo,%d,LoadEnable1,%d,LoadEnable2,%d,1Bottom,%d,2Bottom,%d", 1, nLtWorkPort, m_bLotLoadEnable[0], m_bLotLoadEnable[1], m_pDX00->iLoadPort1Bottom, m_pDX00->iLoadPort2Bottom);
-				g_objLogFile.Save_HandlerLog(m_strLog);
+				g_objLogFile.Save_MCCLog(m_strLog);
 			}
 		}
 		else if (nLtWorkPort == 2 && !m_pDX00->iLoadPort2Bottom && m_pDX00->iLoadPort1Bottom && m_bLotLoadEnable[0] == FALSE) 
@@ -2673,7 +2680,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				m_nLoadTrayCase = 2; m_tLoadTrayLoop.Set_LoopTime(10000);
 
 				m_strLog.Format("LoadTray case 30,No,%d,PNo,%d,LoadEnable1,%d,LoadEnable2,%d,1Bottom,%d,2Bottom,%d", 2, nLtWorkPort, m_bLotLoadEnable[0], m_bLotLoadEnable[1], m_pDX00->iLoadPort1Bottom, m_pDX00->iLoadPort2Bottom);
-				g_objLogFile.Save_HandlerLog(m_strLog);
+				g_objLogFile.Save_MCCLog(m_strLog);
 			}
 		} else
 		{
