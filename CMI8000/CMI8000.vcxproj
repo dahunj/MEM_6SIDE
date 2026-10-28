@@ -48,6 +48,7 @@
     <IncludePath>Include;$(IncludePath)</IncludePath>
     <LibraryPath>Library;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)</TargetName>
+    <IntDir>D:\VS2010Build\MySolution\$(ProjectName)\$(Platform)\$(Configuration)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
