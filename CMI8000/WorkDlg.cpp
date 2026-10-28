@@ -1523,7 +1523,8 @@ LRESULT CWorkDlg::OnUpdateUph(WPARAM wParam, LPARAM lParam)
 LRESULT CWorkDlg::OnVisionResult(WPARAM wParam, LPARAM lParam)
 {
 	CString strText;
-	if (wParam == 1 || wParam == 0) {
+	if (wParam == 1 || wParam == 0) 
+	{
 		int nTotal = gLot.nGoodCount[0] + gLot.nNgCount[0];
 		strText.Format("%d", nTotal);				m_stcVisionResult[1].SetWindowText(strText);
 		strText.Format("%d", gLot.nGoodCount[0]);	m_stcVisionResult[2].SetWindowText(strText);
@@ -1533,9 +1534,8 @@ LRESULT CWorkDlg::OnVisionResult(WPARAM wParam, LPARAM lParam)
 		strText.Format("%d", gLot.nSNgCount[0][5]);	m_stcVisionResult[6].SetWindowText(strText);
 
 		m_stcVisionResult[0].Init_Ctrl("¹ÙÅÁ", 11, TRUE, RGB(0x00, 0xFF, 0x00), RGB(0x00, 0x00, 0x00));
-		m_stcVisionResult[8].Init_Ctrl("¹ÙÅÁ", 11, TRUE, RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00));
 		m_stcVisionResult[0].SetWindowText(gLot.sLotID[0]);
-		m_stcVisionResult[8].SetWindowText(gLot.sLotID[1]);
+	
 
 		if (nTotal == 0) strText.Format("0.0");
 		else strText.Format("%0.1lf", gLot.nGoodCount[0] * 100.0 / nTotal);
@@ -1551,9 +1551,7 @@ LRESULT CWorkDlg::OnVisionResult(WPARAM wParam, LPARAM lParam)
 		strText.Format("%d", gLot.nSNgCount[1][3]);	m_stcVisionResult[13].SetWindowText(strText);
 		strText.Format("%d", gLot.nSNgCount[1][5]);	m_stcVisionResult[14].SetWindowText(strText);
 
-		m_stcVisionResult[0].Init_Ctrl("¹ÙÅÁ", 11, TRUE, RGB(0xFF, 0xFF, 0xFF), RGB(0x00, 0x00, 0x00));
 		m_stcVisionResult[8].Init_Ctrl("¹ÙÅÁ", 11, TRUE, RGB(0x00, 0xFF, 0x00), RGB(0x00, 0x00, 0x00));
-		m_stcVisionResult[0].SetWindowText(gLot.sLotID[0]);
 		m_stcVisionResult[8].SetWindowText(gLot.sLotID[1]);
 
 		if (nTotal == 0) strText.Format("0.0");
@@ -1772,13 +1770,7 @@ void CWorkDlg::OnBnClickedButton7()
 
 void CWorkDlg::OnBnClickedButton9()
 {
-	gData.dwSkipTime_Sort2 = GetTickCount();
-	DWORD dwTemp = (gData.dwSkipTime_Sort2 - gData.dwSkipTime_Sort1);
 
-	if(dwTemp > 30000)
-	{
-		AfxMessageBox("good");
-	}
 }
 
 

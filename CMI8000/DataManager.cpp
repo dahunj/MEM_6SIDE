@@ -46,7 +46,6 @@ void CDataManager::Reset_EquipData()
 	m_EquipData.bUseMesComplete = FALSE;
 
 	m_EquipData.bUseBtm2PickUpDown = FALSE;
-	m_EquipData.bUseRosSkip = FALSE;
 	m_EquipData.bUseInspectSkip = FALSE;
 
 	m_EquipData.dTrayPitchX = 0.0;
@@ -202,8 +201,7 @@ BOOL CDataManager::Read_EquipData()
 	
 	m_EquipData.bUseBtm2PickUpDown = INI.Get_Bool("OPTION", "BTM2_PICK_UPDOWN", FALSE);
 
-	m_EquipData.bUseRosSkip = INI.Get_Bool("OPTION", "ROS_SKIP", FALSE);
-	m_EquipData.bUseInspectSkip = INI.Get_Bool("OPTION", "INSPECT_SKIP", FALSE);
+	//m_EquipData.bUseInspectSkip = INI.Get_Bool("OPTION", "INSPECT_SKIP", FALSE);
 
 	m_EquipData.sVisionProgVer = INI.Get_String("OPTION", "VIS_PROG_VER", "0000");
 	m_EquipData.sVisionParaVer = INI.Get_String("OPTION", "VIS_PARA_VER", "0000");

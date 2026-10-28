@@ -251,7 +251,7 @@ private:
 	void Set_3DInspectJigNo(int nType, int nScanCnt, int &nINo1, int &nINo2, int &nINo3, int &nINo4, int &nINo5, int &nINo6, int &nINo7, int &nINo8);
 
 	BOOL Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &Info, int nSortNo);
-	BOOL Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int &Info, int nSortNo);
+	
 	void Set_InspectError(int nPortNo, int nTrayNo, int nCmNo);
 	void Set_ScanError(int nErrNo, int nTrayNo1, int nTrayNo2, int nTrayNo3, int nTrayNo4, int nCmNo1, int nCmNo2, int nCmNo3, int nCmNo4);
 	

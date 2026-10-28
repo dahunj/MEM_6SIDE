@@ -689,9 +689,8 @@ void CSetupEquipDlg::Display_EquipData()
 	m_chkUseInline.SetCheck(pEquipData->bUseInlineMode);
 	m_chkUseMesApd.SetCheck(pEquipData->bUseApdAlarm);
 	m_chkUsePMTrigger.SetCheck(pEquipData->bUsePMTrigger);
-	m_chkUse2ndAVI.SetCheck(pEquipData->bUse2ndAVI);
+	
 	m_chkUseBtm2.SetCheck(pEquipData->bUseBtm2PickUpDown);
-	m_chkUseRosSkip.SetCheck(pEquipData->bUseRosSkip);
 	m_chkUseInspectSkip.SetCheck(pEquipData->bUseInspectSkip);
 
 	m_chkUseMesComplete.SetCheck(pEquipData->bUseMesComplete);

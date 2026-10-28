@@ -116,7 +116,7 @@ afx_msg LRESULT CUdpManager::OnUdpReceive(WPARAM wParam, LPARAM lParam)
 		}
 		else if (strCmd == "LOT")
 		{
-			if (strOp == "START") Get_LotStart(strArg[0]);
+			if (strOp == "START") Get_LotStart(strArg[0], strArg[1]);
 		}
 	}
 	return 1;
@@ -182,14 +182,14 @@ void CUdpManager::Get_StatusUpdate(int nInspector, CString sStatus)
 	Set_StatusReply(nInspector);
 }
 
-void CUdpManager::Get_LotStart(CString sLotID)
+void CUdpManager::Get_LotStart(CString sLotID, CString sPortNo)
 {
 	gData.sLotID[0] = sLotID;
 
-	Set_LotReady(1, gData.sLotID[0]);
-	Set_LotReady(2, gData.sLotID[0]);
-	Set_LotReady(3, gData.sLotID[0]);
-	Set_LotReady(4, gData.sLotID[0]);
+	Set_LotReady(1, gData.sLotID[0], sPortNo);
+	Set_LotReady(2, gData.sLotID[0], sPortNo);
+	Set_LotReady(3, gData.sLotID[0], sPortNo);
+	Set_LotReady(4, gData.sLotID[0], sPortNo);
 }
 
 
@@ -253,25 +253,23 @@ void CUdpManager::Get_LoadComplete(int nInspector, CString sGbn, CString sLotID,
 	nCNo3 = atoi(sCNo3);
 	nCNo4 = atoi(sCNo4);
 
-
-
-
+	   
 	if (nTNo1 > 0 && nCNo1 > 0) Set_ScanComplete(nInspector, sGbn, sLotID, nPortNo, sTNo1, sCNo1);
-	Sleep(1);
+	Sleep(5);
 	if (nTNo2 > 0 && nCNo2 > 0) Set_ScanComplete(nInspector, sGbn, sLotID, nPortNo, sTNo2, sCNo2);
-	Sleep(1);
+	Sleep(5);
 	if (nTNo3 > 0 && nCNo3 > 0) Set_ScanComplete(nInspector, sGbn, sLotID, nPortNo, sTNo3, sCNo3);
-	Sleep(1);
+	Sleep(5);
 	if (nTNo4 > 0 && nCNo4 > 0) Set_ScanComplete(nInspector, sGbn, sLotID, nPortNo, sTNo4, sCNo4);
-	Sleep(1);
+	Sleep(5);
 	if (nTNo1 > 0 && nCNo1 > 0) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo1, sCNo1);
-	Sleep(1);
+	Sleep(5);
 	if (nTNo2 > 0 && nCNo2 > 0) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo2, sCNo2);
-	Sleep(1);
+	Sleep(5);
 	if (nTNo3 > 0 && nCNo3 > 0) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo3, sCNo3);
-	Sleep(1);
+	Sleep(5);
 	if (nTNo4 > 0 && nCNo4 > 0) Set_InspectComplete(nInspector, sGbn, sLotID, nPortNo, sTNo4, sCNo4);
-	Sleep(1);
+	Sleep(5);
 
 }
 
@@ -300,7 +298,7 @@ void CUdpManager::Set_InspectComplete(int nInspector, CString sGbn, CString sLot
 	if (!bSeed) { srand((unsigned)time(NULL)); bSeed = TRUE; }
 	nResult = (rand() % (nEnd - nStart + 1) + nStart);
 
-	if (nResult < 30)
+	if (nResult < 15)
 	{
 		m_sJudge[nPortNo - 1][nTNo - 1][nCNo - 1] = "N1";
 		m_sCode[nPortNo - 1][nTNo - 1][nCNo - 1] = "RE";
@@ -334,11 +332,16 @@ void CUdpManager::Set_StatusReply(int nInspector)
 	Send_Command(nInspector, strSendCmd);
 }
 
-void CUdpManager::Set_LotReady(int nInspector, CString sLotID)
+void CUdpManager::Set_LotReady(int nInspector, CString sLotID, CString sPortNo)
 {
+	
 	CString	strSendCmd;
-	strSendCmd.Format("LOT,READY,%s,1,1928,2059,MEM", sLotID);
+
+	int nPNo = atoi(sPortNo);
+
+	strSendCmd.Format("LOT,READY,%s,%d,1928,2059,MEM", sLotID, nPNo);
 	Send_Command(nInspector, strSendCmd);
+	
 }
 
 

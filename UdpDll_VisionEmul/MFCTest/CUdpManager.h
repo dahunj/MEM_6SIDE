@@ -64,7 +64,7 @@ private:
 	void Exception_Log(CString sFunc, CString sGbn, int nCase);	// Receive Exception Log
 
 	void Get_LoadComplete(int nInspector, CString sGbn, CString sLotID, CString nPortNo, CString sTNo1, CString sTNo2, CString sTNo3, CString sTNo4, CString sCNo1, CString sCNo2, CString sCNo3, CString sCNo4);
-	void Get_LotStart(CString sLotID);
+	void Get_LotStart(CString sLotID, CString sPortNo);
 public:
 
 	CString m_sJudge[2][30][30];
@@ -79,7 +79,7 @@ public:
 	void Set_ConnectReply(int nInspector);
 	void Set_StatusReply(int nInspector);
 
-	void Set_LotReady(int nInspector, CString sLotID);
+	void Set_LotReady(int nInspector, CString sLotID, CString sPortNo);
 
 	void Set_ScanComplete(int nInspector, CString sGbn, CString sLotID, CString sPortNo, CString sTNo, CString sCNo);
 	void Set_InspectComplete(int nInspector, CString sGbn, CString sLotID, CString sPortNo, CString sTNo, CString sCNo);

@@ -297,7 +297,10 @@ void CErrorDlg::OnShowWindow(BOOL bShow, UINT nStatus)
 			m_btnErrRetry.ShowWindow(SW_SHOW);
 			strErrPick.Format("\r\n Fail ID: %s/ Code: %s/ Text: %s", gMes.sHostFailLotId, gMes.sHostFailCode, gMes.sHostFailText);
 		}
-
+		if(m_nErrNo == 3118)
+		{
+			m_btnErrRetry.ShowWindow(SW_SHOW);			
+		}
 
 		if (m_nErrNo > 2 && m_nErrNo < 9) g_objSequenceInit.Set_InitComplete(FALSE);	// 3,4,5,6
 
@@ -451,6 +454,12 @@ void CErrorDlg::OnBnClickedBtnErrRetry()
 	{
 	case 9004:
 		g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 40);
+		break;
+	case 3118:
+		{
+			//int nCase = g_objSequenceMain.Get_MainRunCase(AUTO_LOAD_TRAY);
+			g_objSequenceMain.Set_MainRunCase(AUTO_LOAD_TRAY, 61);
+		}
 		break;
 
 	case 3141:

@@ -1405,20 +1405,24 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		if (m_pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) 
 			bDone = FALSE;	// return FALSE;	// Btm1_3D
 
+
+
 		DWORD dwTick = GetTickCount();
-		if (!bDone) 
-		{		
-			m_strLog.Format("Currrent Tick sort1: %lu", dwTick);
+
+		if (!bDone)
+		{
+			m_strLog.Format("Current Tick sort %d: %lu", nSortNo, dwTick);
 			g_objLogFile.Save_TestLog(m_strLog);
-			if (m_pEquipData->bUseInspectSkip || ((dwTick - gData.dwSkipTime_Sort1) > m_pEquipData->nDelayAdd[4]) ) 
-			{	
+
+			if (m_pEquipData->bUseInspectSkip ||((dwTick - gData.dwSkipTime_Sort[nSortNo-1]) >static_cast<DWORD>(m_pEquipData->nDelayAdd[4])))
+			{
 				// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
 				gData.nInspectInfo[nPx][nTx][nCx] = 4;
 				gMes.sJudge[nPx][nTx][nCx] = "N1";
 				gMes.sNGCode[nPx][nTx][nCx] = "TimeOut";
 				strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
 				g_objLogFile.Save_HandlerLog(strLog);
-			} 
+			}
 			else
 			{
 				return FALSE;
@@ -1432,15 +1436,16 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 		g_objLogFile.Save_InspectWaitLog(nPx+1, strLog);
 				
 
-		if(gData.bPullForce)
+		/*	if(gData.bPullForce)
 		{
-			int nJudge = 1;
-			nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
-			if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
-			strLog.Format("PullForce : %d,%d,%d",nInfo, nTx+1, nCx+1);
-			g_objLogFile.Save_TestLog(strLog);
+		int nJudge = 1;
+		nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
+		if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
+		strLog.Format("PullForce : %d,%d,%d",nInfo, nTx+1, nCx+1);
+		g_objLogFile.Save_TestLog(strLog);
 		}
-		else if (m_pEquipData->bResultTestUse)
+		else*/
+		if (m_pEquipData->bResultTestUse)
 		{
 			int nRand = g_objCommon.Get_Random(0, 99);
 			int nNg1 = m_pEquipData->nResultTestN1;
@@ -1489,125 +1494,6 @@ BOOL CSequenceMain::Check_InspectDone(int nPortNo, int nTrayNo, int nCmNo, int &
 }
 
 
-
-BOOL CSequenceMain::Check_InspectDone2(int nPortNo, int nTrayNo, int nCmNo, int &nInfo, int nSortNo)
-{
-	CString strLog;
-
-	if (nPortNo == 0 || nTrayNo == 0 || nCmNo == 0 || nInfo == 0) return TRUE;
-	int	nPx = nPortNo - 1;	// Port Index
-	int	nTx = nTrayNo - 1;	// Tray Index
-	int	nCx = nCmNo - 1;	// CM Index
-
-	if (((gData.byInspectDone[nPx][nTx][nCx] >> 7) & 1) == 1) return TRUE;	// 판정 완료 (2번 판정하지 않기 위해)
-
-	if(gData.bUseDryRun)
-	{
-		int nRand = g_objCommon.Get_Random(0, 99);
-		int nNg1 = m_pEquipData->nResultTestN1;
-		int nNg2 = m_pEquipData->nResultTestN2 + nNg1;
-		int nNg3 = m_pEquipData->nResultTestN3 + nNg2;
-		int nNg4 = m_pEquipData->nResultTestN4 + nNg3;
-
-		int nJudge = (nRand < nNg1 ? 4 : (nRand < nNg2 ? 5 : (nRand < nNg3 ? 6 : (nRand < nNg4 ? 8 : 1))));
-		nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
-		if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
-	}
-	else
-	{
-		
-		BOOL bDone = TRUE;
-		if (m_pEquipData->bUseInspectAngle && ((gData.byInspectDone[nPx][nTx][nCx] >> 0) & 1) == 0)
-			bDone = FALSE;	// return FALSE;	// Angle
-		if (m_pEquipData->bUseInspectBtm1Specular  && ((gData.byInspectDone[nPx][nTx][nCx] >> 1) & 1) == 0) 
-			bDone = FALSE;	// return FALSE;	// Btm1_SP
-		if (m_pEquipData->bUseInspectTop1  && ((gData.byInspectDone[nPx][nTx][nCx] >> 2) & 1) == 0) 
-			bDone = FALSE;	// return FALSE;	// Top1	
-		if (m_pEquipData->bUseInspectTop2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 3) & 1) == 0) 
-			bDone = FALSE;	// return FALSE;	// Top2
-		if (m_pEquipData->bUseInspectBtm2  && ((gData.byInspectDone[nPx][nTx][nCx] >> 4) & 1) == 0)
-			bDone = FALSE;	// return FALSE;	// Btm2
-		if (m_pEquipData->bUseInspectBtm1Angle  && ((gData.byInspectDone[nPx][nTx][nCx] >> 5) & 1) == 0)
-			bDone = FALSE;	// return FALSE;	// Btm1_AG
-		if (m_pEquipData->bUseInspectBtm13D  && ((gData.byInspectDone[nPx][nTx][nCx] >> 6) & 1) == 0) 
-		bDone = FALSE;	// return FALSE;	// Btm1_3D
-
-		DWORD dwTick = GetTickCount();
-
-		if (!bDone) 
-		{
-			m_strLog.Format("Currrent Tick sort 2: %lu", dwTick);
-			g_objLogFile.Save_TestLog(m_strLog);
-
-			if (m_pEquipData->bUseInspectSkip || ((dwTick - gData.dwSkipTime_Sort2)  > m_pEquipData->nDelayAdd[4]) ) {	// SortPicker에서 검사 완료 체크할때 검사결과가 안날라왔으면 1차로 빼준다.
-				gData.nInspectInfo[nPx][nTx][nCx] = 4;
-				gMes.sJudge[nPx][nTx][nCx] = "N1";
-				gMes.sNGCode[nPx][nTx][nCx] = "TimeOut";
-				strLog.Format("Judge Time Over Sort Picker, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
-				g_objLogFile.Save_HandlerLog(strLog);
-			} else {
-				return FALSE;
-			}
-		}
-
-		int nWaitTime = 0;
-		if		(nSortNo == 1)	nWaitTime = GetTickCount() - gData.nSp1Timer;
-		else if (nSortNo == 2)  nWaitTime = GetTickCount() - gData.nSp2Timer;
-		strLog.Format("%d,%d,%d,%s,%d", nPx+1, nTx+1, nCx+1, gData.sSortWaitStartTime[nSortNo-1], nWaitTime);
-		g_objLogFile.Save_InspectWaitLog(nPx+1, strLog);				
-
-		if(gData.bPullForce)
-		{
-			int nJudge = 1;
-			nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
-			if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
-			strLog.Format("PullForce : %d,%d,%d",nInfo, nTx+1, nCx+1);
-			g_objLogFile.Save_TestLog(strLog);
-		}
-		else if (m_pEquipData->bResultTestUse) {
-			int nRand = g_objCommon.Get_Random(0, 99);
-			int nNg1 = m_pEquipData->nResultTestN1;
-			int nNg2 = m_pEquipData->nResultTestN2 + nNg1;
-			int nNg3 = m_pEquipData->nResultTestN3 + nNg2;
-			int nNg4 = m_pEquipData->nResultTestN4 + nNg3;
-
-			int nJudge = (nRand < nNg1 ? 4 : (nRand < nNg2 ? 5 : (nRand < nNg3 ? 6 : (nRand < nNg4 ? 8 : 1))));
-			nInfo = gData.nInspectInfo[nPx][nTx][nCx] = nJudge;
-			if (nInfo == 9) { nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1; }
-			strLog.Format("ResultTest_Use : %d,%d,%d",nInfo, nTx+1, nCx+1);
-			g_objLogFile.Save_TestLog(strLog);
-
-		} 
-		else
-		{
-			if (gData.bCycleStop && !Get_VisionInspectUse()) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	//Good
-			else if (Get_VisionInspectUse())  nInfo = gData.nInspectInfo[nPx][nTx][nCx];
-
-			if (nInfo == 9) nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;
-		}
-	}
-
-	for(int i = 0; i < gLot.nMatchingNgCount[nPx][0]; i++ )
-	{
-		if(gData.nPNoMESNG[i] == nPortNo && gData.nTNoMESNG[i] == nTrayNo && gData.nCmNoMESNG[i] == nCmNo)
-		{
-			gData.nInspectInfo[nPx][nTx][nCx] = 4;
-			gMes.sJudge[nPx][nTx][nCx] = "N1";
-
-			nInfo = gData.nInspectInfo[nPx][nTx][nCx];		
-
-			strLog.Format("MES NG, CM less than MES Count Info, PortNo(%d), TrayNo(%d), CmNo(%d)", nPx+1, nTx+1, nCx+1);
-			g_objLogFile.Save_HandlerLog(strLog);
-		}
-	}
-
-#ifdef VISION_REPEAT
-	nInfo = gData.nInspectInfo[nPx][nTx][nCx] = 1;	// 반복성 검증일때 모두 양품
-#endif
-
-	gData.byInspectDone[nPx][nTx][nCx] |= (1 << 7);	// 판정 완료 (2번 판정하지 않기 위해)
-	return TRUE;	// All Inspect Done
-}
 
 void CSequenceMain::Set_InspectError(int nPortNo, int nTrayNo, int nCmNo)
 {
@@ -2134,13 +2020,18 @@ void CSequenceMain::Job_LotEnd(int nPortNo, int nGTNo)
 	gData.nTrayUseCount[nPx] = 0;	
 
 	gData.bLoadLampOn[nPx] = TRUE;
-
-	
-
 	gLot.bLotEndComplete[nPx] = TRUE;
 
 	gData.nTrayUseCount[nPx] = 0;
 	gData.nCmUseCount[nPx] = 0;
+
+	gLot.nGoodCount[nPx] = 0;
+	gLot.nNgCount[nPx] = 0;
+	gLot.nSNgCount[nPx][1] = 0;
+	gLot.nSNgCount[nPx][2] = 0;
+	gLot.nSNgCount[nPx][3] = 0;
+	gLot.nSNgCount[nPx][5] = 0;
+
 
 	for (int i = 0; i < 30; i++) for (int j = 0; j < 40; j++) gMes.sBarID[nPx][i][j] = gMes.sJudge[nPx][i][j] = gMes.sNGCode[nPx][i][j] = "";
 	for (int i = 0; i < 30; i++) for (int j = 0; j < 40; j++) for (int k = 0; k < 7; k++) gData.sNGData[nPx][i][j][k] = "";
@@ -2247,7 +2138,7 @@ BOOL CSequenceMain::LoadTray_Run()
 		{
 			if(m_pEquipData->bUseMES)
 			{
-				g_dlgWork.Get_LotInfo(nLtWorkPort);	// 입력된 Lot 정보를 다시 얻는다.
+				
 				m_nLoadTrayCase = 40; m_tLoadTrayLoop.Set_LoopTime(30000);
 				m_strLog.Format("[Sequence] Get_LotInfo. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
 				g_objLogFile.Save_HandlerLog(m_strLog);	
@@ -2363,6 +2254,7 @@ BOOL CSequenceMain::LoadTray_Run()
 				m_strLog.Format("[Sequence] WriteCMCount. (LotID:%s, CmCnt:%d, Port:%d)", gData.sLotID[nLtWorkPort-1], gData.nCmUseCount[nLtWorkPort-1], nLtWorkPort);
 				g_objLogFile.Save_HandlerLog(m_strLog);	
 			}
+			g_dlgWork.Get_LotInfo(nLtWorkPort);
 
 			CString sCount;
 			sCount.Format("%d",gMes.nHostCount);
@@ -2543,7 +2435,8 @@ BOOL CSequenceMain::LoadTray_Run()
 			if (gData.nLoadTrayCount[nLtWorkPort-1] == 1) 
 			{
 				gData.nLPNo = nLtWorkPort;	// 첫번째 트레이 로딩할때
-				if (gData.bVisionVerErr) {
+				if (gData.bVisionVerErr) 
+				{
 					g_objInspector.Set_LotStart(INSPECTOR_ALL, gData.sLotID[nLtWorkPort-1], nLtWorkPort, m_pEquipData->sVisionProgVer, m_pEquipData->sVisionParaVer);
 					gData.bVisionVerErr = FALSE;
 				}
@@ -2559,20 +2452,21 @@ BOOL CSequenceMain::LoadTray_Run()
 		}
 		break;
 	case 18:	// Check Lot Ready
-		dwEndTick = GetTickCount() - dwStartTick;
 		if (g_objInspector.Check_LotReady()) 
 		{
 			m_nLoadTrayCase = 20; m_tLoadTrayLoop.Set_LoopTime(5000);
 			m_tLoadTrayLoop.Takt_End(nTaktZone, 17);
 			m_tLoadTrayLoop.Takt_Start(nTaktZone, 18);
-		}
-		else if(dwEndTick > 25000)
-		{
-			m_nLoadTrayCase = 19; m_tLoadTrayLoop.Set_LoopTime(5000);
-		}
+		}		
 		break;
 	case 19:
 		dwStartTick = GetTickCount();
+		g_objInspector.Set_LotStart(INSPECTOR_ALL, gData.sLotID[nLtWorkPort-1], nLtWorkPort, m_pEquipData->sVisionProgVer, m_pEquipData->sVisionParaVer);
+		gData.bVisionVerErr = FALSE;
+		m_nLoadTrayCase = 18; m_tLoadTrayLoop.Set_LoopTime(20000);
+		break;
+
+	case 61:
 		g_objInspector.Set_LotStart(INSPECTOR_ALL, gData.sLotID[nLtWorkPort-1], nLtWorkPort, m_pEquipData->sVisionProgVer, m_pEquipData->sVisionParaVer);
 		gData.bVisionVerErr = FALSE;
 		m_nLoadTrayCase = 18; m_tLoadTrayLoop.Set_LoopTime(20000);
@@ -2616,9 +2510,10 @@ BOOL CSequenceMain::LoadTray_Run()
 		if ((nLtWorkPort == 1 && g_objCommon.Check_Position(AX_LOAD_STAGE_X, 0)) || 
 			(nLtWorkPort == 2 && g_objCommon.Check_Position(AX_LOAD_STAGE_X, 1))) 
 		{
-			if (gData.nLoadTrayCount[nLtWorkPort-1] >= gData.nTrayUseCount[nLtWorkPort-1]) {
+			if (gData.nLoadTrayCount[nLtWorkPort-1] >= gData.nTrayUseCount[nLtWorkPort-1])
+			{
 				m_bLotLoadEnable[nLtWorkPort-1] = TRUE;	// Port에서 트레이 로드 완료
-				gData.nLoadTrayCount[nLtWorkPort-1] = 0;
+				
 				if (nLtWorkPort == 1) 
 				{ 
 					m_pDY00->oLoadPort1SlideLock = FALSE; m_pDY00->oLoadPort1SlideUnlock = TRUE; 
@@ -2629,11 +2524,14 @@ BOOL CSequenceMain::LoadTray_Run()
 					m_pDY00->oLoadPort2SlideLock = FALSE; m_pDY00->oLoadPort2SlideUnlock = TRUE; 
 					nLtWorkPort = 1;
 				}
+				gData.nLoadTrayCount[nLtWorkPort-1] = 0;
 				g_objAJinAXL.Write_Output(0);
 				g_objAJinAXL.Write_Output(14);
 				
 				m_nLoadTrayCase = 30; m_tLoadTrayLoop.Set_LoopTime(10000);
-			} else {
+			}
+			else
+			{
 				m_nLoadTrayCase = 2; m_tLoadTrayLoop.Set_LoopTime(10000);
 			}		
 			m_strLog.Format("LoadTray, %d", GetTickCount() - m_dwLoadTray);
@@ -2641,6 +2539,8 @@ BOOL CSequenceMain::LoadTray_Run()
 
 			m_tLoadTrayLoop.Takt_End(nTaktZone, 23);
 			m_tLoadTrayLoop.Takt_Start(nTaktZone, 24); 
+			
+
 			m_tLoadTrayLoop.Takt_End(nTaktZone, 24, TRUE);
 		}
 		break;
@@ -7437,19 +7337,30 @@ BOOL CSequenceMain::SortPicker1_Run()
 			}
 			gData.bBuffStageMove = FALSE;
 			gData.nSp1Timer = GetTickCount();
+			
 			SYSTEMTIME time;
 			GetLocalTime(&time);
 			gData.sSortWaitStartTime[0].Format("%02d:%02d:%02d %03d", time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
 			m_nSortPick1Case++; m_tSortPick1Loop.Set_LoopTime(30000);	// 검사 완료
 			m_tSortPick1Loop.Takt_End(nTaktZone, 4);
 			m_tSortPick1Loop.Takt_Start(nTaktZone, 5);
-			gData.dwSkipTime_Sort1 = GetTickCount();
-			m_strLog.Format("Skip Time Sort 1 : %lu", gData.dwSkipTime_Sort1);
+			gData.dwSkipTime_Sort[0] = GetTickCount();
+			m_strLog.Format("Skip Time Sort 1 : %lu", gData.dwSkipTime_Sort[0]);
 			g_objLogFile.Save_TestLog(m_strLog);
 		} 
 		break;
 	case 6:		// NG or Good
-		for (int i = 4; i >= 0; i--) { if (!Check_InspectDone(gData.nPNoSortPick[0], gData.nTNoSortPick[0][i], gData.nCNoSortPick[0][i], gData.InfoSortPick[0][i], 1)) { bS1Checking = TRUE; break; } }
+		for (int i = 4; i >= 0; i--) 
+		{ 
+			if (!Check_InspectDone(gData.nPNoSortPick[0], gData.nTNoSortPick[0][i], gData.nCNoSortPick[0][i], gData.InfoSortPick[0][i], 1)) 
+			{ 
+				bS1Checking = TRUE; break; 
+			} 
+			else
+			{
+				bS1Checking = FALSE;
+			}
+		}
 		if (bS1Checking) break;	// Not Complete
 
 		nSp1PNo = gData.nPNoSortPick[0];
@@ -8571,6 +8482,7 @@ BOOL CSequenceMain::SortPicker2_Run()
 				if (nSp2WorkBuff == 2 && m_nBuffTray2Case == 20) m_nBuffTray2Case = 21;
 			}
 			gData.bBuffStageMove = FALSE;
+
 			gData.nSp2Timer = GetTickCount();
 			SYSTEMTIME time;
 			GetLocalTime(&time);
@@ -8579,13 +8491,23 @@ BOOL CSequenceMain::SortPicker2_Run()
 
 			m_tSortPick2Loop.Takt_End(nTaktZone, 4);
 			m_tSortPick2Loop.Takt_Start(nTaktZone, 5);
-			gData.dwSkipTime_Sort2 = GetTickCount();
-			m_strLog.Format("Skip Time Sort 2 : %lu", gData.dwSkipTime_Sort2);
+			gData.dwSkipTime_Sort[1] = GetTickCount();
+			m_strLog.Format("Skip Time Sort 2 : %lu", gData.dwSkipTime_Sort[1]);
 			g_objLogFile.Save_TestLog(m_strLog);
 		} 
 		break;
 	case 6:		// NG or Good
-		for (int i = 4; i >= 0; i--) { if (!Check_InspectDone2(gData.nPNoSortPick[1], gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i], gData.InfoSortPick[1][i], 2)) { bS2Checking = TRUE; break; } }
+		for (int i = 4; i >= 0; i--) 
+		{ 
+			if (!Check_InspectDone(gData.nPNoSortPick[1], gData.nTNoSortPick[1][i], gData.nCNoSortPick[1][i], gData.InfoSortPick[1][i], 2)) 
+			{ 
+				bS2Checking = TRUE; break; 
+			} 
+			else
+			{
+				bS2Checking = FALSE;
+			}
+		}
 		if (bS2Checking) break;	// Not Complete
 
 		nSp2PNo = gData.nPNoSortPick[1];
@@ -11274,9 +11196,18 @@ BOOL CSequenceMain::Run_Simulation()
 	}
 	if(m_nEmptyTrayYCase == 22){
 		m_pDX13->iEmptyTrans2Exist = FALSE;
+		
+		
 		m_pDX12->iGoodTrayBufferBottom = TRUE;
 		iGoodTrayBufferCount++;
 		iGoodTrayBufferCount++;
+	}
+
+	if(m_nEmptyTrayElCase == 26)
+	{
+		m_pDX01->iEmptyPortSlideClose = TRUE;
+		m_pDX01->iEmptyPortTopCheck = FALSE;
+		m_nEmptyTrayElCase = 22;
 	}
 	
 	

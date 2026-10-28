@@ -78,8 +78,8 @@
 
 
 //---------------주석처리하면 SIMULATION-------------------------- 
-#define AJIN_BOARD_USE 
-#define LOT_BARCODE_USE
+//#define AJIN_BOARD_USE 
+//#define LOT_BARCODE_USE
 
 // 2~5호기 옵션
 #define EDITION_2ND 		// 2~5호기
@@ -295,8 +295,7 @@ typedef struct {
 
 	BOOL	b3DGrabFailErr;
 
-	DWORD	dwSkipTime_Sort1;		// 작업자 기인 알람, Stop 버튼or스위치 눌러서 장비 세웠을때 
-	DWORD	dwSkipTime_Sort2;
+	DWORD	dwSkipTime_Sort[2];		// 작업자 기인 알람, Stop 버튼or스위치 눌러서 장비 세웠을때 
 
 	BOOL	bWasUnlock;
 	CTime	tDoorUnlockStartMin;
