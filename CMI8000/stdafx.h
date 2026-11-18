@@ -74,7 +74,7 @@
 #endif
 
 
-#define MAIN_VERSION	_T("V 3.7.0.5 MEM26")
+#define MAIN_VERSION	_T("V 3.7.0.6 MEM26")
 
 
 //---------------주석처리하면 SIMULATION-------------------------- 
