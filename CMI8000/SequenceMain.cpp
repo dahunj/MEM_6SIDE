@@ -3177,23 +3177,26 @@ BOOL CSequenceMain::AngleTray1_Run()
 	case 5:		// Angle Port Support In
 		if (g_objCommon.Check_Position(AX_ANGLE_STAGE1_Z, 3)) 
 		{
-			m_pDY02->oAngleStage1AlignIn = FALSE;
+			
 			g_objCommon.Set_AnglePortSupportIn();// Write output 포함
 			
+			m_pDY02->oAngleStage1AlignIn = FALSE;
+			g_objAJinAXL.Write_Output(2);
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 4);
 			m_tAngleTray1Loop.Takt_Start(nTaktZone, 5);
 		}
 		break;
 	case 6:		// Support Check
-
 		if (g_objCommon.Get_AnglePortSupportIn() && !m_pDX02->iAngleStage1AlignIn && m_pDX02->iAngleStage1AlignOut )
-		{					
+		{	
+			
 			m_pDY02->oAngleStage1AlignIn = TRUE;
 			g_objAJinAXL.Write_Output(2);
 			m_nAngleTray1Case++; m_tAngleTray1Loop.Set_LoopTime(5000);
 			m_tAngleTray1Loop.Takt_End(nTaktZone, 5);
 		}
+		break;
 	case 7:		// 안전 확인.
 		if (m_nAngleTray2Case >= 20 && m_pDX02->iAngleStage1AlignIn && !m_pDX02->iAngleStage1AlignOut )  //
 		{	// Btm1 Picker CM Loading
@@ -3506,9 +3509,9 @@ BOOL CSequenceMain::AngleTray2_Run()
 	case 5:		// Angle Port Support In
 		if (g_objCommon.Check_Position(AX_ANGLE_STAGE2_Z, 3)) 
 		{			
+			g_objCommon.Set_AnglePortSupportIn();			
 			m_pDY02->oAngleStage2AlignIn = FALSE;
-			g_objCommon.Set_AnglePortSupportIn();
-			
+			g_objAJinAXL.Write_Output(2);
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
 			m_tAngleTray2Loop.Takt_End(nTaktZone, 4);
 			m_tAngleTray2Loop.Takt_Start(nTaktZone, 5);
@@ -3522,6 +3525,7 @@ BOOL CSequenceMain::AngleTray2_Run()
 			m_nAngleTray2Case++; m_tAngleTray2Loop.Set_LoopTime(5000);
 			m_tAngleTray2Loop.Takt_End(nTaktZone, 5);
 		}
+		break;
 	case 7:		// 안전 확인.
 		if (m_nAngleTray1Case >= 20 && m_pDX02->iAngleStage2AlignIn && !m_pDX02->iAngleStage2AlignOut ) 
 		{	// Btm1 Picker CM Loading
